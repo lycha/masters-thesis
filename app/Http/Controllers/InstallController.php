@@ -11,6 +11,8 @@ use PDO;
 
 class InstallController extends Controller {
 
+	public $envFilePath = "../.env";
+	
 	/**
 	 * Create a new controller instance.
 	 *
@@ -27,9 +29,7 @@ class InstallController extends Controller {
 	 */
 	public function index()
 	{
-		//var_dump($lc);
-		//var_dump($program);
-		if(file_exists("../.env")){
+		if(file_exists($this->envFilePath)){
 			return response()->json(['error' => 'Application is already installed.']);
 		} else {
 			$db_host = urldecode(Input::get('db-host'));
@@ -41,47 +41,44 @@ class InstallController extends Controller {
 			} else {
 				$envResult = $this->generateEnv($db_host, $db_database, $db_username, $db_password);
 				$databaseResult = $this->testDb($db_host, $db_database, $db_username, $db_password);
-				$migrationResult = $this->runMigrations();
-				
 				return response()->json(array_merge($envResult, $databaseResult));
 			}
 		}
-    	
 	}
+
 	public function generateEnv($db_host, $db_database, $db_username, $db_password)
 	{
-		$myfile = fopen("../.env", "w") ;
+		$myfile = fopen($this->envFilePath, "w");
 		$txt = "APP_ENV=local
-APP_DEBUG=true
-APP_KEY=".md5(microtime().rand())."
-			
-DB_CONNECTION=pgsql
-DB_HOST=".$db_host."
-DB_DATABASE=".$db_database."
-DB_USERNAME=".$db_username."
-DB_PASSWORD=".$db_password."
+				APP_DEBUG=true
+				APP_KEY=".md5(microtime().rand())."
+							
+				DB_CONNECTION=pgsql
+				DB_HOST=".$db_host."
+				DB_DATABASE=".$db_database."
+				DB_USERNAME=".$db_username."
+				DB_PASSWORD=".$db_password."
 
-CACHE_DRIVER=file
-SESSION_DRIVER=file
-QUEUE_DRIVER=sync
+				CACHE_DRIVER=file
+				SESSION_DRIVER=file
+				QUEUE_DRIVER=sync
 
-REDIS_HOST=localhost
-REDIS_PASSWORD=null
-REDIS_PORT=6379
+				REDIS_HOST=localhost
+				REDIS_PASSWORD=null
+				REDIS_PORT=6379
 
-MAIL_DRIVER=smtp
-MAIL_HOST=mailtrap.io
-MAIL_PORT=2525
-MAIL_USERNAME=null
-MAIL_PASSWORD=null
-MAIL_ENCRYPTION=null
-			";
-
-		$output = fwrite($myfile, $txt);
-		fclose($myfile);
-		if ($output === FALSE) {
+				MAIL_DRIVER=smtp
+				MAIL_HOST=mailtrap.io
+				MAIL_PORT=2525
+				MAIL_USERNAME=null
+				MAIL_PASSWORD=null
+				MAIL_ENCRYPTION=null";
+		
+		if (fwrite($myfile, $txt) === FALSE) {
+			fclose($myfile);
 			return array('error' => 'Write error.');
 		} else {
+			fclose($myfile);
 			return array('env_success' => '.env file generated');
 		}
 	}
@@ -96,12 +93,11 @@ MAIL_ENCRYPTION=null
 			$this->deleteEnv();
 			return array('error' => 'Database connection error: '.$e);
 		}
-		
 	}
 
 	public function deleteEnv()
 	{
-		unlink('../.env');
+		unlink($this->envFilePath);
 	}
 
 	public function runMigrations()
@@ -119,7 +115,6 @@ MAIL_ENCRYPTION=null
 			Artisan::call('migrate:refresh');
 
 			return array('migration_success' => 'Migrations passed.');
-			
 
 	    } catch (\PDOException $e) {
 			$this->deleteEnv();

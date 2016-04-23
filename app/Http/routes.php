@@ -1,17 +1,13 @@
 <?php
-
-/*
-|--------------------------------------------------------------------------
-| Routes File
-|--------------------------------------------------------------------------
-|
-| Here is where you will register all of the routes in an application.
-| It's a breeze. Simply tell Laravel the URIs it should respond to
-| and give it the controller to call when that URI is requested.
-|
+/**
+* Displays API docs by Swagger
 */
 Route::get("/api-docs", function() { return Redirect::to("/swagger-ui/dist/index.html"); });
 
+/**
+* Needs to be called to install app and specify configuration.
+* 
+*/
 Route::post('/install', 'InstallController@index');
 Route::get('/run-migrations', 'InstallController@runMigrations');
 Route::post('/init-roles', 'UserController@addRoles');
@@ -21,7 +17,7 @@ Route::post('/init-roles', 'UserController@addRoles');
 //Route::get('/install/setup-users', 'InstallController@setupUsers');
 
 Route::get('/', function () {
-    return view('welcome');
+    return App::abort(404);
 });
 
 
