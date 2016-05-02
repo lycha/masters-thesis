@@ -14,6 +14,7 @@ class UserController extends Controller
 
 	public function addRoles()
 	{
+		
 		$name = urldecode(Input::get('name'));
 		$email = urldecode(Input::get('email'));
 		$password = urldecode(Input::get('password'));
@@ -69,14 +70,18 @@ class UserController extends Controller
 
 	private function createNewAdmin($name, $email, $password)
 	{
+		$users = User::all();
+		foreach ($users as $user) {
+			if ($user->is('admin')) {
+				return array('error' => 'Admin is already created');
+			} 
+		}
 		$user = User::create([
            'name' => $name,
            'email' => $email,
            'password' => bcrypt($password),
        	]);
-
 		$user->assignRole('admin');
-
 		return array('success_new_admin' => 'Created new Admin with id: '.$user->getId());
 	}
 

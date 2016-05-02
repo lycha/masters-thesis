@@ -1,17 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+use Chrisbjr\ApiGuard\Http\Controllers\ApiGuardController;
 
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
-use JWTAuth;
-use Tymon\JWTAuth\Exceptions\JWTException;
-use App\User;
-
-
-class LeadsController extends Controller
+class LeadsController extends ApiGuardController
 {
 
     public function __construct()
@@ -23,7 +14,7 @@ class LeadsController extends Controller
 
    public function index()
    {
-   	return response()->json(['success' => 'you are admin']);
+   	return $this->response()->json(['success' => 'you are admin']);
    }
 
 }
