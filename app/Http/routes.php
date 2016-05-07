@@ -42,18 +42,15 @@ Route::group(['prefix' => 'api/v1'], function()
     Route::get('authenticate/user', 'AuthenticateController@getAuthenticatedUser');
     Route::get('logout', 'AuthenticateController@logout');
 
-    Route::post('/create-user', [
+    Route::post('/user/create', [
         'uses' => 'UserController@create',
         'middleware' => ['jwt.auth', 'acl'], 
         'can' => 'create.user']);
-/*
-    Route::group([
-              'is' => 'admin',
-			  'middleware' => ['jwt.auth', 'acl']], 
-		function () {
-		    Route::post('create-user', 'UserController@create');
-	});*/
 
+    Route::delete('/user/delete/{id}', [
+        'uses' => 'UserController@delete',
+        'middleware' => ['jwt.auth', 'acl'], 
+        'can' => 'delete.user']);
 
             Route::get('save-lead', 'LeadsController@index');
 });
