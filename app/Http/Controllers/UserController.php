@@ -12,6 +12,7 @@ class UserController extends Controller
 	private $EMAIL_NOT_UNIQUE = 'EMAIL_NOT_UNIQUE';
 	private $INVALID_PAYLOAD = 'INVALID_PAYLOAD';
 	private $REQUEST_FAILED = 'REQUEST_FAILED';
+	private $USER_DOES_NOT_EXIST = 'USER_DOES_NOT_EXIST';
 	
 	public function __construct()
 	{
@@ -57,6 +58,10 @@ class UserController extends Controller
 	public function delete($id)
 	{
 		$user = User::find($id);
+		if ($user == null) {
+			return response()->json(['error' => ['code' => $this->USER_DOES_NOT_EXIST, 
+				'title' => 'User does not exist.']], 400);
+		}
 		$user->delete();
 	}
 }
