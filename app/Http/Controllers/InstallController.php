@@ -117,10 +117,8 @@ class InstallController extends Controller {
 			return array('migration_success' => 'Migrations passed.');
 
 	    } catch (\PDOException $e) {
-			$this->deleteEnv();
 			return array('error' => 'Migrations error: '.$e);
 		} catch (Exception $e) {
-			$this->deleteEnv();
 	    	return array('error' => 'Migrations error: '.$e);
 	    }
 	}

@@ -1,7 +1,7 @@
 ## Marketing Tracking Tool
 
 ## INSTALATION
-- run POST http://master-tool.dev/install with json body to generate .en variable and check database connection:
+- run POST http://master-tool.dev/install with json body to generate .env variable and check database connection:
 ```{
     "db-host": "localhost",
     "db-database":"homestead",
