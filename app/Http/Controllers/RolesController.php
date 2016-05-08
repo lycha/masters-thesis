@@ -21,10 +21,10 @@ class RolesController extends Controller
 		} else {
 			$adminOutput = $this->createAdminRole();
 			$userOutput = $this->createUserRole();
-			$adminController = new AdminModel();
-			$createAdmin  = $adminController->create($name, $email, $password);
+			$admin = new AdminModel();
+			$newAdmin  = $admin->create($name, $email, $password);
 
-			return response()->json(array_merge($adminOutput, $userOutput, $createAdmin));
+			return response()->json(array_merge($adminOutput, $userOutput, $newAdmin));
 		}
 	}
 
@@ -36,7 +36,7 @@ class RolesController extends Controller
 			$roleAdmin->slug = 'admin';
 			$roleAdmin->description = 'manage administration privileges';
 			$roleAdmin->save();
-
+			$roleAdmin->assignPermission('user'); //todo add all future permissions
 			if ($roleAdmin->exists) {
 				return array('success_admin_role' => 'Created Admin role.');
 			} else {

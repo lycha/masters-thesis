@@ -13,14 +13,15 @@ class PermissionsController extends Controller
 	public function create()
 	{
 		
-		$userPerm = $this->createUserPermissions();
-		$assingedAdmin = $this->assignAdminPermissions($userPerm);
-		if ($assingedAdmin) {
+		$userForAdminPerm = $this->createUserForAdminPermissions();
+		$userForUserPerm = $this->createUserForUserPermissions();
+		//$assingedAdmin = $this->assignAdminPermissions($userForAdminPerm);
+		if ($userForAdminPerm && $userForUserPerm) {
 			return response()->json([], 200);
 		}
 	}
 
-	private function createUserPermissions() {
+	private function createUserForAdminPermissions() {
 		$permission = new Permission();
 		return $permUser = $permission->create([ 
 		    'name'        => 'user',
@@ -30,7 +31,22 @@ class PermissionsController extends Controller
 		        'update'     => true,
 		        'delete'     => true
 		    ],
-		    'description' => 'Manage user permissions'
+		    'description' => 'Manage user permissions for admin role'
+		]);
+	}
+
+	private function createUserForUserPermissions() {
+		$permission = new Permission();
+		return $permUser = $permission->create([ 
+		    'name'        => 'user.user',
+		    'slug'        => [          // pass an array of permissions.
+		        'create'     => false,
+		        'view'       => true,
+		        'update'     => true,
+		        'delete'     => false
+		    ],
+            'inherit_id' => Permission::where('name', 'user')->first()->getKey(),
+		    'description' => 'Manage user permissions for user role'
 		]);
 	}
 

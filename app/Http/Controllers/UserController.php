@@ -13,6 +13,7 @@ class UserController extends Controller
 	private $INVALID_PAYLOAD = 'INVALID_PAYLOAD';
 	private $REQUEST_FAILED = 'REQUEST_FAILED';
 	private $USER_DOES_NOT_EXIST = 'USER_DOES_NOT_EXIST';
+	private $ADMIN_USER_ID = 'ADMIN_USER_ID';
 	
 	public function __construct()
 	{
@@ -57,6 +58,11 @@ class UserController extends Controller
 
 	public function delete($id)
 	{
+		if ($id == 1) {
+			return response()->json(['error' => ['code' => $this->ADMIN_USER_ID, 
+				'title' => 'Can not delete admin.']], 400);
+		}
+
 		$user = User::find($id);
 		if ($user == null) {
 			return response()->json(['error' => ['code' => $this->USER_DOES_NOT_EXIST, 

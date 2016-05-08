@@ -11,7 +11,13 @@
   },
   "host": "master-tool.dev",
   "basePath": "/",
-  "securityDefinitions": {},
+  "securityDefinitions": {
+    "bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
   "schemes": [
     "http"
   ],
@@ -22,6 +28,36 @@
     "application/json"
   ],
   "paths": {
+    "/api/v1/user/create": {
+      "post": {
+        "description": "if succesful returns 200 with user object else returns 400 with one of the error codes:\n\nEMAIL_NOT_UNIQUE\nINVALID_PAYLOAD\nREQUEST_FAILED\nf.e.:\n{\n  \"error\": {\n    \"code\": \"EMAIL_NOT_UNIQUE\",\n    \"title\": \"Email already exists in database.\"\n  }\n}\n",
+        "operationId": "Create_http://master-tool.dev/api/v1/user/create_",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "x-is-map": false,
+            "schema": {
+              "$ref": "#/definitions/http://master-tool.dev/api/v1/user/createRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ]
+      }
+    },
     "/run-migrations": {
       "get": {
         "description": "Creates all necessary tables in database.",
@@ -70,12 +106,9 @@
         "security": []
       }
     },
-    "/install": {
+    "/init-permissions": {
       "post": {
         "description": "Generates .env variable and creates database connection:\n{\n    \"db-host\": \"localhost\",\n    \"db-database\":\"homestead\",\n    \"db-username\":\"homestead\",\n    \"db-password\":\"secret\"\n}\n",
-        "tags": [
-          "Instalation"
-        ],
         "operationId": "Create_http://master-tool.dev/install_",
         "produces": [
           "application/json"
@@ -91,6 +124,22 @@
             }
           }
         ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": []
+      }
+    },
+    "/api/v1/user/delete/19": {
+      "delete": {
+        "description": "",
+        "operationId": "Delete_http://master-tool.dev/api/v1/user/delete/{id}_",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": ""
@@ -159,6 +208,20 @@
     }
   },
   "definitions": {
+    "http://master-tool.dev/api/v1/user/createRequest": {
+      "title": "http://master-tool.dev/api/v1/user/createRequest",
+      "type": "object",
+      "properties": {
+        "name": {},
+        "email": {},
+        "password": {}
+      },
+      "required": [
+        "name",
+        "email",
+        "password"
+      ]
+    },
     "http://master-tool.dev/api/v1/authenticate/userRequest": {
       "title": "http://master-tool.dev/api/v1/authenticate/userRequest",
       "type": "object",
