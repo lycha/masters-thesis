@@ -16,6 +16,7 @@ class CreateCustomersTable extends Migration
         {
             $table->increments('id');
             $table->string('lead_uniqid', 50);//to be changed to numeric
+            $table->string('email')->unique();
             $table->passthru('hstore', 'fields');
             $table->timestamps();
         });
