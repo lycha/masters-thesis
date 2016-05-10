@@ -38,6 +38,10 @@ class RolesController extends Controller
 			$roleAdmin->save();
 			$roleAdmin->assignPermission('user'); //todo add all future permissions
 			$roleAdmin->assignPermission('lead'); 
+			$roleAdmin->assignPermission('campaign'); 
+			$roleAdmin->assignPermission('customer'); 
+			$roleAdmin->assignPermission('entity'); 
+			$roleAdmin->assignPermission('product'); 
 			if ($roleAdmin->exists) {
 				return array('success_admin_role' => 'Created Admin role.');
 			} else {
