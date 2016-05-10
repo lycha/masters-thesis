@@ -70,4 +70,14 @@ class UserController extends Controller
 		}
 		$user->delete();
 	}
+
+	public function view()
+	{
+		return response()->json(User::role('user')->get());
+	}
+
+	public function update($user)
+	{
+		//todo
+	}
 }

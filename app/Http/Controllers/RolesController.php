@@ -2,7 +2,7 @@
 use Kodeine\Acl\Models\Eloquent\Role;
 use Input;
 use App\User;
-use App\AdminModel;
+use App\Admin;
 /**
 * 
 */
@@ -21,7 +21,7 @@ class RolesController extends Controller
 		} else {
 			$adminOutput = $this->createAdminRole();
 			$userOutput = $this->createUserRole();
-			$admin = new AdminModel();
+			$admin = new Admin();
 			$newAdmin  = $admin->create($name, $email, $password);
 
 			return response()->json(array_merge($adminOutput, $userOutput, $newAdmin));
@@ -37,6 +37,7 @@ class RolesController extends Controller
 			$roleAdmin->description = 'manage administration privileges';
 			$roleAdmin->save();
 			$roleAdmin->assignPermission('user'); //todo add all future permissions
+			$roleAdmin->assignPermission('lead'); 
 			if ($roleAdmin->exists) {
 				return array('success_admin_role' => 'Created Admin role.');
 			} else {
@@ -55,6 +56,7 @@ class RolesController extends Controller
 			$roleUser->slug = 'user';
 			$roleUser->description = 'standard user privileges';
 			$roleUser->save();
+			$roleUser->assignPermission('user.user'); //todo add all future permissions
 
 			if ($roleUser->exists) {
 				return array('success_user_role' => 'Created User role.');

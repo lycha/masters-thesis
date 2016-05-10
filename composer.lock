@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "0993c859317d93c757bde3ab2de43bb8",
-    "content-hash": "16ff3c193ad75b903f9b9a32e17ae814",
+    "hash": "0e49c3d9ee6c8a9f4541366f67a591a0",
+    "content-hash": "fe101bd6207b27a155362174f58a6547",
     "packages": [
         {
             "name": "chrisbjr/api-guard",
@@ -1654,6 +1654,56 @@
                 "shell"
             ],
             "time": "2015-11-12 16:18:56"
+        },
+        {
+            "name": "shiftonelabs/laravel-nomad",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/shiftonelabs/laravel-nomad.git",
+                "reference": "2a5f3665449a5eb37e21d3817ae4deeec7f81493"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/shiftonelabs/laravel-nomad/zipball/2a5f3665449a5eb37e21d3817ae4deeec7f81493",
+                "reference": "2a5f3665449a5eb37e21d3817ae4deeec7f81493",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/database": ">=4.1",
+                "illuminate/support": ">=4.1",
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "laravel/framework": ">=4.1",
+                "mockery/mockery": "~0.9",
+                "phpunit/phpunit": "~4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "ShiftOneLabs\\LaravelNomad\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Patrick Carlo-Hickman",
+                    "email": "patrick@shiftonelabs.com"
+                }
+            ],
+            "description": "Add extra functionality to Laravel migrations.",
+            "homepage": "https://github.com/shiftonelabs/laravel-nomad",
+            "keywords": [
+                "custom",
+                "laravel",
+                "lumen",
+                "migration"
+            ],
+            "time": "2016-01-15 09:05:02"
         },
         {
             "name": "swiftmailer/swiftmailer",

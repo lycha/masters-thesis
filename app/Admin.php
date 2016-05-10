@@ -7,7 +7,7 @@ use App\User;
 /**
 * 
 */
-class AdminModel
+class Admin
 {
 	
 	public function __construct()

@@ -108,9 +108,10 @@ class InstallController extends Controller {
 			//echo 'done migrate:install';
 
 			//echo '<br>init with app tables migrations...';
-			Artisan::call('migrate', [
+			/*Artisan::call('migrate', [
 			'--path'     => "app/database/migrations"
-			]);
+			]);*/
+			\Artisan::call('migrate'); 
 			//echo '<br>done with app tables migrations';
 			Artisan::call('migrate:refresh');
 

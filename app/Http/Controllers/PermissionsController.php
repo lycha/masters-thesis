@@ -2,7 +2,7 @@
 use Kodeine\Acl\Models\Eloquent\Role;
 use Input;
 use App\User;
-use App\AdminModel;
+use App\Admin;
 use Kodeine\Acl\Models\Eloquent\Permission;
 /**
 * 
@@ -14,6 +14,7 @@ class PermissionsController extends Controller
 	{
 		
 		$userForAdminPerm = $this->createUserForAdminPermissions();
+		$leadForAdminPerm = $this->createLeadForAdminPermissions();
 		$userForUserPerm = $this->createUserForUserPermissions();
 		//$assingedAdmin = $this->assignAdminPermissions($userForAdminPerm);
 		if ($userForAdminPerm && $userForUserPerm) {
@@ -47,6 +48,21 @@ class PermissionsController extends Controller
 		    ],
             'inherit_id' => Permission::where('name', 'user')->first()->getKey(),
 		    'description' => 'Manage user permissions for user role'
+		]);
+	}
+
+	public function createLeadForAdminPermissions()
+	{
+		$permission = new Permission();
+		return $perm = $permission->create([ 
+		    'name'        => 'lead',
+		    'slug'        => [          // pass an array of permissions.
+		        'create'     => true,
+		        'view'       => true,
+		        'update'     => true,
+		        'delete'     => true
+		    ],
+		    'description' => 'Manage lead permissions for admin role'
 		]);
 	}
 

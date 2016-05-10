@@ -150,6 +150,7 @@ return [
         Illuminate\Foundation\Providers\ArtisanServiceProvider::class,
         Illuminate\Auth\AuthServiceProvider::class,
         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class,
+        ShiftOneLabs\LaravelNomad\LaravelNomadServiceProvider::class,
 
         /*
          * Application Service Providers...
