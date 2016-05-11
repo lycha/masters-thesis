@@ -80,6 +80,11 @@ Route::group(['prefix' => 'api/v1'], function()
         'middleware' => ['jwt.auth', 'acl'], 
         'can' => 'view.campaign']);
 
+    Route::get('/campaigns/{id}', [
+        'uses' => 'CampaignController@viewById',
+        'middleware' => ['jwt.auth', 'acl'], 
+        'can' => 'view.campaign']);
+
     Route::put('/campaigns/{id}', [
         'uses' => 'CampaignController@update',
         'middleware' => ['jwt.auth', 'acl'], 
@@ -129,43 +134,48 @@ Route::group(['prefix' => 'api/v1'], function()
 
     //////////////**********PRODUCT**************////////////
     Route::post('/products', [
-        'uses' => 'ProductController@createProduct',
+        'uses' => 'ProductController@create',
         'middleware' => ['jwt.auth', 'acl'], 
         'can' => 'create.product']);
 
     Route::delete('/products/{id}', [
-        'uses' => 'ProductController@deleteProduct',
+        'uses' => 'ProductController@delete',
         'middleware' => ['jwt.auth', 'acl'], 
         'can' => 'delete.product']);
 
     Route::get('/products/', [
-        'uses' => 'ProductController@viewProducts',
+        'uses' => 'ProductController@view',
+        'middleware' => ['jwt.auth', 'acl'], 
+        'can' => 'view.product']);
+
+    Route::get('/products/{id}', [
+        'uses' => 'ProductController@viewById',
         'middleware' => ['jwt.auth', 'acl'], 
         'can' => 'view.product']);
 
     Route::put('/products/{id}', [
-        'uses' => 'ProductController@updateProduct',
+        'uses' => 'ProductController@update',
         'middleware' => ['jwt.auth', 'acl'], 
         'can' => 'update.product']);
 
     //////////////**********SUBPRODUCT**************////////////
-    Route::post('/products/{product-id}/subproducts', [
-        'uses' => 'ProductController@createSubproduct',
+    Route::post('/products/{product_id}/subproducts', [
+        'uses' => 'SubproductsController@create',
         'middleware' => ['jwt.auth', 'acl'], 
         'can' => 'create.product']);
 
-    Route::delete('/products/{product-id}/subproducts/{id}', [
-        'uses' => 'ProductController@deleteSubproduct',
+    Route::delete('/products/{product_id}/subproducts/{id}', [
+        'uses' => 'SubproductsController@delete',
         'middleware' => ['jwt.auth', 'acl'], 
         'can' => 'delete.product']);
 
-    Route::get('/products/{product-id}/subproducts', [
-        'uses' => 'ProductController@viewSubproducts',
+    Route::get('/products/{product_id}/subproducts', [
+        'uses' => 'SubproductsController@view',
         'middleware' => ['jwt.auth', 'acl'], 
         'can' => 'view.product']);
 
-    Route::put('/products/{product-id}/subproducts/{id}', [
-        'uses' => 'ProductController@updateSubproduct',
+    Route::put('/products/{product_id}/subproducts/{id}', [
+        'uses' => 'SubproductsController@update',
         'middleware' => ['jwt.auth', 'acl'], 
         'can' => 'update.product']);
 });

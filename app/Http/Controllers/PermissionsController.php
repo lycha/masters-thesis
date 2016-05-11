@@ -21,7 +21,7 @@ class PermissionsController extends Controller
 		$productForAdminPerm = $this->createProductForAdminPermissions();
 
 		$userForUserPerm = $this->createUserForUserPermissions();
-		//$assingedAdmin = $this->assignAdminPermissions($userForAdminPerm);
+
 		if ($userForAdminPerm && $userForUserPerm) {
 			return response()->json([], 200);
 		}
@@ -129,11 +129,5 @@ class PermissionsController extends Controller
 		    ],
 		    'description' => 'Manage product permissions for admin role'
 		]);
-	}
-
-	private function assignAdminPermissions($userPerm) {
-		$adminRole = Role::where('slug', 'admin')->first();
-		$adminRole->assignPermission($userPerm);
-		return true;
 	}
 }
