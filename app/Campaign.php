@@ -12,4 +12,13 @@ class Campaign extends Model
      * @var string
      */
     protected $table = 'campaigns';
+
+    public function isActive()
+    {
+    	if (date('Y-m-d H:i:s') < date('Y-m-d H:i:s', strtotime($this->expires_on))) {
+    		return true;
+		} else {
+			return false;
+		}
+    }
 }

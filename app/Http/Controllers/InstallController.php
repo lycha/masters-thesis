@@ -115,6 +115,8 @@ class InstallController extends Controller {
 			//echo '<br>done with app tables migrations';
 			Artisan::call('migrate:refresh');
 
+			seedGenericModels();
+
 			return array('migration_success' => 'Migrations passed.');
 
 	    } catch (\PDOException $e) {
@@ -122,5 +124,22 @@ class InstallController extends Controller {
 		} catch (Exception $e) {
 	    	return array('error' => 'Migrations error: '.$e);
 	    }
+	}
+
+	private function seedGenericModels()
+	{
+		Campaign::create(array('name' => 'generic', 
+        						'description' => 'generic', 
+        						'slug' => 'generic', 
+        						'expires_on' => '9999-12-30 00:00:00'
+        						));
+
+		Entity::create(array('name' => 'generic', 
+    						'description' => 'generic', 
+    						'slug' => 'generic'));
+
+		Product::create(array('name' => 'n/a', 
+    						'description' => 'n/a', 
+    						'slug' => 'n-a'));
 	}
 }
