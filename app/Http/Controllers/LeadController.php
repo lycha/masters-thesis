@@ -34,10 +34,10 @@ class LeadController extends Controller
         $lead->utm_term = $request->utm_term;
         $lead->entity_id = $this->getEntityId($request->entity);
         $lead->product_id = $this->getProductId($request->product);
-        $lead->subproduct_id = $this->getSubproductId($request->subproduct); //this value can be null
+        $lead->subproduct_id = $this->getSubproductId($request->subproduct, $lead->product_id); //this value can be null
         
         $lead->save();
-        return response($lead);
+        return response(['lead' => $lead]);
     }
 
     public function delete($id)
@@ -51,7 +51,7 @@ class LeadController extends Controller
 
 	public function view()
 	{
-		return response()->json(Lead::all());
+		return response()->json(['leads'=>Lead::all()]);
 	}
 
     private function getCampaignId($slug)
@@ -91,12 +91,13 @@ class LeadController extends Controller
         }
     }
 
-    private function getSubproductId($slug)
+    private function getSubproductId($slug, $productId)
     {
-        $subproduct = Subproduct::whereSlug($slug)->first();
+        $whereQuery = ['slug' => $slug, 'product_id' => $productId];
+        $subproduct = Subproduct::where($whereQuery)->first();
 
         if ($subproduct != null) {
-            $subproduct->id;
+            return $subproduct->id;
         } 
 
         return null;

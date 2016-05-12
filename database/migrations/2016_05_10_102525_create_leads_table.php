@@ -78,6 +78,18 @@ class CreateLeadsTable extends Migration
                   ->onDelete('cascade');
             $table->timestamps();
         });
+
+        Schema::create('customers', function(Blueprint $table)
+        {
+            $table->increments('id');
+            $table->integer('lead_id', 50);
+            $table->foreign('lead_id')
+                  ->references('id')->on('leads')
+                  ->onDelete('cascade');
+            $table->string('email')->unique();
+            $table->passthru('hstore', 'fields');
+            $table->timestamps();
+        });
     }
 
     /**
@@ -92,5 +104,6 @@ class CreateLeadsTable extends Migration
         Schema::drop('campaigns');
         Schema::drop('subproducts');
         Schema::drop('products');
+        Schema::drop('customers');
     }
 }

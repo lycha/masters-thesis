@@ -12,7 +12,7 @@ class CustomerController extends Controller
 {
     public function create(Request $request)
 	{
-		# code...
+		
 	}
 
 	public function delete(Request $request)
