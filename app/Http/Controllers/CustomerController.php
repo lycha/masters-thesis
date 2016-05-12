@@ -6,10 +6,11 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Http\Utils\ErrorManager;
 
 class CustomerController extends Controller
 {
-    	public function create(Request $request)
+    public function create(Request $request)
 	{
 		# code...
 	}

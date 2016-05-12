@@ -30,7 +30,7 @@ class PermissionsController extends Controller
 			$entityForAdminPerm &&
 			$productForAdminPerm &&
 			$userForUserPerm) {
-			return response(201);
+			return response()->json([], 201);
 		} else {
             return ErrorManager::error400(ErrorManager::$CREATE_PERMISSIONS_FAILED, 'Failed to create permissions.');
 		}

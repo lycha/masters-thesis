@@ -28,7 +28,7 @@ class RolesController extends Controller
 				return ErrorManager::error400(ErrorManager::$OBJECT_DUPLICATED, 'Admin is already created.');
 			}
 
-			return response()->json(array_merge_recursive($adminOutput, $userOutput, $newAdmin));
+			return response()->json(array_merge_recursive($adminOutput, $userOutput, ['admin' => $newAdmin]), 201);
 		}
 	}
 

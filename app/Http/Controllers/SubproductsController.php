@@ -23,8 +23,9 @@ class SubproductsController extends Controller
         	return ErrorManager::error400(ErrorManager::$INVALID_PAYLOAD, 'Some elements are not provided.');
 		} 
 
-        if (Subproduct::whereSlug($request->slug)->first() != null) {
-        	return ErrorManager::error400(ErrorManager::$SLUG_NOT_UNIQUE, 'Provided subproduct slug is not unique.');
+        $whereQuery = ['slug' => $request->slug, 'product_id' => $request->product_id];
+        if (Subproduct::where($whereQuery)->first() != null) {
+        	return ErrorManager::error400(ErrorManager::$SLUG_NOT_UNIQUE, 'Provided subproduct slug is not unique for this Product.');
         }
 
         try {
