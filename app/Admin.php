@@ -4,6 +4,7 @@ namespace App;
 use Kodeine\Acl\Models\Eloquent\Role;
 use Input;
 use App\User;
+use App\Http\Utils\ErrorManager;
 /**
 * 
 */
@@ -19,7 +20,7 @@ class Admin
 		$users = User::all();
 		foreach ($users as $user) {
 			if ($user->is('admin')) {
-				return array('error' => 'Admin is already created');
+            	return false;
 			} 
 		}
 		$user = User::create([
@@ -28,6 +29,6 @@ class Admin
            'password' => bcrypt($password),
        	]);
 		$user->assignRole('admin');
-		return array('success_new_admin' => 'Created new Admin with id: '.$user->getId());
+		return $user->toArray();
 	}
 }

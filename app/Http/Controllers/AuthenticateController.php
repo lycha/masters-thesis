@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use App\User;
+use App\Http\Utils\ErrorManager;
 
 
 class AuthenticateController extends Controller
@@ -36,11 +37,11 @@ class AuthenticateController extends Controller
         try {
             // verify the credentials and create a token for the user
             if (! $token = JWTAuth::attempt($credentials)) {
-                return response()->json(['error' => 'invalid_credentials'], 401);
+                return ErrorManager::error401(ErrorManager::$INVALID_CREDENTIALS, 'Invalid credentials.');
             }
         } catch (JWTException $e) {
             // something went wrong
-            return response()->json(['error' => 'could_not_create_token'], 500);
+            return ErrorManager::error500(ErrorManager::$TOKEN_CREATION_FAILED, 'Could not create token.');
         }
 
         // if no errors are encountered we can return a JWT
@@ -53,6 +54,7 @@ class AuthenticateController extends Controller
 
             if (! $user = JWTAuth::parseToken()->authenticate()) {
                 return response()->json(['user_not_found'], 404);
+                return ErrorManager::error404(ErrorManager::$USER_NOT_FOUND, 'User could not be found.');
             }
 
         } catch (Tymon\JWTAuth\Exceptions\TokenExpiredException $e) {

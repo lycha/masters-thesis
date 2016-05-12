@@ -4,6 +4,7 @@ use Input;
 use App\User;
 use App\Admin;
 use Kodeine\Acl\Models\Eloquent\Permission;
+use App\Http\Utils\ErrorManager;
 /**
 * 
 */
@@ -22,8 +23,16 @@ class PermissionsController extends Controller
 
 		$userForUserPerm = $this->createUserForUserPermissions();
 
-		if ($userForAdminPerm && $userForUserPerm) {
-			return response()->json([], 200);
+		if ($userForAdminPerm && 
+			$leadForAdminPerm &&
+			$campaignForAdminPerm &&
+			$customerForAdminPerm &&
+			$entityForAdminPerm &&
+			$productForAdminPerm &&
+			$userForUserPerm) {
+			return response(201);
+		} else {
+            return ErrorManager::error400(ErrorManager::$CREATE_PERMISSIONS_FAILED, 'Failed to create permissions.');
 		}
 	}
 

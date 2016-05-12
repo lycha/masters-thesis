@@ -67,15 +67,15 @@ class CreateLeadsTable extends Migration
             $table->integer('entity_id');
             $table->foreign('entity_id')
                   ->references('id')->on('entities')
-                  ->onDelete('cascade')->nullable();
+                  ->onDelete('cascade');
             $table->integer('product_id');
             $table->foreign('product_id')
                   ->references('id')->on('products')
-                  ->onDelete('cascade')->nullable();
-            $table->integer('subproduct_id');
+                  ->onDelete('cascade');
+            $table->integer('subproduct_id')->nullable();
             $table->foreign('subproduct_id')
                   ->references('id')->on('subproducts')
-                  ->onDelete('cascade')->nullable();
+                  ->onDelete('cascade');
             $table->timestamps();
         });
     }

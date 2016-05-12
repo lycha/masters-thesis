@@ -3,6 +3,7 @@ use Kodeine\Acl\Models\Eloquent\Role;
 use Input;
 use App\User;
 use App\Admin;
+use App\Http\Utils\ErrorManager;
 /**
 * 
 */
@@ -17,14 +18,17 @@ class RolesController extends Controller
 		$password = urldecode(Input::get('password'));
 
 		if (empty($name) || empty($email) || empty($password) ) {
-			return response()->json(['error' => 'Some fields are not specified.']);
+            return ErrorManager::error400(ErrorManager::$INVALID_PAYLOAD, 'Some fields are not specified.');
 		} else {
 			$adminOutput = $this->createAdminRole();
 			$userOutput = $this->createUserRole();
 			$admin = new Admin();
 			$newAdmin  = $admin->create($name, $email, $password);
+			if (!$newAdmin) {
+				return ErrorManager::error400(ErrorManager::$OBJECT_DUPLICATED, 'Admin is already created.');
+			}
 
-			return response()->json(array_merge($adminOutput, $userOutput, $newAdmin));
+			return response()->json(array_merge_recursive($adminOutput, $userOutput, $newAdmin));
 		}
 	}
 
@@ -45,10 +49,10 @@ class RolesController extends Controller
 			if ($roleAdmin->exists) {
 				return array('success_admin_role' => 'Created Admin role.');
 			} else {
-				return array('error' => 'Admin role creation failed.');
+				return ErrorManager::error400(ErrorManager::$OBJECT_CREATION_FAILED, 'Admin role creation failed.');
 			}
 		} catch(\Illuminate\Database\QueryException $e) {
-			return array('error' => 'Admin role creation failed: '.$e);
+				return ErrorManager::error400(ErrorManager::$OBJECT_CREATION_FAILED, 'Admin role creation failed.');
 		}
 	}
 
@@ -65,10 +69,10 @@ class RolesController extends Controller
 			if ($roleUser->exists) {
 				return array('success_user_role' => 'Created User role.');
 			} else {
-				return array('error' => 'User role creation failed.');
+				return ErrorManager::error400(ErrorManager::$OBJECT_CREATION_FAILED, 'User role creation failed.');
 			}
 		} catch(\Illuminate\Database\QueryException $e) {
-			return array('error' => 'Admin role creation failed: '.$e);
+				return ErrorManager::error400(ErrorManager::$OBJECT_CREATION_FAILED, 'User role creation failed.');
 		}
 	}
 }

@@ -8,6 +8,8 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Entity;
 
+use App\Http\Utils\ErrorManager;
+
 class EntityController extends Controller
 {
     public function create(Request $request)

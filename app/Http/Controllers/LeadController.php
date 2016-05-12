@@ -10,15 +10,14 @@ use App\Entity;
 use App\Product;
 use App\Subproduct;
 use App\Http\Utils\ErrorManager;
+use Config;
 
 use App\Http\Requests;
 /**
 * 
 */
 class LeadController extends Controller
-{
-	private $LEAD_DOES_NOT_EXIST = "LEAD_DOES_NOT_EXIST";
-	
+{	
     /**
      * Create a new flight instance.
      *
@@ -29,18 +28,13 @@ class LeadController extends Controller
     {
         $lead = new Lead;
         $lead->utm_source = $request->utm_source;
-        $campaign = Campaign::whereSlug($request->utm_campaign)->first();
-        if ($campaign->isActive()) {
-            $lead->utm_campaign_id = $campaign->id;
-        } else {
-            return ErrorManager::error400(ErrorManager::$INVALID_PAYLOAD, 'campaign not active.');
-        }
+        $lead->utm_campaign_id = $this->getCampaignId($request->utm_campaign);
         $lead->utm_medium = $request->utm_medium;
         $lead->utm_content = $request->utm_content;
         $lead->utm_term = $request->utm_term;
-        $lead->entity_id = Entity::whereSlug($request->entity)->first()->id;
-        $lead->product_id = Product::whereSlug($request->product)->first()->id;
-        $lead->subproduct_id = Subproduct::whereSlug($request->subproduct)->first()->id;
+        $lead->entity_id = $this->getEntityId($request->entity);
+        $lead->product_id = $this->getProductId($request->product);
+        $lead->subproduct_id = $this->getSubproductId($request->subproduct); //this value can be null
         
         $lead->save();
         return response($lead);
@@ -50,8 +44,7 @@ class LeadController extends Controller
 	{
 		$user = Lead::find($id);
 		if ($user == null) {
-			return response()->json(['error' => ['code' => $this->LEAD_DOES_NOT_EXIST, 
-				'title' => 'Lead does not exist.']], 400);
+            return ErrorManager::error400(ErrorManager::$OBJECT_DOES_NOT_EXIST, 'Lead does not exist.');
 		}
 		$user->delete();
 	}
@@ -60,4 +53,52 @@ class LeadController extends Controller
 	{
 		return response()->json(Lead::all());
 	}
+
+    private function getCampaignId($slug)
+    {
+        $campaignGeneric = Campaign::whereSlug(Config::get('leads.campaign_generic.slug'))->first();
+        $campaign = Campaign::whereSlug($slug)->first();
+
+        if ($campaign != null) {
+            if ($campaign->isActive()) {
+                return $campaign->id;
+            }
+        }
+        return $campaignGeneric->id;
+    }
+
+    private function getEntityId($slug)
+    {
+        $entityGeneric = Entity::whereSlug(Config::get('leads.entity_generic.slug'))->first();
+        $entity = Entity::whereSlug($slug)->first();
+
+        if ($entity != null) {
+            return $entity->id;
+        } else {
+            return $entityGeneric->id;
+        }
+    }
+
+    private function getProductId($slug)
+    {
+        $productGeneric = Product::whereSlug(Config::get('leads.product_generic.slug'))->first();
+        $product = Product::whereSlug($slug)->first();
+
+        if ($product != null) {
+            return $product->id;
+        } else {
+            return $productGeneric->id;
+        }
+    }
+
+    private function getSubproductId($slug)
+    {
+        $subproduct = Subproduct::whereSlug($slug)->first();
+
+        if ($subproduct != null) {
+            $subproduct->id;
+        } 
+
+        return null;
+    }
 }
