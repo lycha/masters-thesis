@@ -28,11 +28,11 @@ class LeadController extends Controller
     public function create(Request $request)
     {
         $lead = new Lead;
-        $lead->utm_source = $request->utm_source;
+        $lead->utm_source = preg_replace('/[^a-zA-Z0-9_.]/', '_', $request->utm_source);
         $lead->utm_campaign_id = $this->getCampaignId($request->utm_campaign);
-        $lead->utm_medium = $request->utm_medium;
-        $lead->utm_content = $request->utm_content;
-        $lead->utm_term = $request->utm_term;
+        $lead->utm_medium = preg_replace('/[^a-zA-Z0-9_.]/', '_', $request->utm_medium);
+        $lead->utm_content = preg_replace('/[^a-zA-Z0-9_.]/', '_', $request->utm_content);
+        $lead->utm_term = preg_replace('/[^a-zA-Z0-9_.]/', '_', $request->utm_term);
         $lead->entity_id = $this->getEntityId($request->entity);
         $lead->product_id = $this->getProductId($request->product);
         $lead->subproduct_id = $this->getSubproductId($request->subproduct, $lead->product_id); //this value can be null
@@ -80,6 +80,10 @@ class LeadController extends Controller
 
     public function getLeadsAnalysis(Request $request)
     {
+        if (!$this->validateAnalysisInput($request)) {
+            return ErrorManager::error400(ErrorManager::$INVALID_PAYLOAD, 'Some elements are not provided.');
+        }
+
         $utm_sources = DB::select("SELECT DISTINCT utm_source FROM utm_source_medium");
         $coalesce = "";
         $sum = "";
@@ -92,6 +96,14 @@ class LeadController extends Controller
                 $source;
         }
 
+        $where = "WHERE product_id = ".$request->product;
+        if (!empty($request->entity)) {
+            $where = $where." AND entity_id = ".$request->entity;
+        }
+        if (!empty($request->utm_campaign)) {
+            $where = $where." AND utm_campaign_id = ".$request->utm_campaign;
+        }
+
         $select = "SELECT
             date::date".$coalesce."
             FROM
@@ -102,14 +114,16 @@ class LeadController extends Controller
             LEFT OUTER JOIN
               (SELECT
                  date_trunc('day', created_at) as day".$sum."
-               FROM leads 
+               FROM leads ".$where."
             
                  GROUP BY day) results
             ON (date = results.day)";
 
-        var_dump($select);
-        $leads = DB::select($select);
-
+        try {
+            $leads = DB::select($select);
+        } catch (\Illuminate\Database\QueryException $e) {
+            return ErrorManager::error400(ErrorManager::$DATABASE_ERROR, 'There is problem with database query.');
+        }
         return $leads;
     }
 
@@ -163,6 +177,15 @@ class LeadController extends Controller
     }
 
     public function validateCountInput(Request $request)
+    {
+        if (empty($request->date_from) || empty($request->date_to) || empty($request->product)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public function validateAnalysisInput(Request $request)
     {
         if (empty($request->date_from) || empty($request->date_to) || empty($request->product)) {
             return false;

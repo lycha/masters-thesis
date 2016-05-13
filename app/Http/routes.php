@@ -131,6 +131,11 @@ Route::group(['prefix' => 'api/v1'], function()
         'middleware' => ['jwt.auth', 'acl'], 
         'can' => 'update.customer']);
 
+    Route::post('/customers/customers-statistics', [
+        'uses' => 'CustomerController@getCustomersAnalysis',
+        'middleware' => ['jwt.auth', 'acl'], 
+        'can' => 'view.customer']);
+
     //////////////**********ENTITY**************////////////
     Route::post('/entities', [
         'uses' => 'EntityController@create',
