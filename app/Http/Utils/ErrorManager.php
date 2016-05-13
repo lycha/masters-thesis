@@ -21,8 +21,8 @@ class ErrorManager
 	public static $CREATE_PERMISSIONS_FAILED = "CREATE_PERMISSIONS_FAILED";
 	public static $OBJECT_DUPLICATED = "OBJECT_DUPLICATED";
 	public static $OBJECT_CREATION_FAILED = "OBJECT_CREATION_FAILED";
-	private static $EMAIL_NOT_UNIQUE = 'EMAIL_NOT_UNIQUE';
-	private static $INTERNAL_VIOLATION = 'INTERNAL_VIOLATION';
+	public static $EMAIL_NOT_UNIQUE = 'EMAIL_NOT_UNIQUE';
+	public static $INTERNAL_VIOLATION = 'INTERNAL_VIOLATION';
 
 	/*
     |--------------------------------------------------------------------------

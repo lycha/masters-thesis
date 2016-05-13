@@ -11,6 +11,7 @@ use App\Product;
 use App\Subproduct;
 use App\Http\Utils\ErrorManager;
 use Config;
+use DB;
 
 use App\Http\Requests;
 /**
@@ -53,6 +54,64 @@ class LeadController extends Controller
 	{
 		return response()->json(['leads'=>Lead::all()]);
 	}
+
+    public function count(Request $request)
+    {
+        if (!$this->validateCountInput($request)) {
+            return ErrorManager::error400(ErrorManager::$INVALID_PAYLOAD, 'Some elements are not provided.');
+        } 
+        $count = "";
+        //if entity_id is not provided return for all entities
+        if (empty($request->entity)) {
+            $count = DB::table('leads')
+                ->whereBetween('created_at',[$request->date_from, $request->date_to])
+                ->where('product_id', $request->product)
+                ->count();
+        } else {
+            $count = DB::table('leads')
+                ->whereBetween('created_at',[$request->date_from, $request->date_to])
+                ->where('entity_id', $request->entity)
+                ->where('product_id', $request->product)
+                ->count();
+        }
+        
+        return response()->json(['leads'=>['count'=>$count]]);
+    }
+
+    public function getLeadsAnalysis(Request $request)
+    {
+        $utm_sources = DB::select("SELECT DISTINCT utm_source FROM utm_source_medium");
+        $coalesce = "";
+        $sum = "";
+        foreach ($utm_sources as $utm_source) {
+            $source = preg_replace('/[^a-zA-Z0-9_.]/', '_', $utm_source->utm_source);
+            $coalesce = $coalesce.", coalesce(".$source.",0) AS ".$source;
+            $sum = $sum.", sum(case when utm_source  = '".
+                $source.
+                "' then 1 else 0 end) as ".
+                $source;
+        }
+
+        $select = "SELECT
+            date::date".$coalesce."
+            FROM
+             generate_series(
+               '".$request->date_from."'::timestamp,
+               '".$request->date_to."'::timestamp,
+               '1 day') AS date
+            LEFT OUTER JOIN
+              (SELECT
+                 date_trunc('day', created_at) as day".$sum."
+               FROM leads 
+            
+                 GROUP BY day) results
+            ON (date = results.day)";
+
+        var_dump($select);
+        $leads = DB::select($select);
+
+        return $leads;
+    }
 
     private function getCampaignId($slug)
     {
@@ -101,5 +160,62 @@ class LeadController extends Controller
         } 
 
         return null;
+    }
+
+    public function validateCountInput(Request $request)
+    {
+        if (empty($request->date_from) || empty($request->date_to) || empty($request->product)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public function populateLeads()
+    {
+        for ($i=0; $i < 10; $i++) { 
+            Lead::create(['utm_source' => 'facebook',
+                            'utm_campaign_id' => 1,
+                            'utm_medium' => 'paid',
+                            'utm_content' => 'content',
+                            'utm_term' => 'terms',
+                            'entity_id' => 2,
+                            'product_id' => 3,
+                            ]);
+        }   
+
+        for ($i=0; $i < 19; $i++) { 
+            Lead::create(['utm_source' => 'facebook',
+                            'utm_campaign_id' => 1,
+                            'utm_medium' => 'post',
+                            'utm_content' => 'content',
+                            'utm_term' => 'terms',
+                            'entity_id' => 2,
+                            'product_id' => 3,
+                            ]);
+        }   
+
+        for ($i=0; $i < 7; $i++) { 
+            Lead::create(['utm_source' => 'website',
+                            'utm_campaign_id' => 1,
+                            'utm_medium' => 'header',
+                            'utm_content' => 'content',
+                            'utm_term' => 'terms',
+                            'entity_id' => 2,
+                            'product_id' => 3,
+                            ]);
+        }  
+
+        for ($i=0; $i < 12; $i++) { 
+            Lead::create(['utm_source' => 'twitter',
+                            'utm_campaign_id' => 1,
+                            'utm_medium' => 'standard',
+                            'utm_content' => 'content',
+                            'utm_term' => 'terms',
+                            'entity_id' => 2,
+                            'product_id' => 3,
+                            ]);
+        }   
+
     }
 }

@@ -64,6 +64,21 @@ Route::group(['prefix' => 'api/v1'], function()
         'middleware' => ['jwt.auth', 'acl'], 
         'can' => 'view.lead']);
 
+    Route::get('/leads/populate', [
+        'uses' => 'LeadController@populateLeads',
+        'middleware' => ['jwt.auth', 'acl'], 
+        'can' => 'view.lead']);
+
+    Route::post('/leads/count', [
+        'uses' => 'LeadController@count',
+        'middleware' => ['jwt.auth', 'acl'], 
+        'can' => 'view.lead']);
+
+    Route::post('/leads/leads-statistics', [
+        'uses' => 'LeadController@getLeadsAnalysis',
+        'middleware' => ['jwt.auth', 'acl'], 
+        'can' => 'view.lead']);
+
     //////////////**********CAMPAIGNS**************////////////
     Route::post('/campaigns', [
         'uses' => 'CampaignController@create',
@@ -103,6 +118,11 @@ Route::group(['prefix' => 'api/v1'], function()
 
     Route::get('/customers/', [
         'uses' => 'CustomerController@view',
+        'middleware' => ['jwt.auth', 'acl'], 
+        'can' => 'view.customer']);
+
+    Route::post('/customers/count', [
+        'uses' => 'CustomerController@count',
         'middleware' => ['jwt.auth', 'acl'], 
         'can' => 'view.customer']);
 
@@ -178,4 +198,5 @@ Route::group(['prefix' => 'api/v1'], function()
         'uses' => 'SubproductsController@update',
         'middleware' => ['jwt.auth', 'acl'], 
         'can' => 'update.product']);
+
 });

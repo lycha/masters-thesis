@@ -12,6 +12,13 @@ class Lead extends Model
      * @var string
      */
     protected $table = 'leads';
+    protected $fillable = ['utm_source',
+'utm_campaign_id',
+'utm_medium',
+'utm_content',
+'utm_term',
+'entity_id',
+'product_id'];
 
     public function getId()
     {
