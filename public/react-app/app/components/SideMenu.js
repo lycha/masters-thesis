@@ -40,7 +40,7 @@ class SideMenu extends React.Component {
 			          </li>
 			          
 			            <li className="sub-menu">
-			                <a href="javascript:;" className="<?= Request::is($lc['url_name'].'*') ? 'active' : '' ?>">
+			                <a href="javascript:;">
 			                    <i className="fa fa-bar-chart-o"></i>
 			                    <span>LC</span>
 			                </a>

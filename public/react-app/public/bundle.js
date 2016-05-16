@@ -29326,7 +29326,7 @@
 																													{ className: 'sub-menu' },
 																													_react2.default.createElement(
 																																	'a',
-																																	{ href: 'javascript:;', className: '<?= Request::is($lc[\'url_name\'].\'*\') ? \'active\' : \'\' ?>' },
+																																	{ href: 'javascript:;' },
 																																	_react2.default.createElement('i', { className: 'fa fa-bar-chart-o' }),
 																																	_react2.default.createElement(
 																																					'span',
