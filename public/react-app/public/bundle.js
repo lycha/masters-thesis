@@ -24699,8 +24699,8 @@
 					}
 
 					_createClass(Main, [{
-									key: 'componentDidMount',
-									value: function componentDidMount() {
+									key: 'componentWillMount',
+									value: function componentWillMount() {
 													var _this2 = this;
 
 													if (!localStorage.getItem('trackingToolAuthToken')) {
@@ -28585,7 +28585,6 @@
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Dashboard).call(this, props));
 
 	    _this.displayName = 'Dashboard';
-
 	    return _this;
 	  }
 
@@ -29180,7 +29179,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+					value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -29189,9 +29188,13 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _AdminMenu = __webpack_require__(256);
+	var _SettingsMenu = __webpack_require__(259);
 
-	var _AdminMenu2 = _interopRequireDefault(_AdminMenu);
+	var _SettingsMenu2 = _interopRequireDefault(_SettingsMenu);
+
+	var _TotalAnalisysMenu = __webpack_require__(258);
+
+	var _TotalAnalisysMenu2 = _interopRequireDefault(_TotalAnalisysMenu);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -29202,267 +29205,203 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var SideMenu = function (_React$Component) {
-	    _inherits(SideMenu, _React$Component);
+					_inherits(SideMenu, _React$Component);
 
-	    function SideMenu(props) {
-	        _classCallCheck(this, SideMenu);
+					function SideMenu(props) {
+									_classCallCheck(this, SideMenu);
 
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SideMenu).call(this, props));
+									var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SideMenu).call(this, props));
 
-	        _this.displayName = 'SideMenu';
-	        return _this;
-	    }
+									_this.displayName = 'SideMenu';
+									return _this;
+					}
 
-	    _createClass(SideMenu, [{
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement(
-	                'aside',
-	                null,
-	                _react2.default.createElement(
-	                    'div',
-	                    { id: 'sidebar', className: 'nav-collapse ' },
-	                    _react2.default.createElement(
-	                        'ul',
-	                        { className: 'sidebar-menu', id: 'nav-accordion' },
-	                        _react2.default.createElement(
-	                            'p',
-	                            { className: 'centered' },
-	                            _react2.default.createElement(
-	                                'a',
-	                                { href: '#' },
-	                                _react2.default.createElement('img', { src: '../public/assets/img/aiesec_launcher.png', className: 'img-circle', width: '60' })
-	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            'h5',
-	                            { className: 'centered' },
-	                            'AIESEC in Poland'
-	                        ),
-	                        function () {
-	                            if (this.props.userRole == 'admin') {
-	                                return _react2.default.createElement(_AdminMenu2.default, null);
-	                            }
-	                        }.call(this),
-	                        _react2.default.createElement(
-	                            'li',
-	                            { className: 'sub-menu' },
-	                            _react2.default.createElement(
-	                                'a',
-	                                { href: '{{URL::to(\'/\')}}/generate-url' },
-	                                _react2.default.createElement('i', { className: 'fa fa-bar-chart-o' }),
-	                                _react2.default.createElement(
-	                                    'span',
-	                                    null,
-	                                    'URL Generator'
-	                                )
-	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            'li',
-	                            { className: 'sub-menu dcjq-parent-li' },
-	                            _react2.default.createElement(
-	                                'a',
-	                                { href: 'javascript:;', className: 'dcjq-parent active' },
-	                                _react2.default.createElement('i', { className: 'fa fa-bar-chart-o' }),
-	                                _react2.default.createElement(
-	                                    'span',
-	                                    null,
-	                                    'Total Analysis'
-	                                )
-	                            ),
-	                            _react2.default.createElement(
-	                                'ul',
-	                                { className: 'sub' },
-	                                _react2.default.createElement(
-	                                    'li',
-	                                    null,
-	                                    _react2.default.createElement(
-	                                        'a',
-	                                        { href: '{{URL::to(\'/\')}}/total/gc' },
-	                                        'Global Citizen'
-	                                    )
-	                                ),
-	                                _react2.default.createElement(
-	                                    'li',
-	                                    null,
-	                                    _react2.default.createElement(
-	                                        'a',
-	                                        { href: '{{URL::to(\'/\')}}/total/gt' },
-	                                        'Global Talents'
-	                                    )
-	                                ),
-	                                _react2.default.createElement(
-	                                    'li',
-	                                    null,
-	                                    _react2.default.createElement(
-	                                        'a',
-	                                        { href: '{{URL::to(\'/\')}}/total/gh' },
-	                                        'Global Host'
-	                                    )
-	                                ),
-	                                _react2.default.createElement(
-	                                    'li',
-	                                    null,
-	                                    _react2.default.createElement(
-	                                        'a',
-	                                        { href: '{{URL::to(\'/\')}}/total/fl' },
-	                                        'Future Leaders'
-	                                    )
-	                                ),
-	                                _react2.default.createElement(
-	                                    'li',
-	                                    null,
-	                                    _react2.default.createElement(
-	                                        'a',
-	                                        { href: '{{URL::to(\'/\')}}/total/au' },
-	                                        'Aiesec University'
-	                                    )
-	                                )
-	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            'li',
-	                            { className: 'sub-menu' },
-	                            _react2.default.createElement(
-	                                'a',
-	                                { href: 'javascript:;', className: '<?= Request::is(\'national*\') ? \'active\' : \'\' ?>' },
-	                                _react2.default.createElement('i', { className: 'fa fa-bar-chart-o' }),
-	                                _react2.default.createElement(
-	                                    'span',
-	                                    null,
-	                                    'MC promo'
-	                                )
-	                            ),
-	                            _react2.default.createElement(
-	                                'ul',
-	                                { className: 'sub' },
-	                                _react2.default.createElement(
-	                                    'li',
-	                                    { className: '<?= Request::is(\'national/gc*\') ? \'active\' : \'\' ?>' },
-	                                    _react2.default.createElement(
-	                                        'a',
-	                                        { href: '{{URL::to(\'/\')}}/national/gc' },
-	                                        'Global Citizen'
-	                                    )
-	                                ),
-	                                _react2.default.createElement(
-	                                    'li',
-	                                    { className: '<?= Request::is(\'national/gt*\') ? \'active\' : \'\' ?>' },
-	                                    _react2.default.createElement(
-	                                        'a',
-	                                        { href: '{{URL::to(\'/\')}}/national/gt' },
-	                                        'Global Talents'
-	                                    )
-	                                ),
-	                                _react2.default.createElement(
-	                                    'li',
-	                                    { className: '<?= Request::is(\'national/gh*\') ? \'active\' : \'\' ?>' },
-	                                    _react2.default.createElement(
-	                                        'a',
-	                                        { href: '{{URL::to(\'/\')}}/national/gh' },
-	                                        'Global Host'
-	                                    )
-	                                ),
-	                                _react2.default.createElement(
-	                                    'li',
-	                                    { className: '<?= Request::is(\'national/fl*\') ? \'active\' : \'\' ?>' },
-	                                    _react2.default.createElement(
-	                                        'a',
-	                                        { href: '{{URL::to(\'/\')}}/national/fl' },
-	                                        'Future Leaders'
-	                                    )
-	                                ),
-	                                _react2.default.createElement(
-	                                    'li',
-	                                    { className: '<?= Request::is(\'national/au*\') ? \'active\' : \'\' ?>' },
-	                                    _react2.default.createElement(
-	                                        'a',
-	                                        { href: '{{URL::to(\'/\')}}/national/au' },
-	                                        'Aiesec University'
-	                                    )
-	                                )
-	                            )
-	                        ),
-	                        _react2.default.createElement(
-	                            'li',
-	                            { className: 'sub-menu' },
-	                            _react2.default.createElement(
-	                                'a',
-	                                { href: 'javascript:;', className: '<?= Request::is($lc[\'url_name\'].\'*\') ? \'active\' : \'\' ?>' },
-	                                _react2.default.createElement('i', { className: 'fa fa-bar-chart-o' }),
-	                                _react2.default.createElement(
-	                                    'span',
-	                                    null,
-	                                    'LC'
-	                                )
-	                            ),
-	                            _react2.default.createElement(
-	                                'ul',
-	                                { className: 'sub' },
-	                                _react2.default.createElement(
-	                                    'li',
-	                                    { className: '<?= Request::is($lc[\'url_name\'].\'/gc*\') ? \'active\' : \'\' ?>' },
-	                                    _react2.default.createElement(
-	                                        'a',
-	                                        { href: '{{URL::to(\'/\')}}/{{$lc[\'url_name\']}}/gc' },
-	                                        'Global Citizen'
-	                                    )
-	                                ),
-	                                _react2.default.createElement(
-	                                    'li',
-	                                    { className: '<?= Request::is($lc[\'url_name\'].\'/gt*\') ? \'active\' : \'\' ?>' },
-	                                    _react2.default.createElement(
-	                                        'a',
-	                                        { href: '{{URL::to(\'/\')}}/{{$lc[\'url_name\']}}/gt' },
-	                                        'Global Talents'
-	                                    )
-	                                ),
-	                                _react2.default.createElement(
-	                                    'li',
-	                                    { className: '<?= Request::is($lc[\'url_name\'].\'/gh*\') ? \'active\' : \'\' ?>' },
-	                                    _react2.default.createElement(
-	                                        'a',
-	                                        { href: '{{URL::to(\'/\')}}/{{$lc[\'url_name\']}}/gh' },
-	                                        'Global Host'
-	                                    )
-	                                ),
-	                                _react2.default.createElement(
-	                                    'li',
-	                                    { className: '<?= Request::is($lc[\'url_name\'].\'/fl*\') ? \'active\' : \'\' ?>' },
-	                                    _react2.default.createElement(
-	                                        'a',
-	                                        { href: '{{URL::to(\'/\')}}/{{$lc[\'url_name\']}}/fl' },
-	                                        'Future Leaders'
-	                                    )
-	                                ),
-	                                _react2.default.createElement(
-	                                    'li',
-	                                    { className: '<?= Request::is($lc[\'url_name\'].\'/au*\') ? \'active\' : \'\' ?>' },
-	                                    _react2.default.createElement(
-	                                        'a',
-	                                        { href: '{{URL::to(\'/\')}}/{{$lc[\'url_name\']}}/au' },
-	                                        'Aiesec University'
-	                                    )
-	                                )
-	                            )
-	                        )
-	                    )
-	                )
-	            );
-	        }
-	    }]);
+					_createClass(SideMenu, [{
+									key: 'render',
+									value: function render() {
+													return _react2.default.createElement(
+																	'aside',
+																	null,
+																	_react2.default.createElement(
+																					'div',
+																					{ id: 'sidebar', className: 'nav-collapse ' },
+																					_react2.default.createElement(
+																									'ul',
+																									{ className: 'sidebar-menu', id: 'nav-accordion' },
+																									_react2.default.createElement(
+																													'p',
+																													{ className: 'centered' },
+																													_react2.default.createElement(
+																																	'a',
+																																	{ href: '#' },
+																																	_react2.default.createElement('img', { src: '../public/assets/img/aiesec_launcher.png', className: 'img-circle', width: '60' })
+																													)
+																									),
+																									_react2.default.createElement(
+																													'h5',
+																													{ className: 'centered' },
+																													'AIESEC in Poland'
+																									),
+																									_react2.default.createElement(_SettingsMenu2.default, { userRole: this.props.userRole }),
+																									_react2.default.createElement(
+																													'li',
+																													{ className: 'sub-menu' },
+																													_react2.default.createElement(
+																																	'a',
+																																	{ href: '/generate-url' },
+																																	_react2.default.createElement('i', { className: 'fa fa-bar-chart-o' }),
+																																	_react2.default.createElement(
+																																					'span',
+																																					null,
+																																					'URL Generator'
+																																	)
+																													)
+																									),
+																									_react2.default.createElement(_TotalAnalisysMenu2.default, null),
+																									_react2.default.createElement(
+																													'li',
+																													{ className: 'sub-menu' },
+																													_react2.default.createElement(
+																																	'a',
+																																	{ href: 'javascript:;' },
+																																	_react2.default.createElement('i', { className: 'fa fa-bar-chart-o' }),
+																																	_react2.default.createElement(
+																																					'span',
+																																					null,
+																																					'MC promo'
+																																	)
+																													),
+																													_react2.default.createElement(
+																																	'ul',
+																																	{ className: 'sub' },
+																																	_react2.default.createElement(
+																																					'li',
+																																					null,
+																																					_react2.default.createElement(
+																																									'a',
+																																									{ href: '/national/gc' },
+																																									'Global Citizen'
+																																					)
+																																	),
+																																	_react2.default.createElement(
+																																					'li',
+																																					null,
+																																					_react2.default.createElement(
+																																									'a',
+																																									{ href: '/national/gt' },
+																																									'Global Talents'
+																																					)
+																																	),
+																																	_react2.default.createElement(
+																																					'li',
+																																					null,
+																																					_react2.default.createElement(
+																																									'a',
+																																									{ href: '/national/gh' },
+																																									'Global Host'
+																																					)
+																																	),
+																																	_react2.default.createElement(
+																																					'li',
+																																					null,
+																																					_react2.default.createElement(
+																																									'a',
+																																									{ href: '/national/fl' },
+																																									'Future Leaders'
+																																					)
+																																	),
+																																	_react2.default.createElement(
+																																					'li',
+																																					null,
+																																					_react2.default.createElement(
+																																									'a',
+																																									{ href: '/national/au' },
+																																									'Aiesec University'
+																																					)
+																																	)
+																													)
+																									),
+																									_react2.default.createElement(
+																													'li',
+																													{ className: 'sub-menu' },
+																													_react2.default.createElement(
+																																	'a',
+																																	{ href: 'javascript:;', className: '<?= Request::is($lc[\'url_name\'].\'*\') ? \'active\' : \'\' ?>' },
+																																	_react2.default.createElement('i', { className: 'fa fa-bar-chart-o' }),
+																																	_react2.default.createElement(
+																																					'span',
+																																					null,
+																																					'LC'
+																																	)
+																													),
+																													_react2.default.createElement(
+																																	'ul',
+																																	{ className: 'sub' },
+																																	_react2.default.createElement(
+																																					'li',
+																																					null,
+																																					_react2.default.createElement(
+																																									'a',
+																																									{ href: '/gc' },
+																																									'Global Citizen'
+																																					)
+																																	),
+																																	_react2.default.createElement(
+																																					'li',
+																																					null,
+																																					_react2.default.createElement(
+																																									'a',
+																																									{ href: '/gt' },
+																																									'Global Talents'
+																																					)
+																																	),
+																																	_react2.default.createElement(
+																																					'li',
+																																					null,
+																																					_react2.default.createElement(
+																																									'a',
+																																									{ href: '/gh' },
+																																									'Global Host'
+																																					)
+																																	),
+																																	_react2.default.createElement(
+																																					'li',
+																																					null,
+																																					_react2.default.createElement(
+																																									'a',
+																																									{ href: '/fl' },
+																																									'Future Leaders'
+																																					)
+																																	),
+																																	_react2.default.createElement(
+																																					'li',
+																																					null,
+																																					_react2.default.createElement(
+																																									'a',
+																																									{ href: '/au' },
+																																									'Aiesec University'
+																																					)
+																																	)
+																													)
+																									)
+																					)
+																	)
+													);
+									}
+					}]);
 
-	    return SideMenu;
+					return SideMenu;
 	}(_react2.default.Component);
 
 	SideMenu.PropTypes = {
-	    userRole: _react2.default.PropTypes.string.isRequired
+					userRole: _react2.default.PropTypes.string.isRequired
 	};
 	exports.default = SideMenu;
 
 /***/ },
-/* 256 */
+/* 256 */,
+/* 257 */,
+/* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -29485,19 +29424,19 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var AdminMenu = function (_React$Component) {
-	    _inherits(AdminMenu, _React$Component);
+	var TotalAnalisysMenu = function (_React$Component) {
+	    _inherits(TotalAnalisysMenu, _React$Component);
 
-	    function AdminMenu(props) {
-	        _classCallCheck(this, AdminMenu);
+	    function TotalAnalisysMenu(props) {
+	        _classCallCheck(this, TotalAnalisysMenu);
 
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(AdminMenu).call(this, props));
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(TotalAnalisysMenu).call(this, props));
 
-	        _this.displayName = 'AdminMenu';
+	        _this.displayName = 'TotalAnalisysMenu';
 	        return _this;
 	    }
 
-	    _createClass(AdminMenu, [{
+	    _createClass(TotalAnalisysMenu, [{
 	        key: 'render',
 	        value: function render() {
 	            return _react2.default.createElement(
@@ -29510,7 +29449,7 @@
 	                    _react2.default.createElement(
 	                        'span',
 	                        null,
-	                        'Admin Settings'
+	                        'Total Analysis'
 	                    )
 	                ),
 	                _react2.default.createElement(
@@ -29521,8 +29460,8 @@
 	                        null,
 	                        _react2.default.createElement(
 	                            'a',
-	                            { href: '{{URL::to(\'/\')}}/expa-leads' },
-	                            'EXPA Leads'
+	                            { href: '{{URL::to(\'/\')}}/total/gc' },
+	                            'Global Citizen'
 	                        )
 	                    ),
 	                    _react2.default.createElement(
@@ -29530,8 +29469,35 @@
 	                        null,
 	                        _react2.default.createElement(
 	                            'a',
-	                            { href: '{{URL::to(\'/\')}}/lcs' },
-	                            'Local Committees'
+	                            { href: '{{URL::to(\'/\')}}/total/gt' },
+	                            'Global Talents'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'li',
+	                        null,
+	                        _react2.default.createElement(
+	                            'a',
+	                            { href: '{{URL::to(\'/\')}}/total/gh' },
+	                            'Global Host'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'li',
+	                        null,
+	                        _react2.default.createElement(
+	                            'a',
+	                            { href: '{{URL::to(\'/\')}}/total/fl' },
+	                            'Future Leaders'
+	                        )
+	                    ),
+	                    _react2.default.createElement(
+	                        'li',
+	                        null,
+	                        _react2.default.createElement(
+	                            'a',
+	                            { href: '{{URL::to(\'/\')}}/total/au' },
+	                            'Aiesec University'
 	                        )
 	                    )
 	                )
@@ -29539,10 +29505,115 @@
 	        }
 	    }]);
 
-	    return AdminMenu;
+	    return TotalAnalisysMenu;
 	}(_react2.default.Component);
 
-	exports.default = AdminMenu;
+	exports.default = TotalAnalisysMenu;
+
+/***/ },
+/* 259 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var SettingsMenu = function (_React$Component) {
+	    _inherits(SettingsMenu, _React$Component);
+
+	    function SettingsMenu(props) {
+	        _classCallCheck(this, SettingsMenu);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SettingsMenu).call(this, props));
+
+	        _this.displayName = 'SettingsMenu';
+	        return _this;
+	    }
+
+	    _createClass(SettingsMenu, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'li',
+	                { className: 'sub-menu dcjq-parent-li' },
+	                _react2.default.createElement(
+	                    'a',
+	                    { href: 'javascript:;', className: 'dcjq-parent' },
+	                    _react2.default.createElement('i', { className: 'fa fa-bar-chart-o' }),
+	                    _react2.default.createElement(
+	                        'span',
+	                        null,
+	                        'Settings'
+	                    )
+	                ),
+	                function () {
+	                    if (this.props.userRole == 'admin') {
+	                        return _react2.default.createElement(
+	                            'ul',
+	                            { className: 'sub' },
+	                            _react2.default.createElement(
+	                                'li',
+	                                null,
+	                                _react2.default.createElement(
+	                                    'a',
+	                                    { href: '/expa-leads' },
+	                                    'EXPA Leads'
+	                                )
+	                            ),
+	                            _react2.default.createElement(
+	                                'li',
+	                                null,
+	                                _react2.default.createElement(
+	                                    'a',
+	                                    { href: '/lcs' },
+	                                    'Local Committees'
+	                                )
+	                            )
+	                        );
+	                    } else {
+	                        return _react2.default.createElement(
+	                            'ul',
+	                            { className: 'sub' },
+	                            _react2.default.createElement(
+	                                'li',
+	                                null,
+	                                _react2.default.createElement(
+	                                    'a',
+	                                    { href: '/expa-leads' },
+	                                    'User'
+	                                )
+	                            )
+	                        );
+	                    }
+	                }.call(this)
+	            );
+	        }
+	    }]);
+
+	    return SettingsMenu;
+	}(_react2.default.Component);
+
+	SettingsMenu.PropTypes = {
+	    userRole: _react2.default.PropTypes.string.isRequired
+	};
+
+	exports.default = SettingsMenu;
 
 /***/ }
 /******/ ]);

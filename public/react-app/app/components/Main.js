@@ -12,7 +12,7 @@ class Main extends React.Component {
         	userRole: '', 
         }
     }
-    componentDidMount(){
+    componentWillMount(){
 		if (!localStorage.getItem('trackingToolAuthToken')) {
 			this.props.history.pushState(null, 'auth/login');
 		}

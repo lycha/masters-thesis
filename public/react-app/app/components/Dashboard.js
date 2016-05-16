@@ -9,7 +9,6 @@ class Dashboard extends React.Component {
     constructor(props) {
         super(props);
         this.displayName = 'Dashboard';
-        
     }
     render() {
         return (
