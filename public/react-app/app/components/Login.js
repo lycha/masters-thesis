@@ -3,15 +3,15 @@ import React from 'react';
 import backstretch from 'jquery.backstretch';
 import axios from 'axios';
 import {Router, browserHistory} from 'react-router';
-
+import {createSession} from '../utils/SessionManager';
+import {login} from '../utils/ServerRequests';
 
 class Login extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
         	username: '', 
-        	password: '',
-        	message: ''
+        	password: ''
         };
         this.displayName = 'Login';
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
@@ -52,24 +52,17 @@ class Login extends React.Component {
         }
         this.setState({
 	      name: '',
-	      email: '',
-	      message: 'Authentication...'
+	      email: ''
 	    });
 
-        axios.post('../../api/v1/authenticate', {
-		    email: email,
-		    password: password
-		})
-		.then((response) => {
-			localStorage.setItem('trackingToolAuthToken', response.data.token);
-		    this.redirectOnSuccess();
-		})
-		.catch((response) => {
-			this.setState({
-		      message: 'Whoops There is problem with authentication. Please check your credentials and try again.'
-		    });
-		    console.log(response);
-		});
+        login(email, password)
+        	.then(function(response){
+				window.hideLoadingSpinner();
+				if (response) {
+					createSession(response.token)
+				    this.redirectOnSuccess();
+				}
+			}.bind(this))
 
         return;
 	}
@@ -90,9 +83,6 @@ class Login extends React.Component {
 			            	<br />
 			            	<button type='submit' className="btn btn-theme btn-block"><i className="fa fa-lock"></i> SIGN IN</button>
 			            	<hr />
-			            	<div class="alert alert-danger registration">
-								  { this.state.message }
-							</div>
 						</div>
 			      	</form>	  	
 		  		</div>

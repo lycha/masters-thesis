@@ -1,6 +1,6 @@
 import React from 'react';
 import Header from './Header'
-import SideMenu from './SideMenu'
+import SideMenu from './SideMenu/SideMenu'
 import Dashboard from './Dashboard'
 import axios from 'axios';
 
@@ -34,8 +34,9 @@ class Main extends React.Component {
 			<section id="container">
 	        	<Header />
 	        	<SideMenu userRole={this.state.userRole}/>
-	        	<Dashboard />
+          {this.props.children}
 	        </section>
+	        
         );
     }
 }

@@ -1,5 +1,5 @@
 /*---LEFT BAR ACCORDION----*/
-$(function() {
+function startAccordion() {
     $('#nav-accordion').dcAccordion({
         eventType: 'click',
         autoClose: true,
@@ -11,13 +11,23 @@ $(function() {
 //        cookie: 'dcjq-accordion-1',
         classExpand: 'dcjq-current-parent'
     });
-});
+};
 
-var Script = function () {
+function showError(errorCode, errorMessage) {
+    $('#request-error span').text(errorCode + " " + errorMessage);
+    $('#request-error').show();
+};
 
+function showLoadingSpinner(errorCode, errorMessage) {
+    $('#loader').show();
+};
 
+function hideLoadingSpinner(errorCode, errorMessage) {
+    $('#loader').hide();
+};
+
+function commonScript () {
 //    sidebar dropdown menu auto scrolling
-
     jQuery('#sidebar .sub-menu > a').click(function () {
         var o = ($(this).offset());
         diff = 250 - o.top;
@@ -116,4 +126,4 @@ var Script = function () {
     }
 
 
-}();
+};

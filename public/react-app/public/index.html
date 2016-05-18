@@ -29,19 +29,27 @@
 </head>
 <body>
 <script src="assets/js/jquery.js"></script>
+<div id="loader"><div id="loader-inner">
+    <div class="spinner"></div>
+</div></div>
   <div id="app"></div>
-  <script src="bundle.js"></script>
+
+<div class="alert alert-danger alert-dismissable" id="request-error">
+  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+  <strong>Warning!</strong> <span id="error-content"> Better check yourself, you're not looking too good.</span>
+</div>
 
 
   <!-- js placed at the end of the document so the pages load faster -->
 <!--     <script src="assets/js/jquery.js"></script>
  -->    
+    <script src="assets/js/jquery.nicescroll.js" type="text/javascript"></script>
     <script src="assets/js/common-scripts.js"></script>
     <script class="include" type="text/javascript" src="assets/js/jquery.dcjqaccordion.2.7.js"></script>
 
     <script src="assets/js/jquery.scrollTo.min.js"></script>
-    <script src="assets/js/jquery.nicescroll.js" type="text/javascript"></script>
 
 
+  <script src="bundle.js"></script>
 </body>
 </html>
