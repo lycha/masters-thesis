@@ -29,7 +29,8 @@ return  [
     */
     'entity_generic' => [
     	'name' => 'generic',
-		'description' => 'generic',
+        'expa_id' => '1510',
+        'expa_name' => 'KRAKOW',
 		'slug' => 'generic'
     ],
 
@@ -44,8 +45,8 @@ return  [
     */
     'product_generic' => [
     	'name' => 'n/a',
-		'description' => 'n/a',
-		'slug' => 'na'
+        'slug' => 'na',
+        'description' => 'generic'
     ]
 
 

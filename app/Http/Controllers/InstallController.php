@@ -133,9 +133,9 @@ class InstallController extends Controller {
 
 			return array('migration_success' => 'Migrations passed.');
 
-	    } catch (\PDOException $e) {
-			return ErrorManager::error500(ErrorManager::$MIGRATIONS_ERROR, 'Migrations error.');
-		} catch (Exception $e) {
+	    } catch (\PDOException $e) {		
+	    	return ErrorManager::error500(ErrorManager::$MIGRATIONS_ERROR, 'Migrations error.');
+		} catch (Exception $e) {		
 			return ErrorManager::error500(ErrorManager::$MIGRATIONS_ERROR, 'Migrations error.');
 	    }
 	}
@@ -151,14 +151,15 @@ class InstallController extends Controller {
 
 		$entity = new Entity;
         $entity->name = Config::get('leads.entity_generic.name');
-        $entity->description = Config::get('leads.entity_generic.description');
+        $entity->expa_id = Config::get('leads.entity_generic.expa_id');
+        $entity->expa_name = Config::get('leads.entity_generic.expa_name');
         $entity->slug = Config::get('leads.entity_generic.slug');
         $entity->save();
 
 		$product = new Product;
         $product->name = Config::get('leads.product_generic.name');
-        $product->description = Config::get('leads.product_generic.description');
         $product->slug = Config::get('leads.product_generic.slug');
+        $product->description = Config::get('leads.product_generic.description');
         $product->save();
 	}
 }

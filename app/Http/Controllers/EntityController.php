@@ -16,7 +16,8 @@ class EntityController extends Controller
 	{
         $entity = new Entity;
         $entity->name = $request->name;	
-        $entity->description = $request->description;	
+        $entity->expa_name = $request->expa_name;	
+        $entity->expa_id = $request->expa_id;	
         $entity->slug = $request->slug;	
 
 		if (!$this->validateEntityInput($entity)) {
@@ -57,23 +58,35 @@ class EntityController extends Controller
 
 	public function update(Request $request)
 	{
+		$oldEntity = Entity::find($request->id);
 		$entity = Entity::find($request->id);
-		$entity->name = $request->name;	
-        $entity->description = $request->description;	
+        $entity->name = $request->name;	
+        $entity->expa_name = $request->expa_name;	
+        $entity->expa_id = $request->expa_id;	
         $entity->slug = $request->slug;	
 
 		if (!$this->validateEntityInput($entity) && empty($request->id)) {
         	return ErrorManager::error400(ErrorManager::$INVALID_PAYLOAD, 'Some elements are not provided.');
 		} 
 
-        if (Entity::whereSlug($request->slug)->first()->id != $request->id) {
-        	return ErrorManager::error400(ErrorManager::$SLUG_NOT_UNIQUE, 'Provided entity slug is not unique.');
-        }
+		$otherEntity = "";
+		try {
+			$otherEntity = Entity::whereSlug($request->slug)->first();
+		} catch (\Exception $e) {
+
+		}
+
+		if ($otherEntity != null) {
+			
+	        if ($otherEntity->id != $request->id && $otherEntity->slug == $request->slug) {
+	        	return ErrorManager::error400(ErrorManager::$SLUG_NOT_UNIQUE, 'Provided entity slug is not unique.');
+	        }
+	    }
 
         try {
         	$entity->save();
         } catch (\Illuminate\Database\QueryException $e) {
-        	return ErrorManager::error400(ErrorManager::$INVALID_PAYLOAD, 'Invalid payload. Please check date format and unique fields.');
+        	return ErrorManager::error400(ErrorManager::$INVALID_PAYLOAD, 'Invalid payload. Please check date format and unique fields.'.$e);
         }
 
         return response($entity);
@@ -81,7 +94,7 @@ class EntityController extends Controller
 
 	private function validateEntityInput(Entity $entity)
 	{
-		if (empty($entity->name) || empty($entity->description) || empty($entity->slug)) {
+		if (empty($entity->name) || empty($entity->expa_name) || empty($entity->expa_id) || empty($entity->slug)) {
 			return false;
 		} else {
 			return true;

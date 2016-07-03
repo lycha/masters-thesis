@@ -22,8 +22,10 @@
     "jQuery": "^2.2.3",
     "jquery.backstretch": "^2.1.13",
     "query-string": "^4.1.0",
+    "react-addons-update": "^15.0.2",
     "react-redux": "^4.4.5",
     "react-router": "^1.0.1",
+    "react-value-link": "^1.0.0",
     "redux": "^3.5.2",
     "redux-simple-router": "^2.0.4",
     "underscore": "^1.8.3"

@@ -37,17 +37,18 @@ class Entities extends React.Component {
 
 	}
 	addEntity(entity) {
-		debugger
 		this.setState({entities: this.state.entities.concat([entity])});
 	}
 	deleteEntity(id) {
 		deleteEntity(id)
 			.then(function(response){
+				debugger
 				window.hideLoadingSpinner();
 				var newData = this.state.entities.slice(); //copy array
 				newData = _.reject(newData, function(el) { return el.id === id; });
 				this.setState({entities: newData});
-			}.bind(this))
+				this.forceUpdate();
+			}.bind(this));
 	}
 
     render() {
@@ -55,6 +56,7 @@ class Entities extends React.Component {
 		    return a.id - b.id;
 		});
     	entities = entities.map((entity, index)=>{
+				debugger
 			return (
 				<Entity entity={entity} key={index} deleteEntity={this.deleteEntity} showModal={this.showModal}/>
 			)
@@ -88,7 +90,7 @@ class Entities extends React.Component {
 						          </tr>
 						          </thead>
 
-						          <tbody id="lc-{{ $lc['id'] }}">
+						          <tbody>
 						              {entities}
 						          </tbody>
 						      </table>

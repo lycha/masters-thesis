@@ -50,9 +50,7 @@ class AddEntity extends React.Component {
     addEntity(expa_name, expa_id, slug, name)
       .then(function(response){
           window.hideLoadingSpinner();
-            debugger
           if (response) {
-            console.log(response);
             this.props.addEntity(response.data);
           }
         }.bind(this))

@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use DB;
 
 class CreateLeadsTable extends Migration
 {
@@ -27,7 +26,8 @@ class CreateLeadsTable extends Migration
         {
             $table->increments('id');
             $table->string('name');
-            $table->string('description');
+            $table->string('expa_name');
+            $table->integer('expa_id');
             $table->string('slug')->unique();
             $table->timestamps();
         });
@@ -134,6 +134,8 @@ class CreateLeadsTable extends Migration
      */
     public function down()
     {
+        DB::statement('DROP VIEW lead_customer');
+        DB::statement('DROP VIEW utm_source_medium');
         Schema::drop('customers');
         Schema::drop('leads');
         Schema::drop('entities');
