@@ -26497,6 +26497,7 @@
 
 	//Authentication
 	var LOGIN_SUCCESS = exports.LOGIN_SUCCESS = 'LOGIN_SUCCESS';
+	var GET_AUTHENTICATED_USER_SUCCESS = exports.GET_AUTHENTICATED_USER_SUCCESS = 'GET_AUTHENTICATED_USER_SUCCESS';
 
 /***/ },
 /* 247 */
@@ -42932,7 +42933,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+			value: true
 	});
 
 	var _ActionTypes = __webpack_require__(246);
@@ -42948,21 +42949,24 @@
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	var initialState = {
-	  token: {},
-	  userRole: {}
+			token: {},
+			user: {}
 	};
 
 	var AuthenticationReducer = function AuthenticationReducer() {
-	  var state = arguments.length <= 0 || arguments[0] === undefined ? initialState : arguments[0];
-	  var action = arguments[1];
+			var state = arguments.length <= 0 || arguments[0] === undefined ? initialState : arguments[0];
+			var action = arguments[1];
 
-	  switch (action.type) {
+			switch (action.type) {
 
-	    case types.LOGIN_SUCCESS:
-	      return Object.assign({}, state, { token: action.token });
-	  }
+					case types.LOGIN_SUCCESS:
+							return Object.assign({}, state, { token: action.token });
 
-	  return state;
+					case types.GET_AUTHENTICATED_USER_SUCCESS:
+							return Object.assign({}, state, { token: action.user });
+			}
+
+			return state;
 	};
 
 	exports.default = AuthenticationReducer;
@@ -43054,7 +43058,7 @@
 					'section',
 					{ id: 'container' },
 					_react2.default.createElement(_Header2.default, { logout: this.logout }),
-					_react2.default.createElement(_SideMenu2.default, { userRole: this.userRole }),
+					_react2.default.createElement(_SideMenu2.default, { userRole: this.user }),
 					this.props.children
 				);
 			}
@@ -43065,7 +43069,7 @@
 
 	var mapStateToProps = function mapStateToProps(store) {
 		return {
-			userRole: store.authenticationState.userRole
+			user: store.authenticationState.user
 		};
 	};
 
@@ -45513,11 +45517,21 @@
 	}
 
 	function getAuthenticatedUser() {
+		window.showLoadingSpinner();
 		_axios2.default.get('../../api/v1/authenticate/user', {
 			headers: {
 				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
-			} }).then(function (response) {}).catch(function (response) {
-			console.log(response);
+			} }).then(function (response) {
+			window.hideLoadingSpinner();
+			_store2.default.dispatch((0, _AuthenticationActions.getAuthenticatedUserSuccess)(response.data.user));
+			return response;
+		}).catch(function (response) {
+			if (response.data.error.code && response.data.error.title) {
+				window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
+			} else {
+					window.showError(response.status + " " + response.data.error, ""); //method from common-scripts.js
+				}
+			window.hideLoadingSpinner();
 		});
 	}
 
@@ -47088,9 +47102,10 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	   value: true
+		value: true
 	});
 	exports.loginSuccess = loginSuccess;
+	exports.getAuthenticatedUserSuccess = getAuthenticatedUserSuccess;
 
 	var _ActionTypes = __webpack_require__(246);
 
@@ -47099,10 +47114,17 @@
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function loginSuccess(token) {
-	   return {
-	      type: types.LOGIN_SUCCESS,
-	      token: token
-	   };
+		return {
+			type: types.LOGIN_SUCCESS,
+			token: token
+		};
+	}
+
+	function getAuthenticatedUserSuccess(user) {
+		return {
+			type: types.GET_AUTHENTICATED_USER_SUCCESS,
+			user: user
+		};
 	}
 
 /***/ },

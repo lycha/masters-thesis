@@ -32,17 +32,16 @@ class Main extends React.Component {
         return (
 			<section id="container">
 	        	<Header logout={this.logout}/>
-	        	<SideMenu userRole={this.userRole}/>
+	        	<SideMenu userRole={this.user}/>
           {this.props.children}
 	        </section>
-	        
         );
     }
 }
 
 const mapStateToProps = function(store) {
   return {
-    userRole: store.authenticationState.userRole
+    user: store.authenticationState.user
   };
 };
 
