@@ -2,7 +2,7 @@ import axios from 'axios';
 import store from '../store';
 import Config from 'Config';
 import _ from 'underscore';
-import { getEntitiesSuccess, deleteEntitySuccess, addEntitySuccess } from '../actions/EntityActions';
+import { getEntitiesSuccess, deleteEntitySuccess, addEntitySuccess, updateEntitySuccess } from '../actions/EntityActions';
 
 export function getEntities() {
   	return axios.get(Config.serverUrl+'entities/',{
@@ -11,17 +11,20 @@ export function getEntities() {
 	    }})
 	    .then(response => {
 			window.hideLoadingSpinner();
-			let sortedEntities = _.sortBy(response.data, 'name');
-			store.dispatch(getEntitiesSuccess(sortedEntities));
+			store.dispatch(getEntitiesSuccess(response.data));
 			return response;
 		})
 		.catch((response) => { //todo ogarnąć errory
 			{data: null}
 			if (response.data.error.code && response.data.error.title) {
+				if (response.data.error.code == 401) {
+					//todo co się dzieje jeśli 401
+				}
 				window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
 			} else {
 				window.showError(response.status + " " + response.data.error, ""); //method from common-scripts.js
 			}
+
 			window.hideLoadingSpinner();
 			deleteSession();
 			window.location.reload();
@@ -66,9 +69,12 @@ export function updateEntity(entity) {
 		return response;
 	})
 	.catch((response) => {
-		debugger;
-		window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
-	    console.log(response);
+		if (response.data.error.code && response.data.error.title) {
+			window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
+		} else {
+			window.showError(response.status, "Unknown error.");
+			console.log(response.data);
+		}
 		window.hideLoadingSpinner();
 	});
 }

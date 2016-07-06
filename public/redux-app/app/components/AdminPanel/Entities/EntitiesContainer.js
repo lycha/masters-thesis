@@ -1,7 +1,7 @@
 import React from 'react';
-import store from '../../store';
+import store from '../../../store';
 import { connect } from 'react-redux';
-import {getEntities, deleteEntity, updateEntity, addEntity} from '../../api/EntitiesApi';
+import {getEntities, deleteEntity, updateEntity, addEntity} from '../../../api/EntitiesApi';
 import EntityList from './EntityList'
 import AddEntity from './AddEntity'
 
@@ -34,10 +34,10 @@ class EntitiesContainer extends React.Component {
 					          <thead>
 					          <tr>
 				                <th><i className="fa fa-bookmark"></i> id</th>
+					              <th><i className="fa fa-question-circle"></i> Full Name</th>
 					              <th><i className="fa fa-bookmark"></i> EXPA id</th>
 				                <th><i className="fa fa-question-circle"></i> EXPA Name</th>
 				                <th><i className="fa fa-question-circle"></i> URL Name</th>
-					              <th><i className="fa fa-question-circle"></i> Full Name</th>
 					              <th></th>
 					          </tr>
 					          </thead>

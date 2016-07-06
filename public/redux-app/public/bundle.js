@@ -62,31 +62,31 @@
 
 	var _store2 = _interopRequireDefault(_store);
 
-	var _Main = __webpack_require__(249);
+	var _Main = __webpack_require__(250);
 
 	var _Main2 = _interopRequireDefault(_Main);
 
-	var _Home = __webpack_require__(280);
+	var _Home = __webpack_require__(285);
 
 	var _Home2 = _interopRequireDefault(_Home);
 
-	var _Login = __webpack_require__(281);
+	var _LoginContainer = __webpack_require__(286);
 
-	var _Login2 = _interopRequireDefault(_Login);
+	var _LoginContainer2 = _interopRequireDefault(_LoginContainer);
 
-	var _Dashboard = __webpack_require__(274);
+	var _Dashboard = __webpack_require__(275);
 
 	var _Dashboard2 = _interopRequireDefault(_Dashboard);
 
-	var _Users = __webpack_require__(283);
+	var _Users = __webpack_require__(289);
 
 	var _Users2 = _interopRequireDefault(_Users);
 
-	var _Products = __webpack_require__(297);
+	var _Products = __webpack_require__(303);
 
 	var _Products2 = _interopRequireDefault(_Products);
 
-	var _EntitiesContainer = __webpack_require__(298);
+	var _EntitiesContainer = __webpack_require__(304);
 
 	var _EntitiesContainer2 = _interopRequireDefault(_EntitiesContainer);
 
@@ -98,7 +98,7 @@
 		_react2.default.createElement(
 			_reactRouter.Router,
 			{ history: _reactRouter.browserHistory },
-			_react2.default.createElement(_reactRouter.Route, { path: 'auth/login', component: _Login2.default, history: history }),
+			_react2.default.createElement(_reactRouter.Route, { path: 'auth/login', component: _LoginContainer2.default, history: history }),
 			_react2.default.createElement(
 				_reactRouter.Route,
 				{ path: '/', component: _Main2.default, history: history },
@@ -26399,15 +26399,21 @@
 
 	var _EntityReducer2 = _interopRequireDefault(_EntityReducer);
 
+	var _AuthenticationReducer = __webpack_require__(249);
+
+	var _AuthenticationReducer2 = _interopRequireDefault(_AuthenticationReducer);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	// Combine Reducers
-	var reducers = (0, _redux.combineReducers)({
-		entityState: _EntityReducer2.default
-	});
+
 
 	// Reducers
+	var reducers = (0, _redux.combineReducers)({
+		entityState: _EntityReducer2.default,
+		authenticationState: _AuthenticationReducer2.default
 
+	});
 
 	exports.default = reducers;
 
@@ -26445,20 +26451,28 @@
 	  switch (action.type) {
 
 	    case types.GET_ENTITIES_SUCCESS:
-	      return Object.assign({}, state, { entities: action.entities });
+	      var entities = _lodash2.default.sortBy(action.entities, 'name');
+	      return Object.assign({}, state, { entities: entities });
 
 	    case types.DELETE_ENTITY_SUCCESS:
 	      var newData = _lodash2.default.filter(state.entities, function (entity) {
 	        return entity.id != action.entityId;
 	      });
-	      return Object.assign({}, state, { entities: newData });
+	      var entities = _lodash2.default.sortBy(newData, 'name');
+	      return Object.assign({}, state, { entities: entities });
 
 	    case types.ADD_ENTITY_SUCCESS:
 	      var newEntity = state.entities.concat([action.entity]);
-	      return Object.assign({}, state, { entities: newEntity });
+	      var entities = _lodash2.default.sortBy(newEntity, 'name');
+	      return Object.assign({}, state, { entities: entities });
 
 	    case types.UPDATE_ENTITY_SUCCESS:
-	      return Object.assign({}, state, { entities: action.entities });
+	      var newData = _lodash2.default.filter(state.entities, function (entity) {
+	        return entity.id != action.entity.id;
+	      });
+	      var newEntities = newData.concat([action.entity]);
+	      var entities = _lodash2.default.sortBy(newEntities, 'name');
+	      return Object.assign({}, state, { entities: entities });
 	  }
 
 	  return state;
@@ -26480,6 +26494,9 @@
 	var DELETE_ENTITY_SUCCESS = exports.DELETE_ENTITY_SUCCESS = 'DELETE_ENTITY_SUCCESS';
 	var UPDATE_ENTITY_SUCCESS = exports.UPDATE_ENTITY_SUCCESS = 'UPDATE_ENTITY_SUCCESS';
 	var ADD_ENTITY_SUCCESS = exports.ADD_ENTITY_SUCCESS = 'ADD_ENTITY_SUCCESS';
+
+	//Authentication
+	var LOGIN_SUCCESS = exports.LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 
 /***/ },
 /* 247 */
@@ -42915,7 +42932,49 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-					value: true
+	  value: true
+	});
+
+	var _ActionTypes = __webpack_require__(246);
+
+	var types = _interopRequireWildcard(_ActionTypes);
+
+	var _lodash = __webpack_require__(247);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	var initialState = {
+	  token: {},
+	  userRole: {}
+	};
+
+	var AuthenticationReducer = function AuthenticationReducer() {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? initialState : arguments[0];
+	  var action = arguments[1];
+
+	  switch (action.type) {
+
+	    case types.LOGIN_SUCCESS:
+	      return Object.assign({}, state, { token: action.token });
+	  }
+
+	  return state;
+	};
+
+	exports.default = AuthenticationReducer;
+
+/***/ },
+/* 250 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -42924,21 +42983,31 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Header = __webpack_require__(250);
+	var _Header = __webpack_require__(251);
 
 	var _Header2 = _interopRequireDefault(_Header);
 
-	var _SideMenu = __webpack_require__(251);
+	var _SideMenu = __webpack_require__(252);
 
 	var _SideMenu2 = _interopRequireDefault(_SideMenu);
 
-	var _Dashboard = __webpack_require__(274);
+	var _Dashboard = __webpack_require__(275);
 
 	var _Dashboard2 = _interopRequireDefault(_Dashboard);
 
-	var _axios = __webpack_require__(256);
+	var _axios = __webpack_require__(257);
 
 	var _axios2 = _interopRequireDefault(_axios);
+
+	var _store = __webpack_require__(243);
+
+	var _store2 = _interopRequireDefault(_store);
+
+	var _reactRedux = __webpack_require__(217);
+
+	var _UserApi = __webpack_require__(281);
+
+	var _SessionManager = __webpack_require__(256);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -42949,69 +43018,67 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var Main = function (_React$Component) {
-					_inherits(Main, _React$Component);
+		_inherits(Main, _React$Component);
 
-					function Main(props) {
-									_classCallCheck(this, Main);
+		function Main(props) {
+			_classCallCheck(this, Main);
 
-									var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Main).call(this, props));
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Main).call(this, props));
 
-									_this.displayName = 'Main';
-									_this.state = {
-													userRole: ''
-									};
-									return _this;
-					}
+			_this.logout = _this.logout.bind(_this);
+			return _this;
+		}
 
-					_createClass(Main, [{
-									key: 'componentWillMount',
-									value: function componentWillMount() {
-													var _this2 = this;
+		_createClass(Main, [{
+			key: 'componentDidMount',
+			value: function componentDidMount() {
+				(0, _UserApi.getAuthenticatedUser)();
+			}
+		}, {
+			key: 'componentWillMount',
+			value: function componentWillMount() {
+				if (!localStorage.getItem('trackingToolAuthToken') || localStorage.getItem('trackingToolAuthToken') == 'undefined') {
+					this.props.history.pushState(null, 'auth/login');
+				}
+			}
+		}, {
+			key: 'logout',
+			value: function logout() {
+				(0, _SessionManager.deleteSession)();
+				this.props.history.pushState(null, 'auth/login');
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				return _react2.default.createElement(
+					'section',
+					{ id: 'container' },
+					_react2.default.createElement(_Header2.default, { logout: this.logout }),
+					_react2.default.createElement(_SideMenu2.default, { userRole: this.userRole }),
+					this.props.children
+				);
+			}
+		}]);
 
-													if (!localStorage.getItem('trackingToolAuthToken')) {
-																	this.props.history.pushState(null, 'auth/login');
-													}
-													_axios2.default.get('../../api/v1/authenticate/user', {
-																	headers: {
-																					'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
-																	} }).then(function (response) {
-																	_this2.setState({
-																					userRole: response.data.user.roles[0].slug
-																	});
-													}).catch(function (response) {
-																	console.log(response);
-													});
-									}
-					}, {
-									key: 'render',
-									value: function render() {
-													return _react2.default.createElement(
-																	'section',
-																	{ id: 'container' },
-																	_react2.default.createElement(_Header2.default, null),
-																	_react2.default.createElement(_SideMenu2.default, { userRole: this.state.userRole }),
-																	this.props.children
-													);
-									}
-					}]);
-
-					return Main;
+		return Main;
 	}(_react2.default.Component);
 
-	Main.PropTypes = {
-					history: _react2.default.PropTypes.object.isRequired
+	var mapStateToProps = function mapStateToProps(store) {
+		return {
+			userRole: store.authenticationState.userRole
+		};
 	};
 
-	exports.default = Main;
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(Main);
 
 /***/ },
-/* 250 */
+/* 251 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-					value: true
+	    value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -43029,65 +43096,75 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var Header = function (_React$Component) {
-					_inherits(Header, _React$Component);
+	    _inherits(Header, _React$Component);
 
-					function Header(props) {
-									_classCallCheck(this, Header);
+	    function Header(props) {
+	        _classCallCheck(this, Header);
 
-									var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Header).call(this, props));
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Header).call(this, props));
 
-									_this.displayName = 'Header';
-									return _this;
-					}
+	        _this.displayName = 'Header';
+	        return _this;
+	    }
 
-					_createClass(Header, [{
-									key: 'render',
-									value: function render() {
-													return _react2.default.createElement(
-																	'header',
-																	{ className: 'header black-bg' },
-																	_react2.default.createElement(
-																					'div',
-																					{ className: 'sidebar-toggle-box' },
-																					_react2.default.createElement('div', { className: 'fa fa-bars tooltips', 'data-placement': 'right', 'data-original-title': 'Toggle Navigation' })
-																	),
-																	_react2.default.createElement(
-																					'a',
-																					{ href: '#', className: 'logo' },
-																					_react2.default.createElement(
-																									'b',
-																									null,
-																									'AIESEC in Poland Mkt Tracking Tool '
-																					)
-																	),
-																	_react2.default.createElement(
-																					'div',
-																					{ className: 'top-menu' },
-																					_react2.default.createElement(
-																									'ul',
-																									{ className: 'nav pull-right top-menu' },
-																									_react2.default.createElement(
-																													'li',
-																													null,
-																													_react2.default.createElement(
-																																	'a',
-																																	{ className: 'logout', href: '#/auth/login' },
-																																	'Logout'
-																													)
-																									)
-																					)
-																	)
-													);
-									}
-					}]);
+	    _createClass(Header, [{
+	        key: 'logoutClick',
+	        value: function logoutClick(e) {
+	            e.preventDefault();
+	            this.props.logout();
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
 
-					return Header;
+	            return _react2.default.createElement(
+	                'header',
+	                { className: 'header black-bg' },
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'sidebar-toggle-box' },
+	                    _react2.default.createElement('div', { className: 'fa fa-bars tooltips', 'data-placement': 'right', 'data-original-title': 'Toggle Navigation' })
+	                ),
+	                _react2.default.createElement(
+	                    'a',
+	                    { href: '#', className: 'logo' },
+	                    _react2.default.createElement(
+	                        'b',
+	                        null,
+	                        'AIESEC in Poland Mkt Tracking Tool '
+	                    )
+	                ),
+	                _react2.default.createElement(
+	                    'div',
+	                    { className: 'top-menu' },
+	                    _react2.default.createElement(
+	                        'ul',
+	                        { className: 'nav pull-right top-menu' },
+	                        _react2.default.createElement(
+	                            'li',
+	                            null,
+	                            _react2.default.createElement(
+	                                'a',
+	                                { className: 'logout', onClick: function onClick(e) {
+	                                        return _this2.logoutClick(e);
+	                                    }, href: '' },
+	                                'Logout'
+	                            )
+	                        )
+	                    )
+	                )
+	            );
+	        }
+	    }]);
+
+	    return Header;
 	}(_react2.default.Component);
 
 	exports.default = Header;
 
 /***/ },
-/* 251 */
+/* 252 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -43102,15 +43179,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _SettingsMenu = __webpack_require__(252);
+	var _SettingsMenu = __webpack_require__(253);
 
 	var _SettingsMenu2 = _interopRequireDefault(_SettingsMenu);
 
-	var _TotalAnalisysMenu = __webpack_require__(253);
+	var _TotalAnalisysMenu = __webpack_require__(254);
 
 	var _TotalAnalisysMenu2 = _interopRequireDefault(_TotalAnalisysMenu);
 
-	var _ServerRequests = __webpack_require__(254);
+	var _ServerRequests = __webpack_require__(255);
 
 	var _reactRouter = __webpack_require__(33);
 
@@ -43140,14 +43217,15 @@
 		_createClass(SideMenu, [{
 			key: 'componentWillMount',
 			value: function componentWillMount() {
-				(0, _ServerRequests.getEntities)().then(function (response) {
-					window.hideLoadingSpinner();
-					if (response) {
-						this.setState({
-							entities: response.data
-						});
-					}
-				}.bind(this));
+				/*getEntities()
+	   .then(function(response){
+	   window.hideLoadingSpinner();
+	   if (response) {
+	   this.setState({
+	        entities: response.data
+	      })
+	   }
+	   }.bind(this))*/
 			}
 		}, {
 			key: 'componentDidMount',
@@ -43358,7 +43436,7 @@
 	exports.default = SideMenu;
 
 /***/ },
-/* 252 */
+/* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -43483,7 +43561,7 @@
 	exports.default = SettingsMenu;
 
 /***/ },
-/* 253 */
+/* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -43593,7 +43671,7 @@
 	exports.default = TotalAnalisysMenu;
 
 /***/ },
-/* 254 */
+/* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -43601,100 +43679,17 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
-	exports.updateEntity = updateEntity;
-	exports.getEntities = getEntities;
-	exports.addEntity = addEntity;
-	exports.deleteEntity = deleteEntity;
 	exports.login = login;
 
 	var _reactRouter = __webpack_require__(33);
 
-	var _SessionManager = __webpack_require__(255);
+	var _SessionManager = __webpack_require__(256);
 
 	var _SessionManager2 = _interopRequireDefault(_SessionManager);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var axios = __webpack_require__(256);
-	function updateEntity(id, name, slug, expa_id, expa_name) {
-		window.showLoadingSpinner();
-		var config = {
-			headers: { 'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken') }
-		};
-		axios.put('../../api/v1/entities/' + id, {
-			name: name,
-			slug: slug,
-			expa_id: expa_id,
-			expa_name: expa_name
-		}, config).then(function (response) {
-			window.hideLoadingSpinner();
-			return response.data;
-		}).catch(function (response) {
-			window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
-			console.log(response);
-			window.hideLoadingSpinner();
-		});
-	}
-
-	function getEntities() {
-		window.showLoadingSpinner();
-		return axios.get('../../api/v1/entities/', {
-			headers: {
-				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
-			} }).then(function (response) {
-			return { data: response.data };
-		}).catch(function (response) {
-			{
-				data: null;
-			}
-			if (response.data.error.code && response.data.error.title) {
-				window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
-			} else {
-					window.showError(response.status + " " + response.data.error, ""); //method from common-scripts.js
-				}
-			window.hideLoadingSpinner();
-			(0, _SessionManager2.default)();
-			window.location.reload();
-		});
-	}
-
-	function addEntity(expa_name, expa_id, slug, name) {
-		window.showLoadingSpinner();
-		var config = {
-			headers: { 'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken') }
-		};
-		return axios.post('../../api/v1/entities', {
-			name: name,
-			slug: slug,
-			expa_id: expa_id,
-			expa_name: expa_name
-		}, config).then(function (response) {
-			return { data: response.data };
-		}).catch(function (response) {
-			if (response.data.error.code && response.data.error.title) {
-				window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
-			} else {
-					window.showError(response.status + " " + response.data.error, ""); //method from common-scripts.js
-				}
-			window.hideLoadingSpinner();
-		});
-	}
-
-	function deleteEntity(id) {
-		window.showLoadingSpinner();
-		return axios.delete('../../api/v1/entities/' + id, {
-			headers: {
-				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
-			} }).then(function (response) {}).catch(function (response) {
-			window.hideLoadingSpinner();
-			if (response.data.error.code && response.data.error.title) {
-				window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
-			} else {
-					window.showError(response.status + " " + response.data.error, ""); //method from common-scripts.js
-				}
-		});
-	}
-
+	var axios = __webpack_require__(257);
 	function login(email, password) {
 		window.showLoadingSpinner();
 		return axios.post('../../api/v1/authenticate', {
@@ -43713,7 +43708,7 @@
 	}
 
 /***/ },
-/* 255 */
+/* 256 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -43724,7 +43719,6 @@
 	exports.createSession = createSession;
 	exports.deleteSession = deleteSession;
 	function createSession(token) {
-		console.log("createSession", token);
 		localStorage.setItem('trackingToolAuthToken', token);
 	}
 
@@ -43733,25 +43727,25 @@
 	}
 
 /***/ },
-/* 256 */
+/* 257 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(257);
+	module.exports = __webpack_require__(258);
 
 /***/ },
-/* 257 */
+/* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var defaults = __webpack_require__(258);
-	var utils = __webpack_require__(259);
-	var dispatchRequest = __webpack_require__(260);
-	var InterceptorManager = __webpack_require__(269);
-	var isAbsoluteURL = __webpack_require__(270);
-	var combineURLs = __webpack_require__(271);
-	var bind = __webpack_require__(272);
-	var transformData = __webpack_require__(264);
+	var defaults = __webpack_require__(259);
+	var utils = __webpack_require__(260);
+	var dispatchRequest = __webpack_require__(261);
+	var InterceptorManager = __webpack_require__(270);
+	var isAbsoluteURL = __webpack_require__(271);
+	var combineURLs = __webpack_require__(272);
+	var bind = __webpack_require__(273);
+	var transformData = __webpack_require__(265);
 
 	function Axios(defaultConfig) {
 	  this.defaults = utils.merge({}, defaultConfig);
@@ -43836,7 +43830,7 @@
 	axios.all = function all(promises) {
 	  return Promise.all(promises);
 	};
-	axios.spread = __webpack_require__(273);
+	axios.spread = __webpack_require__(274);
 
 	// Provide aliases for supported request methods
 	utils.forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {
@@ -43864,12 +43858,12 @@
 
 
 /***/ },
-/* 258 */
+/* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(259);
+	var utils = __webpack_require__(260);
 
 	var PROTECTION_PREFIX = /^\)\]\}',?\n/;
 	var DEFAULT_CONTENT_TYPE = {
@@ -43936,7 +43930,7 @@
 
 
 /***/ },
-/* 259 */
+/* 260 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -44208,7 +44202,7 @@
 
 
 /***/ },
-/* 260 */
+/* 261 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -44230,10 +44224,10 @@
 	        adapter = config.adapter;
 	      } else if (typeof XMLHttpRequest !== 'undefined') {
 	        // For browsers use XHR adapter
-	        adapter = __webpack_require__(261);
+	        adapter = __webpack_require__(262);
 	      } else if (typeof process !== 'undefined') {
 	        // For node use HTTP adapter
-	        adapter = __webpack_require__(261);
+	        adapter = __webpack_require__(262);
 	      }
 
 	      if (typeof adapter === 'function') {
@@ -44249,18 +44243,18 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 261 */
+/* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
-	var utils = __webpack_require__(259);
-	var buildURL = __webpack_require__(262);
-	var parseHeaders = __webpack_require__(263);
-	var transformData = __webpack_require__(264);
-	var isURLSameOrigin = __webpack_require__(265);
-	var btoa = (typeof window !== 'undefined' && window.btoa) || __webpack_require__(266);
-	var settle = __webpack_require__(267);
+	var utils = __webpack_require__(260);
+	var buildURL = __webpack_require__(263);
+	var parseHeaders = __webpack_require__(264);
+	var transformData = __webpack_require__(265);
+	var isURLSameOrigin = __webpack_require__(266);
+	var btoa = (typeof window !== 'undefined' && window.btoa) || __webpack_require__(267);
+	var settle = __webpack_require__(268);
 
 	module.exports = function xhrAdapter(resolve, reject, config) {
 	  var requestData = config.data;
@@ -44359,7 +44353,7 @@
 	  // This is only done if running in a standard browser environment.
 	  // Specifically not if we're in a web worker, or react-native.
 	  if (utils.isStandardBrowserEnv()) {
-	    var cookies = __webpack_require__(268);
+	    var cookies = __webpack_require__(269);
 
 	    // Add xsrf header
 	    var xsrfValue = config.withCredentials || isURLSameOrigin(config.url) ?
@@ -44420,12 +44414,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 262 */
+/* 263 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(259);
+	var utils = __webpack_require__(260);
 
 	function encode(val) {
 	  return encodeURIComponent(val).
@@ -44493,12 +44487,12 @@
 
 
 /***/ },
-/* 263 */
+/* 264 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(259);
+	var utils = __webpack_require__(260);
 
 	/**
 	 * Parse headers into an object
@@ -44536,12 +44530,12 @@
 
 
 /***/ },
-/* 264 */
+/* 265 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(259);
+	var utils = __webpack_require__(260);
 
 	/**
 	 * Transform the data for a request or a response
@@ -44562,12 +44556,12 @@
 
 
 /***/ },
-/* 265 */
+/* 266 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(259);
+	var utils = __webpack_require__(260);
 
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -44636,7 +44630,7 @@
 
 
 /***/ },
-/* 266 */
+/* 267 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -44678,7 +44672,7 @@
 
 
 /***/ },
-/* 267 */
+/* 268 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -44702,12 +44696,12 @@
 
 
 /***/ },
-/* 268 */
+/* 269 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(259);
+	var utils = __webpack_require__(260);
 
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -44761,12 +44755,12 @@
 
 
 /***/ },
-/* 269 */
+/* 270 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(259);
+	var utils = __webpack_require__(260);
 
 	function InterceptorManager() {
 	  this.handlers = [];
@@ -44819,7 +44813,7 @@
 
 
 /***/ },
-/* 270 */
+/* 271 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -44839,7 +44833,7 @@
 
 
 /***/ },
-/* 271 */
+/* 272 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -44857,7 +44851,7 @@
 
 
 /***/ },
-/* 272 */
+/* 273 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -44874,7 +44868,7 @@
 
 
 /***/ },
-/* 273 */
+/* 274 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -44907,7 +44901,7 @@
 
 
 /***/ },
-/* 274 */
+/* 275 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -44922,23 +44916,23 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _ProgramLogo = __webpack_require__(275);
+	var _ProgramLogo = __webpack_require__(276);
 
 	var _ProgramLogo2 = _interopRequireDefault(_ProgramLogo);
 
-	var _GlobalStatistics = __webpack_require__(276);
+	var _GlobalStatistics = __webpack_require__(277);
 
 	var _GlobalStatistics2 = _interopRequireDefault(_GlobalStatistics);
 
-	var _Conversion = __webpack_require__(277);
+	var _Conversion = __webpack_require__(278);
 
 	var _Conversion2 = _interopRequireDefault(_Conversion);
 
-	var _ProductStatistics = __webpack_require__(278);
+	var _ProductStatistics = __webpack_require__(279);
 
 	var _ProductStatistics2 = _interopRequireDefault(_ProductStatistics);
 
-	var _LineChart = __webpack_require__(279);
+	var _LineChart = __webpack_require__(280);
 
 	var _LineChart2 = _interopRequireDefault(_LineChart);
 
@@ -45041,7 +45035,7 @@
 	exports.default = Dashboard;
 
 /***/ },
-/* 275 */
+/* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -45105,7 +45099,7 @@
 	exports.default = ProgramLogo;
 
 /***/ },
-/* 276 */
+/* 277 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -45213,7 +45207,7 @@
 	exports.default = GlobalStatistics;
 
 /***/ },
-/* 277 */
+/* 278 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -45287,7 +45281,7 @@
 	exports.default = Conversion;
 
 /***/ },
-/* 278 */
+/* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -45399,7 +45393,7 @@
 	exports.default = ProductStatistics;
 
 /***/ },
-/* 279 */
+/* 280 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -45465,28 +45459,6 @@
 	exports.default = LineChart;
 
 /***/ },
-/* 280 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var React = __webpack_require__(1);
-
-	var Home = React.createClass({
-	  displayName: "Home",
-
-	  render: function render() {
-	    return React.createElement(
-	      "h2",
-	      { className: "text-center" },
-	      "Search By Github Username Above"
-	    );
-	  }
-	});
-
-	module.exports = Home;
-
-/***/ },
 /* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -45495,5271 +45467,68 @@
 	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
+	exports.login = login;
+	exports.getAuthenticatedUser = getAuthenticatedUser;
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _jquery = __webpack_require__(282);
-
-	var _jquery2 = _interopRequireDefault(_jquery);
-
-	var _axios = __webpack_require__(256);
+	var _axios = __webpack_require__(257);
 
 	var _axios2 = _interopRequireDefault(_axios);
 
-	var _reactRouter = __webpack_require__(33);
+	var _store = __webpack_require__(243);
 
-	var _SessionManager = __webpack_require__(255);
+	var _store2 = _interopRequireDefault(_store);
 
-	var _ServerRequests = __webpack_require__(254);
+	var _Config = __webpack_require__(282);
+
+	var _Config2 = _interopRequireDefault(_Config);
+
+	var _underscore = __webpack_require__(283);
+
+	var _underscore2 = _interopRequireDefault(_underscore);
+
+	var _AuthenticationActions = __webpack_require__(284);
+
+	var _SessionManager = __webpack_require__(256);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var Login = function (_React$Component) {
-		_inherits(Login, _React$Component);
-
-		function Login(props) {
-			_classCallCheck(this, Login);
-
-			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Login).call(this, props));
-
-			_this.state = {
-				username: '',
-				password: ''
-			};
-			_this.displayName = 'Login';
-			_this.handlePasswordChange = _this.handlePasswordChange.bind(_this);
-			_this.handleEmailChange = _this.handleEmailChange.bind(_this);
-			_this.handleSubmit = _this.handleSubmit.bind(_this);
-			_this.redirectOnSuccess = _this.redirectOnSuccess.bind(_this);
-			return _this;
-		}
-
-		_createClass(Login, [{
-			key: 'redirectOnSuccess',
-			value: function redirectOnSuccess() {
-				this.props.history.pushState(null, '/');
-			}
-		}, {
-			key: 'componentDidMount',
-			value: function componentDidMount() {
-				if (localStorage.getItem('trackingToolAuthToken')) {
-					localStorage.removeItem('trackingToolAuthToken');
+	function login(email, password) {
+		window.showLoadingSpinner();
+		return _axios2.default.post('../../api/v1/authenticate', {
+			email: email,
+			password: password
+		}).then(function (response) {
+			window.hideLoadingSpinner();
+			_store2.default.dispatch((0, _AuthenticationActions.loginSuccess)(response.data));
+			(0, _SessionManager.createSession)(response.data.token);
+			return response;
+		}).catch(function (response) {
+			if (response.data.error.code && response.data.error.title) {
+				window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
+			} else {
+					window.showError(response.status + " " + response.data.error, ""); //method from common-scripts.js
 				}
-				jQuery.backstretch("assets/img/login-bg.jpg", { transitionDuration: 500 });
-			}
-		}, {
-			key: 'componentWillUnmount',
-			value: function componentWillUnmount() {
-				jQuery.backstretch('destroy');
-			}
-		}, {
-			key: 'handleEmailChange',
-			value: function handleEmailChange(e) {
-				this.setState({ email: e.target.value });
-			}
-		}, {
-			key: 'handlePasswordChange',
-			value: function handlePasswordChange(e) {
-				this.setState({ password: e.target.value });
-			}
-		}, {
-			key: 'handleSubmit',
-			value: function handleSubmit(e) {
-				e.preventDefault();
-				var email = this.state.email.trim();
-				var password = this.state.password.trim();
+			window.hideLoadingSpinner();
+		});
+	}
 
-				if (!email || !password) {
-					return;
-				}
-
-				(0, _ServerRequests.login)(email, password).then(function (response) {
-					window.hideLoadingSpinner();
-					if (response) {
-						(0, _SessionManager.createSession)(response.token);
-						this.redirectOnSuccess();
-					}
-				}.bind(this));
-
-				return;
-			}
-		}, {
-			key: 'render',
-			value: function render() {
-				return _react2.default.createElement(
-					'div',
-					{ id: 'login-page' },
-					_react2.default.createElement(
-						'div',
-						{ className: 'container' },
-						_react2.default.createElement(
-							'form',
-							{ className: 'form-login' },
-							_react2.default.createElement(
-								'h2',
-								{ className: 'form-login-heading' },
-								'sign in now'
-							),
-							_react2.default.createElement(
-								'div',
-								{ className: 'login-wrap' },
-								_react2.default.createElement('input', { type: 'text', className: 'form-control', name: 'name', placeholder: 'email',
-									autofocus: true,
-									onChange: this.handleEmailChange }),
-								_react2.default.createElement('br', null),
-								_react2.default.createElement('input', { type: 'password', className: 'form-control', name: 'password', placeholder: 'Password',
-									onChange: this.handlePasswordChange }),
-								_react2.default.createElement('br', null),
-								_react2.default.createElement(
-									'button',
-									{ onClick: this.handleSubmit, className: 'btn btn-theme btn-block' },
-									_react2.default.createElement('i', { className: 'fa fa-lock' }),
-									' SIGN IN'
-								),
-								_react2.default.createElement('hr', null)
-							)
-						)
-					)
-				);
-			}
-		}]);
-
-		return Login;
-	}(_react2.default.Component);
-
-	Login.PropTypes = {
-		history: _react2.default.PropTypes.object.isRequired
-	};
-
-	exports.default = Login;
+	function getAuthenticatedUser() {
+		_axios2.default.get('../../api/v1/authenticate/user', {
+			headers: {
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
+			} }).then(function (response) {}).catch(function (response) {
+			console.log(response);
+		});
+	}
 
 /***/ },
 /* 282 */
 /***/ function(module, exports) {
 
-	/*
-	 * Backstretch
-	 * http://srobbin.com/jquery-plugins/backstretch/
-	 *
-	 * Copyright (c) 2013 Scott Robbin
-	 * Licensed under the MIT license.
-	 */
-
-	;(function ($, window, undefined) {
-	  'use strict';
-
-	  /** @const */
-	  var YOUTUBE_REGEXP = /^.*(youtu\.be\/|youtube\.com\/v\/|youtube\.com\/embed\/|youtube\.com\/watch\?v=|youtube\.com\/watch\?.*\&v=)([^#\&\?]*).*/i;
-	  
-	  /* PLUGIN DEFINITION
-	   * ========================= */
-
-	  $.fn.backstretch = function (images, options) {
-	    var args = arguments;
-
-	    /*
-	     * Scroll the page one pixel to get the right window height on iOS
-	     * Pretty harmless for everyone else
-	    */
-	    if ($(window).scrollTop() === 0 ) {
-	      window.scrollTo(0, 0);
-	    }
-
-	    var returnValues;
-	    
-	    this.each(function (eachIndex) {
-	      var $this = $(this)
-	        , obj = $this.data('backstretch');
-
-	      // Do we already have an instance attached to this element?
-	      if (obj) {
-
-	        // Is this a method they're trying to execute?
-	        if (typeof args[0] === 'string' &&
-	            typeof obj[args[0]] === 'function') {
-	              
-	          // Call the method
-	          var returnValue = obj[args[0]].apply(obj, Array.prototype.slice.call(args, 1));
-	          if (returnValue === obj) { // If a method is chaining
-	            returnValue = undefined;
-	          }
-	          if (returnValue !== undefined) {
-	            returnValues = returnValues || [];
-	            returnValues[eachIndex] = returnValue;
-	          }
-	          
-	          return; // Nothing further to do
-	        }
-
-	        // Merge the old options with the new
-	        options = $.extend(obj.options, options);
-
-	        // Remove the old instance
-	        if ( obj.hasOwnProperty('destroy') ) {
-	          obj.destroy(true);
-	        }
-	      }
-
-	      // We need at least one image
-	      if (!images || (images && images.length === 0)) {
-	        var cssBackgroundImage = $this.css('background-image');
-	        if (cssBackgroundImage && cssBackgroundImage !== 'none') {
-	          images = [ { url: $this.css('backgroundImage').replace(/url\(|\)|"|'/g,"") } ];
-	        } else {
-	          $.error('No images were supplied for Backstretch, or element must have a CSS-defined background image.');
-	        }
-	      }
-
-	      obj = new Backstretch(this, images, options || {});
-	      $this.data('backstretch', obj);
-	    });
-	    
-	    return returnValues ? returnValues.length === 1 ? returnValues[0] : returnValues : this;
-	  };
-
-	  // If no element is supplied, we'll attach to body
-	  $.backstretch = function (images, options) {
-	    // Return the instance
-	    return $('body')
-	            .backstretch(images, options)
-	            .data('backstretch');
-	  };
-
-	  // Custom selector
-	  $.expr[':'].backstretch = function(elem) {
-	    return $(elem).data('backstretch') !== undefined;
-	  };
-
-	  /* DEFAULTS
-	   * ========================= */
-
-	  $.fn.backstretch.defaults = {
-	    duration: 5000                // Amount of time in between slides (if slideshow)
-	    , transition: 'fade'          // Type of transition between slides
-	    , transitionDuration: 0       // Duration of transition between slides
-	    , animateFirst: true          // Animate the transition of first image of slideshow in?
-	    , alignX: 0.5                 // The x-alignment for the image, can be 'left'|'center'|'right' or any number between 0.0 and 1.0
-	    , alignY: 0.5                 // The y-alignment for the image, can be 'top'|'center'|'bottom' or any number between 0.0 and 1.0
-	    , paused: false               // Whether the images should slide after given duration
-	    , start: 0                    // Index of the first image to show
-	    , preload: 2                  // How many images preload at a time?
-	    , preloadSize: 1              // How many images can we preload in parallel?
-	    , resolutionRefreshRate: 2500 // How long to wait before switching resolution?
-	    , resolutionChangeRatioThreshold: 0.1 // How much a change should it be before switching resolution?
-	  };
-
-	  /* STYLES
-	   *
-	   * Baked-in styles that we'll apply to our elements.
-	   * In an effort to keep the plugin simple, these are not exposed as options.
-	   * That said, anyone can override these in their own stylesheet.
-	   * ========================= */
-	  var styles = {
-	    wrap: {
-	      left: 0
-	      , top: 0
-	      , overflow: 'hidden'
-	      , margin: 0
-	      , padding: 0
-	      , height: '100%'
-	      , width: '100%'
-	      , zIndex: -999999
-	    }
-	    , itemWrapper: {
-	      position: 'absolute'
-	      , display: 'none'
-	      , margin: 0
-	      , padding: 0
-	      , border: 'none'
-	      , width: '100%'
-	      , height: '100%'
-	      , zIndex: -999999
-	    }
-	    , item: {
-	      position: 'absolute'
-	      , margin: 0
-	      , padding: 0
-	      , border: 'none'
-	      , width: '100%'
-	      , height: '100%'
-	      , maxWidth: 'none'
-	    }
-	  };
-
-	  /* Given an array of different options for an image,
-	   * choose the optimal image for the container size.
-	   *
-	   * Given an image template (a string with {{ width }} and/or
-	   * {{height}} inside) and a container object, returns the
-	   * image url with the exact values for the size of that
-	   * container.
-	   *
-	   * Returns an array of urls optimized for the specified resolution.
-	   *
-	   */
-	  var optimalSizeImages = (function () {
-
-	    /* Sorts the array of image sizes based on width */
-	    var widthInsertSort = function (arr) {
-	      for (var i = 1; i < arr.length; i++) {
-	        var tmp = arr[i],
-	            j = i;
-	        while (arr[j - 1] && parseInt(arr[j - 1].width, 10) > parseInt(tmp.width, 10)) {
-	          arr[j] = arr[j - 1];
-	          --j;
-	        }
-	        arr[j] = tmp;
-	      }
-
-	      return arr;
-	    };
-
-	    /* Given an array of various sizes of the same image and a container width,
-	     * return the best image.
-	     */
-	    var selectBest = function (containerWidth, imageSizes) {
-
-	      var devicePixelRatio = window.devicePixelRatio || 1;
-	      var lastAllowedImage = 0;
-	      var testWidth;
-
-	      for (var j = 0, image; j < imageSizes.length; j++) {
-
-	          image = imageSizes[j];
-
-	          // In case a new image was pushed in, process it:
-	          if (typeof image === 'string') {
-	              image = imageSizes[j] = { url: image };
-	          }
-
-	          if (image.pixelRatio && image.pixelRatio !== 'auto' && parseFloat(image.pixelRatio) !== devicePixelRatio) {
-	              // We disallowed choosing this image for current device pixel ratio,
-	              // So skip this one.
-	              continue;
-	          }
-
-	          // Mark this one as the last one we investigated
-	          // which does not violate device pixel ratio rules.
-	          // We may choose this one later if there's no match.
-	          lastAllowedImage = j;
-
-	          // For most images, we match the specified width against element width,
-	          // And enforcing a limit depending on the "pixelRatio" property if specified.
-	          // But if a pixelRatio="auto", then we consider the width as the physical width of the image,
-	          // And match it while considering the device's pixel ratio.
-	          testWidth = containerWidth;
-	          if (image.pixelRatio === 'auto') {
-	              containerWidth *= devicePixelRatio;
-	          }
-
-	          // Stop when the width of the image is larger or equal to the container width
-	          if (image.width >= testWidth) {
-	              break;
-	          }
-	      }
-
-	      // Use the image located at where we stopped
-	      return imageSizes[Math.min(j, lastAllowedImage)];
-	    };
-	    
-	    var replaceTagsInUrl = function (url, templateReplacer) {
-	        
-	        if (typeof url === 'string') {
-	            url = url.replace(/{{(width|height)}}/g, templateReplacer);
-	        } else if (url instanceof Array) {
-	            for (var i = 0; i < url.length; i++) {
-	                if (url[i].src) {
-	                    url[i].src = replaceTagsInUrl(url[i].src, templateReplacer);
-	                } else {
-	                    url[i] = replaceTagsInUrl(url[i], templateReplacer);
-	                }
-	            }
-	        }
-	        
-	        return url;
-	    };
-
-	    return function ($container, images) {
-	      var containerWidth = $container.width(),
-	          containerHeight = $container.height();
-
-	      var chosenImages = [];
-
-	      var templateReplacer = function (match, key) {
-	        if (key === 'width') {
-	          return containerWidth;
-	        }
-	        if (key === 'height') {
-	          return containerHeight;
-	        }
-	        return match;
-	      };
-
-	      for (var i = 0; i < images.length; i++) {
-	        if ($.isArray(images[i])) {
-	          images[i] = widthInsertSort(images[i]);
-	          var chosen = selectBest(containerWidth, images[i]);
-	          chosenImages.push(chosen);
-	        } else {
-	          // In case a new image was pushed in, process it:
-	          if (typeof images[i] === 'string') {
-	              images[i] = { url: images[i] };
-	          }
-
-	          var item = $.extend({}, images[i]);
-	          item.url = replaceTagsInUrl(item.url, templateReplacer);
-	          chosenImages.push(item);
-	        }
-	      }
-	      return chosenImages;
-	    };
-
-	  })();
-	  
-	  var isVideoSource = function (source) {
-	    return YOUTUBE_REGEXP.test(source.url) || source.isVideo;
-	  };
-
-	  /* Preload images */
-	  var preload = (function (sources, startAt, count, batchSize, callback) {
-	    // Plugin cache
-	    var cache = [];
-
-	    // Wrapper for cache
-	    var caching = function(image){
-	      for (var i = 0; i < cache.length; i++) {
-	        if (cache[i].src === image.src) {
-	          return cache[i];
-	        }
-	      }
-	      cache.push(image);
-	      return image;
-	    };
-
-	    // Execute callback
-	    var exec = function(sources, callback, last){
-	      if (typeof callback === 'function') {
-	        callback.call(sources, last);
-	      }
-	    };
-
-	    // Closure to hide cache
-	    return function preload (sources, startAt, count, batchSize, callback){
-	      // Check input data
-	      if (typeof sources === 'undefined') {
-	        return;
-	      }
-	      if (!$.isArray(sources)) {
-	        sources = [sources];
-	      }
-
-	      if (arguments.length < 5 && typeof arguments[arguments.length - 1] === 'function') {
-	        callback = arguments[arguments.length - 1];
-	      }
-
-	      startAt = (typeof startAt === 'function' || !startAt) ? 0 : startAt;
-	      count = (typeof count === 'function' || !count || count < 0) ? sources.length : Math.min(count, sources.length);
-	      batchSize = (typeof batchSize === 'function' || !batchSize) ? 1 : batchSize;
-
-	      if (startAt >= sources.length) {
-	          startAt = 0;
-	          count = 0;
-	      }
-	      if (batchSize < 0) {
-	          batchSize = count;
-	      }
-	      batchSize = Math.min(batchSize, count);
-
-	      var next = sources.slice(startAt + batchSize, count - batchSize);
-	      sources = sources.slice(startAt, batchSize);
-	      count = sources.length;
-
-	      // If sources array is empty
-	      if (!count) {
-	        exec(sources, callback, true);
-	        return;
-	      }
-
-	      // Image loading callback
-	      var countLoaded = 0;
-
-	      var loaded = function() {
-	        countLoaded++;
-	        if (countLoaded !== count) {
-	          return;
-	        }
-
-	        exec(sources, callback, !next);
-	        preload(next, 0, 0, batchSize, callback);
-	      };
-
-	      // Loop sources to preload
-	      var image;
-
-	      for (var i = 0; i < sources.length; i++) {
-	        
-	        if (isVideoSource(sources[i])) {
-	          
-	          // Do not preload videos. There are issues with that.
-	          // First - we need to keep an instance of the preloaded and use that exactly, not a copy.
-	          // Second - there are memory issues.
-	          // If there will be a requirement from users - I'll try to implement this.
-
-	          continue;
-	            
-	        } else {
-	      
-	          image = new Image();
-	          image.src = sources[i].url;
-
-	          image = caching(image);
-
-	          if (image.complete) {
-	            loaded();
-	          } else {
-	            $(image).on('load error', loaded);
-	          }
-	            
-	        }
-	        
-	      }
-	    };
-	  })();
-
-	  /* Process images array */
-	  var processImagesArray = function (images) {
-	    var processed = [];
-	    for (var i = 0; i < images.length; i++) {
-	      if (typeof images[i] === 'string') {
-	        processed.push({ url: images[i] });
-	      }
-	      else if ($.isArray(images[i])) {
-	        processed.push(processImagesArray(images[i]));
-	      }
-	      else {
-	        processed.push(processOptions(images[i]));
-	      }
-	    }
-	    return processed;
-	  };
-
-	  /* Process options */
-	  var processOptions = function (options, required) {
-
-	    // Convert old options
-
-	    // centeredX/centeredY are deprecated
-	    if (options.centeredX || options.centeredY) {
-	      if (window.console && window.console.log) {
-	        window.console.log('jquery.backstretch: `centeredX`/`centeredY` is deprecated, please use `alignX`/`alignY`');
-	      }
-	      if (options.centeredX) {
-	        options.alignX = 0.5;
-	      }
-	      if (options.centeredY) {
-	        options.alignY = 0.5;
-	      }
-	    }
-
-	    // Deprecated spec
-	    if (options.speed !== undefined) {
-
-	      if (window.console && window.console.log) {
-	        window.console.log('jquery.backstretch: `speed` is deprecated, please use `transitionDuration`');
-	      }
-
-	      options.transitionDuration = options.speed;
-	      options.transition = 'fade';
-	    }
-
-	    // Typo
-	    if (options.resolutionChangeRatioTreshold !== undefined) {
-	      window.console.log('jquery.backstretch: `treshold` is a typo!');
-	      options.resolutionChangeRatioThreshold = options.resolutionChangeRatioTreshold;
-	    }
-
-	    // Current spec that needs processing
-
-	    if (options.fadeFirst !== undefined) {
-	      options.animateFirst = options.fadeFirst;
-	    }
-
-	    if (options.fade !== undefined) {
-	      options.transitionDuration = options.fade;
-	      options.transition = 'fade';
-	    }
-
-	    return processAlignOptions(options);
-	  };
-
-	  /* Process align options */
-	  var processAlignOptions = function (options, required) {
-	    if (options.alignX === 'left') {
-	      options.alignX = 0.0;
-	    }
-	    else if (options.alignX === 'center') {
-	      options.alignX = 0.5;
-	    }
-	    else if (options.alignX === 'right') {
-	      options.alignX = 1.0;
-	    }
-	    else {
-	      if (options.alignX !== undefined || required) {
-	        options.alignX = parseFloat(options.alignX);
-	        if (isNaN(options.alignX)) {
-	          options.alignX = 0.5;
-	        }
-	      }
-	    }
-
-	    if (options.alignY === 'top') {
-	      options.alignY = 0.0;
-	    }
-	    else if (options.alignY === 'center') {
-	      options.alignY = 0.5;
-	    }
-	    else if (options.alignY === 'bottom') {
-	      options.alignY = 1.0;
-	    }
-	    else {
-	      if (options.alignX !== undefined || required) {
-	        options.alignY = parseFloat(options.alignY);
-	        if (isNaN(options.alignY)) {
-	          options.alignY = 0.5;
-	        }
-	      }
-	    }
-
-	    return options;
-	  };
-
-	  /* CLASS DEFINITION
-	   * ========================= */
-	  var Backstretch = function (container, images, options) {
-	    this.options = $.extend({}, $.fn.backstretch.defaults, options || {});
-
-	    this.firstShow = true;
-
-	    // Process options
-	    processOptions(this.options, true);
-
-	    /* In its simplest form, we allow Backstretch to be called on an image path.
-	     * e.g. $.backstretch('/path/to/image.jpg')
-	     * So, we need to turn this back into an array.
-	     */
-	    this.images = processImagesArray($.isArray(images) ? images : [images]);
-
-	    /**
-	     * Paused-Option
-	     */
-	    if (this.options.paused) {
-	        this.paused = true;
-	    }
-
-	    /**
-	     * Start-Option (Index)
-	     */
-	    if (this.options.start >= this.images.length)
-	    {
-	        this.options.start = this.images.length - 1;
-	    }
-	    if (this.options.start < 0)
-	    {
-	        this.options.start = 0;
-	    }
-
-	    // Convenience reference to know if the container is body.
-	    this.isBody = container === document.body;
-
-	    /* We're keeping track of a few different elements
-	     *
-	     * Container: the element that Backstretch was called on.
-	     * Wrap: a DIV that we place the image into, so we can hide the overflow.
-	     * Root: Convenience reference to help calculate the correct height.
-	     */
-	    var $window = $(window);
-	    this.$container = $(container);
-	    this.$root = this.isBody ? supportsFixedPosition ? $window : $(document) : this.$container;
-
-	    this.originalImages = this.images;
-	    this.images = optimalSizeImages(
-	        this.options.alwaysTestWindowResolution ? $window : this.$root, 
-	        this.originalImages);
-
-	    /**
-	     * Pre-Loading.
-	     * This is the first image, so we will preload a minimum of 1 images.
-	     */
-	    preload(this.images, this.options.start || 0, this.options.preload || 1);
-
-	    // Don't create a new wrap if one already exists (from a previous instance of Backstretch)
-	    var $existing = this.$container.children(".backstretch").first();
-	    this.$wrap = $existing.length ? $existing : 
-	        $('<div class="backstretch"></div>')
-	        .css(this.options.bypassCss ? {} : styles.wrap)
-	        .appendTo(this.$container);
-
-	    if (!this.options.bypassCss) {
-	        
-	        // Non-body elements need some style adjustments
-	        if (!this.isBody) {
-	          // If the container is statically positioned, we need to make it relative,
-	          // and if no zIndex is defined, we should set it to zero.
-	          var position = this.$container.css('position')
-	            , zIndex = this.$container.css('zIndex');
-
-	          this.$container.css({
-	              position: position === 'static' ? 'relative' : position
-	            , zIndex: zIndex === 'auto' ? 0 : zIndex
-	          });
-
-	          // Needs a higher z-index
-	          this.$wrap.css({zIndex: -999998});
-	        }
-
-	        // Fixed or absolute positioning?
-	        this.$wrap.css({
-	            position: this.isBody && supportsFixedPosition ? 'fixed' : 'absolute'
-	        });
-	    
-	    }
-
-	    // Set the first image
-	    this.index = this.options.start;
-	    this.show(this.index);
-
-	    // Listen for resize
-	    $window.on('resize.backstretch', $.proxy(this.resize, this))
-	           .on('orientationchange.backstretch', $.proxy(function () {
-	              // Need to do this in order to get the right window height
-	              if (this.isBody && window.pageYOffset === 0) {
-	                window.scrollTo(0, 1);
-	                this.resize();
-	              }
-	           }, this));
-	  };
-
-	  var performTransition = function (options) {
-
-	    var transition = options.transition || 'fade';
-
-	    // Look for multiple options
-	    if (typeof transition === 'string' && transition.indexOf('|') > -1) {
-	      transition = transition.split('|');
-	    }
-
-	    if (transition instanceof Array) {
-	      transition = transition[Math.round(Math.random() * (transition.length - 1))];
-	    }
-	    
-	    var $new = options['new'];
-	    var $old = options['old'] ? options['old'] : $([]);
-
-	    switch (transition.toString().toLowerCase()) {
-
-	      default:
-	      case 'fade':
-	        $new.fadeIn({
-	          duration: options.duration,
-	          complete: options.complete,
-	          easing: options.easing || undefined
-	        });
-	        break;
-	        
-	      case 'fadeinout':
-	      case 'fade_in_out':
-	            
-	        var fadeInNew = function () {
-	            $new.fadeIn({
-	              duration: options.duration / 2,
-	              complete: options.complete,
-	              easing: options.easing || undefined
-	            });
-	        };
-	        
-	        if ($old.length) {
-	            $old.fadeOut({
-	              duration: options.duration / 2,
-	              complete: fadeInNew,
-	              easing: options.easing || undefined
-	            });
-	        } else {
-	            fadeInNew();
-	        }
-	        
-	        break;
-
-	      case 'pushleft':
-	      case 'push_left':
-	      case 'pushright':
-	      case 'push_right':
-	      case 'pushup':
-	      case 'push_up':
-	      case 'pushdown':
-	      case 'push_down':
-	      case 'coverleft':
-	      case 'cover_left':
-	      case 'coverright':
-	      case 'cover_right':
-	      case 'coverup':
-	      case 'cover_up':
-	      case 'coverdown':
-	      case 'cover_down':
-
-	        var transitionParts = transition.match(/^(cover|push)_?(.*)$/);
-
-	        var animProp = transitionParts[2] === 'left' ? 'right' :
-	            transitionParts[2] === 'right' ? 'left' :
-	                transitionParts[2] === 'down' ? 'top' :
-	                    transitionParts[2] === 'up' ? 'bottom' :
-	                        'right';
-
-	        var newCssStart = {
-	          'display': ''
-	        }, newCssAnim = {};
-	        newCssStart[animProp] = '-100%';
-	        newCssAnim[animProp] = 0;
-
-	        $new
-	            .css(newCssStart)
-	            .animate(newCssAnim, {
-	              duration: options.duration,
-	              complete: function () {
-	                $new.css(animProp, '');
-	                options.complete.apply(this, arguments);
-	              },
-	              easing: options.easing || undefined
-	            });
-
-	        if (transitionParts[1] === 'push' && $old.length) {
-	            var oldCssAnim = {};
-	            oldCssAnim[animProp] = '100%';
-
-	            $old
-	                .animate(oldCssAnim, {
-	                  duration: options.duration,
-	                  complete: function () {
-	                    $old.css('display', 'none');
-	                  },
-	                  easing: options.easing || undefined
-	                });
-	        }
-
-	        break;
-	    }
-
-	  };
-
-	  /* PUBLIC METHODS
-	   * ========================= */
-	  Backstretch.prototype = {
-
-	      resize: function () {
-	        try {
-
-	          // Check for a better suited image after the resize
-	          var $resTest = this.options.alwaysTestWindowResolution ? $(window) : this.$root;
-	          var newContainerWidth = $resTest.width();
-	          var newContainerHeight = $resTest.height();
-	          var changeRatioW = newContainerWidth / (this._lastResizeContainerWidth || 0);
-	          var changeRatioH = newContainerHeight / (this._lastResizeContainerHeight || 0);
-	          var resolutionChangeRatioThreshold = this.options.resolutionChangeRatioThreshold || 0.0;
-
-	          // check for big changes in container size
-	          if ((newContainerWidth !== this._lastResizeContainerWidth ||
-	               newContainerHeight !== this._lastResizeContainerHeight) &&
-	              ((Math.abs(changeRatioW - 1) >= resolutionChangeRatioThreshold || isNaN(changeRatioW)) ||
-	              (Math.abs(changeRatioH - 1) >= resolutionChangeRatioThreshold || isNaN(changeRatioH)))) {
-
-	            this._lastResizeContainerWidth = newContainerWidth;
-	            this._lastResizeContainerHeight = newContainerHeight;
-
-	            // Big change: rebuild the entire images array
-	            this.images = optimalSizeImages($resTest, this.originalImages);
-
-	            // Preload them (they will be automatically inserted on the next cycle)
-	            if (this.options.preload) {
-	              preload(this.images, (this.index + 1) % this.images.length, this.options.preload);
-	            }
-
-	            // In case there is no cycle and the new source is different than the current
-	            if (this.images.length === 1 &&
-	                this._currentImage.url !== this.images[0].url) {
-
-	              // Wait a little an update the image being showed
-	              var that = this;
-	              clearTimeout(that._selectAnotherResolutionTimeout);
-	              that._selectAnotherResolutionTimeout = setTimeout(function () {
-	                that.show(0);
-	              }, this.options.resolutionRefreshRate);
-	            }
-	          }
-
-	          var bgCSS = {left: 0, top: 0, right: 'auto', bottom: 'auto'}
-	            , rootWidth = this.isBody ? this.$root.width() : this.$root.innerWidth()
-	            , rootHeight = this.isBody ? ( window.innerHeight ? window.innerHeight : this.$root.height() ) : this.$root.innerHeight()
-	            , bgWidth = rootWidth
-	            , bgHeight = bgWidth / this.$itemWrapper.data('ratio')
-	            , evt = $.Event('backstretch.resize', {
-	              relatedTarget: this.$container[0]
-	            })
-	            , bgOffset
-	            , alignX = this._currentImage.alignX === undefined ? this.options.alignX : this._currentImage.alignX
-	            , alignY = this._currentImage.alignY === undefined ? this.options.alignY : this._currentImage.alignY;
-
-	            // Make adjustments based on image ratio
-	            if (bgHeight >= rootHeight) {
-	                bgCSS.top = -(bgHeight - rootHeight) * alignY;
-	            } else {
-	                bgHeight = rootHeight;
-	                bgWidth = bgHeight * this.$itemWrapper.data('ratio');
-	                bgOffset = (bgWidth - rootWidth) / 2;
-	                bgCSS.left = -(bgWidth - rootWidth) * alignX;
-	            }
-
-	            if (!this.options.bypassCss) {
-
-	                this.$wrap
-	                    .css({width: rootWidth, height: rootHeight})
-	                    .find('>.backstretch-item').not('.deleteable')
-	                    .each(function () {
-	                        var $wrapper = $(this);
-	                        $wrapper.find('img,video,iframe')
-	                                .css({width: bgWidth, height: bgHeight})
-	                                .css(bgCSS);
-	                    });
-	            }
-
-	            this.$container.trigger(evt, this);
-	        } catch(err) {
-	            // IE7 seems to trigger resize before the image is loaded.
-	            // This try/catch block is a hack to let it fail gracefully.
-	        }
-
-	        return this;
-	      }
-
-	      // Show the slide at a certain position
-	    , show: function (newIndex, overrideOptions) {
-
-	        // Validate index
-	        if (Math.abs(newIndex) > this.images.length - 1) {
-	          return;
-	        }
-
-	        // Vars
-	        var that = this
-	          , $oldItemWrapper = that.$wrap.find('>.backstretch-item').addClass('deleteable')
-	          , oldVideoWrapper = that.videoWrapper
-	          , evtOptions = { relatedTarget: that.$container[0] };
-
-	        // Trigger the "before" event
-	        that.$container.trigger($.Event('backstretch.before', evtOptions), [that, newIndex]);
-
-	        // Set the new frame index
-	        this.index = newIndex;
-	        var selectedImage = that.images[newIndex];
-
-	        // Pause the slideshow
-	        clearTimeout(that._cycleTimeout);
-
-	        // New image
-
-	        delete that.videoWrapper; // Current item may not be a video
-
-	        var isVideo = isVideoSource(selectedImage);
-	        if (isVideo) {
-	          that.videoWrapper = new VideoWrapper(selectedImage);
-	          that.$item = that.videoWrapper.$video.css('pointer-events', 'none');
-	        } else {
-	          that.$item = $('<img />');
-	        }
-
-	        that.$itemWrapper = $('<div class="backstretch-item">')
-	            .append(that.$item);
-
-	        if (this.options.bypassCss) {
-	            that.$itemWrapper.css({
-	              'display': 'none'
-	            });
-	        } else {
-	          that.$itemWrapper.css(styles.itemWrapper);
-	          that.$item.css(styles.item);
-	        }
-
-	        that.$item.bind(isVideo ? 'canplay' : 'load', function (e) {
-	            var $this = $(this)
-	              , $wrapper = $this.parent()
-	              , options = $wrapper.data('options');
-	              
-	            if (overrideOptions) {
-	              options = $.extend({}, options, overrideOptions);
-	            }
-
-	            var imgWidth = this.naturalWidth || this.videoWidth || this.width
-	              , imgHeight = this.naturalHeight || this.videoHeight || this.height;
-
-	            // Save the ratio
-	            $wrapper.data('ratio', imgWidth / imgHeight);
-
-	            var getOption = function (opt) {
-	              return options[opt] !== undefined ?
-	                options[opt] :
-	                that.options[opt];
-	            };
-
-	            var transition = getOption('transition');
-	            var transitionEasing = getOption('transitionEasing');
-	            var transitionDuration = getOption('transitionDuration');
-
-	            // Show the image, then delete the old one
-	            var bringInNextImage = function () {
-	              
-	              if (oldVideoWrapper) {
-	                oldVideoWrapper.stop();
-	                oldVideoWrapper.destroy();
-	              }
-	              
-	              $oldItemWrapper.remove();
-
-	              // Resume the slideshow
-	              if (!that.paused && that.images.length > 1) {
-	                that.cycle();
-	              }
-
-	              // Now we can clear the background on the element, to spare memory
-	              if (!that.options.bypassCss && !that.isBody) {
-	                that.$container.css('background', 'none');
-	              }
-
-	              // Trigger the "after" and "show" events
-	              // "show" is being deprecated
-	              $(['after', 'show']).each(function () {
-	                that.$container.trigger($.Event('backstretch.' + this, evtOptions), [that, newIndex]);
-	              });
-	              
-	              if (isVideo) {
-	                that.videoWrapper.play();
-	              }
-	            };
-
-	            if ((that.firstShow && !that.options.animateFirst) || !transitionDuration || !transition) {
-	                // Avoid transition on first show or if there's no transitionDuration value
-	                $wrapper.show();
-	                bringInNextImage();
-	            } else {
-
-	                performTransition({
-	                    'new': $wrapper,
-	                    old: $oldItemWrapper,
-	                    transition: transition,
-	                    duration: transitionDuration,
-	                    easing: transitionEasing,
-	                    complete: bringInNextImage
-	                });
-
-	            }
-
-	            that.firstShow = false;
-
-	            // Resize
-	            that.resize();
-	        });
-
-	        that.$itemWrapper.appendTo(that.$wrap);
-
-	        that.$item.attr('alt', selectedImage.alt || '');
-	        that.$itemWrapper.data('options', selectedImage);
-
-	        if (!isVideo) {
-	          that.$item.attr('src', selectedImage.url);
-	        }
-	        
-	        that._currentImage = selectedImage;
-
-	        return that;
-	      }
-
-	    , current: function () {
-	        return this.index;
-	      }
-
-	    , next: function () {
-	        var args = Array.prototype.slice.call(arguments, 0);
-	        args.unshift(this.index < this.images.length - 1 ? this.index + 1 : 0);
-	        return this.show.apply(this, args);
-	      }
-
-	    , prev: function () {
-	        var args = Array.prototype.slice.call(arguments, 0);
-	        args.unshift(this.index === 0 ? this.images.length - 1 : this.index - 1);
-	        return this.show.apply(this, args);
-	      }
-
-	    , pause: function () {
-	        // Pause the slideshow
-	        this.paused = true;
-	        
-	        if (this.videoWrapper) {
-	          this.videoWrapper.pause();
-	        }
-	        
-	        return this;
-	      }
-
-	    , resume: function () {
-	        // Resume the slideshow
-	        this.paused = false;
-	        
-	        if (this.videoWrapper) {
-	          this.videoWrapper.play();
-	        }
-	        
-	        this.cycle();
-	        return this;
-	      }
-
-	    , cycle: function () {
-	        // Start/resume the slideshow
-	        if(this.images.length > 1) {
-	          // Clear the timeout, just in case
-	          clearTimeout(this._cycleTimeout);
-
-	          var duration = (this._currentImage && this._currentImage.duration) || this.options.duration;
-	          var isVideo = isVideoSource(this._currentImage);
-	          
-	          var callNext = function () {
-	            this.$item.off('.cycle');
-	            
-	            // Check for paused slideshow
-	            if (!this.paused) {
-	              this.next();
-	            }
-	          };
-
-	          // Special video handling
-	          if (isVideo) {
-
-	            // Leave video at last frame
-	            if (!this._currentImage.loop) {
-	              var lastFrameTimeout = 0;
-
-	              this.$item
-	                .on('playing.cycle', function () {
-	                  var player = $(this).data('player');
-
-	                  clearTimeout(lastFrameTimeout);
-	                  lastFrameTimeout = setTimeout(function () {
-	                    player.pause();
-	                    player.$video.trigger('ended');
-	                  }, (player.getDuration() - player.getCurrentTime()) * 1000);
-	                })
-	                .on('ended.cycle', function () {
-	                  clearTimeout(lastFrameTimeout);
-	                });
-	            }
-
-	            // On error go to next
-	            this.$item.on('error.cycle initerror.cycle', $.proxy(callNext, this));
-	          }
-
-	          if (isVideo && !this._currentImage.duration) {
-	            // It's a video - playing until end
-	            this.$item.on('ended.cycle', $.proxy(callNext, this));
-	            
-	          } else {
-	            // Cycling according to specified duration
-	            this._cycleTimeout = setTimeout($.proxy(callNext, this), duration);
-	          }
-	          
-	        }
-	        return this;
-	      }
-
-	    , destroy: function (preserveBackground) {
-	        // Stop the resize events
-	        $(window).off('resize.backstretch orientationchange.backstretch');
-
-	        // Stop any videos
-	        if (this.videoWrapper) {
-	          this.videoWrapper.destroy();
-	        }
-	        
-	        // Clear the timeout
-	        clearTimeout(this._cycleTimeout);
-
-	        // Remove Backstretch
-	        if(!preserveBackground) {
-	          this.$wrap.remove();
-	        }
-	        this.$container.removeData('backstretch');
-	      }
-	  };
-	    
-	 /**
-	  *	Video Abstraction Layer
-	  *
-	  * Static methods:
-	  * > VideoWrapper.loadYoutubeAPI() -> Call in order to load the Youtube API. 
-	  *                                   An 'youtube_api_load' event will be triggered on $(window) when the API is loaded.
-	  *
-	  * Generic:
-	  * > player.type -> type of the video
-	  * > player.video / player.$video -> contains the element holding the video
-	  * > player.play() -> plays the video
-	  * > player.pause() -> pauses the video
-	  * > player.setCurrentTime(position) -> seeks to a position by seconds
-	  * 
-	  * Youtube:
-	  * > player.ytId will contain the youtube ID if the source is a youtube url
-	  * > player.ytReady is a flag telling whether the youtube source is ready for playback
-	  * */
-
-	  var VideoWrapper = function () { this.init.apply(this, arguments); };
-
-	  /**
-	   * @param {Object} options
-	   * @param {String|Array<String>|Array<{{src: String, type: String?}}>} options.url
-	   * @param {Boolean} options.loop=false
-	   * @param {Boolean?} options.mute=true
-	   * @param {String?} options.poster
-	   * loop, mute, poster
-	   */
-	  VideoWrapper.prototype.init = function (options) {
-
-	    var that = this;
-	    
-	    var $video;
-
-	    var setVideoElement = function () {
-	      that.$video = $video;
-	      that.video = $video[0];
-	    };
-	    
-	    // Determine video type
-	    
-	    var videoType = 'video';
-	    
-	    if (!(options.url instanceof Array) &&
-	      YOUTUBE_REGEXP.test(options.url)) {
-	      videoType = 'youtube';
-	    }
-	    
-	    that.type = videoType;
-
-	    if (videoType === 'youtube') {
-
-	      // Try to load the API in the meantime
-	      VideoWrapper.loadYoutubeAPI();
-
-	      that.ytId = options.url.match(YOUTUBE_REGEXP)[2];
-	      var src = 'https://www.youtube.com/embed/' + that.ytId +
-	        '?rel=0&autoplay=0&showinfo=0&controls=0&modestbranding=1' +
-	        '&cc_load_policy=0&disablekb=1&iv_load_policy=3&loop=0' +
-	        '&enablejsapi=1&origin=' + encodeURIComponent(window.location.origin);
-
-	      that.__ytStartMuted = !!options.mute || options.mute === undefined;
-
-	      $video = $('<iframe />')
-	        .attr({ 'src_to_load': src })
-	        .css({ 'border': 0, 'margin': 0, 'padding': 0 })
-	        .data('player', that);
-	        
-	      if (options.loop) {
-	        $video.on('ended.loop', function () {
-	          if (!that.__manuallyStopped) {
-	           that.play();
-	          }
-	        });
-	      }
-
-	      that.ytReady = false;
-
-	      setVideoElement();
-
-	      if (window['YT']) {
-	        that._initYoutube();
-	        $video.trigger('initsuccess');
-	      } else {
-	        $(window).one('youtube_api_load', function () {
-	          that._initYoutube();
-	          $video.trigger('initsuccess');
-	        });
-	      }
-	      
-	    }
-	    else {
-	      // Traditional <video> tag with multiple sources
-	      
-	      $video = $('<video>')
-	        .prop('autoplay', false)
-	        .prop('controls', false)
-	        .prop('loop', !!options.loop)
-	        .prop('muted', !!options.mute || options.mute === undefined)
-	        
-	        // Let the first frames be available before playback, as we do transitions
-	        .prop('preload', 'auto')
-	        .prop('poster', options.poster || '');
-	        
-	      var sources = (options.url instanceof Array) ? options.url : [options.url];
-
-	      for (var i = 0; i < sources.length; i++) {
-	        var sourceItem = sources[i];
-	        if (typeof(sourceItem) === 'string') {
-	          sourceItem = { src: sourceItem };
-	        }
-	        $('<source>')
-	          .attr('src', sourceItem.src)
-	          // Make sure to not specify type if unknown - 
-	          //   so the browser will try to autodetect.
-	          .attr('type', sourceItem.type || null)
-	          .appendTo($video);
-	      }
-	      
-	      if (!$video[0].canPlayType || !sources.length) {
-	        $video.trigger('initerror');
-	      } else {
-	        $video.trigger('initsuccess');
-	      }
-
-	      setVideoElement();
-	    }
-
-	  };
-
-	  VideoWrapper.prototype._initYoutube = function () {
-	    var that = this;
-	    
-	    var YT = window['YT'];
-
-	    that.$video
-	      .attr('src', that.$video.attr('src_to_load'))
-	      .removeAttr('src_to_load');
-
-	    // It won't init if it's not in the DOM, so we emulate that
-	    var hasParent = !!that.$video[0].parentNode;
-	    if (!hasParent) {
-	      var $tmpParent = $('<div>').css('display', 'none !important').appendTo(document.body);
-	      that.$video.appendTo($tmpParent);
-	    }
-
-	    var player = new YT.Player(that.video, {
-	      events: {
-	        'onReady': function () {
-
-	          if (that.__ytStartMuted) {
-	            player.mute();
-	          }
-
-	          if (!hasParent) {
-	            // Restore parent to old state - without interrupting any changes
-	            if (that.$video[0].parentNode === $tmpParent[0]) {
-	              that.$video.detach();
-	            }
-	            $tmpParent.remove();
-	          }
-
-	          that.ytReady = true;
-	          that._updateYoutubeSize();
-	          that.$video.trigger('canplay');
-	        },
-	        'onStateChange': function (event) {
-	          switch (event.data) {
-	            case YT.PlayerState.PLAYING:
-	              that.$video.trigger('playing');
-	              break;
-	            case YT.PlayerState.ENDED:
-	              that.$video.trigger('ended');
-	              break;
-	            case YT.PlayerState.PAUSED:
-	              that.$video.trigger('pause');
-	              break;
-	            case YT.PlayerState.BUFFERING:
-	              that.$video.trigger('waiting');
-	              break;
-	            case YT.PlayerState.CUED:
-	              that.$video.trigger('canplay');
-	              break;
-	          }
-	        },
-	        'onPlaybackQualityChange': function () {
-	          that._updateYoutubeSize();
-	          that.$video.trigger('resize');
-	        },
-	        'onError': function (err) {
-	          that.hasError = true;
-	          that.$video.trigger({ 'type': 'error', 'error': err });
-	        }
-	      }
-	    });
-
-	    that.ytPlayer = player;
-
-	    return that;
-	  };    
-	    
-	  VideoWrapper.prototype._updateYoutubeSize = function () {
-	    var that = this;
-
-	    switch (that.ytPlayer.getPlaybackQuality() || 'medium') {
-	      case 'small':
-	        that.video.videoWidth = 426;
-	        that.video.videoHeight = 240;
-	        break;
-	      case 'medium':
-	        that.video.videoWidth = 640;
-	        that.video.videoHeight = 360;
-	        break;
-	      default:
-	      case 'large':
-	        that.video.videoWidth = 854;
-	        that.video.videoHeight = 480;
-	        break;
-	      case 'hd720':
-	        that.video.videoWidth = 1280;
-	        that.video.videoHeight = 720;
-	        break;
-	      case 'hd1080':
-	        that.video.videoWidth = 1920;
-	        that.video.videoHeight = 1080;
-	        break;
-	      case 'highres':
-	        that.video.videoWidth = 2560;
-	        that.video.videoHeight = 1440;
-	        break;
-	    }
-
-	    return that;
-	  };
-
-	  VideoWrapper.prototype.play = function () {
-	    var that = this;
-
-	    that.__manuallyStopped = false;
-	    
-	    if (that.type === 'youtube') {
-	      if (that.ytReady) {
-	        that.$video.trigger('play');
-	        that.ytPlayer.playVideo();
-	      }
-	    } else {
-	      that.video.play();
-	    }
-
-	    return that;
-	  };
-
-	  VideoWrapper.prototype.pause = function () {
-	    var that = this;
-
-	    that.__manuallyStopped = false;
-	    
-	    if (that.type === 'youtube') {
-	      if (that.ytReady) {
-	        that.ytPlayer.pauseVideo();
-	      }
-	    } else {
-	      that.video.pause();
-	    }
-
-	    return that;
-	  };
-
-	  VideoWrapper.prototype.stop = function () {
-	    var that = this;
-
-	    that.__manuallyStopped = true;
-	    
-	    if (that.type === 'youtube') {
-	      if (that.ytReady) {
-	        that.ytPlayer.pauseVideo();
-	        that.ytPlayer.seekTo(0);
-	      }
-	    } else {
-	      that.video.pause();
-	      that.video.currentTime = 0;
-	    }
-
-	    return that;
-	  };
-
-	  VideoWrapper.prototype.destroy = function () {
-	    var that = this;
-
-	    if (that.ytPlayer) {
-	      that.ytPlayer.destroy();
-	    }
-
-	    that.$video.remove();
-
-	    return that;
-	  };
-
-	  VideoWrapper.prototype.getCurrentTime = function (seconds) {
-	    var that = this;
-
-	    if (that.type === 'youtube') {
-	      if (that.ytReady) {
-	        return that.ytPlayer.getCurrentTime();
-	      }
-	    } else {
-	      return that.video.currentTime;
-	    }
-
-	    return 0;
-	  };
-
-	  VideoWrapper.prototype.setCurrentTime = function (seconds) {
-	    var that = this;
-
-	    if (that.type === 'youtube') {
-	      if (that.ytReady) {
-	        that.ytPlayer.seekTo(seconds, true);
-	      }
-	    } else {
-	      that.video.currentTime = seconds;
-	    }
-
-	    return that;
-	  };
-
-	  VideoWrapper.prototype.getDuration = function () {
-	    var that = this;
-
-	    if (that.type === 'youtube') {
-	      if (that.ytReady) {
-	        return that.ytPlayer.getDuration();
-	      }
-	    } else {
-	      return that.video.duration;
-	    }
-
-	    return 0;
-	  };
-
-	  /**
-	   * This will load the youtube API (if not loaded yet)
-	   * Use $(window).one('youtube_api_load', ...) to listen for API loaded event
-	   */
-	  VideoWrapper.loadYoutubeAPI = function () {
-	    if (window['YT']) {
-	      return;
-	    }
-	    if (!$('script[src*=www\\.youtube\\.com\\/iframe_api]').length) {
-	      $('<script type="text/javascript" src="https://www.youtube.com/iframe_api">').appendTo('body');
-	    }
-	    var ytAPILoadInt = setInterval(function () {
-	      if (window['YT'] && window['YT'].loaded) {
-	        $(window).trigger('youtube_api_load');
-	        clearTimeout(ytAPILoadInt);
-	      }
-	    }, 50);
-	  };
-
-
-	  /* SUPPORTS FIXED POSITION?
-	   *
-	   * Based on code from jQuery Mobile 1.1.0
-	   * http://jquerymobile.com/
-	   *
-	   * In a nutshell, we need to figure out if fixed positioning is supported.
-	   * Unfortunately, this is very difficult to do on iOS, and usually involves
-	   * injecting content, scrolling the page, etc.. It's ugly.
-	   * jQuery Mobile uses this workaround. It's not ideal, but works.
-	   *
-	   * Modified to detect IE6
-	   * ========================= */
-
-	  var supportsFixedPosition = (function () {
-	    var ua = navigator.userAgent
-	      , platform = navigator.platform
-	        // Rendering engine is Webkit, and capture major version
-	      , wkmatch = ua.match( /AppleWebKit\/([0-9]+)/ )
-	      , wkversion = !!wkmatch && wkmatch[ 1 ]
-	      , ffmatch = ua.match( /Fennec\/([0-9]+)/ )
-	      , ffversion = !!ffmatch && ffmatch[ 1 ]
-	      , operammobilematch = ua.match( /Opera Mobi\/([0-9]+)/ )
-	      , omversion = !!operammobilematch && operammobilematch[ 1 ]
-	      , iematch = ua.match( /MSIE ([0-9]+)/ )
-	      , ieversion = !!iematch && iematch[ 1 ];
-
-	    return !(
-	      // iOS 4.3 and older : Platform is iPhone/Pad/Touch and Webkit version is less than 534 (ios5)
-	      ((platform.indexOf( "iPhone" ) > -1 || platform.indexOf( "iPad" ) > -1  || platform.indexOf( "iPod" ) > -1 ) && wkversion && wkversion < 534) ||
-
-	      // Opera Mini
-	      (window.operamini && ({}).toString.call( window.operamini ) === "[object OperaMini]") ||
-	      (operammobilematch && omversion < 7458) ||
-
-	      //Android lte 2.1: Platform is Android and Webkit version is less than 533 (Android 2.2)
-	      (ua.indexOf( "Android" ) > -1 && wkversion && wkversion < 533) ||
-
-	      // Firefox Mobile before 6.0 -
-	      (ffversion && ffversion < 6) ||
-
-	      // WebOS less than 3
-	      ("palmGetResource" in window && wkversion && wkversion < 534) ||
-
-	      // MeeGo
-	      (ua.indexOf( "MeeGo" ) > -1 && ua.indexOf( "NokiaBrowser/8.5.0" ) > -1) ||
-
-	      // IE6
-	      (ieversion && ieversion <= 6)
-	    );
-	  }());
-
-	}(jQuery, window));
-
-
-/***/ },
-/* 283 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _bootstrap = __webpack_require__(284);
-
-	var _bootstrap2 = _interopRequireDefault(_bootstrap);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var Users = function (_React$Component) {
-		_inherits(Users, _React$Component);
-
-		function Users(props) {
-			_classCallCheck(this, Users);
-
-			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Users).call(this, props));
-
-			_this.displayName = 'Users';
-			return _this;
-		}
-
-		_createClass(Users, [{
-			key: 'render',
-			value: function render() {
-				return _react2.default.createElement(
-					'section',
-					{ id: 'main-content' },
-					_react2.default.createElement(
-						'section',
-						{ className: 'wrapper' },
-						_react2.default.createElement(
-							'div',
-							{ className: 'row mt' },
-							_react2.default.createElement(
-								'div',
-								{ className: 'col-lg-12' },
-								_react2.default.createElement(
-									'div',
-									{ className: 'form-panel' },
-									_react2.default.createElement(
-										'h4',
-										{ className: 'mb' },
-										_react2.default.createElement('i', { className: 'fa fa-angle-right' }),
-										' Add Local Committee'
-									),
-									_react2.default.createElement(
-										'p',
-										null,
-										'add entity field'
-									)
-								)
-							)
-						),
-						_react2.default.createElement(
-							'div',
-							{ className: 'row mt' },
-							_react2.default.createElement(
-								'div',
-								{ className: 'col-lg-12' },
-								_react2.default.createElement(
-									'div',
-									{ className: 'content-panel' },
-									_react2.default.createElement(
-										'h4',
-										null,
-										_react2.default.createElement('i', { className: 'fa fa-angle-right' }),
-										' Local Committees'
-									),
-									_react2.default.createElement('hr', null),
-									_react2.default.createElement(
-										'table',
-										{ className: 'table table-striped table-advance table-hover' },
-										_react2.default.createElement(
-											'thead',
-											null,
-											_react2.default.createElement(
-												'tr',
-												null,
-												_react2.default.createElement(
-													'th',
-													null,
-													_react2.default.createElement('i', { className: 'fa fa-bookmark' }),
-													' id'
-												),
-												_react2.default.createElement(
-													'th',
-													null,
-													_react2.default.createElement('i', { className: 'fa fa-bookmark' }),
-													' EXPA id'
-												),
-												_react2.default.createElement(
-													'th',
-													null,
-													_react2.default.createElement('i', { className: 'fa fa-question-circle' }),
-													' EXPA Name'
-												),
-												_react2.default.createElement(
-													'th',
-													null,
-													_react2.default.createElement('i', { className: 'fa fa-question-circle' }),
-													' URL Name'
-												),
-												_react2.default.createElement(
-													'th',
-													null,
-													_react2.default.createElement('i', { className: 'fa fa-question-circle' }),
-													' Full Name'
-												),
-												_react2.default.createElement('th', null)
-											)
-										),
-										_react2.default.createElement(
-											'tbody',
-											{ id: 'lc-{{ $lc[\'id\'] }}' },
-											_react2.default.createElement(
-												'tr',
-												null,
-												_react2.default.createElement(
-													'td',
-													{ id: '{{ $lc[\'id\'] }}' },
-													'id'
-												),
-												_react2.default.createElement(
-													'td',
-													{ id: 'expa-id-{{ $lc[\'id\'] }}' },
-													'expa_id'
-												),
-												_react2.default.createElement(
-													'td',
-													{ id: 'expa-name-{{ $lc[\'id\'] }}' },
-													'expa_name'
-												),
-												_react2.default.createElement(
-													'td',
-													{ id: 'url-name-{{ $lc[\'id\'] }}' },
-													'url_name'
-												),
-												_react2.default.createElement(
-													'td',
-													{ id: 'full-name-{{ $lc[\'id\'] }}' },
-													'full_name'
-												),
-												_react2.default.createElement(
-													'td',
-													null,
-													_react2.default.createElement(
-														'button',
-														{ 'data-toggle': 'modal', 'data-target': '#edit-Modal', className: 'btn btn-primary btn-xs edit-lc', id: 'edit-lc-{{ $lc[\'id\'] }}' },
-														_react2.default.createElement('i', { className: 'fa fa-pencil' })
-													),
-													_react2.default.createElement(
-														'button',
-														{ className: 'btn btn-danger btn-xs delete-lc', id: 'delete-lc-{{ $lc[\'id\'] }}' },
-														_react2.default.createElement('i', { className: 'fa fa-trash-o ' })
-													)
-												)
-											)
-										)
-									)
-								)
-							)
-						),
-						_react2.default.createElement(
-							'div',
-							{ className: 'modal fade', id: 'edit-Modal', tabindex: '-1', role: 'dialog', 'aria-labelledby': 'myModalLabel', 'aria-hidden': 'true' },
-							_react2.default.createElement(
-								'div',
-								{ className: 'modal-dialog' },
-								_react2.default.createElement(
-									'div',
-									{ className: 'modal-content' },
-									_react2.default.createElement(
-										'div',
-										{ className: 'modal-header' },
-										_react2.default.createElement(
-											'button',
-											{ type: 'button', className: 'close', 'data-dismiss': 'modal', 'aria-hidden': 'true' },
-											'×'
-										),
-										_react2.default.createElement(
-											'h4',
-											{ className: 'modal-title', id: 'myModalLabel' },
-											'Edit Local Committee'
-										)
-									),
-									_react2.default.createElement(
-										'div',
-										{ className: 'modal-body' },
-										_react2.default.createElement(
-											'p',
-											null,
-											'edit form'
-										)
-									),
-									_react2.default.createElement(
-										'div',
-										{ className: 'modal-footer' },
-										_react2.default.createElement(
-											'button',
-											{ type: 'button', className: 'btn btn-default', 'data-dismiss': 'modal' },
-											'Cancel'
-										)
-									)
-								)
-							)
-						)
-					)
-				);
-			}
-		}]);
-
-		return Users;
-	}(_react2.default.Component);
-
-	exports.default = Users;
-
-/***/ },
-/* 284 */
-/***/ function(module, exports, __webpack_require__) {
-
-	// This file is autogenerated via the `commonjs` Grunt task. You can require() this file in a CommonJS environment.
-	__webpack_require__(285)
-	__webpack_require__(286)
-	__webpack_require__(287)
-	__webpack_require__(288)
-	__webpack_require__(289)
-	__webpack_require__(290)
-	__webpack_require__(291)
-	__webpack_require__(292)
-	__webpack_require__(293)
-	__webpack_require__(294)
-	__webpack_require__(295)
-	__webpack_require__(296)
-
-/***/ },
-/* 285 */
-/***/ function(module, exports) {
-
-	/* ========================================================================
-	 * Bootstrap: transition.js v3.3.6
-	 * http://getbootstrap.com/javascript/#transitions
-	 * ========================================================================
-	 * Copyright 2011-2015 Twitter, Inc.
-	 * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
-	 * ======================================================================== */
-
-
-	+function ($) {
-	  'use strict';
-
-	  // CSS TRANSITION SUPPORT (Shoutout: http://www.modernizr.com/)
-	  // ============================================================
-
-	  function transitionEnd() {
-	    var el = document.createElement('bootstrap')
-
-	    var transEndEventNames = {
-	      WebkitTransition : 'webkitTransitionEnd',
-	      MozTransition    : 'transitionend',
-	      OTransition      : 'oTransitionEnd otransitionend',
-	      transition       : 'transitionend'
-	    }
-
-	    for (var name in transEndEventNames) {
-	      if (el.style[name] !== undefined) {
-	        return { end: transEndEventNames[name] }
-	      }
-	    }
-
-	    return false // explicit for ie8 (  ._.)
-	  }
-
-	  // http://blog.alexmaccaw.com/css-transitions
-	  $.fn.emulateTransitionEnd = function (duration) {
-	    var called = false
-	    var $el = this
-	    $(this).one('bsTransitionEnd', function () { called = true })
-	    var callback = function () { if (!called) $($el).trigger($.support.transition.end) }
-	    setTimeout(callback, duration)
-	    return this
-	  }
-
-	  $(function () {
-	    $.support.transition = transitionEnd()
-
-	    if (!$.support.transition) return
-
-	    $.event.special.bsTransitionEnd = {
-	      bindType: $.support.transition.end,
-	      delegateType: $.support.transition.end,
-	      handle: function (e) {
-	        if ($(e.target).is(this)) return e.handleObj.handler.apply(this, arguments)
-	      }
-	    }
-	  })
-
-	}(jQuery);
-
-
-/***/ },
-/* 286 */
-/***/ function(module, exports) {
-
-	/* ========================================================================
-	 * Bootstrap: alert.js v3.3.6
-	 * http://getbootstrap.com/javascript/#alerts
-	 * ========================================================================
-	 * Copyright 2011-2015 Twitter, Inc.
-	 * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
-	 * ======================================================================== */
-
-
-	+function ($) {
-	  'use strict';
-
-	  // ALERT CLASS DEFINITION
-	  // ======================
-
-	  var dismiss = '[data-dismiss="alert"]'
-	  var Alert   = function (el) {
-	    $(el).on('click', dismiss, this.close)
-	  }
-
-	  Alert.VERSION = '3.3.6'
-
-	  Alert.TRANSITION_DURATION = 150
-
-	  Alert.prototype.close = function (e) {
-	    var $this    = $(this)
-	    var selector = $this.attr('data-target')
-
-	    if (!selector) {
-	      selector = $this.attr('href')
-	      selector = selector && selector.replace(/.*(?=#[^\s]*$)/, '') // strip for ie7
-	    }
-
-	    var $parent = $(selector)
-
-	    if (e) e.preventDefault()
-
-	    if (!$parent.length) {
-	      $parent = $this.closest('.alert')
-	    }
-
-	    $parent.trigger(e = $.Event('close.bs.alert'))
-
-	    if (e.isDefaultPrevented()) return
-
-	    $parent.removeClass('in')
-
-	    function removeElement() {
-	      // detach from parent, fire event then clean up data
-	      $parent.detach().trigger('closed.bs.alert').remove()
-	    }
-
-	    $.support.transition && $parent.hasClass('fade') ?
-	      $parent
-	        .one('bsTransitionEnd', removeElement)
-	        .emulateTransitionEnd(Alert.TRANSITION_DURATION) :
-	      removeElement()
-	  }
-
-
-	  // ALERT PLUGIN DEFINITION
-	  // =======================
-
-	  function Plugin(option) {
-	    return this.each(function () {
-	      var $this = $(this)
-	      var data  = $this.data('bs.alert')
-
-	      if (!data) $this.data('bs.alert', (data = new Alert(this)))
-	      if (typeof option == 'string') data[option].call($this)
-	    })
-	  }
-
-	  var old = $.fn.alert
-
-	  $.fn.alert             = Plugin
-	  $.fn.alert.Constructor = Alert
-
-
-	  // ALERT NO CONFLICT
-	  // =================
-
-	  $.fn.alert.noConflict = function () {
-	    $.fn.alert = old
-	    return this
-	  }
-
-
-	  // ALERT DATA-API
-	  // ==============
-
-	  $(document).on('click.bs.alert.data-api', dismiss, Alert.prototype.close)
-
-	}(jQuery);
-
-
-/***/ },
-/* 287 */
-/***/ function(module, exports) {
-
-	/* ========================================================================
-	 * Bootstrap: button.js v3.3.6
-	 * http://getbootstrap.com/javascript/#buttons
-	 * ========================================================================
-	 * Copyright 2011-2015 Twitter, Inc.
-	 * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
-	 * ======================================================================== */
-
-
-	+function ($) {
-	  'use strict';
-
-	  // BUTTON PUBLIC CLASS DEFINITION
-	  // ==============================
-
-	  var Button = function (element, options) {
-	    this.$element  = $(element)
-	    this.options   = $.extend({}, Button.DEFAULTS, options)
-	    this.isLoading = false
-	  }
-
-	  Button.VERSION  = '3.3.6'
-
-	  Button.DEFAULTS = {
-	    loadingText: 'loading...'
-	  }
-
-	  Button.prototype.setState = function (state) {
-	    var d    = 'disabled'
-	    var $el  = this.$element
-	    var val  = $el.is('input') ? 'val' : 'html'
-	    var data = $el.data()
-
-	    state += 'Text'
-
-	    if (data.resetText == null) $el.data('resetText', $el[val]())
-
-	    // push to event loop to allow forms to submit
-	    setTimeout($.proxy(function () {
-	      $el[val](data[state] == null ? this.options[state] : data[state])
-
-	      if (state == 'loadingText') {
-	        this.isLoading = true
-	        $el.addClass(d).attr(d, d)
-	      } else if (this.isLoading) {
-	        this.isLoading = false
-	        $el.removeClass(d).removeAttr(d)
-	      }
-	    }, this), 0)
-	  }
-
-	  Button.prototype.toggle = function () {
-	    var changed = true
-	    var $parent = this.$element.closest('[data-toggle="buttons"]')
-
-	    if ($parent.length) {
-	      var $input = this.$element.find('input')
-	      if ($input.prop('type') == 'radio') {
-	        if ($input.prop('checked')) changed = false
-	        $parent.find('.active').removeClass('active')
-	        this.$element.addClass('active')
-	      } else if ($input.prop('type') == 'checkbox') {
-	        if (($input.prop('checked')) !== this.$element.hasClass('active')) changed = false
-	        this.$element.toggleClass('active')
-	      }
-	      $input.prop('checked', this.$element.hasClass('active'))
-	      if (changed) $input.trigger('change')
-	    } else {
-	      this.$element.attr('aria-pressed', !this.$element.hasClass('active'))
-	      this.$element.toggleClass('active')
-	    }
-	  }
-
-
-	  // BUTTON PLUGIN DEFINITION
-	  // ========================
-
-	  function Plugin(option) {
-	    return this.each(function () {
-	      var $this   = $(this)
-	      var data    = $this.data('bs.button')
-	      var options = typeof option == 'object' && option
-
-	      if (!data) $this.data('bs.button', (data = new Button(this, options)))
-
-	      if (option == 'toggle') data.toggle()
-	      else if (option) data.setState(option)
-	    })
-	  }
-
-	  var old = $.fn.button
-
-	  $.fn.button             = Plugin
-	  $.fn.button.Constructor = Button
-
-
-	  // BUTTON NO CONFLICT
-	  // ==================
-
-	  $.fn.button.noConflict = function () {
-	    $.fn.button = old
-	    return this
-	  }
-
-
-	  // BUTTON DATA-API
-	  // ===============
-
-	  $(document)
-	    .on('click.bs.button.data-api', '[data-toggle^="button"]', function (e) {
-	      var $btn = $(e.target)
-	      if (!$btn.hasClass('btn')) $btn = $btn.closest('.btn')
-	      Plugin.call($btn, 'toggle')
-	      if (!($(e.target).is('input[type="radio"]') || $(e.target).is('input[type="checkbox"]'))) e.preventDefault()
-	    })
-	    .on('focus.bs.button.data-api blur.bs.button.data-api', '[data-toggle^="button"]', function (e) {
-	      $(e.target).closest('.btn').toggleClass('focus', /^focus(in)?$/.test(e.type))
-	    })
-
-	}(jQuery);
-
-
-/***/ },
-/* 288 */
-/***/ function(module, exports) {
-
-	/* ========================================================================
-	 * Bootstrap: carousel.js v3.3.6
-	 * http://getbootstrap.com/javascript/#carousel
-	 * ========================================================================
-	 * Copyright 2011-2015 Twitter, Inc.
-	 * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
-	 * ======================================================================== */
-
-
-	+function ($) {
-	  'use strict';
-
-	  // CAROUSEL CLASS DEFINITION
-	  // =========================
-
-	  var Carousel = function (element, options) {
-	    this.$element    = $(element)
-	    this.$indicators = this.$element.find('.carousel-indicators')
-	    this.options     = options
-	    this.paused      = null
-	    this.sliding     = null
-	    this.interval    = null
-	    this.$active     = null
-	    this.$items      = null
-
-	    this.options.keyboard && this.$element.on('keydown.bs.carousel', $.proxy(this.keydown, this))
-
-	    this.options.pause == 'hover' && !('ontouchstart' in document.documentElement) && this.$element
-	      .on('mouseenter.bs.carousel', $.proxy(this.pause, this))
-	      .on('mouseleave.bs.carousel', $.proxy(this.cycle, this))
-	  }
-
-	  Carousel.VERSION  = '3.3.6'
-
-	  Carousel.TRANSITION_DURATION = 600
-
-	  Carousel.DEFAULTS = {
-	    interval: 5000,
-	    pause: 'hover',
-	    wrap: true,
-	    keyboard: true
-	  }
-
-	  Carousel.prototype.keydown = function (e) {
-	    if (/input|textarea/i.test(e.target.tagName)) return
-	    switch (e.which) {
-	      case 37: this.prev(); break
-	      case 39: this.next(); break
-	      default: return
-	    }
-
-	    e.preventDefault()
-	  }
-
-	  Carousel.prototype.cycle = function (e) {
-	    e || (this.paused = false)
-
-	    this.interval && clearInterval(this.interval)
-
-	    this.options.interval
-	      && !this.paused
-	      && (this.interval = setInterval($.proxy(this.next, this), this.options.interval))
-
-	    return this
-	  }
-
-	  Carousel.prototype.getItemIndex = function (item) {
-	    this.$items = item.parent().children('.item')
-	    return this.$items.index(item || this.$active)
-	  }
-
-	  Carousel.prototype.getItemForDirection = function (direction, active) {
-	    var activeIndex = this.getItemIndex(active)
-	    var willWrap = (direction == 'prev' && activeIndex === 0)
-	                || (direction == 'next' && activeIndex == (this.$items.length - 1))
-	    if (willWrap && !this.options.wrap) return active
-	    var delta = direction == 'prev' ? -1 : 1
-	    var itemIndex = (activeIndex + delta) % this.$items.length
-	    return this.$items.eq(itemIndex)
-	  }
-
-	  Carousel.prototype.to = function (pos) {
-	    var that        = this
-	    var activeIndex = this.getItemIndex(this.$active = this.$element.find('.item.active'))
-
-	    if (pos > (this.$items.length - 1) || pos < 0) return
-
-	    if (this.sliding)       return this.$element.one('slid.bs.carousel', function () { that.to(pos) }) // yes, "slid"
-	    if (activeIndex == pos) return this.pause().cycle()
-
-	    return this.slide(pos > activeIndex ? 'next' : 'prev', this.$items.eq(pos))
-	  }
-
-	  Carousel.prototype.pause = function (e) {
-	    e || (this.paused = true)
-
-	    if (this.$element.find('.next, .prev').length && $.support.transition) {
-	      this.$element.trigger($.support.transition.end)
-	      this.cycle(true)
-	    }
-
-	    this.interval = clearInterval(this.interval)
-
-	    return this
-	  }
-
-	  Carousel.prototype.next = function () {
-	    if (this.sliding) return
-	    return this.slide('next')
-	  }
-
-	  Carousel.prototype.prev = function () {
-	    if (this.sliding) return
-	    return this.slide('prev')
-	  }
-
-	  Carousel.prototype.slide = function (type, next) {
-	    var $active   = this.$element.find('.item.active')
-	    var $next     = next || this.getItemForDirection(type, $active)
-	    var isCycling = this.interval
-	    var direction = type == 'next' ? 'left' : 'right'
-	    var that      = this
-
-	    if ($next.hasClass('active')) return (this.sliding = false)
-
-	    var relatedTarget = $next[0]
-	    var slideEvent = $.Event('slide.bs.carousel', {
-	      relatedTarget: relatedTarget,
-	      direction: direction
-	    })
-	    this.$element.trigger(slideEvent)
-	    if (slideEvent.isDefaultPrevented()) return
-
-	    this.sliding = true
-
-	    isCycling && this.pause()
-
-	    if (this.$indicators.length) {
-	      this.$indicators.find('.active').removeClass('active')
-	      var $nextIndicator = $(this.$indicators.children()[this.getItemIndex($next)])
-	      $nextIndicator && $nextIndicator.addClass('active')
-	    }
-
-	    var slidEvent = $.Event('slid.bs.carousel', { relatedTarget: relatedTarget, direction: direction }) // yes, "slid"
-	    if ($.support.transition && this.$element.hasClass('slide')) {
-	      $next.addClass(type)
-	      $next[0].offsetWidth // force reflow
-	      $active.addClass(direction)
-	      $next.addClass(direction)
-	      $active
-	        .one('bsTransitionEnd', function () {
-	          $next.removeClass([type, direction].join(' ')).addClass('active')
-	          $active.removeClass(['active', direction].join(' '))
-	          that.sliding = false
-	          setTimeout(function () {
-	            that.$element.trigger(slidEvent)
-	          }, 0)
-	        })
-	        .emulateTransitionEnd(Carousel.TRANSITION_DURATION)
-	    } else {
-	      $active.removeClass('active')
-	      $next.addClass('active')
-	      this.sliding = false
-	      this.$element.trigger(slidEvent)
-	    }
-
-	    isCycling && this.cycle()
-
-	    return this
-	  }
-
-
-	  // CAROUSEL PLUGIN DEFINITION
-	  // ==========================
-
-	  function Plugin(option) {
-	    return this.each(function () {
-	      var $this   = $(this)
-	      var data    = $this.data('bs.carousel')
-	      var options = $.extend({}, Carousel.DEFAULTS, $this.data(), typeof option == 'object' && option)
-	      var action  = typeof option == 'string' ? option : options.slide
-
-	      if (!data) $this.data('bs.carousel', (data = new Carousel(this, options)))
-	      if (typeof option == 'number') data.to(option)
-	      else if (action) data[action]()
-	      else if (options.interval) data.pause().cycle()
-	    })
-	  }
-
-	  var old = $.fn.carousel
-
-	  $.fn.carousel             = Plugin
-	  $.fn.carousel.Constructor = Carousel
-
-
-	  // CAROUSEL NO CONFLICT
-	  // ====================
-
-	  $.fn.carousel.noConflict = function () {
-	    $.fn.carousel = old
-	    return this
-	  }
-
-
-	  // CAROUSEL DATA-API
-	  // =================
-
-	  var clickHandler = function (e) {
-	    var href
-	    var $this   = $(this)
-	    var $target = $($this.attr('data-target') || (href = $this.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '')) // strip for ie7
-	    if (!$target.hasClass('carousel')) return
-	    var options = $.extend({}, $target.data(), $this.data())
-	    var slideIndex = $this.attr('data-slide-to')
-	    if (slideIndex) options.interval = false
-
-	    Plugin.call($target, options)
-
-	    if (slideIndex) {
-	      $target.data('bs.carousel').to(slideIndex)
-	    }
-
-	    e.preventDefault()
-	  }
-
-	  $(document)
-	    .on('click.bs.carousel.data-api', '[data-slide]', clickHandler)
-	    .on('click.bs.carousel.data-api', '[data-slide-to]', clickHandler)
-
-	  $(window).on('load', function () {
-	    $('[data-ride="carousel"]').each(function () {
-	      var $carousel = $(this)
-	      Plugin.call($carousel, $carousel.data())
-	    })
-	  })
-
-	}(jQuery);
-
-
-/***/ },
-/* 289 */
-/***/ function(module, exports) {
-
-	/* ========================================================================
-	 * Bootstrap: collapse.js v3.3.6
-	 * http://getbootstrap.com/javascript/#collapse
-	 * ========================================================================
-	 * Copyright 2011-2015 Twitter, Inc.
-	 * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
-	 * ======================================================================== */
-
-
-	+function ($) {
-	  'use strict';
-
-	  // COLLAPSE PUBLIC CLASS DEFINITION
-	  // ================================
-
-	  var Collapse = function (element, options) {
-	    this.$element      = $(element)
-	    this.options       = $.extend({}, Collapse.DEFAULTS, options)
-	    this.$trigger      = $('[data-toggle="collapse"][href="#' + element.id + '"],' +
-	                           '[data-toggle="collapse"][data-target="#' + element.id + '"]')
-	    this.transitioning = null
-
-	    if (this.options.parent) {
-	      this.$parent = this.getParent()
-	    } else {
-	      this.addAriaAndCollapsedClass(this.$element, this.$trigger)
-	    }
-
-	    if (this.options.toggle) this.toggle()
-	  }
-
-	  Collapse.VERSION  = '3.3.6'
-
-	  Collapse.TRANSITION_DURATION = 350
-
-	  Collapse.DEFAULTS = {
-	    toggle: true
-	  }
-
-	  Collapse.prototype.dimension = function () {
-	    var hasWidth = this.$element.hasClass('width')
-	    return hasWidth ? 'width' : 'height'
-	  }
-
-	  Collapse.prototype.show = function () {
-	    if (this.transitioning || this.$element.hasClass('in')) return
-
-	    var activesData
-	    var actives = this.$parent && this.$parent.children('.panel').children('.in, .collapsing')
-
-	    if (actives && actives.length) {
-	      activesData = actives.data('bs.collapse')
-	      if (activesData && activesData.transitioning) return
-	    }
-
-	    var startEvent = $.Event('show.bs.collapse')
-	    this.$element.trigger(startEvent)
-	    if (startEvent.isDefaultPrevented()) return
-
-	    if (actives && actives.length) {
-	      Plugin.call(actives, 'hide')
-	      activesData || actives.data('bs.collapse', null)
-	    }
-
-	    var dimension = this.dimension()
-
-	    this.$element
-	      .removeClass('collapse')
-	      .addClass('collapsing')[dimension](0)
-	      .attr('aria-expanded', true)
-
-	    this.$trigger
-	      .removeClass('collapsed')
-	      .attr('aria-expanded', true)
-
-	    this.transitioning = 1
-
-	    var complete = function () {
-	      this.$element
-	        .removeClass('collapsing')
-	        .addClass('collapse in')[dimension]('')
-	      this.transitioning = 0
-	      this.$element
-	        .trigger('shown.bs.collapse')
-	    }
-
-	    if (!$.support.transition) return complete.call(this)
-
-	    var scrollSize = $.camelCase(['scroll', dimension].join('-'))
-
-	    this.$element
-	      .one('bsTransitionEnd', $.proxy(complete, this))
-	      .emulateTransitionEnd(Collapse.TRANSITION_DURATION)[dimension](this.$element[0][scrollSize])
-	  }
-
-	  Collapse.prototype.hide = function () {
-	    if (this.transitioning || !this.$element.hasClass('in')) return
-
-	    var startEvent = $.Event('hide.bs.collapse')
-	    this.$element.trigger(startEvent)
-	    if (startEvent.isDefaultPrevented()) return
-
-	    var dimension = this.dimension()
-
-	    this.$element[dimension](this.$element[dimension]())[0].offsetHeight
-
-	    this.$element
-	      .addClass('collapsing')
-	      .removeClass('collapse in')
-	      .attr('aria-expanded', false)
-
-	    this.$trigger
-	      .addClass('collapsed')
-	      .attr('aria-expanded', false)
-
-	    this.transitioning = 1
-
-	    var complete = function () {
-	      this.transitioning = 0
-	      this.$element
-	        .removeClass('collapsing')
-	        .addClass('collapse')
-	        .trigger('hidden.bs.collapse')
-	    }
-
-	    if (!$.support.transition) return complete.call(this)
-
-	    this.$element
-	      [dimension](0)
-	      .one('bsTransitionEnd', $.proxy(complete, this))
-	      .emulateTransitionEnd(Collapse.TRANSITION_DURATION)
-	  }
-
-	  Collapse.prototype.toggle = function () {
-	    this[this.$element.hasClass('in') ? 'hide' : 'show']()
-	  }
-
-	  Collapse.prototype.getParent = function () {
-	    return $(this.options.parent)
-	      .find('[data-toggle="collapse"][data-parent="' + this.options.parent + '"]')
-	      .each($.proxy(function (i, element) {
-	        var $element = $(element)
-	        this.addAriaAndCollapsedClass(getTargetFromTrigger($element), $element)
-	      }, this))
-	      .end()
-	  }
-
-	  Collapse.prototype.addAriaAndCollapsedClass = function ($element, $trigger) {
-	    var isOpen = $element.hasClass('in')
-
-	    $element.attr('aria-expanded', isOpen)
-	    $trigger
-	      .toggleClass('collapsed', !isOpen)
-	      .attr('aria-expanded', isOpen)
-	  }
-
-	  function getTargetFromTrigger($trigger) {
-	    var href
-	    var target = $trigger.attr('data-target')
-	      || (href = $trigger.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '') // strip for ie7
-
-	    return $(target)
-	  }
-
-
-	  // COLLAPSE PLUGIN DEFINITION
-	  // ==========================
-
-	  function Plugin(option) {
-	    return this.each(function () {
-	      var $this   = $(this)
-	      var data    = $this.data('bs.collapse')
-	      var options = $.extend({}, Collapse.DEFAULTS, $this.data(), typeof option == 'object' && option)
-
-	      if (!data && options.toggle && /show|hide/.test(option)) options.toggle = false
-	      if (!data) $this.data('bs.collapse', (data = new Collapse(this, options)))
-	      if (typeof option == 'string') data[option]()
-	    })
-	  }
-
-	  var old = $.fn.collapse
-
-	  $.fn.collapse             = Plugin
-	  $.fn.collapse.Constructor = Collapse
-
-
-	  // COLLAPSE NO CONFLICT
-	  // ====================
-
-	  $.fn.collapse.noConflict = function () {
-	    $.fn.collapse = old
-	    return this
-	  }
-
-
-	  // COLLAPSE DATA-API
-	  // =================
-
-	  $(document).on('click.bs.collapse.data-api', '[data-toggle="collapse"]', function (e) {
-	    var $this   = $(this)
-
-	    if (!$this.attr('data-target')) e.preventDefault()
-
-	    var $target = getTargetFromTrigger($this)
-	    var data    = $target.data('bs.collapse')
-	    var option  = data ? 'toggle' : $this.data()
-
-	    Plugin.call($target, option)
-	  })
-
-	}(jQuery);
-
-
-/***/ },
-/* 290 */
-/***/ function(module, exports) {
-
-	/* ========================================================================
-	 * Bootstrap: dropdown.js v3.3.6
-	 * http://getbootstrap.com/javascript/#dropdowns
-	 * ========================================================================
-	 * Copyright 2011-2015 Twitter, Inc.
-	 * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
-	 * ======================================================================== */
-
-
-	+function ($) {
-	  'use strict';
-
-	  // DROPDOWN CLASS DEFINITION
-	  // =========================
-
-	  var backdrop = '.dropdown-backdrop'
-	  var toggle   = '[data-toggle="dropdown"]'
-	  var Dropdown = function (element) {
-	    $(element).on('click.bs.dropdown', this.toggle)
-	  }
-
-	  Dropdown.VERSION = '3.3.6'
-
-	  function getParent($this) {
-	    var selector = $this.attr('data-target')
-
-	    if (!selector) {
-	      selector = $this.attr('href')
-	      selector = selector && /#[A-Za-z]/.test(selector) && selector.replace(/.*(?=#[^\s]*$)/, '') // strip for ie7
-	    }
-
-	    var $parent = selector && $(selector)
-
-	    return $parent && $parent.length ? $parent : $this.parent()
-	  }
-
-	  function clearMenus(e) {
-	    if (e && e.which === 3) return
-	    $(backdrop).remove()
-	    $(toggle).each(function () {
-	      var $this         = $(this)
-	      var $parent       = getParent($this)
-	      var relatedTarget = { relatedTarget: this }
-
-	      if (!$parent.hasClass('open')) return
-
-	      if (e && e.type == 'click' && /input|textarea/i.test(e.target.tagName) && $.contains($parent[0], e.target)) return
-
-	      $parent.trigger(e = $.Event('hide.bs.dropdown', relatedTarget))
-
-	      if (e.isDefaultPrevented()) return
-
-	      $this.attr('aria-expanded', 'false')
-	      $parent.removeClass('open').trigger($.Event('hidden.bs.dropdown', relatedTarget))
-	    })
-	  }
-
-	  Dropdown.prototype.toggle = function (e) {
-	    var $this = $(this)
-
-	    if ($this.is('.disabled, :disabled')) return
-
-	    var $parent  = getParent($this)
-	    var isActive = $parent.hasClass('open')
-
-	    clearMenus()
-
-	    if (!isActive) {
-	      if ('ontouchstart' in document.documentElement && !$parent.closest('.navbar-nav').length) {
-	        // if mobile we use a backdrop because click events don't delegate
-	        $(document.createElement('div'))
-	          .addClass('dropdown-backdrop')
-	          .insertAfter($(this))
-	          .on('click', clearMenus)
-	      }
-
-	      var relatedTarget = { relatedTarget: this }
-	      $parent.trigger(e = $.Event('show.bs.dropdown', relatedTarget))
-
-	      if (e.isDefaultPrevented()) return
-
-	      $this
-	        .trigger('focus')
-	        .attr('aria-expanded', 'true')
-
-	      $parent
-	        .toggleClass('open')
-	        .trigger($.Event('shown.bs.dropdown', relatedTarget))
-	    }
-
-	    return false
-	  }
-
-	  Dropdown.prototype.keydown = function (e) {
-	    if (!/(38|40|27|32)/.test(e.which) || /input|textarea/i.test(e.target.tagName)) return
-
-	    var $this = $(this)
-
-	    e.preventDefault()
-	    e.stopPropagation()
-
-	    if ($this.is('.disabled, :disabled')) return
-
-	    var $parent  = getParent($this)
-	    var isActive = $parent.hasClass('open')
-
-	    if (!isActive && e.which != 27 || isActive && e.which == 27) {
-	      if (e.which == 27) $parent.find(toggle).trigger('focus')
-	      return $this.trigger('click')
-	    }
-
-	    var desc = ' li:not(.disabled):visible a'
-	    var $items = $parent.find('.dropdown-menu' + desc)
-
-	    if (!$items.length) return
-
-	    var index = $items.index(e.target)
-
-	    if (e.which == 38 && index > 0)                 index--         // up
-	    if (e.which == 40 && index < $items.length - 1) index++         // down
-	    if (!~index)                                    index = 0
-
-	    $items.eq(index).trigger('focus')
-	  }
-
-
-	  // DROPDOWN PLUGIN DEFINITION
-	  // ==========================
-
-	  function Plugin(option) {
-	    return this.each(function () {
-	      var $this = $(this)
-	      var data  = $this.data('bs.dropdown')
-
-	      if (!data) $this.data('bs.dropdown', (data = new Dropdown(this)))
-	      if (typeof option == 'string') data[option].call($this)
-	    })
-	  }
-
-	  var old = $.fn.dropdown
-
-	  $.fn.dropdown             = Plugin
-	  $.fn.dropdown.Constructor = Dropdown
-
-
-	  // DROPDOWN NO CONFLICT
-	  // ====================
-
-	  $.fn.dropdown.noConflict = function () {
-	    $.fn.dropdown = old
-	    return this
-	  }
-
-
-	  // APPLY TO STANDARD DROPDOWN ELEMENTS
-	  // ===================================
-
-	  $(document)
-	    .on('click.bs.dropdown.data-api', clearMenus)
-	    .on('click.bs.dropdown.data-api', '.dropdown form', function (e) { e.stopPropagation() })
-	    .on('click.bs.dropdown.data-api', toggle, Dropdown.prototype.toggle)
-	    .on('keydown.bs.dropdown.data-api', toggle, Dropdown.prototype.keydown)
-	    .on('keydown.bs.dropdown.data-api', '.dropdown-menu', Dropdown.prototype.keydown)
-
-	}(jQuery);
-
-
-/***/ },
-/* 291 */
-/***/ function(module, exports) {
-
-	/* ========================================================================
-	 * Bootstrap: modal.js v3.3.6
-	 * http://getbootstrap.com/javascript/#modals
-	 * ========================================================================
-	 * Copyright 2011-2015 Twitter, Inc.
-	 * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
-	 * ======================================================================== */
-
-
-	+function ($) {
-	  'use strict';
-
-	  // MODAL CLASS DEFINITION
-	  // ======================
-
-	  var Modal = function (element, options) {
-	    this.options             = options
-	    this.$body               = $(document.body)
-	    this.$element            = $(element)
-	    this.$dialog             = this.$element.find('.modal-dialog')
-	    this.$backdrop           = null
-	    this.isShown             = null
-	    this.originalBodyPad     = null
-	    this.scrollbarWidth      = 0
-	    this.ignoreBackdropClick = false
-
-	    if (this.options.remote) {
-	      this.$element
-	        .find('.modal-content')
-	        .load(this.options.remote, $.proxy(function () {
-	          this.$element.trigger('loaded.bs.modal')
-	        }, this))
-	    }
-	  }
-
-	  Modal.VERSION  = '3.3.6'
-
-	  Modal.TRANSITION_DURATION = 300
-	  Modal.BACKDROP_TRANSITION_DURATION = 150
-
-	  Modal.DEFAULTS = {
-	    backdrop: true,
-	    keyboard: true,
-	    show: true
-	  }
-
-	  Modal.prototype.toggle = function (_relatedTarget) {
-	    return this.isShown ? this.hide() : this.show(_relatedTarget)
-	  }
-
-	  Modal.prototype.show = function (_relatedTarget) {
-	    var that = this
-	    var e    = $.Event('show.bs.modal', { relatedTarget: _relatedTarget })
-
-	    this.$element.trigger(e)
-
-	    if (this.isShown || e.isDefaultPrevented()) return
-
-	    this.isShown = true
-
-	    this.checkScrollbar()
-	    this.setScrollbar()
-	    this.$body.addClass('modal-open')
-
-	    this.escape()
-	    this.resize()
-
-	    this.$element.on('click.dismiss.bs.modal', '[data-dismiss="modal"]', $.proxy(this.hide, this))
-
-	    this.$dialog.on('mousedown.dismiss.bs.modal', function () {
-	      that.$element.one('mouseup.dismiss.bs.modal', function (e) {
-	        if ($(e.target).is(that.$element)) that.ignoreBackdropClick = true
-	      })
-	    })
-
-	    this.backdrop(function () {
-	      var transition = $.support.transition && that.$element.hasClass('fade')
-
-	      if (!that.$element.parent().length) {
-	        that.$element.appendTo(that.$body) // don't move modals dom position
-	      }
-
-	      that.$element
-	        .show()
-	        .scrollTop(0)
-
-	      that.adjustDialog()
-
-	      if (transition) {
-	        that.$element[0].offsetWidth // force reflow
-	      }
-
-	      that.$element.addClass('in')
-
-	      that.enforceFocus()
-
-	      var e = $.Event('shown.bs.modal', { relatedTarget: _relatedTarget })
-
-	      transition ?
-	        that.$dialog // wait for modal to slide in
-	          .one('bsTransitionEnd', function () {
-	            that.$element.trigger('focus').trigger(e)
-	          })
-	          .emulateTransitionEnd(Modal.TRANSITION_DURATION) :
-	        that.$element.trigger('focus').trigger(e)
-	    })
-	  }
-
-	  Modal.prototype.hide = function (e) {
-	    if (e) e.preventDefault()
-
-	    e = $.Event('hide.bs.modal')
-
-	    this.$element.trigger(e)
-
-	    if (!this.isShown || e.isDefaultPrevented()) return
-
-	    this.isShown = false
-
-	    this.escape()
-	    this.resize()
-
-	    $(document).off('focusin.bs.modal')
-
-	    this.$element
-	      .removeClass('in')
-	      .off('click.dismiss.bs.modal')
-	      .off('mouseup.dismiss.bs.modal')
-
-	    this.$dialog.off('mousedown.dismiss.bs.modal')
-
-	    $.support.transition && this.$element.hasClass('fade') ?
-	      this.$element
-	        .one('bsTransitionEnd', $.proxy(this.hideModal, this))
-	        .emulateTransitionEnd(Modal.TRANSITION_DURATION) :
-	      this.hideModal()
-	  }
-
-	  Modal.prototype.enforceFocus = function () {
-	    $(document)
-	      .off('focusin.bs.modal') // guard against infinite focus loop
-	      .on('focusin.bs.modal', $.proxy(function (e) {
-	        if (this.$element[0] !== e.target && !this.$element.has(e.target).length) {
-	          this.$element.trigger('focus')
-	        }
-	      }, this))
-	  }
-
-	  Modal.prototype.escape = function () {
-	    if (this.isShown && this.options.keyboard) {
-	      this.$element.on('keydown.dismiss.bs.modal', $.proxy(function (e) {
-	        e.which == 27 && this.hide()
-	      }, this))
-	    } else if (!this.isShown) {
-	      this.$element.off('keydown.dismiss.bs.modal')
-	    }
-	  }
-
-	  Modal.prototype.resize = function () {
-	    if (this.isShown) {
-	      $(window).on('resize.bs.modal', $.proxy(this.handleUpdate, this))
-	    } else {
-	      $(window).off('resize.bs.modal')
-	    }
-	  }
-
-	  Modal.prototype.hideModal = function () {
-	    var that = this
-	    this.$element.hide()
-	    this.backdrop(function () {
-	      that.$body.removeClass('modal-open')
-	      that.resetAdjustments()
-	      that.resetScrollbar()
-	      that.$element.trigger('hidden.bs.modal')
-	    })
-	  }
-
-	  Modal.prototype.removeBackdrop = function () {
-	    this.$backdrop && this.$backdrop.remove()
-	    this.$backdrop = null
-	  }
-
-	  Modal.prototype.backdrop = function (callback) {
-	    var that = this
-	    var animate = this.$element.hasClass('fade') ? 'fade' : ''
-
-	    if (this.isShown && this.options.backdrop) {
-	      var doAnimate = $.support.transition && animate
-
-	      this.$backdrop = $(document.createElement('div'))
-	        .addClass('modal-backdrop ' + animate)
-	        .appendTo(this.$body)
-
-	      this.$element.on('click.dismiss.bs.modal', $.proxy(function (e) {
-	        if (this.ignoreBackdropClick) {
-	          this.ignoreBackdropClick = false
-	          return
-	        }
-	        if (e.target !== e.currentTarget) return
-	        this.options.backdrop == 'static'
-	          ? this.$element[0].focus()
-	          : this.hide()
-	      }, this))
-
-	      if (doAnimate) this.$backdrop[0].offsetWidth // force reflow
-
-	      this.$backdrop.addClass('in')
-
-	      if (!callback) return
-
-	      doAnimate ?
-	        this.$backdrop
-	          .one('bsTransitionEnd', callback)
-	          .emulateTransitionEnd(Modal.BACKDROP_TRANSITION_DURATION) :
-	        callback()
-
-	    } else if (!this.isShown && this.$backdrop) {
-	      this.$backdrop.removeClass('in')
-
-	      var callbackRemove = function () {
-	        that.removeBackdrop()
-	        callback && callback()
-	      }
-	      $.support.transition && this.$element.hasClass('fade') ?
-	        this.$backdrop
-	          .one('bsTransitionEnd', callbackRemove)
-	          .emulateTransitionEnd(Modal.BACKDROP_TRANSITION_DURATION) :
-	        callbackRemove()
-
-	    } else if (callback) {
-	      callback()
-	    }
-	  }
-
-	  // these following methods are used to handle overflowing modals
-
-	  Modal.prototype.handleUpdate = function () {
-	    this.adjustDialog()
-	  }
-
-	  Modal.prototype.adjustDialog = function () {
-	    var modalIsOverflowing = this.$element[0].scrollHeight > document.documentElement.clientHeight
-
-	    this.$element.css({
-	      paddingLeft:  !this.bodyIsOverflowing && modalIsOverflowing ? this.scrollbarWidth : '',
-	      paddingRight: this.bodyIsOverflowing && !modalIsOverflowing ? this.scrollbarWidth : ''
-	    })
-	  }
-
-	  Modal.prototype.resetAdjustments = function () {
-	    this.$element.css({
-	      paddingLeft: '',
-	      paddingRight: ''
-	    })
-	  }
-
-	  Modal.prototype.checkScrollbar = function () {
-	    var fullWindowWidth = window.innerWidth
-	    if (!fullWindowWidth) { // workaround for missing window.innerWidth in IE8
-	      var documentElementRect = document.documentElement.getBoundingClientRect()
-	      fullWindowWidth = documentElementRect.right - Math.abs(documentElementRect.left)
-	    }
-	    this.bodyIsOverflowing = document.body.clientWidth < fullWindowWidth
-	    this.scrollbarWidth = this.measureScrollbar()
-	  }
-
-	  Modal.prototype.setScrollbar = function () {
-	    var bodyPad = parseInt((this.$body.css('padding-right') || 0), 10)
-	    this.originalBodyPad = document.body.style.paddingRight || ''
-	    if (this.bodyIsOverflowing) this.$body.css('padding-right', bodyPad + this.scrollbarWidth)
-	  }
-
-	  Modal.prototype.resetScrollbar = function () {
-	    this.$body.css('padding-right', this.originalBodyPad)
-	  }
-
-	  Modal.prototype.measureScrollbar = function () { // thx walsh
-	    var scrollDiv = document.createElement('div')
-	    scrollDiv.className = 'modal-scrollbar-measure'
-	    this.$body.append(scrollDiv)
-	    var scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth
-	    this.$body[0].removeChild(scrollDiv)
-	    return scrollbarWidth
-	  }
-
-
-	  // MODAL PLUGIN DEFINITION
-	  // =======================
-
-	  function Plugin(option, _relatedTarget) {
-	    return this.each(function () {
-	      var $this   = $(this)
-	      var data    = $this.data('bs.modal')
-	      var options = $.extend({}, Modal.DEFAULTS, $this.data(), typeof option == 'object' && option)
-
-	      if (!data) $this.data('bs.modal', (data = new Modal(this, options)))
-	      if (typeof option == 'string') data[option](_relatedTarget)
-	      else if (options.show) data.show(_relatedTarget)
-	    })
-	  }
-
-	  var old = $.fn.modal
-
-	  $.fn.modal             = Plugin
-	  $.fn.modal.Constructor = Modal
-
-
-	  // MODAL NO CONFLICT
-	  // =================
-
-	  $.fn.modal.noConflict = function () {
-	    $.fn.modal = old
-	    return this
-	  }
-
-
-	  // MODAL DATA-API
-	  // ==============
-
-	  $(document).on('click.bs.modal.data-api', '[data-toggle="modal"]', function (e) {
-	    var $this   = $(this)
-	    var href    = $this.attr('href')
-	    var $target = $($this.attr('data-target') || (href && href.replace(/.*(?=#[^\s]+$)/, ''))) // strip for ie7
-	    var option  = $target.data('bs.modal') ? 'toggle' : $.extend({ remote: !/#/.test(href) && href }, $target.data(), $this.data())
-
-	    if ($this.is('a')) e.preventDefault()
-
-	    $target.one('show.bs.modal', function (showEvent) {
-	      if (showEvent.isDefaultPrevented()) return // only register focus restorer if modal will actually get shown
-	      $target.one('hidden.bs.modal', function () {
-	        $this.is(':visible') && $this.trigger('focus')
-	      })
-	    })
-	    Plugin.call($target, option, this)
-	  })
-
-	}(jQuery);
-
-
-/***/ },
-/* 292 */
-/***/ function(module, exports) {
-
-	/* ========================================================================
-	 * Bootstrap: tooltip.js v3.3.6
-	 * http://getbootstrap.com/javascript/#tooltip
-	 * Inspired by the original jQuery.tipsy by Jason Frame
-	 * ========================================================================
-	 * Copyright 2011-2015 Twitter, Inc.
-	 * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
-	 * ======================================================================== */
-
-
-	+function ($) {
-	  'use strict';
-
-	  // TOOLTIP PUBLIC CLASS DEFINITION
-	  // ===============================
-
-	  var Tooltip = function (element, options) {
-	    this.type       = null
-	    this.options    = null
-	    this.enabled    = null
-	    this.timeout    = null
-	    this.hoverState = null
-	    this.$element   = null
-	    this.inState    = null
-
-	    this.init('tooltip', element, options)
-	  }
-
-	  Tooltip.VERSION  = '3.3.6'
-
-	  Tooltip.TRANSITION_DURATION = 150
-
-	  Tooltip.DEFAULTS = {
-	    animation: true,
-	    placement: 'top',
-	    selector: false,
-	    template: '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
-	    trigger: 'hover focus',
-	    title: '',
-	    delay: 0,
-	    html: false,
-	    container: false,
-	    viewport: {
-	      selector: 'body',
-	      padding: 0
-	    }
-	  }
-
-	  Tooltip.prototype.init = function (type, element, options) {
-	    this.enabled   = true
-	    this.type      = type
-	    this.$element  = $(element)
-	    this.options   = this.getOptions(options)
-	    this.$viewport = this.options.viewport && $($.isFunction(this.options.viewport) ? this.options.viewport.call(this, this.$element) : (this.options.viewport.selector || this.options.viewport))
-	    this.inState   = { click: false, hover: false, focus: false }
-
-	    if (this.$element[0] instanceof document.constructor && !this.options.selector) {
-	      throw new Error('`selector` option must be specified when initializing ' + this.type + ' on the window.document object!')
-	    }
-
-	    var triggers = this.options.trigger.split(' ')
-
-	    for (var i = triggers.length; i--;) {
-	      var trigger = triggers[i]
-
-	      if (trigger == 'click') {
-	        this.$element.on('click.' + this.type, this.options.selector, $.proxy(this.toggle, this))
-	      } else if (trigger != 'manual') {
-	        var eventIn  = trigger == 'hover' ? 'mouseenter' : 'focusin'
-	        var eventOut = trigger == 'hover' ? 'mouseleave' : 'focusout'
-
-	        this.$element.on(eventIn  + '.' + this.type, this.options.selector, $.proxy(this.enter, this))
-	        this.$element.on(eventOut + '.' + this.type, this.options.selector, $.proxy(this.leave, this))
-	      }
-	    }
-
-	    this.options.selector ?
-	      (this._options = $.extend({}, this.options, { trigger: 'manual', selector: '' })) :
-	      this.fixTitle()
-	  }
-
-	  Tooltip.prototype.getDefaults = function () {
-	    return Tooltip.DEFAULTS
-	  }
-
-	  Tooltip.prototype.getOptions = function (options) {
-	    options = $.extend({}, this.getDefaults(), this.$element.data(), options)
-
-	    if (options.delay && typeof options.delay == 'number') {
-	      options.delay = {
-	        show: options.delay,
-	        hide: options.delay
-	      }
-	    }
-
-	    return options
-	  }
-
-	  Tooltip.prototype.getDelegateOptions = function () {
-	    var options  = {}
-	    var defaults = this.getDefaults()
-
-	    this._options && $.each(this._options, function (key, value) {
-	      if (defaults[key] != value) options[key] = value
-	    })
-
-	    return options
-	  }
-
-	  Tooltip.prototype.enter = function (obj) {
-	    var self = obj instanceof this.constructor ?
-	      obj : $(obj.currentTarget).data('bs.' + this.type)
-
-	    if (!self) {
-	      self = new this.constructor(obj.currentTarget, this.getDelegateOptions())
-	      $(obj.currentTarget).data('bs.' + this.type, self)
-	    }
-
-	    if (obj instanceof $.Event) {
-	      self.inState[obj.type == 'focusin' ? 'focus' : 'hover'] = true
-	    }
-
-	    if (self.tip().hasClass('in') || self.hoverState == 'in') {
-	      self.hoverState = 'in'
-	      return
-	    }
-
-	    clearTimeout(self.timeout)
-
-	    self.hoverState = 'in'
-
-	    if (!self.options.delay || !self.options.delay.show) return self.show()
-
-	    self.timeout = setTimeout(function () {
-	      if (self.hoverState == 'in') self.show()
-	    }, self.options.delay.show)
-	  }
-
-	  Tooltip.prototype.isInStateTrue = function () {
-	    for (var key in this.inState) {
-	      if (this.inState[key]) return true
-	    }
-
-	    return false
-	  }
-
-	  Tooltip.prototype.leave = function (obj) {
-	    var self = obj instanceof this.constructor ?
-	      obj : $(obj.currentTarget).data('bs.' + this.type)
-
-	    if (!self) {
-	      self = new this.constructor(obj.currentTarget, this.getDelegateOptions())
-	      $(obj.currentTarget).data('bs.' + this.type, self)
-	    }
-
-	    if (obj instanceof $.Event) {
-	      self.inState[obj.type == 'focusout' ? 'focus' : 'hover'] = false
-	    }
-
-	    if (self.isInStateTrue()) return
-
-	    clearTimeout(self.timeout)
-
-	    self.hoverState = 'out'
-
-	    if (!self.options.delay || !self.options.delay.hide) return self.hide()
-
-	    self.timeout = setTimeout(function () {
-	      if (self.hoverState == 'out') self.hide()
-	    }, self.options.delay.hide)
-	  }
-
-	  Tooltip.prototype.show = function () {
-	    var e = $.Event('show.bs.' + this.type)
-
-	    if (this.hasContent() && this.enabled) {
-	      this.$element.trigger(e)
-
-	      var inDom = $.contains(this.$element[0].ownerDocument.documentElement, this.$element[0])
-	      if (e.isDefaultPrevented() || !inDom) return
-	      var that = this
-
-	      var $tip = this.tip()
-
-	      var tipId = this.getUID(this.type)
-
-	      this.setContent()
-	      $tip.attr('id', tipId)
-	      this.$element.attr('aria-describedby', tipId)
-
-	      if (this.options.animation) $tip.addClass('fade')
-
-	      var placement = typeof this.options.placement == 'function' ?
-	        this.options.placement.call(this, $tip[0], this.$element[0]) :
-	        this.options.placement
-
-	      var autoToken = /\s?auto?\s?/i
-	      var autoPlace = autoToken.test(placement)
-	      if (autoPlace) placement = placement.replace(autoToken, '') || 'top'
-
-	      $tip
-	        .detach()
-	        .css({ top: 0, left: 0, display: 'block' })
-	        .addClass(placement)
-	        .data('bs.' + this.type, this)
-
-	      this.options.container ? $tip.appendTo(this.options.container) : $tip.insertAfter(this.$element)
-	      this.$element.trigger('inserted.bs.' + this.type)
-
-	      var pos          = this.getPosition()
-	      var actualWidth  = $tip[0].offsetWidth
-	      var actualHeight = $tip[0].offsetHeight
-
-	      if (autoPlace) {
-	        var orgPlacement = placement
-	        var viewportDim = this.getPosition(this.$viewport)
-
-	        placement = placement == 'bottom' && pos.bottom + actualHeight > viewportDim.bottom ? 'top'    :
-	                    placement == 'top'    && pos.top    - actualHeight < viewportDim.top    ? 'bottom' :
-	                    placement == 'right'  && pos.right  + actualWidth  > viewportDim.width  ? 'left'   :
-	                    placement == 'left'   && pos.left   - actualWidth  < viewportDim.left   ? 'right'  :
-	                    placement
-
-	        $tip
-	          .removeClass(orgPlacement)
-	          .addClass(placement)
-	      }
-
-	      var calculatedOffset = this.getCalculatedOffset(placement, pos, actualWidth, actualHeight)
-
-	      this.applyPlacement(calculatedOffset, placement)
-
-	      var complete = function () {
-	        var prevHoverState = that.hoverState
-	        that.$element.trigger('shown.bs.' + that.type)
-	        that.hoverState = null
-
-	        if (prevHoverState == 'out') that.leave(that)
-	      }
-
-	      $.support.transition && this.$tip.hasClass('fade') ?
-	        $tip
-	          .one('bsTransitionEnd', complete)
-	          .emulateTransitionEnd(Tooltip.TRANSITION_DURATION) :
-	        complete()
-	    }
-	  }
-
-	  Tooltip.prototype.applyPlacement = function (offset, placement) {
-	    var $tip   = this.tip()
-	    var width  = $tip[0].offsetWidth
-	    var height = $tip[0].offsetHeight
-
-	    // manually read margins because getBoundingClientRect includes difference
-	    var marginTop = parseInt($tip.css('margin-top'), 10)
-	    var marginLeft = parseInt($tip.css('margin-left'), 10)
-
-	    // we must check for NaN for ie 8/9
-	    if (isNaN(marginTop))  marginTop  = 0
-	    if (isNaN(marginLeft)) marginLeft = 0
-
-	    offset.top  += marginTop
-	    offset.left += marginLeft
-
-	    // $.fn.offset doesn't round pixel values
-	    // so we use setOffset directly with our own function B-0
-	    $.offset.setOffset($tip[0], $.extend({
-	      using: function (props) {
-	        $tip.css({
-	          top: Math.round(props.top),
-	          left: Math.round(props.left)
-	        })
-	      }
-	    }, offset), 0)
-
-	    $tip.addClass('in')
-
-	    // check to see if placing tip in new offset caused the tip to resize itself
-	    var actualWidth  = $tip[0].offsetWidth
-	    var actualHeight = $tip[0].offsetHeight
-
-	    if (placement == 'top' && actualHeight != height) {
-	      offset.top = offset.top + height - actualHeight
-	    }
-
-	    var delta = this.getViewportAdjustedDelta(placement, offset, actualWidth, actualHeight)
-
-	    if (delta.left) offset.left += delta.left
-	    else offset.top += delta.top
-
-	    var isVertical          = /top|bottom/.test(placement)
-	    var arrowDelta          = isVertical ? delta.left * 2 - width + actualWidth : delta.top * 2 - height + actualHeight
-	    var arrowOffsetPosition = isVertical ? 'offsetWidth' : 'offsetHeight'
-
-	    $tip.offset(offset)
-	    this.replaceArrow(arrowDelta, $tip[0][arrowOffsetPosition], isVertical)
-	  }
-
-	  Tooltip.prototype.replaceArrow = function (delta, dimension, isVertical) {
-	    this.arrow()
-	      .css(isVertical ? 'left' : 'top', 50 * (1 - delta / dimension) + '%')
-	      .css(isVertical ? 'top' : 'left', '')
-	  }
-
-	  Tooltip.prototype.setContent = function () {
-	    var $tip  = this.tip()
-	    var title = this.getTitle()
-
-	    $tip.find('.tooltip-inner')[this.options.html ? 'html' : 'text'](title)
-	    $tip.removeClass('fade in top bottom left right')
-	  }
-
-	  Tooltip.prototype.hide = function (callback) {
-	    var that = this
-	    var $tip = $(this.$tip)
-	    var e    = $.Event('hide.bs.' + this.type)
-
-	    function complete() {
-	      if (that.hoverState != 'in') $tip.detach()
-	      that.$element
-	        .removeAttr('aria-describedby')
-	        .trigger('hidden.bs.' + that.type)
-	      callback && callback()
-	    }
-
-	    this.$element.trigger(e)
-
-	    if (e.isDefaultPrevented()) return
-
-	    $tip.removeClass('in')
-
-	    $.support.transition && $tip.hasClass('fade') ?
-	      $tip
-	        .one('bsTransitionEnd', complete)
-	        .emulateTransitionEnd(Tooltip.TRANSITION_DURATION) :
-	      complete()
-
-	    this.hoverState = null
-
-	    return this
-	  }
-
-	  Tooltip.prototype.fixTitle = function () {
-	    var $e = this.$element
-	    if ($e.attr('title') || typeof $e.attr('data-original-title') != 'string') {
-	      $e.attr('data-original-title', $e.attr('title') || '').attr('title', '')
-	    }
-	  }
-
-	  Tooltip.prototype.hasContent = function () {
-	    return this.getTitle()
-	  }
-
-	  Tooltip.prototype.getPosition = function ($element) {
-	    $element   = $element || this.$element
-
-	    var el     = $element[0]
-	    var isBody = el.tagName == 'BODY'
-
-	    var elRect    = el.getBoundingClientRect()
-	    if (elRect.width == null) {
-	      // width and height are missing in IE8, so compute them manually; see https://github.com/twbs/bootstrap/issues/14093
-	      elRect = $.extend({}, elRect, { width: elRect.right - elRect.left, height: elRect.bottom - elRect.top })
-	    }
-	    var elOffset  = isBody ? { top: 0, left: 0 } : $element.offset()
-	    var scroll    = { scroll: isBody ? document.documentElement.scrollTop || document.body.scrollTop : $element.scrollTop() }
-	    var outerDims = isBody ? { width: $(window).width(), height: $(window).height() } : null
-
-	    return $.extend({}, elRect, scroll, outerDims, elOffset)
-	  }
-
-	  Tooltip.prototype.getCalculatedOffset = function (placement, pos, actualWidth, actualHeight) {
-	    return placement == 'bottom' ? { top: pos.top + pos.height,   left: pos.left + pos.width / 2 - actualWidth / 2 } :
-	           placement == 'top'    ? { top: pos.top - actualHeight, left: pos.left + pos.width / 2 - actualWidth / 2 } :
-	           placement == 'left'   ? { top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth } :
-	        /* placement == 'right' */ { top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width }
-
-	  }
-
-	  Tooltip.prototype.getViewportAdjustedDelta = function (placement, pos, actualWidth, actualHeight) {
-	    var delta = { top: 0, left: 0 }
-	    if (!this.$viewport) return delta
-
-	    var viewportPadding = this.options.viewport && this.options.viewport.padding || 0
-	    var viewportDimensions = this.getPosition(this.$viewport)
-
-	    if (/right|left/.test(placement)) {
-	      var topEdgeOffset    = pos.top - viewportPadding - viewportDimensions.scroll
-	      var bottomEdgeOffset = pos.top + viewportPadding - viewportDimensions.scroll + actualHeight
-	      if (topEdgeOffset < viewportDimensions.top) { // top overflow
-	        delta.top = viewportDimensions.top - topEdgeOffset
-	      } else if (bottomEdgeOffset > viewportDimensions.top + viewportDimensions.height) { // bottom overflow
-	        delta.top = viewportDimensions.top + viewportDimensions.height - bottomEdgeOffset
-	      }
-	    } else {
-	      var leftEdgeOffset  = pos.left - viewportPadding
-	      var rightEdgeOffset = pos.left + viewportPadding + actualWidth
-	      if (leftEdgeOffset < viewportDimensions.left) { // left overflow
-	        delta.left = viewportDimensions.left - leftEdgeOffset
-	      } else if (rightEdgeOffset > viewportDimensions.right) { // right overflow
-	        delta.left = viewportDimensions.left + viewportDimensions.width - rightEdgeOffset
-	      }
-	    }
-
-	    return delta
-	  }
-
-	  Tooltip.prototype.getTitle = function () {
-	    var title
-	    var $e = this.$element
-	    var o  = this.options
-
-	    title = $e.attr('data-original-title')
-	      || (typeof o.title == 'function' ? o.title.call($e[0]) :  o.title)
-
-	    return title
-	  }
-
-	  Tooltip.prototype.getUID = function (prefix) {
-	    do prefix += ~~(Math.random() * 1000000)
-	    while (document.getElementById(prefix))
-	    return prefix
-	  }
-
-	  Tooltip.prototype.tip = function () {
-	    if (!this.$tip) {
-	      this.$tip = $(this.options.template)
-	      if (this.$tip.length != 1) {
-	        throw new Error(this.type + ' `template` option must consist of exactly 1 top-level element!')
-	      }
-	    }
-	    return this.$tip
-	  }
-
-	  Tooltip.prototype.arrow = function () {
-	    return (this.$arrow = this.$arrow || this.tip().find('.tooltip-arrow'))
-	  }
-
-	  Tooltip.prototype.enable = function () {
-	    this.enabled = true
-	  }
-
-	  Tooltip.prototype.disable = function () {
-	    this.enabled = false
-	  }
-
-	  Tooltip.prototype.toggleEnabled = function () {
-	    this.enabled = !this.enabled
-	  }
-
-	  Tooltip.prototype.toggle = function (e) {
-	    var self = this
-	    if (e) {
-	      self = $(e.currentTarget).data('bs.' + this.type)
-	      if (!self) {
-	        self = new this.constructor(e.currentTarget, this.getDelegateOptions())
-	        $(e.currentTarget).data('bs.' + this.type, self)
-	      }
-	    }
-
-	    if (e) {
-	      self.inState.click = !self.inState.click
-	      if (self.isInStateTrue()) self.enter(self)
-	      else self.leave(self)
-	    } else {
-	      self.tip().hasClass('in') ? self.leave(self) : self.enter(self)
-	    }
-	  }
-
-	  Tooltip.prototype.destroy = function () {
-	    var that = this
-	    clearTimeout(this.timeout)
-	    this.hide(function () {
-	      that.$element.off('.' + that.type).removeData('bs.' + that.type)
-	      if (that.$tip) {
-	        that.$tip.detach()
-	      }
-	      that.$tip = null
-	      that.$arrow = null
-	      that.$viewport = null
-	    })
-	  }
-
-
-	  // TOOLTIP PLUGIN DEFINITION
-	  // =========================
-
-	  function Plugin(option) {
-	    return this.each(function () {
-	      var $this   = $(this)
-	      var data    = $this.data('bs.tooltip')
-	      var options = typeof option == 'object' && option
-
-	      if (!data && /destroy|hide/.test(option)) return
-	      if (!data) $this.data('bs.tooltip', (data = new Tooltip(this, options)))
-	      if (typeof option == 'string') data[option]()
-	    })
-	  }
-
-	  var old = $.fn.tooltip
-
-	  $.fn.tooltip             = Plugin
-	  $.fn.tooltip.Constructor = Tooltip
-
-
-	  // TOOLTIP NO CONFLICT
-	  // ===================
-
-	  $.fn.tooltip.noConflict = function () {
-	    $.fn.tooltip = old
-	    return this
-	  }
-
-	}(jQuery);
-
-
-/***/ },
-/* 293 */
-/***/ function(module, exports) {
-
-	/* ========================================================================
-	 * Bootstrap: popover.js v3.3.6
-	 * http://getbootstrap.com/javascript/#popovers
-	 * ========================================================================
-	 * Copyright 2011-2015 Twitter, Inc.
-	 * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
-	 * ======================================================================== */
-
-
-	+function ($) {
-	  'use strict';
-
-	  // POPOVER PUBLIC CLASS DEFINITION
-	  // ===============================
-
-	  var Popover = function (element, options) {
-	    this.init('popover', element, options)
-	  }
-
-	  if (!$.fn.tooltip) throw new Error('Popover requires tooltip.js')
-
-	  Popover.VERSION  = '3.3.6'
-
-	  Popover.DEFAULTS = $.extend({}, $.fn.tooltip.Constructor.DEFAULTS, {
-	    placement: 'right',
-	    trigger: 'click',
-	    content: '',
-	    template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'
-	  })
-
-
-	  // NOTE: POPOVER EXTENDS tooltip.js
-	  // ================================
-
-	  Popover.prototype = $.extend({}, $.fn.tooltip.Constructor.prototype)
-
-	  Popover.prototype.constructor = Popover
-
-	  Popover.prototype.getDefaults = function () {
-	    return Popover.DEFAULTS
-	  }
-
-	  Popover.prototype.setContent = function () {
-	    var $tip    = this.tip()
-	    var title   = this.getTitle()
-	    var content = this.getContent()
-
-	    $tip.find('.popover-title')[this.options.html ? 'html' : 'text'](title)
-	    $tip.find('.popover-content').children().detach().end()[ // we use append for html objects to maintain js events
-	      this.options.html ? (typeof content == 'string' ? 'html' : 'append') : 'text'
-	    ](content)
-
-	    $tip.removeClass('fade top bottom left right in')
-
-	    // IE8 doesn't accept hiding via the `:empty` pseudo selector, we have to do
-	    // this manually by checking the contents.
-	    if (!$tip.find('.popover-title').html()) $tip.find('.popover-title').hide()
-	  }
-
-	  Popover.prototype.hasContent = function () {
-	    return this.getTitle() || this.getContent()
-	  }
-
-	  Popover.prototype.getContent = function () {
-	    var $e = this.$element
-	    var o  = this.options
-
-	    return $e.attr('data-content')
-	      || (typeof o.content == 'function' ?
-	            o.content.call($e[0]) :
-	            o.content)
-	  }
-
-	  Popover.prototype.arrow = function () {
-	    return (this.$arrow = this.$arrow || this.tip().find('.arrow'))
-	  }
-
-
-	  // POPOVER PLUGIN DEFINITION
-	  // =========================
-
-	  function Plugin(option) {
-	    return this.each(function () {
-	      var $this   = $(this)
-	      var data    = $this.data('bs.popover')
-	      var options = typeof option == 'object' && option
-
-	      if (!data && /destroy|hide/.test(option)) return
-	      if (!data) $this.data('bs.popover', (data = new Popover(this, options)))
-	      if (typeof option == 'string') data[option]()
-	    })
-	  }
-
-	  var old = $.fn.popover
-
-	  $.fn.popover             = Plugin
-	  $.fn.popover.Constructor = Popover
-
-
-	  // POPOVER NO CONFLICT
-	  // ===================
-
-	  $.fn.popover.noConflict = function () {
-	    $.fn.popover = old
-	    return this
-	  }
-
-	}(jQuery);
-
-
-/***/ },
-/* 294 */
-/***/ function(module, exports) {
-
-	/* ========================================================================
-	 * Bootstrap: scrollspy.js v3.3.6
-	 * http://getbootstrap.com/javascript/#scrollspy
-	 * ========================================================================
-	 * Copyright 2011-2015 Twitter, Inc.
-	 * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
-	 * ======================================================================== */
-
-
-	+function ($) {
-	  'use strict';
-
-	  // SCROLLSPY CLASS DEFINITION
-	  // ==========================
-
-	  function ScrollSpy(element, options) {
-	    this.$body          = $(document.body)
-	    this.$scrollElement = $(element).is(document.body) ? $(window) : $(element)
-	    this.options        = $.extend({}, ScrollSpy.DEFAULTS, options)
-	    this.selector       = (this.options.target || '') + ' .nav li > a'
-	    this.offsets        = []
-	    this.targets        = []
-	    this.activeTarget   = null
-	    this.scrollHeight   = 0
-
-	    this.$scrollElement.on('scroll.bs.scrollspy', $.proxy(this.process, this))
-	    this.refresh()
-	    this.process()
-	  }
-
-	  ScrollSpy.VERSION  = '3.3.6'
-
-	  ScrollSpy.DEFAULTS = {
-	    offset: 10
-	  }
-
-	  ScrollSpy.prototype.getScrollHeight = function () {
-	    return this.$scrollElement[0].scrollHeight || Math.max(this.$body[0].scrollHeight, document.documentElement.scrollHeight)
-	  }
-
-	  ScrollSpy.prototype.refresh = function () {
-	    var that          = this
-	    var offsetMethod  = 'offset'
-	    var offsetBase    = 0
-
-	    this.offsets      = []
-	    this.targets      = []
-	    this.scrollHeight = this.getScrollHeight()
-
-	    if (!$.isWindow(this.$scrollElement[0])) {
-	      offsetMethod = 'position'
-	      offsetBase   = this.$scrollElement.scrollTop()
-	    }
-
-	    this.$body
-	      .find(this.selector)
-	      .map(function () {
-	        var $el   = $(this)
-	        var href  = $el.data('target') || $el.attr('href')
-	        var $href = /^#./.test(href) && $(href)
-
-	        return ($href
-	          && $href.length
-	          && $href.is(':visible')
-	          && [[$href[offsetMethod]().top + offsetBase, href]]) || null
-	      })
-	      .sort(function (a, b) { return a[0] - b[0] })
-	      .each(function () {
-	        that.offsets.push(this[0])
-	        that.targets.push(this[1])
-	      })
-	  }
-
-	  ScrollSpy.prototype.process = function () {
-	    var scrollTop    = this.$scrollElement.scrollTop() + this.options.offset
-	    var scrollHeight = this.getScrollHeight()
-	    var maxScroll    = this.options.offset + scrollHeight - this.$scrollElement.height()
-	    var offsets      = this.offsets
-	    var targets      = this.targets
-	    var activeTarget = this.activeTarget
-	    var i
-
-	    if (this.scrollHeight != scrollHeight) {
-	      this.refresh()
-	    }
-
-	    if (scrollTop >= maxScroll) {
-	      return activeTarget != (i = targets[targets.length - 1]) && this.activate(i)
-	    }
-
-	    if (activeTarget && scrollTop < offsets[0]) {
-	      this.activeTarget = null
-	      return this.clear()
-	    }
-
-	    for (i = offsets.length; i--;) {
-	      activeTarget != targets[i]
-	        && scrollTop >= offsets[i]
-	        && (offsets[i + 1] === undefined || scrollTop < offsets[i + 1])
-	        && this.activate(targets[i])
-	    }
-	  }
-
-	  ScrollSpy.prototype.activate = function (target) {
-	    this.activeTarget = target
-
-	    this.clear()
-
-	    var selector = this.selector +
-	      '[data-target="' + target + '"],' +
-	      this.selector + '[href="' + target + '"]'
-
-	    var active = $(selector)
-	      .parents('li')
-	      .addClass('active')
-
-	    if (active.parent('.dropdown-menu').length) {
-	      active = active
-	        .closest('li.dropdown')
-	        .addClass('active')
-	    }
-
-	    active.trigger('activate.bs.scrollspy')
-	  }
-
-	  ScrollSpy.prototype.clear = function () {
-	    $(this.selector)
-	      .parentsUntil(this.options.target, '.active')
-	      .removeClass('active')
-	  }
-
-
-	  // SCROLLSPY PLUGIN DEFINITION
-	  // ===========================
-
-	  function Plugin(option) {
-	    return this.each(function () {
-	      var $this   = $(this)
-	      var data    = $this.data('bs.scrollspy')
-	      var options = typeof option == 'object' && option
-
-	      if (!data) $this.data('bs.scrollspy', (data = new ScrollSpy(this, options)))
-	      if (typeof option == 'string') data[option]()
-	    })
-	  }
-
-	  var old = $.fn.scrollspy
-
-	  $.fn.scrollspy             = Plugin
-	  $.fn.scrollspy.Constructor = ScrollSpy
-
-
-	  // SCROLLSPY NO CONFLICT
-	  // =====================
-
-	  $.fn.scrollspy.noConflict = function () {
-	    $.fn.scrollspy = old
-	    return this
-	  }
-
-
-	  // SCROLLSPY DATA-API
-	  // ==================
-
-	  $(window).on('load.bs.scrollspy.data-api', function () {
-	    $('[data-spy="scroll"]').each(function () {
-	      var $spy = $(this)
-	      Plugin.call($spy, $spy.data())
-	    })
-	  })
-
-	}(jQuery);
-
-
-/***/ },
-/* 295 */
-/***/ function(module, exports) {
-
-	/* ========================================================================
-	 * Bootstrap: tab.js v3.3.6
-	 * http://getbootstrap.com/javascript/#tabs
-	 * ========================================================================
-	 * Copyright 2011-2015 Twitter, Inc.
-	 * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
-	 * ======================================================================== */
-
-
-	+function ($) {
-	  'use strict';
-
-	  // TAB CLASS DEFINITION
-	  // ====================
-
-	  var Tab = function (element) {
-	    // jscs:disable requireDollarBeforejQueryAssignment
-	    this.element = $(element)
-	    // jscs:enable requireDollarBeforejQueryAssignment
-	  }
-
-	  Tab.VERSION = '3.3.6'
-
-	  Tab.TRANSITION_DURATION = 150
-
-	  Tab.prototype.show = function () {
-	    var $this    = this.element
-	    var $ul      = $this.closest('ul:not(.dropdown-menu)')
-	    var selector = $this.data('target')
-
-	    if (!selector) {
-	      selector = $this.attr('href')
-	      selector = selector && selector.replace(/.*(?=#[^\s]*$)/, '') // strip for ie7
-	    }
-
-	    if ($this.parent('li').hasClass('active')) return
-
-	    var $previous = $ul.find('.active:last a')
-	    var hideEvent = $.Event('hide.bs.tab', {
-	      relatedTarget: $this[0]
-	    })
-	    var showEvent = $.Event('show.bs.tab', {
-	      relatedTarget: $previous[0]
-	    })
-
-	    $previous.trigger(hideEvent)
-	    $this.trigger(showEvent)
-
-	    if (showEvent.isDefaultPrevented() || hideEvent.isDefaultPrevented()) return
-
-	    var $target = $(selector)
-
-	    this.activate($this.closest('li'), $ul)
-	    this.activate($target, $target.parent(), function () {
-	      $previous.trigger({
-	        type: 'hidden.bs.tab',
-	        relatedTarget: $this[0]
-	      })
-	      $this.trigger({
-	        type: 'shown.bs.tab',
-	        relatedTarget: $previous[0]
-	      })
-	    })
-	  }
-
-	  Tab.prototype.activate = function (element, container, callback) {
-	    var $active    = container.find('> .active')
-	    var transition = callback
-	      && $.support.transition
-	      && ($active.length && $active.hasClass('fade') || !!container.find('> .fade').length)
-
-	    function next() {
-	      $active
-	        .removeClass('active')
-	        .find('> .dropdown-menu > .active')
-	          .removeClass('active')
-	        .end()
-	        .find('[data-toggle="tab"]')
-	          .attr('aria-expanded', false)
-
-	      element
-	        .addClass('active')
-	        .find('[data-toggle="tab"]')
-	          .attr('aria-expanded', true)
-
-	      if (transition) {
-	        element[0].offsetWidth // reflow for transition
-	        element.addClass('in')
-	      } else {
-	        element.removeClass('fade')
-	      }
-
-	      if (element.parent('.dropdown-menu').length) {
-	        element
-	          .closest('li.dropdown')
-	            .addClass('active')
-	          .end()
-	          .find('[data-toggle="tab"]')
-	            .attr('aria-expanded', true)
-	      }
-
-	      callback && callback()
-	    }
-
-	    $active.length && transition ?
-	      $active
-	        .one('bsTransitionEnd', next)
-	        .emulateTransitionEnd(Tab.TRANSITION_DURATION) :
-	      next()
-
-	    $active.removeClass('in')
-	  }
-
-
-	  // TAB PLUGIN DEFINITION
-	  // =====================
-
-	  function Plugin(option) {
-	    return this.each(function () {
-	      var $this = $(this)
-	      var data  = $this.data('bs.tab')
-
-	      if (!data) $this.data('bs.tab', (data = new Tab(this)))
-	      if (typeof option == 'string') data[option]()
-	    })
-	  }
-
-	  var old = $.fn.tab
-
-	  $.fn.tab             = Plugin
-	  $.fn.tab.Constructor = Tab
-
-
-	  // TAB NO CONFLICT
-	  // ===============
-
-	  $.fn.tab.noConflict = function () {
-	    $.fn.tab = old
-	    return this
-	  }
-
-
-	  // TAB DATA-API
-	  // ============
-
-	  var clickHandler = function (e) {
-	    e.preventDefault()
-	    Plugin.call($(this), 'show')
-	  }
-
-	  $(document)
-	    .on('click.bs.tab.data-api', '[data-toggle="tab"]', clickHandler)
-	    .on('click.bs.tab.data-api', '[data-toggle="pill"]', clickHandler)
-
-	}(jQuery);
-
-
-/***/ },
-/* 296 */
-/***/ function(module, exports) {
-
-	/* ========================================================================
-	 * Bootstrap: affix.js v3.3.6
-	 * http://getbootstrap.com/javascript/#affix
-	 * ========================================================================
-	 * Copyright 2011-2015 Twitter, Inc.
-	 * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
-	 * ======================================================================== */
-
-
-	+function ($) {
-	  'use strict';
-
-	  // AFFIX CLASS DEFINITION
-	  // ======================
-
-	  var Affix = function (element, options) {
-	    this.options = $.extend({}, Affix.DEFAULTS, options)
-
-	    this.$target = $(this.options.target)
-	      .on('scroll.bs.affix.data-api', $.proxy(this.checkPosition, this))
-	      .on('click.bs.affix.data-api',  $.proxy(this.checkPositionWithEventLoop, this))
-
-	    this.$element     = $(element)
-	    this.affixed      = null
-	    this.unpin        = null
-	    this.pinnedOffset = null
-
-	    this.checkPosition()
-	  }
-
-	  Affix.VERSION  = '3.3.6'
-
-	  Affix.RESET    = 'affix affix-top affix-bottom'
-
-	  Affix.DEFAULTS = {
-	    offset: 0,
-	    target: window
-	  }
-
-	  Affix.prototype.getState = function (scrollHeight, height, offsetTop, offsetBottom) {
-	    var scrollTop    = this.$target.scrollTop()
-	    var position     = this.$element.offset()
-	    var targetHeight = this.$target.height()
-
-	    if (offsetTop != null && this.affixed == 'top') return scrollTop < offsetTop ? 'top' : false
-
-	    if (this.affixed == 'bottom') {
-	      if (offsetTop != null) return (scrollTop + this.unpin <= position.top) ? false : 'bottom'
-	      return (scrollTop + targetHeight <= scrollHeight - offsetBottom) ? false : 'bottom'
-	    }
-
-	    var initializing   = this.affixed == null
-	    var colliderTop    = initializing ? scrollTop : position.top
-	    var colliderHeight = initializing ? targetHeight : height
-
-	    if (offsetTop != null && scrollTop <= offsetTop) return 'top'
-	    if (offsetBottom != null && (colliderTop + colliderHeight >= scrollHeight - offsetBottom)) return 'bottom'
-
-	    return false
-	  }
-
-	  Affix.prototype.getPinnedOffset = function () {
-	    if (this.pinnedOffset) return this.pinnedOffset
-	    this.$element.removeClass(Affix.RESET).addClass('affix')
-	    var scrollTop = this.$target.scrollTop()
-	    var position  = this.$element.offset()
-	    return (this.pinnedOffset = position.top - scrollTop)
-	  }
-
-	  Affix.prototype.checkPositionWithEventLoop = function () {
-	    setTimeout($.proxy(this.checkPosition, this), 1)
-	  }
-
-	  Affix.prototype.checkPosition = function () {
-	    if (!this.$element.is(':visible')) return
-
-	    var height       = this.$element.height()
-	    var offset       = this.options.offset
-	    var offsetTop    = offset.top
-	    var offsetBottom = offset.bottom
-	    var scrollHeight = Math.max($(document).height(), $(document.body).height())
-
-	    if (typeof offset != 'object')         offsetBottom = offsetTop = offset
-	    if (typeof offsetTop == 'function')    offsetTop    = offset.top(this.$element)
-	    if (typeof offsetBottom == 'function') offsetBottom = offset.bottom(this.$element)
-
-	    var affix = this.getState(scrollHeight, height, offsetTop, offsetBottom)
-
-	    if (this.affixed != affix) {
-	      if (this.unpin != null) this.$element.css('top', '')
-
-	      var affixType = 'affix' + (affix ? '-' + affix : '')
-	      var e         = $.Event(affixType + '.bs.affix')
-
-	      this.$element.trigger(e)
-
-	      if (e.isDefaultPrevented()) return
-
-	      this.affixed = affix
-	      this.unpin = affix == 'bottom' ? this.getPinnedOffset() : null
-
-	      this.$element
-	        .removeClass(Affix.RESET)
-	        .addClass(affixType)
-	        .trigger(affixType.replace('affix', 'affixed') + '.bs.affix')
-	    }
-
-	    if (affix == 'bottom') {
-	      this.$element.offset({
-	        top: scrollHeight - height - offsetBottom
-	      })
-	    }
-	  }
-
-
-	  // AFFIX PLUGIN DEFINITION
-	  // =======================
-
-	  function Plugin(option) {
-	    return this.each(function () {
-	      var $this   = $(this)
-	      var data    = $this.data('bs.affix')
-	      var options = typeof option == 'object' && option
-
-	      if (!data) $this.data('bs.affix', (data = new Affix(this, options)))
-	      if (typeof option == 'string') data[option]()
-	    })
-	  }
-
-	  var old = $.fn.affix
-
-	  $.fn.affix             = Plugin
-	  $.fn.affix.Constructor = Affix
-
-
-	  // AFFIX NO CONFLICT
-	  // =================
-
-	  $.fn.affix.noConflict = function () {
-	    $.fn.affix = old
-	    return this
-	  }
-
-
-	  // AFFIX DATA-API
-	  // ==============
-
-	  $(window).on('load', function () {
-	    $('[data-spy="affix"]').each(function () {
-	      var $spy = $(this)
-	      var data = $spy.data()
-
-	      data.offset = data.offset || {}
-
-	      if (data.offsetBottom != null) data.offset.bottom = data.offsetBottom
-	      if (data.offsetTop    != null) data.offset.top    = data.offsetTop
-
-	      Plugin.call($spy, data)
-	    })
-	  })
-
-	}(jQuery);
-
-
-/***/ },
-/* 297 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var Products = function (_React$Component) {
-		_inherits(Products, _React$Component);
-
-		function Products(props) {
-			_classCallCheck(this, Products);
-
-			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Products).call(this, props));
-
-			_this.displayName = 'Products';
-			return _this;
-		}
-
-		_createClass(Products, [{
-			key: 'render',
-			value: function render() {
-				return _react2.default.createElement(
-					'section',
-					{ id: 'main-content' },
-					_react2.default.createElement(
-						'section',
-						{ className: 'wrapper' },
-						_react2.default.createElement(
-							'div',
-							{ className: 'row mt' },
-							_react2.default.createElement(
-								'div',
-								{ className: 'col-lg-12' },
-								_react2.default.createElement(
-									'div',
-									{ className: 'form-panel' },
-									_react2.default.createElement(
-										'h4',
-										{ className: 'mb' },
-										_react2.default.createElement('i', { className: 'fa fa-angle-right' }),
-										' Add Local Committee'
-									),
-									_react2.default.createElement(
-										'p',
-										null,
-										'add entity field'
-									)
-								)
-							)
-						),
-						_react2.default.createElement(
-							'div',
-							{ className: 'row mt' },
-							_react2.default.createElement(
-								'div',
-								{ className: 'col-lg-12' },
-								_react2.default.createElement(
-									'div',
-									{ className: 'content-panel' },
-									_react2.default.createElement(
-										'h4',
-										null,
-										_react2.default.createElement('i', { className: 'fa fa-angle-right' }),
-										' Local Committees'
-									),
-									_react2.default.createElement('hr', null),
-									_react2.default.createElement(
-										'table',
-										{ className: 'table table-striped table-advance table-hover' },
-										_react2.default.createElement(
-											'thead',
-											null,
-											_react2.default.createElement(
-												'tr',
-												null,
-												_react2.default.createElement(
-													'th',
-													null,
-													_react2.default.createElement('i', { className: 'fa fa-bookmark' }),
-													' id'
-												),
-												_react2.default.createElement(
-													'th',
-													null,
-													_react2.default.createElement('i', { className: 'fa fa-bookmark' }),
-													' EXPA id'
-												),
-												_react2.default.createElement(
-													'th',
-													null,
-													_react2.default.createElement('i', { className: 'fa fa-question-circle' }),
-													' EXPA Name'
-												),
-												_react2.default.createElement(
-													'th',
-													null,
-													_react2.default.createElement('i', { className: 'fa fa-question-circle' }),
-													' URL Name'
-												),
-												_react2.default.createElement(
-													'th',
-													null,
-													_react2.default.createElement('i', { className: 'fa fa-question-circle' }),
-													' Full Name'
-												),
-												_react2.default.createElement('th', null)
-											)
-										),
-										_react2.default.createElement(
-											'tbody',
-											{ id: 'lc-{{ $lc[\'id\'] }}' },
-											_react2.default.createElement(
-												'tr',
-												null,
-												_react2.default.createElement(
-													'td',
-													{ id: '{{ $lc[\'id\'] }}' },
-													'id'
-												),
-												_react2.default.createElement(
-													'td',
-													{ id: 'expa-id-{{ $lc[\'id\'] }}' },
-													'expa_id'
-												),
-												_react2.default.createElement(
-													'td',
-													{ id: 'expa-name-{{ $lc[\'id\'] }}' },
-													'expa_name'
-												),
-												_react2.default.createElement(
-													'td',
-													{ id: 'url-name-{{ $lc[\'id\'] }}' },
-													'url_name'
-												),
-												_react2.default.createElement(
-													'td',
-													{ id: 'full-name-{{ $lc[\'id\'] }}' },
-													'full_name'
-												),
-												_react2.default.createElement(
-													'td',
-													null,
-													_react2.default.createElement(
-														'button',
-														{ 'data-toggle': 'modal', 'data-target': '#edit-Modal', className: 'btn btn-primary btn-xs edit-lc', id: 'edit-lc-{{ $lc[\'id\'] }}' },
-														_react2.default.createElement('i', { className: 'fa fa-pencil' })
-													),
-													_react2.default.createElement(
-														'button',
-														{ className: 'btn btn-danger btn-xs delete-lc', id: 'delete-lc-{{ $lc[\'id\'] }}' },
-														_react2.default.createElement('i', { className: 'fa fa-trash-o ' })
-													)
-												)
-											)
-										)
-									)
-								)
-							)
-						),
-						_react2.default.createElement(
-							'div',
-							{ className: 'modal fade', id: 'edit-Modal', tabindex: '-1', role: 'dialog', 'aria-labelledby': 'myModalLabel', 'aria-hidden': 'true' },
-							_react2.default.createElement(
-								'div',
-								{ className: 'modal-dialog' },
-								_react2.default.createElement(
-									'div',
-									{ className: 'modal-content' },
-									_react2.default.createElement(
-										'div',
-										{ className: 'modal-header' },
-										_react2.default.createElement(
-											'button',
-											{ type: 'button', className: 'close', 'data-dismiss': 'modal', 'aria-hidden': 'true' },
-											'×'
-										),
-										_react2.default.createElement(
-											'h4',
-											{ className: 'modal-title', id: 'myModalLabel' },
-											'Edit Local Committee'
-										)
-									),
-									_react2.default.createElement(
-										'div',
-										{ className: 'modal-body' },
-										_react2.default.createElement(
-											'p',
-											null,
-											'edit form'
-										)
-									),
-									_react2.default.createElement(
-										'div',
-										{ className: 'modal-footer' },
-										_react2.default.createElement(
-											'button',
-											{ type: 'button', className: 'btn btn-default', 'data-dismiss': 'modal' },
-											'Cancel'
-										)
-									)
-								)
-							)
-						)
-					)
-				);
-			}
-		}]);
-
-		return Products;
-	}(_react2.default.Component);
-
-	exports.default = Products;
-
-/***/ },
-/* 298 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _store = __webpack_require__(243);
-
-	var _store2 = _interopRequireDefault(_store);
-
-	var _reactRedux = __webpack_require__(217);
-
-	var _EntitiesApi = __webpack_require__(299);
-
-	var _EntityList = __webpack_require__(302);
-
-	var _EntityList2 = _interopRequireDefault(_EntityList);
-
-	var _AddEntity = __webpack_require__(303);
-
-	var _AddEntity2 = _interopRequireDefault(_AddEntity);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var EntitiesContainer = function (_React$Component) {
-		_inherits(EntitiesContainer, _React$Component);
-
-		function EntitiesContainer() {
-			_classCallCheck(this, EntitiesContainer);
-
-			return _possibleConstructorReturn(this, Object.getPrototypeOf(EntitiesContainer).apply(this, arguments));
-		}
-
-		_createClass(EntitiesContainer, [{
-			key: 'componentDidMount',
-			value: function componentDidMount() {
-				(0, _EntitiesApi.getEntities)();
-			}
-		}, {
-			key: 'addNew',
-			value: function addNew(entity) {
-				(0, _EntitiesApi.addEntity)(entity);
-			}
-		}, {
-			key: 'render',
-			value: function render() {
-				return _react2.default.createElement(
-					'section',
-					{ id: 'main-content' },
-					_react2.default.createElement(
-						'section',
-						{ className: 'wrapper' },
-						_react2.default.createElement(
-							'div',
-							{ className: 'row mt' },
-							_react2.default.createElement(
-								'div',
-								{ className: 'col-lg-12' },
-								_react2.default.createElement(
-									'div',
-									{ className: 'form-panel' },
-									_react2.default.createElement(_AddEntity2.default, { addNew: this.addNew, ref: 'child' })
-								)
-							)
-						),
-						_react2.default.createElement(
-							'div',
-							{ className: 'row mt' },
-							_react2.default.createElement(
-								'div',
-								{ className: 'col-lg-12' },
-								_react2.default.createElement(
-									'div',
-									{ className: 'content-panel' },
-									_react2.default.createElement(
-										'h4',
-										null,
-										_react2.default.createElement('i', { className: 'fa fa-angle-right' }),
-										' Entities'
-									),
-									_react2.default.createElement('hr', null),
-									_react2.default.createElement(
-										'table',
-										{ className: 'table table-striped table-advance table-hover' },
-										_react2.default.createElement(
-											'thead',
-											null,
-											_react2.default.createElement(
-												'tr',
-												null,
-												_react2.default.createElement(
-													'th',
-													null,
-													_react2.default.createElement('i', { className: 'fa fa-bookmark' }),
-													' id'
-												),
-												_react2.default.createElement(
-													'th',
-													null,
-													_react2.default.createElement('i', { className: 'fa fa-bookmark' }),
-													' EXPA id'
-												),
-												_react2.default.createElement(
-													'th',
-													null,
-													_react2.default.createElement('i', { className: 'fa fa-question-circle' }),
-													' EXPA Name'
-												),
-												_react2.default.createElement(
-													'th',
-													null,
-													_react2.default.createElement('i', { className: 'fa fa-question-circle' }),
-													' URL Name'
-												),
-												_react2.default.createElement(
-													'th',
-													null,
-													_react2.default.createElement('i', { className: 'fa fa-question-circle' }),
-													' Full Name'
-												),
-												_react2.default.createElement('th', null)
-											)
-										),
-										_react2.default.createElement(_EntityList2.default, { entities: this.props.entities,
-											deleteEntity: _EntitiesApi.deleteEntity,
-											updateEntity: _EntitiesApi.updateEntity })
-									)
-								)
-							)
-						)
-					)
-				);
-			}
-		}]);
-
-		return EntitiesContainer;
-	}(_react2.default.Component);
-
-	var mapStateToProps = function mapStateToProps(store) {
-		return {
-			entities: store.entityState.entities
-		};
-	};
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps)(EntitiesContainer);
-
-/***/ },
-/* 299 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	exports.getEntities = getEntities;
-	exports.deleteEntity = deleteEntity;
-	exports.updateEntity = updateEntity;
-	exports.addEntity = addEntity;
-
-	var _axios = __webpack_require__(256);
-
-	var _axios2 = _interopRequireDefault(_axios);
-
-	var _store = __webpack_require__(243);
-
-	var _store2 = _interopRequireDefault(_store);
-
-	var _Config = __webpack_require__(300);
-
-	var _Config2 = _interopRequireDefault(_Config);
-
-	var _underscore = __webpack_require__(305);
-
-	var _underscore2 = _interopRequireDefault(_underscore);
-
-	var _EntityActions = __webpack_require__(301);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function getEntities() {
-		return _axios2.default.get(_Config2.default.serverUrl + 'entities/', {
-			headers: {
-				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
-			} }).then(function (response) {
-			window.hideLoadingSpinner();
-			var sortedEntities = _underscore2.default.sortBy(response.data, 'name');
-			_store2.default.dispatch((0, _EntityActions.getEntitiesSuccess)(sortedEntities));
-			return response;
-		}).catch(function (response) {
-			//todo ogarnąć errory
-			{
-				data: null;
-			}
-			if (response.data.error.code && response.data.error.title) {
-				window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
-			} else {
-					window.showError(response.status + " " + response.data.error, ""); //method from common-scripts.js
-				}
-			window.hideLoadingSpinner();
-			deleteSession();
-			window.location.reload();
-		});
-	}
-
-	function deleteEntity(entityId) {
-		window.showLoadingSpinner();
-		return _axios2.default.delete(_Config2.default.serverUrl + 'entities/' + entityId, {
-			headers: {
-				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
-			} }).then(function (response) {
-			window.hideLoadingSpinner();
-			_store2.default.dispatch((0, _EntityActions.deleteEntitySuccess)(entityId));
-			return response;
-		}).catch(function (response) {
-			window.hideLoadingSpinner();
-			if (response.data.error.code && response.data.error.title) {
-				window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
-			} else {
-					window.showError(response.status + " " + response.data.error, ""); //method from common-scripts.js
-				}
-		});
-	}
-
-	function updateEntity(entity) {
-		window.showLoadingSpinner();
-		var config = {
-			headers: { 'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken') }
-		};
-		_axios2.default.put(_Config2.default.serverUrl + 'entities/' + entity.id, {
-			name: entity.name,
-			slug: entity.slug,
-			expa_id: entity.expa_id,
-			expa_name: entity.expa_name
-		}, config).then(function (response) {
-			window.hideLoadingSpinner();
-			_store2.default.dispatch(updateEntitySuccess(response.data));
-			return response;
-		}).catch(function (response) {
-			debugger;
-			window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
-			console.log(response);
-			window.hideLoadingSpinner();
-		});
-	}
-
-	function addEntity(entity) {
-		window.showLoadingSpinner();
-		var config = {
-			headers: { 'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken') }
-		};
-		return _axios2.default.post(_Config2.default.serverUrl + 'entities', {
-			name: entity.name,
-			slug: entity.slug,
-			expa_id: entity.expa_id,
-			expa_name: entity.expa_name
-		}, config).then(function (response) {
-			window.hideLoadingSpinner();
-			_store2.default.dispatch((0, _EntityActions.addEntitySuccess)(response.data));
-			return response;
-		}).catch(function (response) {
-			if (response.data.error.code && response.data.error.title) {
-				window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
-			} else {
-					window.showError(response.status + " " + response.data.error, ""); //method from common-scripts.js
-				}
-			window.hideLoadingSpinner();
-		});
-	}
-
-/***/ },
-/* 300 */
-/***/ function(module, exports) {
-
 	module.exports = {"serverUrl":"../../api/v1/"};
 
 /***/ },
-/* 301 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.getEntitiesSuccess = getEntitiesSuccess;
-	exports.deleteEntitySuccess = deleteEntitySuccess;
-	exports.updateEntitySuccess = updateEntitySuccess;
-	exports.addEntitySuccess = addEntitySuccess;
-
-	var _ActionTypes = __webpack_require__(246);
-
-	var types = _interopRequireWildcard(_ActionTypes);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	function getEntitiesSuccess(entities) {
-	  return {
-	    type: types.GET_ENTITIES_SUCCESS,
-	    entities: entities
-	  };
-	}
-
-	function deleteEntitySuccess(entityId) {
-	  return {
-	    type: types.DELETE_ENTITY_SUCCESS,
-	    entityId: entityId
-	  };
-	}
-
-	function updateEntitySuccess(entity) {
-	  return {
-	    type: types.UPDATE_ENTITY_SUCCESS,
-	    entity: entity
-	  };
-	}
-
-	function addEntitySuccess(entity) {
-	  return {
-	    type: types.ADD_ENTITY_SUCCESS,
-	    entity: entity
-	  };
-	}
-
-/***/ },
-/* 302 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _EditEntity = __webpack_require__(304);
-
-	var _EditEntity2 = _interopRequireDefault(_EditEntity);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var EntityList = function (_React$Component) {
-		_inherits(EntityList, _React$Component);
-
-		function EntityList(props) {
-			_classCallCheck(this, EntityList);
-
-			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(EntityList).call(this, props));
-
-			_this.displayName = 'EntityList';
-			return _this;
-		}
-
-		_createClass(EntityList, [{
-			key: 'render',
-			value: function render() {
-				var _this2 = this;
-
-				return _react2.default.createElement(
-					'tbody',
-					null,
-					this.props.entities.map(function (entity) {
-						return _react2.default.createElement(
-							'tr',
-							{ key: entity.id },
-							_react2.default.createElement(
-								'td',
-								{ id: 'id' },
-								entity.id
-							),
-							_react2.default.createElement(
-								'td',
-								{ id: 'expa-id' },
-								entity.expa_id
-							),
-							_react2.default.createElement(
-								'td',
-								{ id: 'expa-name' },
-								' ',
-								entity.expa_name,
-								' '
-							),
-							_react2.default.createElement(
-								'td',
-								{ id: 'slug' },
-								entity.slug,
-								' '
-							),
-							_react2.default.createElement(
-								'td',
-								{ id: 'name' },
-								entity.name,
-								' '
-							),
-							_react2.default.createElement(
-								'td',
-								null,
-								_react2.default.createElement(
-									'button',
-									{
-										'data-toggle': 'modal', 'data-target': "#editEntityModal-" + entity.id,
-										className: 'btn btn-primary btn-xs edit-entity',
-										id: "edit-entity-" + entity.id },
-									_react2.default.createElement('i', { className: 'fa fa-pencil' })
-								),
-								_react2.default.createElement(
-									'button',
-									{ onClick: _this2.props.deleteEntity.bind(null, entity.id),
-										className: 'btn btn-danger btn-xs delete-entity',
-										id: "delete-entity-" + entity.id },
-									_react2.default.createElement('i', { className: 'fa fa-trash-o ' })
-								),
-								_react2.default.createElement(_EditEntity2.default, { updateEntity: _this2.props.updateEntity,
-									entity: entity })
-							)
-						);
-					})
-				);
-			}
-		}]);
-
-		return EntityList;
-	}(_react2.default.Component);
-
-	exports.default = EntityList;
-
-/***/ },
-/* 303 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	         value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _axios = __webpack_require__(256);
-
-	var _axios2 = _interopRequireDefault(_axios);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var AddEntity = function (_React$Component) {
-	         _inherits(AddEntity, _React$Component);
-
-	         function AddEntity() {
-	                  _classCallCheck(this, AddEntity);
-
-	                  return _possibleConstructorReturn(this, Object.getPrototypeOf(AddEntity).apply(this, arguments));
-	         }
-
-	         _createClass(AddEntity, [{
-	                  key: 'getQuery',
-	                  value: function getQuery(e) {
-	                           e.preventDefault();
-	                           var entity = {
-	                                    expa_id: this.refs.expa_id.value,
-	                                    expa_name: this.refs.expa_name.value,
-	                                    name: this.refs.name.value,
-	                                    slug: this.refs.slug.value
-	                           };
-	                           this.refs.expa_id.value = "";
-	                           this.refs.expa_name.value = "";
-	                           this.refs.name.value = "";
-	                           this.refs.slug.value = "";
-
-	                           this.props.addNew(entity);
-	                  }
-	         }, {
-	                  key: 'render',
-	                  value: function render() {
-	                           var _this2 = this;
-
-	                           return _react2.default.createElement(
-	                                    'div',
-	                                    null,
-	                                    _react2.default.createElement(
-	                                             'h4',
-	                                             { className: 'mb' },
-	                                             _react2.default.createElement('i', { className: 'fa fa-angle-right' }),
-	                                             ' Add Entity'
-	                                    ),
-	                                    _react2.default.createElement(
-	                                             'form',
-	                                             { onSubmit: function onSubmit(e) {
-	                                                               return _this2.getQuery(e);
-	                                                      }, 'accept-charset': 'UTF-8', className: 'form-inline', id: 'add-lc' },
-	                                             _react2.default.createElement(
-	                                                      'label',
-	                                                      { 'for': 'expa_id' },
-	                                                      ' EXPA ID '
-	                                             ),
-	                                             _react2.default.createElement('input', { className: 'form-inline', name: 'expa_id', type: 'number', id: 'expa_id',
-	                                                      ref: 'expa_id' }),
-	                                             _react2.default.createElement(
-	                                                      'label',
-	                                                      { 'for': 'expa_name' },
-	                                                      ' EXPA Name '
-	                                             ),
-	                                             _react2.default.createElement('input', { className: 'form-inline', name: 'expa_name', type: 'text', id: 'expa_name',
-	                                                      ref: 'expa_name' }),
-	                                             _react2.default.createElement(
-	                                                      'label',
-	                                                      { 'for': 'slug' },
-	                                                      ' URL Name '
-	                                             ),
-	                                             _react2.default.createElement('input', { className: 'form-inline', name: 'slug', type: 'text', id: 'slug',
-	                                                      ref: 'slug' }),
-	                                             _react2.default.createElement(
-	                                                      'label',
-	                                                      { 'for': 'name' },
-	                                                      ' Full Name '
-	                                             ),
-	                                             _react2.default.createElement('input', { className: 'form-inline', name: 'name', type: 'text', id: 'name',
-	                                                      ref: 'name' }),
-	                                             _react2.default.createElement(
-	                                                      'button',
-	                                                      { className: 'btn btn-theme' },
-	                                                      'Add'
-	                                             )
-	                                    )
-	                           );
-	                  }
-	         }]);
-
-	         return AddEntity;
-	}(_react2.default.Component);
-
-	exports.default = AddEntity;
-
-/***/ },
-/* 304 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var EditEntity = function (_React$Component) {
-		_inherits(EditEntity, _React$Component);
-
-		function EditEntity(props) {
-			_classCallCheck(this, EditEntity);
-
-			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(EditEntity).call(this, props));
-
-			_this.displayName = 'EditEntity';
-			return _this;
-		}
-
-		_createClass(EditEntity, [{
-			key: 'getQuery',
-			value: function getQuery(e) {
-				e.preventDefault();
-				var entity = {
-					id: this.refs.id.value,
-					expa_id: this.refs.expa_id.value,
-					expa_name: this.refs.expa_name.value,
-					name: this.refs.name.value,
-					slug: this.refs.slug.value
-				};
-				$("#editEntityModal-" + entity.id).modal('toggle');
-				this.props.updateEntity(entity);
-			}
-		}, {
-			key: 'render',
-			value: function render() {
-				var _this2 = this;
-
-				return _react2.default.createElement(
-					'div',
-					{ className: 'modal fade',
-						id: "editEntityModal-" + this.props.entity.id,
-						tabindex: '-1',
-						role: 'dialog',
-						'aria-labelledby': 'myModalLabel',
-						'aria-hidden': 'false' },
-					_react2.default.createElement(
-						'div',
-						{ className: 'modal-dialog' },
-						_react2.default.createElement(
-							'div',
-							{ className: 'modal-content' },
-							_react2.default.createElement(
-								'div',
-								{ className: 'modal-header' },
-								_react2.default.createElement(
-									'button',
-									{ type: 'button',
-										className: 'close',
-										'data-dismiss': 'modal',
-										'aria-hidden': 'true' },
-									'×'
-								),
-								_react2.default.createElement(
-									'h4',
-									{ className: 'modal-title', id: 'myModalLabel' },
-									'Edit Local Committee'
-								)
-							),
-							_react2.default.createElement(
-								'div',
-								{ className: 'modal-body' },
-								_react2.default.createElement(
-									'form',
-									{ onSubmit: function onSubmit(e) {
-											return _this2.getQuery(e);
-										},
-										'accept-charset': 'UTF-8',
-										className: 'form-horizontal style-form', id: 'edit-entity' },
-									_react2.default.createElement(
-										'div',
-										null,
-										_react2.default.createElement(
-											'label',
-											{ 'for': 'id' },
-											' ID '
-										),
-										_react2.default.createElement('input', { className: 'form-inline', name: 'id', type: 'number', id: 'id',
-											ref: 'id', disabled: true, defaultValue: this.props.entity.id })
-									),
-									_react2.default.createElement(
-										'div',
-										null,
-										_react2.default.createElement(
-											'label',
-											{ 'for': 'expa_id' },
-											' EXPA ID '
-										),
-										_react2.default.createElement('input', { className: 'form-inline', name: 'expa_id', type: 'number', id: 'expa_id',
-											ref: 'expa_id', defaultValue: this.props.entity.expa_id })
-									),
-									_react2.default.createElement(
-										'div',
-										null,
-										_react2.default.createElement(
-											'label',
-											{ 'for': 'expa_name' },
-											' EXPA Name '
-										),
-										_react2.default.createElement('input', { className: 'form-inline', name: 'expa_name', type: 'text', id: 'expa_name',
-											ref: 'expa_name', defaultValue: this.props.entity.expa_name })
-									),
-									_react2.default.createElement(
-										'div',
-										null,
-										_react2.default.createElement(
-											'label',
-											{ 'for': 'slug' },
-											' URL Name '
-										),
-										_react2.default.createElement('input', { className: 'form-inline', name: 'slug', type: 'text', id: 'slug',
-											ref: 'slug', defaultValue: this.props.entity.slug })
-									),
-									_react2.default.createElement(
-										'div',
-										null,
-										_react2.default.createElement(
-											'label',
-											{ 'for': 'name' },
-											' Full Name '
-										),
-										_react2.default.createElement('input', { className: 'form-inline', name: 'name', type: 'text', id: 'name',
-											ref: 'name', defaultValue: this.props.entity.name })
-									),
-									_react2.default.createElement(
-										'button',
-										{ className: 'btn btn-theme' },
-										'Update'
-									)
-								)
-							),
-							_react2.default.createElement(
-								'div',
-								{ className: 'modal-footer' },
-								_react2.default.createElement(
-									'button',
-									{ type: 'button', className: 'btn btn-default', 'data-dismiss': 'modal' },
-									'Cancel'
-								)
-							)
-						)
-					)
-				);
-			}
-		}]);
-
-		return EditEntity;
-	}(_react2.default.Component);
-
-	exports.default = EditEntity;
-
-/***/ },
-/* 305 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;//     Underscore.js 1.8.3
@@ -52311,6 +47080,5354 @@
 	  }
 	}.call(this));
 
+
+/***/ },
+/* 284 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	   value: true
+	});
+	exports.loginSuccess = loginSuccess;
+
+	var _ActionTypes = __webpack_require__(246);
+
+	var types = _interopRequireWildcard(_ActionTypes);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function loginSuccess(token) {
+	   return {
+	      type: types.LOGIN_SUCCESS,
+	      token: token
+	   };
+	}
+
+/***/ },
+/* 285 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var React = __webpack_require__(1);
+
+	var Home = React.createClass({
+	  displayName: "Home",
+
+	  render: function render() {
+	    return React.createElement(
+	      "h2",
+	      { className: "text-center" },
+	      "Search By Github Username Above"
+	    );
+	  }
+	});
+
+	module.exports = Home;
+
+/***/ },
+/* 286 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _store = __webpack_require__(243);
+
+	var _store2 = _interopRequireDefault(_store);
+
+	var _reactRedux = __webpack_require__(217);
+
+	var _UserApi = __webpack_require__(281);
+
+	var _LoginForm = __webpack_require__(287);
+
+	var _LoginForm2 = _interopRequireDefault(_LoginForm);
+
+	var _jquery = __webpack_require__(288);
+
+	var _jquery2 = _interopRequireDefault(_jquery);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var LoginContainer = function (_React$Component) {
+		_inherits(LoginContainer, _React$Component);
+
+		function LoginContainer(props) {
+			_classCallCheck(this, LoginContainer);
+
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(LoginContainer).call(this, props));
+
+			_this.login = _this.login.bind(_this);
+			return _this;
+		}
+
+		_createClass(LoginContainer, [{
+			key: 'componentDidMount',
+			value: function componentDidMount() {
+				if (localStorage.getItem('trackingToolAuthToken')) {
+					this.props.history.pushState(null, '/');
+				}
+				jQuery.backstretch("assets/img/login-bg.jpg", { transitionDuration: 500 });
+			}
+		}, {
+			key: 'login',
+			value: function login(username, password) {
+				(0, _UserApi.login)(username, password).then(function (response) {
+					this.props.history.pushState(null, '/');
+				}.bind(this));
+			}
+		}, {
+			key: 'componentWillUnmount',
+			value: function componentWillUnmount() {
+				jQuery.backstretch('destroy');
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				return _react2.default.createElement(
+					'div',
+					{ id: 'login-page' },
+					_react2.default.createElement(
+						'div',
+						{ className: 'container' },
+						_react2.default.createElement(_LoginForm2.default, { login: this.login })
+					)
+				);
+			}
+		}]);
+
+		return LoginContainer;
+	}(_react2.default.Component);
+
+	var mapStateToProps = function mapStateToProps(store) {
+		return {
+			token: store.authenticationState.token
+		};
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(LoginContainer);
+
+/***/ },
+/* 287 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+					value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var LoginForm = function (_React$Component) {
+					_inherits(LoginForm, _React$Component);
+
+					function LoginForm(props) {
+									_classCallCheck(this, LoginForm);
+
+									var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(LoginForm).call(this, props));
+
+									_this.displayName = 'LoginForm';
+									return _this;
+					}
+
+					_createClass(LoginForm, [{
+									key: 'getQuery',
+									value: function getQuery(e) {
+													e.preventDefault();
+													var username = this.refs.username.value;
+													var password = this.refs.password.value;
+
+													this.refs.password.value = "";
+													this.refs.username.value = "";
+
+													this.props.login(username, password);
+									}
+					}, {
+									key: 'render',
+									value: function render() {
+													var _this2 = this;
+
+													return _react2.default.createElement(
+																	'form',
+																	{ onSubmit: function onSubmit(e) {
+																									return _this2.getQuery(e);
+																					}, className: 'form-login' },
+																	_react2.default.createElement(
+																					'h2',
+																					{ className: 'form-login-heading' },
+																					'sign in now'
+																	),
+																	_react2.default.createElement(
+																					'div',
+																					{ className: 'login-wrap' },
+																					_react2.default.createElement('input', { type: 'text', className: 'form-control', name: 'name', placeholder: 'email',
+																									autofocus: true, ref: 'username' }),
+																					_react2.default.createElement('br', null),
+																					_react2.default.createElement('input', { type: 'password', className: 'form-control', name: 'password', placeholder: 'Password',
+																									ref: 'password' }),
+																					_react2.default.createElement('br', null),
+																					_react2.default.createElement(
+																									'button',
+																									{ className: 'btn btn-theme btn-block' },
+																									_react2.default.createElement('i', { className: 'fa fa-lock' }),
+																									' SIGN IN'
+																					),
+																					_react2.default.createElement('hr', null)
+																	)
+													);
+									}
+					}]);
+
+					return LoginForm;
+	}(_react2.default.Component);
+
+	exports.default = LoginForm;
+
+/***/ },
+/* 288 */
+/***/ function(module, exports) {
+
+	/*
+	 * Backstretch
+	 * http://srobbin.com/jquery-plugins/backstretch/
+	 *
+	 * Copyright (c) 2013 Scott Robbin
+	 * Licensed under the MIT license.
+	 */
+
+	;(function ($, window, undefined) {
+	  'use strict';
+
+	  /** @const */
+	  var YOUTUBE_REGEXP = /^.*(youtu\.be\/|youtube\.com\/v\/|youtube\.com\/embed\/|youtube\.com\/watch\?v=|youtube\.com\/watch\?.*\&v=)([^#\&\?]*).*/i;
+	  
+	  /* PLUGIN DEFINITION
+	   * ========================= */
+
+	  $.fn.backstretch = function (images, options) {
+	    var args = arguments;
+
+	    /*
+	     * Scroll the page one pixel to get the right window height on iOS
+	     * Pretty harmless for everyone else
+	    */
+	    if ($(window).scrollTop() === 0 ) {
+	      window.scrollTo(0, 0);
+	    }
+
+	    var returnValues;
+	    
+	    this.each(function (eachIndex) {
+	      var $this = $(this)
+	        , obj = $this.data('backstretch');
+
+	      // Do we already have an instance attached to this element?
+	      if (obj) {
+
+	        // Is this a method they're trying to execute?
+	        if (typeof args[0] === 'string' &&
+	            typeof obj[args[0]] === 'function') {
+	              
+	          // Call the method
+	          var returnValue = obj[args[0]].apply(obj, Array.prototype.slice.call(args, 1));
+	          if (returnValue === obj) { // If a method is chaining
+	            returnValue = undefined;
+	          }
+	          if (returnValue !== undefined) {
+	            returnValues = returnValues || [];
+	            returnValues[eachIndex] = returnValue;
+	          }
+	          
+	          return; // Nothing further to do
+	        }
+
+	        // Merge the old options with the new
+	        options = $.extend(obj.options, options);
+
+	        // Remove the old instance
+	        if ( obj.hasOwnProperty('destroy') ) {
+	          obj.destroy(true);
+	        }
+	      }
+
+	      // We need at least one image
+	      if (!images || (images && images.length === 0)) {
+	        var cssBackgroundImage = $this.css('background-image');
+	        if (cssBackgroundImage && cssBackgroundImage !== 'none') {
+	          images = [ { url: $this.css('backgroundImage').replace(/url\(|\)|"|'/g,"") } ];
+	        } else {
+	          $.error('No images were supplied for Backstretch, or element must have a CSS-defined background image.');
+	        }
+	      }
+
+	      obj = new Backstretch(this, images, options || {});
+	      $this.data('backstretch', obj);
+	    });
+	    
+	    return returnValues ? returnValues.length === 1 ? returnValues[0] : returnValues : this;
+	  };
+
+	  // If no element is supplied, we'll attach to body
+	  $.backstretch = function (images, options) {
+	    // Return the instance
+	    return $('body')
+	            .backstretch(images, options)
+	            .data('backstretch');
+	  };
+
+	  // Custom selector
+	  $.expr[':'].backstretch = function(elem) {
+	    return $(elem).data('backstretch') !== undefined;
+	  };
+
+	  /* DEFAULTS
+	   * ========================= */
+
+	  $.fn.backstretch.defaults = {
+	    duration: 5000                // Amount of time in between slides (if slideshow)
+	    , transition: 'fade'          // Type of transition between slides
+	    , transitionDuration: 0       // Duration of transition between slides
+	    , animateFirst: true          // Animate the transition of first image of slideshow in?
+	    , alignX: 0.5                 // The x-alignment for the image, can be 'left'|'center'|'right' or any number between 0.0 and 1.0
+	    , alignY: 0.5                 // The y-alignment for the image, can be 'top'|'center'|'bottom' or any number between 0.0 and 1.0
+	    , paused: false               // Whether the images should slide after given duration
+	    , start: 0                    // Index of the first image to show
+	    , preload: 2                  // How many images preload at a time?
+	    , preloadSize: 1              // How many images can we preload in parallel?
+	    , resolutionRefreshRate: 2500 // How long to wait before switching resolution?
+	    , resolutionChangeRatioThreshold: 0.1 // How much a change should it be before switching resolution?
+	  };
+
+	  /* STYLES
+	   *
+	   * Baked-in styles that we'll apply to our elements.
+	   * In an effort to keep the plugin simple, these are not exposed as options.
+	   * That said, anyone can override these in their own stylesheet.
+	   * ========================= */
+	  var styles = {
+	    wrap: {
+	      left: 0
+	      , top: 0
+	      , overflow: 'hidden'
+	      , margin: 0
+	      , padding: 0
+	      , height: '100%'
+	      , width: '100%'
+	      , zIndex: -999999
+	    }
+	    , itemWrapper: {
+	      position: 'absolute'
+	      , display: 'none'
+	      , margin: 0
+	      , padding: 0
+	      , border: 'none'
+	      , width: '100%'
+	      , height: '100%'
+	      , zIndex: -999999
+	    }
+	    , item: {
+	      position: 'absolute'
+	      , margin: 0
+	      , padding: 0
+	      , border: 'none'
+	      , width: '100%'
+	      , height: '100%'
+	      , maxWidth: 'none'
+	    }
+	  };
+
+	  /* Given an array of different options for an image,
+	   * choose the optimal image for the container size.
+	   *
+	   * Given an image template (a string with {{ width }} and/or
+	   * {{height}} inside) and a container object, returns the
+	   * image url with the exact values for the size of that
+	   * container.
+	   *
+	   * Returns an array of urls optimized for the specified resolution.
+	   *
+	   */
+	  var optimalSizeImages = (function () {
+
+	    /* Sorts the array of image sizes based on width */
+	    var widthInsertSort = function (arr) {
+	      for (var i = 1; i < arr.length; i++) {
+	        var tmp = arr[i],
+	            j = i;
+	        while (arr[j - 1] && parseInt(arr[j - 1].width, 10) > parseInt(tmp.width, 10)) {
+	          arr[j] = arr[j - 1];
+	          --j;
+	        }
+	        arr[j] = tmp;
+	      }
+
+	      return arr;
+	    };
+
+	    /* Given an array of various sizes of the same image and a container width,
+	     * return the best image.
+	     */
+	    var selectBest = function (containerWidth, imageSizes) {
+
+	      var devicePixelRatio = window.devicePixelRatio || 1;
+	      var lastAllowedImage = 0;
+	      var testWidth;
+
+	      for (var j = 0, image; j < imageSizes.length; j++) {
+
+	          image = imageSizes[j];
+
+	          // In case a new image was pushed in, process it:
+	          if (typeof image === 'string') {
+	              image = imageSizes[j] = { url: image };
+	          }
+
+	          if (image.pixelRatio && image.pixelRatio !== 'auto' && parseFloat(image.pixelRatio) !== devicePixelRatio) {
+	              // We disallowed choosing this image for current device pixel ratio,
+	              // So skip this one.
+	              continue;
+	          }
+
+	          // Mark this one as the last one we investigated
+	          // which does not violate device pixel ratio rules.
+	          // We may choose this one later if there's no match.
+	          lastAllowedImage = j;
+
+	          // For most images, we match the specified width against element width,
+	          // And enforcing a limit depending on the "pixelRatio" property if specified.
+	          // But if a pixelRatio="auto", then we consider the width as the physical width of the image,
+	          // And match it while considering the device's pixel ratio.
+	          testWidth = containerWidth;
+	          if (image.pixelRatio === 'auto') {
+	              containerWidth *= devicePixelRatio;
+	          }
+
+	          // Stop when the width of the image is larger or equal to the container width
+	          if (image.width >= testWidth) {
+	              break;
+	          }
+	      }
+
+	      // Use the image located at where we stopped
+	      return imageSizes[Math.min(j, lastAllowedImage)];
+	    };
+	    
+	    var replaceTagsInUrl = function (url, templateReplacer) {
+	        
+	        if (typeof url === 'string') {
+	            url = url.replace(/{{(width|height)}}/g, templateReplacer);
+	        } else if (url instanceof Array) {
+	            for (var i = 0; i < url.length; i++) {
+	                if (url[i].src) {
+	                    url[i].src = replaceTagsInUrl(url[i].src, templateReplacer);
+	                } else {
+	                    url[i] = replaceTagsInUrl(url[i], templateReplacer);
+	                }
+	            }
+	        }
+	        
+	        return url;
+	    };
+
+	    return function ($container, images) {
+	      var containerWidth = $container.width(),
+	          containerHeight = $container.height();
+
+	      var chosenImages = [];
+
+	      var templateReplacer = function (match, key) {
+	        if (key === 'width') {
+	          return containerWidth;
+	        }
+	        if (key === 'height') {
+	          return containerHeight;
+	        }
+	        return match;
+	      };
+
+	      for (var i = 0; i < images.length; i++) {
+	        if ($.isArray(images[i])) {
+	          images[i] = widthInsertSort(images[i]);
+	          var chosen = selectBest(containerWidth, images[i]);
+	          chosenImages.push(chosen);
+	        } else {
+	          // In case a new image was pushed in, process it:
+	          if (typeof images[i] === 'string') {
+	              images[i] = { url: images[i] };
+	          }
+
+	          var item = $.extend({}, images[i]);
+	          item.url = replaceTagsInUrl(item.url, templateReplacer);
+	          chosenImages.push(item);
+	        }
+	      }
+	      return chosenImages;
+	    };
+
+	  })();
+	  
+	  var isVideoSource = function (source) {
+	    return YOUTUBE_REGEXP.test(source.url) || source.isVideo;
+	  };
+
+	  /* Preload images */
+	  var preload = (function (sources, startAt, count, batchSize, callback) {
+	    // Plugin cache
+	    var cache = [];
+
+	    // Wrapper for cache
+	    var caching = function(image){
+	      for (var i = 0; i < cache.length; i++) {
+	        if (cache[i].src === image.src) {
+	          return cache[i];
+	        }
+	      }
+	      cache.push(image);
+	      return image;
+	    };
+
+	    // Execute callback
+	    var exec = function(sources, callback, last){
+	      if (typeof callback === 'function') {
+	        callback.call(sources, last);
+	      }
+	    };
+
+	    // Closure to hide cache
+	    return function preload (sources, startAt, count, batchSize, callback){
+	      // Check input data
+	      if (typeof sources === 'undefined') {
+	        return;
+	      }
+	      if (!$.isArray(sources)) {
+	        sources = [sources];
+	      }
+
+	      if (arguments.length < 5 && typeof arguments[arguments.length - 1] === 'function') {
+	        callback = arguments[arguments.length - 1];
+	      }
+
+	      startAt = (typeof startAt === 'function' || !startAt) ? 0 : startAt;
+	      count = (typeof count === 'function' || !count || count < 0) ? sources.length : Math.min(count, sources.length);
+	      batchSize = (typeof batchSize === 'function' || !batchSize) ? 1 : batchSize;
+
+	      if (startAt >= sources.length) {
+	          startAt = 0;
+	          count = 0;
+	      }
+	      if (batchSize < 0) {
+	          batchSize = count;
+	      }
+	      batchSize = Math.min(batchSize, count);
+
+	      var next = sources.slice(startAt + batchSize, count - batchSize);
+	      sources = sources.slice(startAt, batchSize);
+	      count = sources.length;
+
+	      // If sources array is empty
+	      if (!count) {
+	        exec(sources, callback, true);
+	        return;
+	      }
+
+	      // Image loading callback
+	      var countLoaded = 0;
+
+	      var loaded = function() {
+	        countLoaded++;
+	        if (countLoaded !== count) {
+	          return;
+	        }
+
+	        exec(sources, callback, !next);
+	        preload(next, 0, 0, batchSize, callback);
+	      };
+
+	      // Loop sources to preload
+	      var image;
+
+	      for (var i = 0; i < sources.length; i++) {
+	        
+	        if (isVideoSource(sources[i])) {
+	          
+	          // Do not preload videos. There are issues with that.
+	          // First - we need to keep an instance of the preloaded and use that exactly, not a copy.
+	          // Second - there are memory issues.
+	          // If there will be a requirement from users - I'll try to implement this.
+
+	          continue;
+	            
+	        } else {
+	      
+	          image = new Image();
+	          image.src = sources[i].url;
+
+	          image = caching(image);
+
+	          if (image.complete) {
+	            loaded();
+	          } else {
+	            $(image).on('load error', loaded);
+	          }
+	            
+	        }
+	        
+	      }
+	    };
+	  })();
+
+	  /* Process images array */
+	  var processImagesArray = function (images) {
+	    var processed = [];
+	    for (var i = 0; i < images.length; i++) {
+	      if (typeof images[i] === 'string') {
+	        processed.push({ url: images[i] });
+	      }
+	      else if ($.isArray(images[i])) {
+	        processed.push(processImagesArray(images[i]));
+	      }
+	      else {
+	        processed.push(processOptions(images[i]));
+	      }
+	    }
+	    return processed;
+	  };
+
+	  /* Process options */
+	  var processOptions = function (options, required) {
+
+	    // Convert old options
+
+	    // centeredX/centeredY are deprecated
+	    if (options.centeredX || options.centeredY) {
+	      if (window.console && window.console.log) {
+	        window.console.log('jquery.backstretch: `centeredX`/`centeredY` is deprecated, please use `alignX`/`alignY`');
+	      }
+	      if (options.centeredX) {
+	        options.alignX = 0.5;
+	      }
+	      if (options.centeredY) {
+	        options.alignY = 0.5;
+	      }
+	    }
+
+	    // Deprecated spec
+	    if (options.speed !== undefined) {
+
+	      if (window.console && window.console.log) {
+	        window.console.log('jquery.backstretch: `speed` is deprecated, please use `transitionDuration`');
+	      }
+
+	      options.transitionDuration = options.speed;
+	      options.transition = 'fade';
+	    }
+
+	    // Typo
+	    if (options.resolutionChangeRatioTreshold !== undefined) {
+	      window.console.log('jquery.backstretch: `treshold` is a typo!');
+	      options.resolutionChangeRatioThreshold = options.resolutionChangeRatioTreshold;
+	    }
+
+	    // Current spec that needs processing
+
+	    if (options.fadeFirst !== undefined) {
+	      options.animateFirst = options.fadeFirst;
+	    }
+
+	    if (options.fade !== undefined) {
+	      options.transitionDuration = options.fade;
+	      options.transition = 'fade';
+	    }
+
+	    return processAlignOptions(options);
+	  };
+
+	  /* Process align options */
+	  var processAlignOptions = function (options, required) {
+	    if (options.alignX === 'left') {
+	      options.alignX = 0.0;
+	    }
+	    else if (options.alignX === 'center') {
+	      options.alignX = 0.5;
+	    }
+	    else if (options.alignX === 'right') {
+	      options.alignX = 1.0;
+	    }
+	    else {
+	      if (options.alignX !== undefined || required) {
+	        options.alignX = parseFloat(options.alignX);
+	        if (isNaN(options.alignX)) {
+	          options.alignX = 0.5;
+	        }
+	      }
+	    }
+
+	    if (options.alignY === 'top') {
+	      options.alignY = 0.0;
+	    }
+	    else if (options.alignY === 'center') {
+	      options.alignY = 0.5;
+	    }
+	    else if (options.alignY === 'bottom') {
+	      options.alignY = 1.0;
+	    }
+	    else {
+	      if (options.alignX !== undefined || required) {
+	        options.alignY = parseFloat(options.alignY);
+	        if (isNaN(options.alignY)) {
+	          options.alignY = 0.5;
+	        }
+	      }
+	    }
+
+	    return options;
+	  };
+
+	  /* CLASS DEFINITION
+	   * ========================= */
+	  var Backstretch = function (container, images, options) {
+	    this.options = $.extend({}, $.fn.backstretch.defaults, options || {});
+
+	    this.firstShow = true;
+
+	    // Process options
+	    processOptions(this.options, true);
+
+	    /* In its simplest form, we allow Backstretch to be called on an image path.
+	     * e.g. $.backstretch('/path/to/image.jpg')
+	     * So, we need to turn this back into an array.
+	     */
+	    this.images = processImagesArray($.isArray(images) ? images : [images]);
+
+	    /**
+	     * Paused-Option
+	     */
+	    if (this.options.paused) {
+	        this.paused = true;
+	    }
+
+	    /**
+	     * Start-Option (Index)
+	     */
+	    if (this.options.start >= this.images.length)
+	    {
+	        this.options.start = this.images.length - 1;
+	    }
+	    if (this.options.start < 0)
+	    {
+	        this.options.start = 0;
+	    }
+
+	    // Convenience reference to know if the container is body.
+	    this.isBody = container === document.body;
+
+	    /* We're keeping track of a few different elements
+	     *
+	     * Container: the element that Backstretch was called on.
+	     * Wrap: a DIV that we place the image into, so we can hide the overflow.
+	     * Root: Convenience reference to help calculate the correct height.
+	     */
+	    var $window = $(window);
+	    this.$container = $(container);
+	    this.$root = this.isBody ? supportsFixedPosition ? $window : $(document) : this.$container;
+
+	    this.originalImages = this.images;
+	    this.images = optimalSizeImages(
+	        this.options.alwaysTestWindowResolution ? $window : this.$root, 
+	        this.originalImages);
+
+	    /**
+	     * Pre-Loading.
+	     * This is the first image, so we will preload a minimum of 1 images.
+	     */
+	    preload(this.images, this.options.start || 0, this.options.preload || 1);
+
+	    // Don't create a new wrap if one already exists (from a previous instance of Backstretch)
+	    var $existing = this.$container.children(".backstretch").first();
+	    this.$wrap = $existing.length ? $existing : 
+	        $('<div class="backstretch"></div>')
+	        .css(this.options.bypassCss ? {} : styles.wrap)
+	        .appendTo(this.$container);
+
+	    if (!this.options.bypassCss) {
+	        
+	        // Non-body elements need some style adjustments
+	        if (!this.isBody) {
+	          // If the container is statically positioned, we need to make it relative,
+	          // and if no zIndex is defined, we should set it to zero.
+	          var position = this.$container.css('position')
+	            , zIndex = this.$container.css('zIndex');
+
+	          this.$container.css({
+	              position: position === 'static' ? 'relative' : position
+	            , zIndex: zIndex === 'auto' ? 0 : zIndex
+	          });
+
+	          // Needs a higher z-index
+	          this.$wrap.css({zIndex: -999998});
+	        }
+
+	        // Fixed or absolute positioning?
+	        this.$wrap.css({
+	            position: this.isBody && supportsFixedPosition ? 'fixed' : 'absolute'
+	        });
+	    
+	    }
+
+	    // Set the first image
+	    this.index = this.options.start;
+	    this.show(this.index);
+
+	    // Listen for resize
+	    $window.on('resize.backstretch', $.proxy(this.resize, this))
+	           .on('orientationchange.backstretch', $.proxy(function () {
+	              // Need to do this in order to get the right window height
+	              if (this.isBody && window.pageYOffset === 0) {
+	                window.scrollTo(0, 1);
+	                this.resize();
+	              }
+	           }, this));
+	  };
+
+	  var performTransition = function (options) {
+
+	    var transition = options.transition || 'fade';
+
+	    // Look for multiple options
+	    if (typeof transition === 'string' && transition.indexOf('|') > -1) {
+	      transition = transition.split('|');
+	    }
+
+	    if (transition instanceof Array) {
+	      transition = transition[Math.round(Math.random() * (transition.length - 1))];
+	    }
+	    
+	    var $new = options['new'];
+	    var $old = options['old'] ? options['old'] : $([]);
+
+	    switch (transition.toString().toLowerCase()) {
+
+	      default:
+	      case 'fade':
+	        $new.fadeIn({
+	          duration: options.duration,
+	          complete: options.complete,
+	          easing: options.easing || undefined
+	        });
+	        break;
+	        
+	      case 'fadeinout':
+	      case 'fade_in_out':
+	            
+	        var fadeInNew = function () {
+	            $new.fadeIn({
+	              duration: options.duration / 2,
+	              complete: options.complete,
+	              easing: options.easing || undefined
+	            });
+	        };
+	        
+	        if ($old.length) {
+	            $old.fadeOut({
+	              duration: options.duration / 2,
+	              complete: fadeInNew,
+	              easing: options.easing || undefined
+	            });
+	        } else {
+	            fadeInNew();
+	        }
+	        
+	        break;
+
+	      case 'pushleft':
+	      case 'push_left':
+	      case 'pushright':
+	      case 'push_right':
+	      case 'pushup':
+	      case 'push_up':
+	      case 'pushdown':
+	      case 'push_down':
+	      case 'coverleft':
+	      case 'cover_left':
+	      case 'coverright':
+	      case 'cover_right':
+	      case 'coverup':
+	      case 'cover_up':
+	      case 'coverdown':
+	      case 'cover_down':
+
+	        var transitionParts = transition.match(/^(cover|push)_?(.*)$/);
+
+	        var animProp = transitionParts[2] === 'left' ? 'right' :
+	            transitionParts[2] === 'right' ? 'left' :
+	                transitionParts[2] === 'down' ? 'top' :
+	                    transitionParts[2] === 'up' ? 'bottom' :
+	                        'right';
+
+	        var newCssStart = {
+	          'display': ''
+	        }, newCssAnim = {};
+	        newCssStart[animProp] = '-100%';
+	        newCssAnim[animProp] = 0;
+
+	        $new
+	            .css(newCssStart)
+	            .animate(newCssAnim, {
+	              duration: options.duration,
+	              complete: function () {
+	                $new.css(animProp, '');
+	                options.complete.apply(this, arguments);
+	              },
+	              easing: options.easing || undefined
+	            });
+
+	        if (transitionParts[1] === 'push' && $old.length) {
+	            var oldCssAnim = {};
+	            oldCssAnim[animProp] = '100%';
+
+	            $old
+	                .animate(oldCssAnim, {
+	                  duration: options.duration,
+	                  complete: function () {
+	                    $old.css('display', 'none');
+	                  },
+	                  easing: options.easing || undefined
+	                });
+	        }
+
+	        break;
+	    }
+
+	  };
+
+	  /* PUBLIC METHODS
+	   * ========================= */
+	  Backstretch.prototype = {
+
+	      resize: function () {
+	        try {
+
+	          // Check for a better suited image after the resize
+	          var $resTest = this.options.alwaysTestWindowResolution ? $(window) : this.$root;
+	          var newContainerWidth = $resTest.width();
+	          var newContainerHeight = $resTest.height();
+	          var changeRatioW = newContainerWidth / (this._lastResizeContainerWidth || 0);
+	          var changeRatioH = newContainerHeight / (this._lastResizeContainerHeight || 0);
+	          var resolutionChangeRatioThreshold = this.options.resolutionChangeRatioThreshold || 0.0;
+
+	          // check for big changes in container size
+	          if ((newContainerWidth !== this._lastResizeContainerWidth ||
+	               newContainerHeight !== this._lastResizeContainerHeight) &&
+	              ((Math.abs(changeRatioW - 1) >= resolutionChangeRatioThreshold || isNaN(changeRatioW)) ||
+	              (Math.abs(changeRatioH - 1) >= resolutionChangeRatioThreshold || isNaN(changeRatioH)))) {
+
+	            this._lastResizeContainerWidth = newContainerWidth;
+	            this._lastResizeContainerHeight = newContainerHeight;
+
+	            // Big change: rebuild the entire images array
+	            this.images = optimalSizeImages($resTest, this.originalImages);
+
+	            // Preload them (they will be automatically inserted on the next cycle)
+	            if (this.options.preload) {
+	              preload(this.images, (this.index + 1) % this.images.length, this.options.preload);
+	            }
+
+	            // In case there is no cycle and the new source is different than the current
+	            if (this.images.length === 1 &&
+	                this._currentImage.url !== this.images[0].url) {
+
+	              // Wait a little an update the image being showed
+	              var that = this;
+	              clearTimeout(that._selectAnotherResolutionTimeout);
+	              that._selectAnotherResolutionTimeout = setTimeout(function () {
+	                that.show(0);
+	              }, this.options.resolutionRefreshRate);
+	            }
+	          }
+
+	          var bgCSS = {left: 0, top: 0, right: 'auto', bottom: 'auto'}
+	            , rootWidth = this.isBody ? this.$root.width() : this.$root.innerWidth()
+	            , rootHeight = this.isBody ? ( window.innerHeight ? window.innerHeight : this.$root.height() ) : this.$root.innerHeight()
+	            , bgWidth = rootWidth
+	            , bgHeight = bgWidth / this.$itemWrapper.data('ratio')
+	            , evt = $.Event('backstretch.resize', {
+	              relatedTarget: this.$container[0]
+	            })
+	            , bgOffset
+	            , alignX = this._currentImage.alignX === undefined ? this.options.alignX : this._currentImage.alignX
+	            , alignY = this._currentImage.alignY === undefined ? this.options.alignY : this._currentImage.alignY;
+
+	            // Make adjustments based on image ratio
+	            if (bgHeight >= rootHeight) {
+	                bgCSS.top = -(bgHeight - rootHeight) * alignY;
+	            } else {
+	                bgHeight = rootHeight;
+	                bgWidth = bgHeight * this.$itemWrapper.data('ratio');
+	                bgOffset = (bgWidth - rootWidth) / 2;
+	                bgCSS.left = -(bgWidth - rootWidth) * alignX;
+	            }
+
+	            if (!this.options.bypassCss) {
+
+	                this.$wrap
+	                    .css({width: rootWidth, height: rootHeight})
+	                    .find('>.backstretch-item').not('.deleteable')
+	                    .each(function () {
+	                        var $wrapper = $(this);
+	                        $wrapper.find('img,video,iframe')
+	                                .css({width: bgWidth, height: bgHeight})
+	                                .css(bgCSS);
+	                    });
+	            }
+
+	            this.$container.trigger(evt, this);
+	        } catch(err) {
+	            // IE7 seems to trigger resize before the image is loaded.
+	            // This try/catch block is a hack to let it fail gracefully.
+	        }
+
+	        return this;
+	      }
+
+	      // Show the slide at a certain position
+	    , show: function (newIndex, overrideOptions) {
+
+	        // Validate index
+	        if (Math.abs(newIndex) > this.images.length - 1) {
+	          return;
+	        }
+
+	        // Vars
+	        var that = this
+	          , $oldItemWrapper = that.$wrap.find('>.backstretch-item').addClass('deleteable')
+	          , oldVideoWrapper = that.videoWrapper
+	          , evtOptions = { relatedTarget: that.$container[0] };
+
+	        // Trigger the "before" event
+	        that.$container.trigger($.Event('backstretch.before', evtOptions), [that, newIndex]);
+
+	        // Set the new frame index
+	        this.index = newIndex;
+	        var selectedImage = that.images[newIndex];
+
+	        // Pause the slideshow
+	        clearTimeout(that._cycleTimeout);
+
+	        // New image
+
+	        delete that.videoWrapper; // Current item may not be a video
+
+	        var isVideo = isVideoSource(selectedImage);
+	        if (isVideo) {
+	          that.videoWrapper = new VideoWrapper(selectedImage);
+	          that.$item = that.videoWrapper.$video.css('pointer-events', 'none');
+	        } else {
+	          that.$item = $('<img />');
+	        }
+
+	        that.$itemWrapper = $('<div class="backstretch-item">')
+	            .append(that.$item);
+
+	        if (this.options.bypassCss) {
+	            that.$itemWrapper.css({
+	              'display': 'none'
+	            });
+	        } else {
+	          that.$itemWrapper.css(styles.itemWrapper);
+	          that.$item.css(styles.item);
+	        }
+
+	        that.$item.bind(isVideo ? 'canplay' : 'load', function (e) {
+	            var $this = $(this)
+	              , $wrapper = $this.parent()
+	              , options = $wrapper.data('options');
+	              
+	            if (overrideOptions) {
+	              options = $.extend({}, options, overrideOptions);
+	            }
+
+	            var imgWidth = this.naturalWidth || this.videoWidth || this.width
+	              , imgHeight = this.naturalHeight || this.videoHeight || this.height;
+
+	            // Save the ratio
+	            $wrapper.data('ratio', imgWidth / imgHeight);
+
+	            var getOption = function (opt) {
+	              return options[opt] !== undefined ?
+	                options[opt] :
+	                that.options[opt];
+	            };
+
+	            var transition = getOption('transition');
+	            var transitionEasing = getOption('transitionEasing');
+	            var transitionDuration = getOption('transitionDuration');
+
+	            // Show the image, then delete the old one
+	            var bringInNextImage = function () {
+	              
+	              if (oldVideoWrapper) {
+	                oldVideoWrapper.stop();
+	                oldVideoWrapper.destroy();
+	              }
+	              
+	              $oldItemWrapper.remove();
+
+	              // Resume the slideshow
+	              if (!that.paused && that.images.length > 1) {
+	                that.cycle();
+	              }
+
+	              // Now we can clear the background on the element, to spare memory
+	              if (!that.options.bypassCss && !that.isBody) {
+	                that.$container.css('background', 'none');
+	              }
+
+	              // Trigger the "after" and "show" events
+	              // "show" is being deprecated
+	              $(['after', 'show']).each(function () {
+	                that.$container.trigger($.Event('backstretch.' + this, evtOptions), [that, newIndex]);
+	              });
+	              
+	              if (isVideo) {
+	                that.videoWrapper.play();
+	              }
+	            };
+
+	            if ((that.firstShow && !that.options.animateFirst) || !transitionDuration || !transition) {
+	                // Avoid transition on first show or if there's no transitionDuration value
+	                $wrapper.show();
+	                bringInNextImage();
+	            } else {
+
+	                performTransition({
+	                    'new': $wrapper,
+	                    old: $oldItemWrapper,
+	                    transition: transition,
+	                    duration: transitionDuration,
+	                    easing: transitionEasing,
+	                    complete: bringInNextImage
+	                });
+
+	            }
+
+	            that.firstShow = false;
+
+	            // Resize
+	            that.resize();
+	        });
+
+	        that.$itemWrapper.appendTo(that.$wrap);
+
+	        that.$item.attr('alt', selectedImage.alt || '');
+	        that.$itemWrapper.data('options', selectedImage);
+
+	        if (!isVideo) {
+	          that.$item.attr('src', selectedImage.url);
+	        }
+	        
+	        that._currentImage = selectedImage;
+
+	        return that;
+	      }
+
+	    , current: function () {
+	        return this.index;
+	      }
+
+	    , next: function () {
+	        var args = Array.prototype.slice.call(arguments, 0);
+	        args.unshift(this.index < this.images.length - 1 ? this.index + 1 : 0);
+	        return this.show.apply(this, args);
+	      }
+
+	    , prev: function () {
+	        var args = Array.prototype.slice.call(arguments, 0);
+	        args.unshift(this.index === 0 ? this.images.length - 1 : this.index - 1);
+	        return this.show.apply(this, args);
+	      }
+
+	    , pause: function () {
+	        // Pause the slideshow
+	        this.paused = true;
+	        
+	        if (this.videoWrapper) {
+	          this.videoWrapper.pause();
+	        }
+	        
+	        return this;
+	      }
+
+	    , resume: function () {
+	        // Resume the slideshow
+	        this.paused = false;
+	        
+	        if (this.videoWrapper) {
+	          this.videoWrapper.play();
+	        }
+	        
+	        this.cycle();
+	        return this;
+	      }
+
+	    , cycle: function () {
+	        // Start/resume the slideshow
+	        if(this.images.length > 1) {
+	          // Clear the timeout, just in case
+	          clearTimeout(this._cycleTimeout);
+
+	          var duration = (this._currentImage && this._currentImage.duration) || this.options.duration;
+	          var isVideo = isVideoSource(this._currentImage);
+	          
+	          var callNext = function () {
+	            this.$item.off('.cycle');
+	            
+	            // Check for paused slideshow
+	            if (!this.paused) {
+	              this.next();
+	            }
+	          };
+
+	          // Special video handling
+	          if (isVideo) {
+
+	            // Leave video at last frame
+	            if (!this._currentImage.loop) {
+	              var lastFrameTimeout = 0;
+
+	              this.$item
+	                .on('playing.cycle', function () {
+	                  var player = $(this).data('player');
+
+	                  clearTimeout(lastFrameTimeout);
+	                  lastFrameTimeout = setTimeout(function () {
+	                    player.pause();
+	                    player.$video.trigger('ended');
+	                  }, (player.getDuration() - player.getCurrentTime()) * 1000);
+	                })
+	                .on('ended.cycle', function () {
+	                  clearTimeout(lastFrameTimeout);
+	                });
+	            }
+
+	            // On error go to next
+	            this.$item.on('error.cycle initerror.cycle', $.proxy(callNext, this));
+	          }
+
+	          if (isVideo && !this._currentImage.duration) {
+	            // It's a video - playing until end
+	            this.$item.on('ended.cycle', $.proxy(callNext, this));
+	            
+	          } else {
+	            // Cycling according to specified duration
+	            this._cycleTimeout = setTimeout($.proxy(callNext, this), duration);
+	          }
+	          
+	        }
+	        return this;
+	      }
+
+	    , destroy: function (preserveBackground) {
+	        // Stop the resize events
+	        $(window).off('resize.backstretch orientationchange.backstretch');
+
+	        // Stop any videos
+	        if (this.videoWrapper) {
+	          this.videoWrapper.destroy();
+	        }
+	        
+	        // Clear the timeout
+	        clearTimeout(this._cycleTimeout);
+
+	        // Remove Backstretch
+	        if(!preserveBackground) {
+	          this.$wrap.remove();
+	        }
+	        this.$container.removeData('backstretch');
+	      }
+	  };
+	    
+	 /**
+	  *	Video Abstraction Layer
+	  *
+	  * Static methods:
+	  * > VideoWrapper.loadYoutubeAPI() -> Call in order to load the Youtube API. 
+	  *                                   An 'youtube_api_load' event will be triggered on $(window) when the API is loaded.
+	  *
+	  * Generic:
+	  * > player.type -> type of the video
+	  * > player.video / player.$video -> contains the element holding the video
+	  * > player.play() -> plays the video
+	  * > player.pause() -> pauses the video
+	  * > player.setCurrentTime(position) -> seeks to a position by seconds
+	  * 
+	  * Youtube:
+	  * > player.ytId will contain the youtube ID if the source is a youtube url
+	  * > player.ytReady is a flag telling whether the youtube source is ready for playback
+	  * */
+
+	  var VideoWrapper = function () { this.init.apply(this, arguments); };
+
+	  /**
+	   * @param {Object} options
+	   * @param {String|Array<String>|Array<{{src: String, type: String?}}>} options.url
+	   * @param {Boolean} options.loop=false
+	   * @param {Boolean?} options.mute=true
+	   * @param {String?} options.poster
+	   * loop, mute, poster
+	   */
+	  VideoWrapper.prototype.init = function (options) {
+
+	    var that = this;
+	    
+	    var $video;
+
+	    var setVideoElement = function () {
+	      that.$video = $video;
+	      that.video = $video[0];
+	    };
+	    
+	    // Determine video type
+	    
+	    var videoType = 'video';
+	    
+	    if (!(options.url instanceof Array) &&
+	      YOUTUBE_REGEXP.test(options.url)) {
+	      videoType = 'youtube';
+	    }
+	    
+	    that.type = videoType;
+
+	    if (videoType === 'youtube') {
+
+	      // Try to load the API in the meantime
+	      VideoWrapper.loadYoutubeAPI();
+
+	      that.ytId = options.url.match(YOUTUBE_REGEXP)[2];
+	      var src = 'https://www.youtube.com/embed/' + that.ytId +
+	        '?rel=0&autoplay=0&showinfo=0&controls=0&modestbranding=1' +
+	        '&cc_load_policy=0&disablekb=1&iv_load_policy=3&loop=0' +
+	        '&enablejsapi=1&origin=' + encodeURIComponent(window.location.origin);
+
+	      that.__ytStartMuted = !!options.mute || options.mute === undefined;
+
+	      $video = $('<iframe />')
+	        .attr({ 'src_to_load': src })
+	        .css({ 'border': 0, 'margin': 0, 'padding': 0 })
+	        .data('player', that);
+	        
+	      if (options.loop) {
+	        $video.on('ended.loop', function () {
+	          if (!that.__manuallyStopped) {
+	           that.play();
+	          }
+	        });
+	      }
+
+	      that.ytReady = false;
+
+	      setVideoElement();
+
+	      if (window['YT']) {
+	        that._initYoutube();
+	        $video.trigger('initsuccess');
+	      } else {
+	        $(window).one('youtube_api_load', function () {
+	          that._initYoutube();
+	          $video.trigger('initsuccess');
+	        });
+	      }
+	      
+	    }
+	    else {
+	      // Traditional <video> tag with multiple sources
+	      
+	      $video = $('<video>')
+	        .prop('autoplay', false)
+	        .prop('controls', false)
+	        .prop('loop', !!options.loop)
+	        .prop('muted', !!options.mute || options.mute === undefined)
+	        
+	        // Let the first frames be available before playback, as we do transitions
+	        .prop('preload', 'auto')
+	        .prop('poster', options.poster || '');
+	        
+	      var sources = (options.url instanceof Array) ? options.url : [options.url];
+
+	      for (var i = 0; i < sources.length; i++) {
+	        var sourceItem = sources[i];
+	        if (typeof(sourceItem) === 'string') {
+	          sourceItem = { src: sourceItem };
+	        }
+	        $('<source>')
+	          .attr('src', sourceItem.src)
+	          // Make sure to not specify type if unknown - 
+	          //   so the browser will try to autodetect.
+	          .attr('type', sourceItem.type || null)
+	          .appendTo($video);
+	      }
+	      
+	      if (!$video[0].canPlayType || !sources.length) {
+	        $video.trigger('initerror');
+	      } else {
+	        $video.trigger('initsuccess');
+	      }
+
+	      setVideoElement();
+	    }
+
+	  };
+
+	  VideoWrapper.prototype._initYoutube = function () {
+	    var that = this;
+	    
+	    var YT = window['YT'];
+
+	    that.$video
+	      .attr('src', that.$video.attr('src_to_load'))
+	      .removeAttr('src_to_load');
+
+	    // It won't init if it's not in the DOM, so we emulate that
+	    var hasParent = !!that.$video[0].parentNode;
+	    if (!hasParent) {
+	      var $tmpParent = $('<div>').css('display', 'none !important').appendTo(document.body);
+	      that.$video.appendTo($tmpParent);
+	    }
+
+	    var player = new YT.Player(that.video, {
+	      events: {
+	        'onReady': function () {
+
+	          if (that.__ytStartMuted) {
+	            player.mute();
+	          }
+
+	          if (!hasParent) {
+	            // Restore parent to old state - without interrupting any changes
+	            if (that.$video[0].parentNode === $tmpParent[0]) {
+	              that.$video.detach();
+	            }
+	            $tmpParent.remove();
+	          }
+
+	          that.ytReady = true;
+	          that._updateYoutubeSize();
+	          that.$video.trigger('canplay');
+	        },
+	        'onStateChange': function (event) {
+	          switch (event.data) {
+	            case YT.PlayerState.PLAYING:
+	              that.$video.trigger('playing');
+	              break;
+	            case YT.PlayerState.ENDED:
+	              that.$video.trigger('ended');
+	              break;
+	            case YT.PlayerState.PAUSED:
+	              that.$video.trigger('pause');
+	              break;
+	            case YT.PlayerState.BUFFERING:
+	              that.$video.trigger('waiting');
+	              break;
+	            case YT.PlayerState.CUED:
+	              that.$video.trigger('canplay');
+	              break;
+	          }
+	        },
+	        'onPlaybackQualityChange': function () {
+	          that._updateYoutubeSize();
+	          that.$video.trigger('resize');
+	        },
+	        'onError': function (err) {
+	          that.hasError = true;
+	          that.$video.trigger({ 'type': 'error', 'error': err });
+	        }
+	      }
+	    });
+
+	    that.ytPlayer = player;
+
+	    return that;
+	  };    
+	    
+	  VideoWrapper.prototype._updateYoutubeSize = function () {
+	    var that = this;
+
+	    switch (that.ytPlayer.getPlaybackQuality() || 'medium') {
+	      case 'small':
+	        that.video.videoWidth = 426;
+	        that.video.videoHeight = 240;
+	        break;
+	      case 'medium':
+	        that.video.videoWidth = 640;
+	        that.video.videoHeight = 360;
+	        break;
+	      default:
+	      case 'large':
+	        that.video.videoWidth = 854;
+	        that.video.videoHeight = 480;
+	        break;
+	      case 'hd720':
+	        that.video.videoWidth = 1280;
+	        that.video.videoHeight = 720;
+	        break;
+	      case 'hd1080':
+	        that.video.videoWidth = 1920;
+	        that.video.videoHeight = 1080;
+	        break;
+	      case 'highres':
+	        that.video.videoWidth = 2560;
+	        that.video.videoHeight = 1440;
+	        break;
+	    }
+
+	    return that;
+	  };
+
+	  VideoWrapper.prototype.play = function () {
+	    var that = this;
+
+	    that.__manuallyStopped = false;
+	    
+	    if (that.type === 'youtube') {
+	      if (that.ytReady) {
+	        that.$video.trigger('play');
+	        that.ytPlayer.playVideo();
+	      }
+	    } else {
+	      that.video.play();
+	    }
+
+	    return that;
+	  };
+
+	  VideoWrapper.prototype.pause = function () {
+	    var that = this;
+
+	    that.__manuallyStopped = false;
+	    
+	    if (that.type === 'youtube') {
+	      if (that.ytReady) {
+	        that.ytPlayer.pauseVideo();
+	      }
+	    } else {
+	      that.video.pause();
+	    }
+
+	    return that;
+	  };
+
+	  VideoWrapper.prototype.stop = function () {
+	    var that = this;
+
+	    that.__manuallyStopped = true;
+	    
+	    if (that.type === 'youtube') {
+	      if (that.ytReady) {
+	        that.ytPlayer.pauseVideo();
+	        that.ytPlayer.seekTo(0);
+	      }
+	    } else {
+	      that.video.pause();
+	      that.video.currentTime = 0;
+	    }
+
+	    return that;
+	  };
+
+	  VideoWrapper.prototype.destroy = function () {
+	    var that = this;
+
+	    if (that.ytPlayer) {
+	      that.ytPlayer.destroy();
+	    }
+
+	    that.$video.remove();
+
+	    return that;
+	  };
+
+	  VideoWrapper.prototype.getCurrentTime = function (seconds) {
+	    var that = this;
+
+	    if (that.type === 'youtube') {
+	      if (that.ytReady) {
+	        return that.ytPlayer.getCurrentTime();
+	      }
+	    } else {
+	      return that.video.currentTime;
+	    }
+
+	    return 0;
+	  };
+
+	  VideoWrapper.prototype.setCurrentTime = function (seconds) {
+	    var that = this;
+
+	    if (that.type === 'youtube') {
+	      if (that.ytReady) {
+	        that.ytPlayer.seekTo(seconds, true);
+	      }
+	    } else {
+	      that.video.currentTime = seconds;
+	    }
+
+	    return that;
+	  };
+
+	  VideoWrapper.prototype.getDuration = function () {
+	    var that = this;
+
+	    if (that.type === 'youtube') {
+	      if (that.ytReady) {
+	        return that.ytPlayer.getDuration();
+	      }
+	    } else {
+	      return that.video.duration;
+	    }
+
+	    return 0;
+	  };
+
+	  /**
+	   * This will load the youtube API (if not loaded yet)
+	   * Use $(window).one('youtube_api_load', ...) to listen for API loaded event
+	   */
+	  VideoWrapper.loadYoutubeAPI = function () {
+	    if (window['YT']) {
+	      return;
+	    }
+	    if (!$('script[src*=www\\.youtube\\.com\\/iframe_api]').length) {
+	      $('<script type="text/javascript" src="https://www.youtube.com/iframe_api">').appendTo('body');
+	    }
+	    var ytAPILoadInt = setInterval(function () {
+	      if (window['YT'] && window['YT'].loaded) {
+	        $(window).trigger('youtube_api_load');
+	        clearTimeout(ytAPILoadInt);
+	      }
+	    }, 50);
+	  };
+
+
+	  /* SUPPORTS FIXED POSITION?
+	   *
+	   * Based on code from jQuery Mobile 1.1.0
+	   * http://jquerymobile.com/
+	   *
+	   * In a nutshell, we need to figure out if fixed positioning is supported.
+	   * Unfortunately, this is very difficult to do on iOS, and usually involves
+	   * injecting content, scrolling the page, etc.. It's ugly.
+	   * jQuery Mobile uses this workaround. It's not ideal, but works.
+	   *
+	   * Modified to detect IE6
+	   * ========================= */
+
+	  var supportsFixedPosition = (function () {
+	    var ua = navigator.userAgent
+	      , platform = navigator.platform
+	        // Rendering engine is Webkit, and capture major version
+	      , wkmatch = ua.match( /AppleWebKit\/([0-9]+)/ )
+	      , wkversion = !!wkmatch && wkmatch[ 1 ]
+	      , ffmatch = ua.match( /Fennec\/([0-9]+)/ )
+	      , ffversion = !!ffmatch && ffmatch[ 1 ]
+	      , operammobilematch = ua.match( /Opera Mobi\/([0-9]+)/ )
+	      , omversion = !!operammobilematch && operammobilematch[ 1 ]
+	      , iematch = ua.match( /MSIE ([0-9]+)/ )
+	      , ieversion = !!iematch && iematch[ 1 ];
+
+	    return !(
+	      // iOS 4.3 and older : Platform is iPhone/Pad/Touch and Webkit version is less than 534 (ios5)
+	      ((platform.indexOf( "iPhone" ) > -1 || platform.indexOf( "iPad" ) > -1  || platform.indexOf( "iPod" ) > -1 ) && wkversion && wkversion < 534) ||
+
+	      // Opera Mini
+	      (window.operamini && ({}).toString.call( window.operamini ) === "[object OperaMini]") ||
+	      (operammobilematch && omversion < 7458) ||
+
+	      //Android lte 2.1: Platform is Android and Webkit version is less than 533 (Android 2.2)
+	      (ua.indexOf( "Android" ) > -1 && wkversion && wkversion < 533) ||
+
+	      // Firefox Mobile before 6.0 -
+	      (ffversion && ffversion < 6) ||
+
+	      // WebOS less than 3
+	      ("palmGetResource" in window && wkversion && wkversion < 534) ||
+
+	      // MeeGo
+	      (ua.indexOf( "MeeGo" ) > -1 && ua.indexOf( "NokiaBrowser/8.5.0" ) > -1) ||
+
+	      // IE6
+	      (ieversion && ieversion <= 6)
+	    );
+	  }());
+
+	}(jQuery, window));
+
+
+/***/ },
+/* 289 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _bootstrap = __webpack_require__(290);
+
+	var _bootstrap2 = _interopRequireDefault(_bootstrap);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Users = function (_React$Component) {
+		_inherits(Users, _React$Component);
+
+		function Users(props) {
+			_classCallCheck(this, Users);
+
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Users).call(this, props));
+
+			_this.displayName = 'Users';
+			return _this;
+		}
+
+		_createClass(Users, [{
+			key: 'render',
+			value: function render() {
+				return _react2.default.createElement(
+					'section',
+					{ id: 'main-content' },
+					_react2.default.createElement(
+						'section',
+						{ className: 'wrapper' },
+						_react2.default.createElement(
+							'div',
+							{ className: 'row mt' },
+							_react2.default.createElement(
+								'div',
+								{ className: 'col-lg-12' },
+								_react2.default.createElement(
+									'div',
+									{ className: 'form-panel' },
+									_react2.default.createElement(
+										'h4',
+										{ className: 'mb' },
+										_react2.default.createElement('i', { className: 'fa fa-angle-right' }),
+										' Add Local Committee'
+									),
+									_react2.default.createElement(
+										'p',
+										null,
+										'add entity field'
+									)
+								)
+							)
+						),
+						_react2.default.createElement(
+							'div',
+							{ className: 'row mt' },
+							_react2.default.createElement(
+								'div',
+								{ className: 'col-lg-12' },
+								_react2.default.createElement(
+									'div',
+									{ className: 'content-panel' },
+									_react2.default.createElement(
+										'h4',
+										null,
+										_react2.default.createElement('i', { className: 'fa fa-angle-right' }),
+										' Local Committees'
+									),
+									_react2.default.createElement('hr', null),
+									_react2.default.createElement(
+										'table',
+										{ className: 'table table-striped table-advance table-hover' },
+										_react2.default.createElement(
+											'thead',
+											null,
+											_react2.default.createElement(
+												'tr',
+												null,
+												_react2.default.createElement(
+													'th',
+													null,
+													_react2.default.createElement('i', { className: 'fa fa-bookmark' }),
+													' id'
+												),
+												_react2.default.createElement(
+													'th',
+													null,
+													_react2.default.createElement('i', { className: 'fa fa-bookmark' }),
+													' EXPA id'
+												),
+												_react2.default.createElement(
+													'th',
+													null,
+													_react2.default.createElement('i', { className: 'fa fa-question-circle' }),
+													' EXPA Name'
+												),
+												_react2.default.createElement(
+													'th',
+													null,
+													_react2.default.createElement('i', { className: 'fa fa-question-circle' }),
+													' URL Name'
+												),
+												_react2.default.createElement(
+													'th',
+													null,
+													_react2.default.createElement('i', { className: 'fa fa-question-circle' }),
+													' Full Name'
+												),
+												_react2.default.createElement('th', null)
+											)
+										),
+										_react2.default.createElement(
+											'tbody',
+											{ id: 'lc-{{ $lc[\'id\'] }}' },
+											_react2.default.createElement(
+												'tr',
+												null,
+												_react2.default.createElement(
+													'td',
+													{ id: '{{ $lc[\'id\'] }}' },
+													'id'
+												),
+												_react2.default.createElement(
+													'td',
+													{ id: 'expa-id-{{ $lc[\'id\'] }}' },
+													'expa_id'
+												),
+												_react2.default.createElement(
+													'td',
+													{ id: 'expa-name-{{ $lc[\'id\'] }}' },
+													'expa_name'
+												),
+												_react2.default.createElement(
+													'td',
+													{ id: 'url-name-{{ $lc[\'id\'] }}' },
+													'url_name'
+												),
+												_react2.default.createElement(
+													'td',
+													{ id: 'full-name-{{ $lc[\'id\'] }}' },
+													'full_name'
+												),
+												_react2.default.createElement(
+													'td',
+													null,
+													_react2.default.createElement(
+														'button',
+														{ 'data-toggle': 'modal', 'data-target': '#edit-Modal', className: 'btn btn-primary btn-xs edit-lc', id: 'edit-lc-{{ $lc[\'id\'] }}' },
+														_react2.default.createElement('i', { className: 'fa fa-pencil' })
+													),
+													_react2.default.createElement(
+														'button',
+														{ className: 'btn btn-danger btn-xs delete-lc', id: 'delete-lc-{{ $lc[\'id\'] }}' },
+														_react2.default.createElement('i', { className: 'fa fa-trash-o ' })
+													)
+												)
+											)
+										)
+									)
+								)
+							)
+						),
+						_react2.default.createElement(
+							'div',
+							{ className: 'modal fade', id: 'edit-Modal', tabindex: '-1', role: 'dialog', 'aria-labelledby': 'myModalLabel', 'aria-hidden': 'true' },
+							_react2.default.createElement(
+								'div',
+								{ className: 'modal-dialog' },
+								_react2.default.createElement(
+									'div',
+									{ className: 'modal-content' },
+									_react2.default.createElement(
+										'div',
+										{ className: 'modal-header' },
+										_react2.default.createElement(
+											'button',
+											{ type: 'button', className: 'close', 'data-dismiss': 'modal', 'aria-hidden': 'true' },
+											'×'
+										),
+										_react2.default.createElement(
+											'h4',
+											{ className: 'modal-title', id: 'myModalLabel' },
+											'Edit Local Committee'
+										)
+									),
+									_react2.default.createElement(
+										'div',
+										{ className: 'modal-body' },
+										_react2.default.createElement(
+											'p',
+											null,
+											'edit form'
+										)
+									),
+									_react2.default.createElement(
+										'div',
+										{ className: 'modal-footer' },
+										_react2.default.createElement(
+											'button',
+											{ type: 'button', className: 'btn btn-default', 'data-dismiss': 'modal' },
+											'Cancel'
+										)
+									)
+								)
+							)
+						)
+					)
+				);
+			}
+		}]);
+
+		return Users;
+	}(_react2.default.Component);
+
+	exports.default = Users;
+
+/***/ },
+/* 290 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// This file is autogenerated via the `commonjs` Grunt task. You can require() this file in a CommonJS environment.
+	__webpack_require__(291)
+	__webpack_require__(292)
+	__webpack_require__(293)
+	__webpack_require__(294)
+	__webpack_require__(295)
+	__webpack_require__(296)
+	__webpack_require__(297)
+	__webpack_require__(298)
+	__webpack_require__(299)
+	__webpack_require__(300)
+	__webpack_require__(301)
+	__webpack_require__(302)
+
+/***/ },
+/* 291 */
+/***/ function(module, exports) {
+
+	/* ========================================================================
+	 * Bootstrap: transition.js v3.3.6
+	 * http://getbootstrap.com/javascript/#transitions
+	 * ========================================================================
+	 * Copyright 2011-2015 Twitter, Inc.
+	 * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+	 * ======================================================================== */
+
+
+	+function ($) {
+	  'use strict';
+
+	  // CSS TRANSITION SUPPORT (Shoutout: http://www.modernizr.com/)
+	  // ============================================================
+
+	  function transitionEnd() {
+	    var el = document.createElement('bootstrap')
+
+	    var transEndEventNames = {
+	      WebkitTransition : 'webkitTransitionEnd',
+	      MozTransition    : 'transitionend',
+	      OTransition      : 'oTransitionEnd otransitionend',
+	      transition       : 'transitionend'
+	    }
+
+	    for (var name in transEndEventNames) {
+	      if (el.style[name] !== undefined) {
+	        return { end: transEndEventNames[name] }
+	      }
+	    }
+
+	    return false // explicit for ie8 (  ._.)
+	  }
+
+	  // http://blog.alexmaccaw.com/css-transitions
+	  $.fn.emulateTransitionEnd = function (duration) {
+	    var called = false
+	    var $el = this
+	    $(this).one('bsTransitionEnd', function () { called = true })
+	    var callback = function () { if (!called) $($el).trigger($.support.transition.end) }
+	    setTimeout(callback, duration)
+	    return this
+	  }
+
+	  $(function () {
+	    $.support.transition = transitionEnd()
+
+	    if (!$.support.transition) return
+
+	    $.event.special.bsTransitionEnd = {
+	      bindType: $.support.transition.end,
+	      delegateType: $.support.transition.end,
+	      handle: function (e) {
+	        if ($(e.target).is(this)) return e.handleObj.handler.apply(this, arguments)
+	      }
+	    }
+	  })
+
+	}(jQuery);
+
+
+/***/ },
+/* 292 */
+/***/ function(module, exports) {
+
+	/* ========================================================================
+	 * Bootstrap: alert.js v3.3.6
+	 * http://getbootstrap.com/javascript/#alerts
+	 * ========================================================================
+	 * Copyright 2011-2015 Twitter, Inc.
+	 * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+	 * ======================================================================== */
+
+
+	+function ($) {
+	  'use strict';
+
+	  // ALERT CLASS DEFINITION
+	  // ======================
+
+	  var dismiss = '[data-dismiss="alert"]'
+	  var Alert   = function (el) {
+	    $(el).on('click', dismiss, this.close)
+	  }
+
+	  Alert.VERSION = '3.3.6'
+
+	  Alert.TRANSITION_DURATION = 150
+
+	  Alert.prototype.close = function (e) {
+	    var $this    = $(this)
+	    var selector = $this.attr('data-target')
+
+	    if (!selector) {
+	      selector = $this.attr('href')
+	      selector = selector && selector.replace(/.*(?=#[^\s]*$)/, '') // strip for ie7
+	    }
+
+	    var $parent = $(selector)
+
+	    if (e) e.preventDefault()
+
+	    if (!$parent.length) {
+	      $parent = $this.closest('.alert')
+	    }
+
+	    $parent.trigger(e = $.Event('close.bs.alert'))
+
+	    if (e.isDefaultPrevented()) return
+
+	    $parent.removeClass('in')
+
+	    function removeElement() {
+	      // detach from parent, fire event then clean up data
+	      $parent.detach().trigger('closed.bs.alert').remove()
+	    }
+
+	    $.support.transition && $parent.hasClass('fade') ?
+	      $parent
+	        .one('bsTransitionEnd', removeElement)
+	        .emulateTransitionEnd(Alert.TRANSITION_DURATION) :
+	      removeElement()
+	  }
+
+
+	  // ALERT PLUGIN DEFINITION
+	  // =======================
+
+	  function Plugin(option) {
+	    return this.each(function () {
+	      var $this = $(this)
+	      var data  = $this.data('bs.alert')
+
+	      if (!data) $this.data('bs.alert', (data = new Alert(this)))
+	      if (typeof option == 'string') data[option].call($this)
+	    })
+	  }
+
+	  var old = $.fn.alert
+
+	  $.fn.alert             = Plugin
+	  $.fn.alert.Constructor = Alert
+
+
+	  // ALERT NO CONFLICT
+	  // =================
+
+	  $.fn.alert.noConflict = function () {
+	    $.fn.alert = old
+	    return this
+	  }
+
+
+	  // ALERT DATA-API
+	  // ==============
+
+	  $(document).on('click.bs.alert.data-api', dismiss, Alert.prototype.close)
+
+	}(jQuery);
+
+
+/***/ },
+/* 293 */
+/***/ function(module, exports) {
+
+	/* ========================================================================
+	 * Bootstrap: button.js v3.3.6
+	 * http://getbootstrap.com/javascript/#buttons
+	 * ========================================================================
+	 * Copyright 2011-2015 Twitter, Inc.
+	 * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+	 * ======================================================================== */
+
+
+	+function ($) {
+	  'use strict';
+
+	  // BUTTON PUBLIC CLASS DEFINITION
+	  // ==============================
+
+	  var Button = function (element, options) {
+	    this.$element  = $(element)
+	    this.options   = $.extend({}, Button.DEFAULTS, options)
+	    this.isLoading = false
+	  }
+
+	  Button.VERSION  = '3.3.6'
+
+	  Button.DEFAULTS = {
+	    loadingText: 'loading...'
+	  }
+
+	  Button.prototype.setState = function (state) {
+	    var d    = 'disabled'
+	    var $el  = this.$element
+	    var val  = $el.is('input') ? 'val' : 'html'
+	    var data = $el.data()
+
+	    state += 'Text'
+
+	    if (data.resetText == null) $el.data('resetText', $el[val]())
+
+	    // push to event loop to allow forms to submit
+	    setTimeout($.proxy(function () {
+	      $el[val](data[state] == null ? this.options[state] : data[state])
+
+	      if (state == 'loadingText') {
+	        this.isLoading = true
+	        $el.addClass(d).attr(d, d)
+	      } else if (this.isLoading) {
+	        this.isLoading = false
+	        $el.removeClass(d).removeAttr(d)
+	      }
+	    }, this), 0)
+	  }
+
+	  Button.prototype.toggle = function () {
+	    var changed = true
+	    var $parent = this.$element.closest('[data-toggle="buttons"]')
+
+	    if ($parent.length) {
+	      var $input = this.$element.find('input')
+	      if ($input.prop('type') == 'radio') {
+	        if ($input.prop('checked')) changed = false
+	        $parent.find('.active').removeClass('active')
+	        this.$element.addClass('active')
+	      } else if ($input.prop('type') == 'checkbox') {
+	        if (($input.prop('checked')) !== this.$element.hasClass('active')) changed = false
+	        this.$element.toggleClass('active')
+	      }
+	      $input.prop('checked', this.$element.hasClass('active'))
+	      if (changed) $input.trigger('change')
+	    } else {
+	      this.$element.attr('aria-pressed', !this.$element.hasClass('active'))
+	      this.$element.toggleClass('active')
+	    }
+	  }
+
+
+	  // BUTTON PLUGIN DEFINITION
+	  // ========================
+
+	  function Plugin(option) {
+	    return this.each(function () {
+	      var $this   = $(this)
+	      var data    = $this.data('bs.button')
+	      var options = typeof option == 'object' && option
+
+	      if (!data) $this.data('bs.button', (data = new Button(this, options)))
+
+	      if (option == 'toggle') data.toggle()
+	      else if (option) data.setState(option)
+	    })
+	  }
+
+	  var old = $.fn.button
+
+	  $.fn.button             = Plugin
+	  $.fn.button.Constructor = Button
+
+
+	  // BUTTON NO CONFLICT
+	  // ==================
+
+	  $.fn.button.noConflict = function () {
+	    $.fn.button = old
+	    return this
+	  }
+
+
+	  // BUTTON DATA-API
+	  // ===============
+
+	  $(document)
+	    .on('click.bs.button.data-api', '[data-toggle^="button"]', function (e) {
+	      var $btn = $(e.target)
+	      if (!$btn.hasClass('btn')) $btn = $btn.closest('.btn')
+	      Plugin.call($btn, 'toggle')
+	      if (!($(e.target).is('input[type="radio"]') || $(e.target).is('input[type="checkbox"]'))) e.preventDefault()
+	    })
+	    .on('focus.bs.button.data-api blur.bs.button.data-api', '[data-toggle^="button"]', function (e) {
+	      $(e.target).closest('.btn').toggleClass('focus', /^focus(in)?$/.test(e.type))
+	    })
+
+	}(jQuery);
+
+
+/***/ },
+/* 294 */
+/***/ function(module, exports) {
+
+	/* ========================================================================
+	 * Bootstrap: carousel.js v3.3.6
+	 * http://getbootstrap.com/javascript/#carousel
+	 * ========================================================================
+	 * Copyright 2011-2015 Twitter, Inc.
+	 * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+	 * ======================================================================== */
+
+
+	+function ($) {
+	  'use strict';
+
+	  // CAROUSEL CLASS DEFINITION
+	  // =========================
+
+	  var Carousel = function (element, options) {
+	    this.$element    = $(element)
+	    this.$indicators = this.$element.find('.carousel-indicators')
+	    this.options     = options
+	    this.paused      = null
+	    this.sliding     = null
+	    this.interval    = null
+	    this.$active     = null
+	    this.$items      = null
+
+	    this.options.keyboard && this.$element.on('keydown.bs.carousel', $.proxy(this.keydown, this))
+
+	    this.options.pause == 'hover' && !('ontouchstart' in document.documentElement) && this.$element
+	      .on('mouseenter.bs.carousel', $.proxy(this.pause, this))
+	      .on('mouseleave.bs.carousel', $.proxy(this.cycle, this))
+	  }
+
+	  Carousel.VERSION  = '3.3.6'
+
+	  Carousel.TRANSITION_DURATION = 600
+
+	  Carousel.DEFAULTS = {
+	    interval: 5000,
+	    pause: 'hover',
+	    wrap: true,
+	    keyboard: true
+	  }
+
+	  Carousel.prototype.keydown = function (e) {
+	    if (/input|textarea/i.test(e.target.tagName)) return
+	    switch (e.which) {
+	      case 37: this.prev(); break
+	      case 39: this.next(); break
+	      default: return
+	    }
+
+	    e.preventDefault()
+	  }
+
+	  Carousel.prototype.cycle = function (e) {
+	    e || (this.paused = false)
+
+	    this.interval && clearInterval(this.interval)
+
+	    this.options.interval
+	      && !this.paused
+	      && (this.interval = setInterval($.proxy(this.next, this), this.options.interval))
+
+	    return this
+	  }
+
+	  Carousel.prototype.getItemIndex = function (item) {
+	    this.$items = item.parent().children('.item')
+	    return this.$items.index(item || this.$active)
+	  }
+
+	  Carousel.prototype.getItemForDirection = function (direction, active) {
+	    var activeIndex = this.getItemIndex(active)
+	    var willWrap = (direction == 'prev' && activeIndex === 0)
+	                || (direction == 'next' && activeIndex == (this.$items.length - 1))
+	    if (willWrap && !this.options.wrap) return active
+	    var delta = direction == 'prev' ? -1 : 1
+	    var itemIndex = (activeIndex + delta) % this.$items.length
+	    return this.$items.eq(itemIndex)
+	  }
+
+	  Carousel.prototype.to = function (pos) {
+	    var that        = this
+	    var activeIndex = this.getItemIndex(this.$active = this.$element.find('.item.active'))
+
+	    if (pos > (this.$items.length - 1) || pos < 0) return
+
+	    if (this.sliding)       return this.$element.one('slid.bs.carousel', function () { that.to(pos) }) // yes, "slid"
+	    if (activeIndex == pos) return this.pause().cycle()
+
+	    return this.slide(pos > activeIndex ? 'next' : 'prev', this.$items.eq(pos))
+	  }
+
+	  Carousel.prototype.pause = function (e) {
+	    e || (this.paused = true)
+
+	    if (this.$element.find('.next, .prev').length && $.support.transition) {
+	      this.$element.trigger($.support.transition.end)
+	      this.cycle(true)
+	    }
+
+	    this.interval = clearInterval(this.interval)
+
+	    return this
+	  }
+
+	  Carousel.prototype.next = function () {
+	    if (this.sliding) return
+	    return this.slide('next')
+	  }
+
+	  Carousel.prototype.prev = function () {
+	    if (this.sliding) return
+	    return this.slide('prev')
+	  }
+
+	  Carousel.prototype.slide = function (type, next) {
+	    var $active   = this.$element.find('.item.active')
+	    var $next     = next || this.getItemForDirection(type, $active)
+	    var isCycling = this.interval
+	    var direction = type == 'next' ? 'left' : 'right'
+	    var that      = this
+
+	    if ($next.hasClass('active')) return (this.sliding = false)
+
+	    var relatedTarget = $next[0]
+	    var slideEvent = $.Event('slide.bs.carousel', {
+	      relatedTarget: relatedTarget,
+	      direction: direction
+	    })
+	    this.$element.trigger(slideEvent)
+	    if (slideEvent.isDefaultPrevented()) return
+
+	    this.sliding = true
+
+	    isCycling && this.pause()
+
+	    if (this.$indicators.length) {
+	      this.$indicators.find('.active').removeClass('active')
+	      var $nextIndicator = $(this.$indicators.children()[this.getItemIndex($next)])
+	      $nextIndicator && $nextIndicator.addClass('active')
+	    }
+
+	    var slidEvent = $.Event('slid.bs.carousel', { relatedTarget: relatedTarget, direction: direction }) // yes, "slid"
+	    if ($.support.transition && this.$element.hasClass('slide')) {
+	      $next.addClass(type)
+	      $next[0].offsetWidth // force reflow
+	      $active.addClass(direction)
+	      $next.addClass(direction)
+	      $active
+	        .one('bsTransitionEnd', function () {
+	          $next.removeClass([type, direction].join(' ')).addClass('active')
+	          $active.removeClass(['active', direction].join(' '))
+	          that.sliding = false
+	          setTimeout(function () {
+	            that.$element.trigger(slidEvent)
+	          }, 0)
+	        })
+	        .emulateTransitionEnd(Carousel.TRANSITION_DURATION)
+	    } else {
+	      $active.removeClass('active')
+	      $next.addClass('active')
+	      this.sliding = false
+	      this.$element.trigger(slidEvent)
+	    }
+
+	    isCycling && this.cycle()
+
+	    return this
+	  }
+
+
+	  // CAROUSEL PLUGIN DEFINITION
+	  // ==========================
+
+	  function Plugin(option) {
+	    return this.each(function () {
+	      var $this   = $(this)
+	      var data    = $this.data('bs.carousel')
+	      var options = $.extend({}, Carousel.DEFAULTS, $this.data(), typeof option == 'object' && option)
+	      var action  = typeof option == 'string' ? option : options.slide
+
+	      if (!data) $this.data('bs.carousel', (data = new Carousel(this, options)))
+	      if (typeof option == 'number') data.to(option)
+	      else if (action) data[action]()
+	      else if (options.interval) data.pause().cycle()
+	    })
+	  }
+
+	  var old = $.fn.carousel
+
+	  $.fn.carousel             = Plugin
+	  $.fn.carousel.Constructor = Carousel
+
+
+	  // CAROUSEL NO CONFLICT
+	  // ====================
+
+	  $.fn.carousel.noConflict = function () {
+	    $.fn.carousel = old
+	    return this
+	  }
+
+
+	  // CAROUSEL DATA-API
+	  // =================
+
+	  var clickHandler = function (e) {
+	    var href
+	    var $this   = $(this)
+	    var $target = $($this.attr('data-target') || (href = $this.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '')) // strip for ie7
+	    if (!$target.hasClass('carousel')) return
+	    var options = $.extend({}, $target.data(), $this.data())
+	    var slideIndex = $this.attr('data-slide-to')
+	    if (slideIndex) options.interval = false
+
+	    Plugin.call($target, options)
+
+	    if (slideIndex) {
+	      $target.data('bs.carousel').to(slideIndex)
+	    }
+
+	    e.preventDefault()
+	  }
+
+	  $(document)
+	    .on('click.bs.carousel.data-api', '[data-slide]', clickHandler)
+	    .on('click.bs.carousel.data-api', '[data-slide-to]', clickHandler)
+
+	  $(window).on('load', function () {
+	    $('[data-ride="carousel"]').each(function () {
+	      var $carousel = $(this)
+	      Plugin.call($carousel, $carousel.data())
+	    })
+	  })
+
+	}(jQuery);
+
+
+/***/ },
+/* 295 */
+/***/ function(module, exports) {
+
+	/* ========================================================================
+	 * Bootstrap: collapse.js v3.3.6
+	 * http://getbootstrap.com/javascript/#collapse
+	 * ========================================================================
+	 * Copyright 2011-2015 Twitter, Inc.
+	 * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+	 * ======================================================================== */
+
+
+	+function ($) {
+	  'use strict';
+
+	  // COLLAPSE PUBLIC CLASS DEFINITION
+	  // ================================
+
+	  var Collapse = function (element, options) {
+	    this.$element      = $(element)
+	    this.options       = $.extend({}, Collapse.DEFAULTS, options)
+	    this.$trigger      = $('[data-toggle="collapse"][href="#' + element.id + '"],' +
+	                           '[data-toggle="collapse"][data-target="#' + element.id + '"]')
+	    this.transitioning = null
+
+	    if (this.options.parent) {
+	      this.$parent = this.getParent()
+	    } else {
+	      this.addAriaAndCollapsedClass(this.$element, this.$trigger)
+	    }
+
+	    if (this.options.toggle) this.toggle()
+	  }
+
+	  Collapse.VERSION  = '3.3.6'
+
+	  Collapse.TRANSITION_DURATION = 350
+
+	  Collapse.DEFAULTS = {
+	    toggle: true
+	  }
+
+	  Collapse.prototype.dimension = function () {
+	    var hasWidth = this.$element.hasClass('width')
+	    return hasWidth ? 'width' : 'height'
+	  }
+
+	  Collapse.prototype.show = function () {
+	    if (this.transitioning || this.$element.hasClass('in')) return
+
+	    var activesData
+	    var actives = this.$parent && this.$parent.children('.panel').children('.in, .collapsing')
+
+	    if (actives && actives.length) {
+	      activesData = actives.data('bs.collapse')
+	      if (activesData && activesData.transitioning) return
+	    }
+
+	    var startEvent = $.Event('show.bs.collapse')
+	    this.$element.trigger(startEvent)
+	    if (startEvent.isDefaultPrevented()) return
+
+	    if (actives && actives.length) {
+	      Plugin.call(actives, 'hide')
+	      activesData || actives.data('bs.collapse', null)
+	    }
+
+	    var dimension = this.dimension()
+
+	    this.$element
+	      .removeClass('collapse')
+	      .addClass('collapsing')[dimension](0)
+	      .attr('aria-expanded', true)
+
+	    this.$trigger
+	      .removeClass('collapsed')
+	      .attr('aria-expanded', true)
+
+	    this.transitioning = 1
+
+	    var complete = function () {
+	      this.$element
+	        .removeClass('collapsing')
+	        .addClass('collapse in')[dimension]('')
+	      this.transitioning = 0
+	      this.$element
+	        .trigger('shown.bs.collapse')
+	    }
+
+	    if (!$.support.transition) return complete.call(this)
+
+	    var scrollSize = $.camelCase(['scroll', dimension].join('-'))
+
+	    this.$element
+	      .one('bsTransitionEnd', $.proxy(complete, this))
+	      .emulateTransitionEnd(Collapse.TRANSITION_DURATION)[dimension](this.$element[0][scrollSize])
+	  }
+
+	  Collapse.prototype.hide = function () {
+	    if (this.transitioning || !this.$element.hasClass('in')) return
+
+	    var startEvent = $.Event('hide.bs.collapse')
+	    this.$element.trigger(startEvent)
+	    if (startEvent.isDefaultPrevented()) return
+
+	    var dimension = this.dimension()
+
+	    this.$element[dimension](this.$element[dimension]())[0].offsetHeight
+
+	    this.$element
+	      .addClass('collapsing')
+	      .removeClass('collapse in')
+	      .attr('aria-expanded', false)
+
+	    this.$trigger
+	      .addClass('collapsed')
+	      .attr('aria-expanded', false)
+
+	    this.transitioning = 1
+
+	    var complete = function () {
+	      this.transitioning = 0
+	      this.$element
+	        .removeClass('collapsing')
+	        .addClass('collapse')
+	        .trigger('hidden.bs.collapse')
+	    }
+
+	    if (!$.support.transition) return complete.call(this)
+
+	    this.$element
+	      [dimension](0)
+	      .one('bsTransitionEnd', $.proxy(complete, this))
+	      .emulateTransitionEnd(Collapse.TRANSITION_DURATION)
+	  }
+
+	  Collapse.prototype.toggle = function () {
+	    this[this.$element.hasClass('in') ? 'hide' : 'show']()
+	  }
+
+	  Collapse.prototype.getParent = function () {
+	    return $(this.options.parent)
+	      .find('[data-toggle="collapse"][data-parent="' + this.options.parent + '"]')
+	      .each($.proxy(function (i, element) {
+	        var $element = $(element)
+	        this.addAriaAndCollapsedClass(getTargetFromTrigger($element), $element)
+	      }, this))
+	      .end()
+	  }
+
+	  Collapse.prototype.addAriaAndCollapsedClass = function ($element, $trigger) {
+	    var isOpen = $element.hasClass('in')
+
+	    $element.attr('aria-expanded', isOpen)
+	    $trigger
+	      .toggleClass('collapsed', !isOpen)
+	      .attr('aria-expanded', isOpen)
+	  }
+
+	  function getTargetFromTrigger($trigger) {
+	    var href
+	    var target = $trigger.attr('data-target')
+	      || (href = $trigger.attr('href')) && href.replace(/.*(?=#[^\s]+$)/, '') // strip for ie7
+
+	    return $(target)
+	  }
+
+
+	  // COLLAPSE PLUGIN DEFINITION
+	  // ==========================
+
+	  function Plugin(option) {
+	    return this.each(function () {
+	      var $this   = $(this)
+	      var data    = $this.data('bs.collapse')
+	      var options = $.extend({}, Collapse.DEFAULTS, $this.data(), typeof option == 'object' && option)
+
+	      if (!data && options.toggle && /show|hide/.test(option)) options.toggle = false
+	      if (!data) $this.data('bs.collapse', (data = new Collapse(this, options)))
+	      if (typeof option == 'string') data[option]()
+	    })
+	  }
+
+	  var old = $.fn.collapse
+
+	  $.fn.collapse             = Plugin
+	  $.fn.collapse.Constructor = Collapse
+
+
+	  // COLLAPSE NO CONFLICT
+	  // ====================
+
+	  $.fn.collapse.noConflict = function () {
+	    $.fn.collapse = old
+	    return this
+	  }
+
+
+	  // COLLAPSE DATA-API
+	  // =================
+
+	  $(document).on('click.bs.collapse.data-api', '[data-toggle="collapse"]', function (e) {
+	    var $this   = $(this)
+
+	    if (!$this.attr('data-target')) e.preventDefault()
+
+	    var $target = getTargetFromTrigger($this)
+	    var data    = $target.data('bs.collapse')
+	    var option  = data ? 'toggle' : $this.data()
+
+	    Plugin.call($target, option)
+	  })
+
+	}(jQuery);
+
+
+/***/ },
+/* 296 */
+/***/ function(module, exports) {
+
+	/* ========================================================================
+	 * Bootstrap: dropdown.js v3.3.6
+	 * http://getbootstrap.com/javascript/#dropdowns
+	 * ========================================================================
+	 * Copyright 2011-2015 Twitter, Inc.
+	 * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+	 * ======================================================================== */
+
+
+	+function ($) {
+	  'use strict';
+
+	  // DROPDOWN CLASS DEFINITION
+	  // =========================
+
+	  var backdrop = '.dropdown-backdrop'
+	  var toggle   = '[data-toggle="dropdown"]'
+	  var Dropdown = function (element) {
+	    $(element).on('click.bs.dropdown', this.toggle)
+	  }
+
+	  Dropdown.VERSION = '3.3.6'
+
+	  function getParent($this) {
+	    var selector = $this.attr('data-target')
+
+	    if (!selector) {
+	      selector = $this.attr('href')
+	      selector = selector && /#[A-Za-z]/.test(selector) && selector.replace(/.*(?=#[^\s]*$)/, '') // strip for ie7
+	    }
+
+	    var $parent = selector && $(selector)
+
+	    return $parent && $parent.length ? $parent : $this.parent()
+	  }
+
+	  function clearMenus(e) {
+	    if (e && e.which === 3) return
+	    $(backdrop).remove()
+	    $(toggle).each(function () {
+	      var $this         = $(this)
+	      var $parent       = getParent($this)
+	      var relatedTarget = { relatedTarget: this }
+
+	      if (!$parent.hasClass('open')) return
+
+	      if (e && e.type == 'click' && /input|textarea/i.test(e.target.tagName) && $.contains($parent[0], e.target)) return
+
+	      $parent.trigger(e = $.Event('hide.bs.dropdown', relatedTarget))
+
+	      if (e.isDefaultPrevented()) return
+
+	      $this.attr('aria-expanded', 'false')
+	      $parent.removeClass('open').trigger($.Event('hidden.bs.dropdown', relatedTarget))
+	    })
+	  }
+
+	  Dropdown.prototype.toggle = function (e) {
+	    var $this = $(this)
+
+	    if ($this.is('.disabled, :disabled')) return
+
+	    var $parent  = getParent($this)
+	    var isActive = $parent.hasClass('open')
+
+	    clearMenus()
+
+	    if (!isActive) {
+	      if ('ontouchstart' in document.documentElement && !$parent.closest('.navbar-nav').length) {
+	        // if mobile we use a backdrop because click events don't delegate
+	        $(document.createElement('div'))
+	          .addClass('dropdown-backdrop')
+	          .insertAfter($(this))
+	          .on('click', clearMenus)
+	      }
+
+	      var relatedTarget = { relatedTarget: this }
+	      $parent.trigger(e = $.Event('show.bs.dropdown', relatedTarget))
+
+	      if (e.isDefaultPrevented()) return
+
+	      $this
+	        .trigger('focus')
+	        .attr('aria-expanded', 'true')
+
+	      $parent
+	        .toggleClass('open')
+	        .trigger($.Event('shown.bs.dropdown', relatedTarget))
+	    }
+
+	    return false
+	  }
+
+	  Dropdown.prototype.keydown = function (e) {
+	    if (!/(38|40|27|32)/.test(e.which) || /input|textarea/i.test(e.target.tagName)) return
+
+	    var $this = $(this)
+
+	    e.preventDefault()
+	    e.stopPropagation()
+
+	    if ($this.is('.disabled, :disabled')) return
+
+	    var $parent  = getParent($this)
+	    var isActive = $parent.hasClass('open')
+
+	    if (!isActive && e.which != 27 || isActive && e.which == 27) {
+	      if (e.which == 27) $parent.find(toggle).trigger('focus')
+	      return $this.trigger('click')
+	    }
+
+	    var desc = ' li:not(.disabled):visible a'
+	    var $items = $parent.find('.dropdown-menu' + desc)
+
+	    if (!$items.length) return
+
+	    var index = $items.index(e.target)
+
+	    if (e.which == 38 && index > 0)                 index--         // up
+	    if (e.which == 40 && index < $items.length - 1) index++         // down
+	    if (!~index)                                    index = 0
+
+	    $items.eq(index).trigger('focus')
+	  }
+
+
+	  // DROPDOWN PLUGIN DEFINITION
+	  // ==========================
+
+	  function Plugin(option) {
+	    return this.each(function () {
+	      var $this = $(this)
+	      var data  = $this.data('bs.dropdown')
+
+	      if (!data) $this.data('bs.dropdown', (data = new Dropdown(this)))
+	      if (typeof option == 'string') data[option].call($this)
+	    })
+	  }
+
+	  var old = $.fn.dropdown
+
+	  $.fn.dropdown             = Plugin
+	  $.fn.dropdown.Constructor = Dropdown
+
+
+	  // DROPDOWN NO CONFLICT
+	  // ====================
+
+	  $.fn.dropdown.noConflict = function () {
+	    $.fn.dropdown = old
+	    return this
+	  }
+
+
+	  // APPLY TO STANDARD DROPDOWN ELEMENTS
+	  // ===================================
+
+	  $(document)
+	    .on('click.bs.dropdown.data-api', clearMenus)
+	    .on('click.bs.dropdown.data-api', '.dropdown form', function (e) { e.stopPropagation() })
+	    .on('click.bs.dropdown.data-api', toggle, Dropdown.prototype.toggle)
+	    .on('keydown.bs.dropdown.data-api', toggle, Dropdown.prototype.keydown)
+	    .on('keydown.bs.dropdown.data-api', '.dropdown-menu', Dropdown.prototype.keydown)
+
+	}(jQuery);
+
+
+/***/ },
+/* 297 */
+/***/ function(module, exports) {
+
+	/* ========================================================================
+	 * Bootstrap: modal.js v3.3.6
+	 * http://getbootstrap.com/javascript/#modals
+	 * ========================================================================
+	 * Copyright 2011-2015 Twitter, Inc.
+	 * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+	 * ======================================================================== */
+
+
+	+function ($) {
+	  'use strict';
+
+	  // MODAL CLASS DEFINITION
+	  // ======================
+
+	  var Modal = function (element, options) {
+	    this.options             = options
+	    this.$body               = $(document.body)
+	    this.$element            = $(element)
+	    this.$dialog             = this.$element.find('.modal-dialog')
+	    this.$backdrop           = null
+	    this.isShown             = null
+	    this.originalBodyPad     = null
+	    this.scrollbarWidth      = 0
+	    this.ignoreBackdropClick = false
+
+	    if (this.options.remote) {
+	      this.$element
+	        .find('.modal-content')
+	        .load(this.options.remote, $.proxy(function () {
+	          this.$element.trigger('loaded.bs.modal')
+	        }, this))
+	    }
+	  }
+
+	  Modal.VERSION  = '3.3.6'
+
+	  Modal.TRANSITION_DURATION = 300
+	  Modal.BACKDROP_TRANSITION_DURATION = 150
+
+	  Modal.DEFAULTS = {
+	    backdrop: true,
+	    keyboard: true,
+	    show: true
+	  }
+
+	  Modal.prototype.toggle = function (_relatedTarget) {
+	    return this.isShown ? this.hide() : this.show(_relatedTarget)
+	  }
+
+	  Modal.prototype.show = function (_relatedTarget) {
+	    var that = this
+	    var e    = $.Event('show.bs.modal', { relatedTarget: _relatedTarget })
+
+	    this.$element.trigger(e)
+
+	    if (this.isShown || e.isDefaultPrevented()) return
+
+	    this.isShown = true
+
+	    this.checkScrollbar()
+	    this.setScrollbar()
+	    this.$body.addClass('modal-open')
+
+	    this.escape()
+	    this.resize()
+
+	    this.$element.on('click.dismiss.bs.modal', '[data-dismiss="modal"]', $.proxy(this.hide, this))
+
+	    this.$dialog.on('mousedown.dismiss.bs.modal', function () {
+	      that.$element.one('mouseup.dismiss.bs.modal', function (e) {
+	        if ($(e.target).is(that.$element)) that.ignoreBackdropClick = true
+	      })
+	    })
+
+	    this.backdrop(function () {
+	      var transition = $.support.transition && that.$element.hasClass('fade')
+
+	      if (!that.$element.parent().length) {
+	        that.$element.appendTo(that.$body) // don't move modals dom position
+	      }
+
+	      that.$element
+	        .show()
+	        .scrollTop(0)
+
+	      that.adjustDialog()
+
+	      if (transition) {
+	        that.$element[0].offsetWidth // force reflow
+	      }
+
+	      that.$element.addClass('in')
+
+	      that.enforceFocus()
+
+	      var e = $.Event('shown.bs.modal', { relatedTarget: _relatedTarget })
+
+	      transition ?
+	        that.$dialog // wait for modal to slide in
+	          .one('bsTransitionEnd', function () {
+	            that.$element.trigger('focus').trigger(e)
+	          })
+	          .emulateTransitionEnd(Modal.TRANSITION_DURATION) :
+	        that.$element.trigger('focus').trigger(e)
+	    })
+	  }
+
+	  Modal.prototype.hide = function (e) {
+	    if (e) e.preventDefault()
+
+	    e = $.Event('hide.bs.modal')
+
+	    this.$element.trigger(e)
+
+	    if (!this.isShown || e.isDefaultPrevented()) return
+
+	    this.isShown = false
+
+	    this.escape()
+	    this.resize()
+
+	    $(document).off('focusin.bs.modal')
+
+	    this.$element
+	      .removeClass('in')
+	      .off('click.dismiss.bs.modal')
+	      .off('mouseup.dismiss.bs.modal')
+
+	    this.$dialog.off('mousedown.dismiss.bs.modal')
+
+	    $.support.transition && this.$element.hasClass('fade') ?
+	      this.$element
+	        .one('bsTransitionEnd', $.proxy(this.hideModal, this))
+	        .emulateTransitionEnd(Modal.TRANSITION_DURATION) :
+	      this.hideModal()
+	  }
+
+	  Modal.prototype.enforceFocus = function () {
+	    $(document)
+	      .off('focusin.bs.modal') // guard against infinite focus loop
+	      .on('focusin.bs.modal', $.proxy(function (e) {
+	        if (this.$element[0] !== e.target && !this.$element.has(e.target).length) {
+	          this.$element.trigger('focus')
+	        }
+	      }, this))
+	  }
+
+	  Modal.prototype.escape = function () {
+	    if (this.isShown && this.options.keyboard) {
+	      this.$element.on('keydown.dismiss.bs.modal', $.proxy(function (e) {
+	        e.which == 27 && this.hide()
+	      }, this))
+	    } else if (!this.isShown) {
+	      this.$element.off('keydown.dismiss.bs.modal')
+	    }
+	  }
+
+	  Modal.prototype.resize = function () {
+	    if (this.isShown) {
+	      $(window).on('resize.bs.modal', $.proxy(this.handleUpdate, this))
+	    } else {
+	      $(window).off('resize.bs.modal')
+	    }
+	  }
+
+	  Modal.prototype.hideModal = function () {
+	    var that = this
+	    this.$element.hide()
+	    this.backdrop(function () {
+	      that.$body.removeClass('modal-open')
+	      that.resetAdjustments()
+	      that.resetScrollbar()
+	      that.$element.trigger('hidden.bs.modal')
+	    })
+	  }
+
+	  Modal.prototype.removeBackdrop = function () {
+	    this.$backdrop && this.$backdrop.remove()
+	    this.$backdrop = null
+	  }
+
+	  Modal.prototype.backdrop = function (callback) {
+	    var that = this
+	    var animate = this.$element.hasClass('fade') ? 'fade' : ''
+
+	    if (this.isShown && this.options.backdrop) {
+	      var doAnimate = $.support.transition && animate
+
+	      this.$backdrop = $(document.createElement('div'))
+	        .addClass('modal-backdrop ' + animate)
+	        .appendTo(this.$body)
+
+	      this.$element.on('click.dismiss.bs.modal', $.proxy(function (e) {
+	        if (this.ignoreBackdropClick) {
+	          this.ignoreBackdropClick = false
+	          return
+	        }
+	        if (e.target !== e.currentTarget) return
+	        this.options.backdrop == 'static'
+	          ? this.$element[0].focus()
+	          : this.hide()
+	      }, this))
+
+	      if (doAnimate) this.$backdrop[0].offsetWidth // force reflow
+
+	      this.$backdrop.addClass('in')
+
+	      if (!callback) return
+
+	      doAnimate ?
+	        this.$backdrop
+	          .one('bsTransitionEnd', callback)
+	          .emulateTransitionEnd(Modal.BACKDROP_TRANSITION_DURATION) :
+	        callback()
+
+	    } else if (!this.isShown && this.$backdrop) {
+	      this.$backdrop.removeClass('in')
+
+	      var callbackRemove = function () {
+	        that.removeBackdrop()
+	        callback && callback()
+	      }
+	      $.support.transition && this.$element.hasClass('fade') ?
+	        this.$backdrop
+	          .one('bsTransitionEnd', callbackRemove)
+	          .emulateTransitionEnd(Modal.BACKDROP_TRANSITION_DURATION) :
+	        callbackRemove()
+
+	    } else if (callback) {
+	      callback()
+	    }
+	  }
+
+	  // these following methods are used to handle overflowing modals
+
+	  Modal.prototype.handleUpdate = function () {
+	    this.adjustDialog()
+	  }
+
+	  Modal.prototype.adjustDialog = function () {
+	    var modalIsOverflowing = this.$element[0].scrollHeight > document.documentElement.clientHeight
+
+	    this.$element.css({
+	      paddingLeft:  !this.bodyIsOverflowing && modalIsOverflowing ? this.scrollbarWidth : '',
+	      paddingRight: this.bodyIsOverflowing && !modalIsOverflowing ? this.scrollbarWidth : ''
+	    })
+	  }
+
+	  Modal.prototype.resetAdjustments = function () {
+	    this.$element.css({
+	      paddingLeft: '',
+	      paddingRight: ''
+	    })
+	  }
+
+	  Modal.prototype.checkScrollbar = function () {
+	    var fullWindowWidth = window.innerWidth
+	    if (!fullWindowWidth) { // workaround for missing window.innerWidth in IE8
+	      var documentElementRect = document.documentElement.getBoundingClientRect()
+	      fullWindowWidth = documentElementRect.right - Math.abs(documentElementRect.left)
+	    }
+	    this.bodyIsOverflowing = document.body.clientWidth < fullWindowWidth
+	    this.scrollbarWidth = this.measureScrollbar()
+	  }
+
+	  Modal.prototype.setScrollbar = function () {
+	    var bodyPad = parseInt((this.$body.css('padding-right') || 0), 10)
+	    this.originalBodyPad = document.body.style.paddingRight || ''
+	    if (this.bodyIsOverflowing) this.$body.css('padding-right', bodyPad + this.scrollbarWidth)
+	  }
+
+	  Modal.prototype.resetScrollbar = function () {
+	    this.$body.css('padding-right', this.originalBodyPad)
+	  }
+
+	  Modal.prototype.measureScrollbar = function () { // thx walsh
+	    var scrollDiv = document.createElement('div')
+	    scrollDiv.className = 'modal-scrollbar-measure'
+	    this.$body.append(scrollDiv)
+	    var scrollbarWidth = scrollDiv.offsetWidth - scrollDiv.clientWidth
+	    this.$body[0].removeChild(scrollDiv)
+	    return scrollbarWidth
+	  }
+
+
+	  // MODAL PLUGIN DEFINITION
+	  // =======================
+
+	  function Plugin(option, _relatedTarget) {
+	    return this.each(function () {
+	      var $this   = $(this)
+	      var data    = $this.data('bs.modal')
+	      var options = $.extend({}, Modal.DEFAULTS, $this.data(), typeof option == 'object' && option)
+
+	      if (!data) $this.data('bs.modal', (data = new Modal(this, options)))
+	      if (typeof option == 'string') data[option](_relatedTarget)
+	      else if (options.show) data.show(_relatedTarget)
+	    })
+	  }
+
+	  var old = $.fn.modal
+
+	  $.fn.modal             = Plugin
+	  $.fn.modal.Constructor = Modal
+
+
+	  // MODAL NO CONFLICT
+	  // =================
+
+	  $.fn.modal.noConflict = function () {
+	    $.fn.modal = old
+	    return this
+	  }
+
+
+	  // MODAL DATA-API
+	  // ==============
+
+	  $(document).on('click.bs.modal.data-api', '[data-toggle="modal"]', function (e) {
+	    var $this   = $(this)
+	    var href    = $this.attr('href')
+	    var $target = $($this.attr('data-target') || (href && href.replace(/.*(?=#[^\s]+$)/, ''))) // strip for ie7
+	    var option  = $target.data('bs.modal') ? 'toggle' : $.extend({ remote: !/#/.test(href) && href }, $target.data(), $this.data())
+
+	    if ($this.is('a')) e.preventDefault()
+
+	    $target.one('show.bs.modal', function (showEvent) {
+	      if (showEvent.isDefaultPrevented()) return // only register focus restorer if modal will actually get shown
+	      $target.one('hidden.bs.modal', function () {
+	        $this.is(':visible') && $this.trigger('focus')
+	      })
+	    })
+	    Plugin.call($target, option, this)
+	  })
+
+	}(jQuery);
+
+
+/***/ },
+/* 298 */
+/***/ function(module, exports) {
+
+	/* ========================================================================
+	 * Bootstrap: tooltip.js v3.3.6
+	 * http://getbootstrap.com/javascript/#tooltip
+	 * Inspired by the original jQuery.tipsy by Jason Frame
+	 * ========================================================================
+	 * Copyright 2011-2015 Twitter, Inc.
+	 * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+	 * ======================================================================== */
+
+
+	+function ($) {
+	  'use strict';
+
+	  // TOOLTIP PUBLIC CLASS DEFINITION
+	  // ===============================
+
+	  var Tooltip = function (element, options) {
+	    this.type       = null
+	    this.options    = null
+	    this.enabled    = null
+	    this.timeout    = null
+	    this.hoverState = null
+	    this.$element   = null
+	    this.inState    = null
+
+	    this.init('tooltip', element, options)
+	  }
+
+	  Tooltip.VERSION  = '3.3.6'
+
+	  Tooltip.TRANSITION_DURATION = 150
+
+	  Tooltip.DEFAULTS = {
+	    animation: true,
+	    placement: 'top',
+	    selector: false,
+	    template: '<div class="tooltip" role="tooltip"><div class="tooltip-arrow"></div><div class="tooltip-inner"></div></div>',
+	    trigger: 'hover focus',
+	    title: '',
+	    delay: 0,
+	    html: false,
+	    container: false,
+	    viewport: {
+	      selector: 'body',
+	      padding: 0
+	    }
+	  }
+
+	  Tooltip.prototype.init = function (type, element, options) {
+	    this.enabled   = true
+	    this.type      = type
+	    this.$element  = $(element)
+	    this.options   = this.getOptions(options)
+	    this.$viewport = this.options.viewport && $($.isFunction(this.options.viewport) ? this.options.viewport.call(this, this.$element) : (this.options.viewport.selector || this.options.viewport))
+	    this.inState   = { click: false, hover: false, focus: false }
+
+	    if (this.$element[0] instanceof document.constructor && !this.options.selector) {
+	      throw new Error('`selector` option must be specified when initializing ' + this.type + ' on the window.document object!')
+	    }
+
+	    var triggers = this.options.trigger.split(' ')
+
+	    for (var i = triggers.length; i--;) {
+	      var trigger = triggers[i]
+
+	      if (trigger == 'click') {
+	        this.$element.on('click.' + this.type, this.options.selector, $.proxy(this.toggle, this))
+	      } else if (trigger != 'manual') {
+	        var eventIn  = trigger == 'hover' ? 'mouseenter' : 'focusin'
+	        var eventOut = trigger == 'hover' ? 'mouseleave' : 'focusout'
+
+	        this.$element.on(eventIn  + '.' + this.type, this.options.selector, $.proxy(this.enter, this))
+	        this.$element.on(eventOut + '.' + this.type, this.options.selector, $.proxy(this.leave, this))
+	      }
+	    }
+
+	    this.options.selector ?
+	      (this._options = $.extend({}, this.options, { trigger: 'manual', selector: '' })) :
+	      this.fixTitle()
+	  }
+
+	  Tooltip.prototype.getDefaults = function () {
+	    return Tooltip.DEFAULTS
+	  }
+
+	  Tooltip.prototype.getOptions = function (options) {
+	    options = $.extend({}, this.getDefaults(), this.$element.data(), options)
+
+	    if (options.delay && typeof options.delay == 'number') {
+	      options.delay = {
+	        show: options.delay,
+	        hide: options.delay
+	      }
+	    }
+
+	    return options
+	  }
+
+	  Tooltip.prototype.getDelegateOptions = function () {
+	    var options  = {}
+	    var defaults = this.getDefaults()
+
+	    this._options && $.each(this._options, function (key, value) {
+	      if (defaults[key] != value) options[key] = value
+	    })
+
+	    return options
+	  }
+
+	  Tooltip.prototype.enter = function (obj) {
+	    var self = obj instanceof this.constructor ?
+	      obj : $(obj.currentTarget).data('bs.' + this.type)
+
+	    if (!self) {
+	      self = new this.constructor(obj.currentTarget, this.getDelegateOptions())
+	      $(obj.currentTarget).data('bs.' + this.type, self)
+	    }
+
+	    if (obj instanceof $.Event) {
+	      self.inState[obj.type == 'focusin' ? 'focus' : 'hover'] = true
+	    }
+
+	    if (self.tip().hasClass('in') || self.hoverState == 'in') {
+	      self.hoverState = 'in'
+	      return
+	    }
+
+	    clearTimeout(self.timeout)
+
+	    self.hoverState = 'in'
+
+	    if (!self.options.delay || !self.options.delay.show) return self.show()
+
+	    self.timeout = setTimeout(function () {
+	      if (self.hoverState == 'in') self.show()
+	    }, self.options.delay.show)
+	  }
+
+	  Tooltip.prototype.isInStateTrue = function () {
+	    for (var key in this.inState) {
+	      if (this.inState[key]) return true
+	    }
+
+	    return false
+	  }
+
+	  Tooltip.prototype.leave = function (obj) {
+	    var self = obj instanceof this.constructor ?
+	      obj : $(obj.currentTarget).data('bs.' + this.type)
+
+	    if (!self) {
+	      self = new this.constructor(obj.currentTarget, this.getDelegateOptions())
+	      $(obj.currentTarget).data('bs.' + this.type, self)
+	    }
+
+	    if (obj instanceof $.Event) {
+	      self.inState[obj.type == 'focusout' ? 'focus' : 'hover'] = false
+	    }
+
+	    if (self.isInStateTrue()) return
+
+	    clearTimeout(self.timeout)
+
+	    self.hoverState = 'out'
+
+	    if (!self.options.delay || !self.options.delay.hide) return self.hide()
+
+	    self.timeout = setTimeout(function () {
+	      if (self.hoverState == 'out') self.hide()
+	    }, self.options.delay.hide)
+	  }
+
+	  Tooltip.prototype.show = function () {
+	    var e = $.Event('show.bs.' + this.type)
+
+	    if (this.hasContent() && this.enabled) {
+	      this.$element.trigger(e)
+
+	      var inDom = $.contains(this.$element[0].ownerDocument.documentElement, this.$element[0])
+	      if (e.isDefaultPrevented() || !inDom) return
+	      var that = this
+
+	      var $tip = this.tip()
+
+	      var tipId = this.getUID(this.type)
+
+	      this.setContent()
+	      $tip.attr('id', tipId)
+	      this.$element.attr('aria-describedby', tipId)
+
+	      if (this.options.animation) $tip.addClass('fade')
+
+	      var placement = typeof this.options.placement == 'function' ?
+	        this.options.placement.call(this, $tip[0], this.$element[0]) :
+	        this.options.placement
+
+	      var autoToken = /\s?auto?\s?/i
+	      var autoPlace = autoToken.test(placement)
+	      if (autoPlace) placement = placement.replace(autoToken, '') || 'top'
+
+	      $tip
+	        .detach()
+	        .css({ top: 0, left: 0, display: 'block' })
+	        .addClass(placement)
+	        .data('bs.' + this.type, this)
+
+	      this.options.container ? $tip.appendTo(this.options.container) : $tip.insertAfter(this.$element)
+	      this.$element.trigger('inserted.bs.' + this.type)
+
+	      var pos          = this.getPosition()
+	      var actualWidth  = $tip[0].offsetWidth
+	      var actualHeight = $tip[0].offsetHeight
+
+	      if (autoPlace) {
+	        var orgPlacement = placement
+	        var viewportDim = this.getPosition(this.$viewport)
+
+	        placement = placement == 'bottom' && pos.bottom + actualHeight > viewportDim.bottom ? 'top'    :
+	                    placement == 'top'    && pos.top    - actualHeight < viewportDim.top    ? 'bottom' :
+	                    placement == 'right'  && pos.right  + actualWidth  > viewportDim.width  ? 'left'   :
+	                    placement == 'left'   && pos.left   - actualWidth  < viewportDim.left   ? 'right'  :
+	                    placement
+
+	        $tip
+	          .removeClass(orgPlacement)
+	          .addClass(placement)
+	      }
+
+	      var calculatedOffset = this.getCalculatedOffset(placement, pos, actualWidth, actualHeight)
+
+	      this.applyPlacement(calculatedOffset, placement)
+
+	      var complete = function () {
+	        var prevHoverState = that.hoverState
+	        that.$element.trigger('shown.bs.' + that.type)
+	        that.hoverState = null
+
+	        if (prevHoverState == 'out') that.leave(that)
+	      }
+
+	      $.support.transition && this.$tip.hasClass('fade') ?
+	        $tip
+	          .one('bsTransitionEnd', complete)
+	          .emulateTransitionEnd(Tooltip.TRANSITION_DURATION) :
+	        complete()
+	    }
+	  }
+
+	  Tooltip.prototype.applyPlacement = function (offset, placement) {
+	    var $tip   = this.tip()
+	    var width  = $tip[0].offsetWidth
+	    var height = $tip[0].offsetHeight
+
+	    // manually read margins because getBoundingClientRect includes difference
+	    var marginTop = parseInt($tip.css('margin-top'), 10)
+	    var marginLeft = parseInt($tip.css('margin-left'), 10)
+
+	    // we must check for NaN for ie 8/9
+	    if (isNaN(marginTop))  marginTop  = 0
+	    if (isNaN(marginLeft)) marginLeft = 0
+
+	    offset.top  += marginTop
+	    offset.left += marginLeft
+
+	    // $.fn.offset doesn't round pixel values
+	    // so we use setOffset directly with our own function B-0
+	    $.offset.setOffset($tip[0], $.extend({
+	      using: function (props) {
+	        $tip.css({
+	          top: Math.round(props.top),
+	          left: Math.round(props.left)
+	        })
+	      }
+	    }, offset), 0)
+
+	    $tip.addClass('in')
+
+	    // check to see if placing tip in new offset caused the tip to resize itself
+	    var actualWidth  = $tip[0].offsetWidth
+	    var actualHeight = $tip[0].offsetHeight
+
+	    if (placement == 'top' && actualHeight != height) {
+	      offset.top = offset.top + height - actualHeight
+	    }
+
+	    var delta = this.getViewportAdjustedDelta(placement, offset, actualWidth, actualHeight)
+
+	    if (delta.left) offset.left += delta.left
+	    else offset.top += delta.top
+
+	    var isVertical          = /top|bottom/.test(placement)
+	    var arrowDelta          = isVertical ? delta.left * 2 - width + actualWidth : delta.top * 2 - height + actualHeight
+	    var arrowOffsetPosition = isVertical ? 'offsetWidth' : 'offsetHeight'
+
+	    $tip.offset(offset)
+	    this.replaceArrow(arrowDelta, $tip[0][arrowOffsetPosition], isVertical)
+	  }
+
+	  Tooltip.prototype.replaceArrow = function (delta, dimension, isVertical) {
+	    this.arrow()
+	      .css(isVertical ? 'left' : 'top', 50 * (1 - delta / dimension) + '%')
+	      .css(isVertical ? 'top' : 'left', '')
+	  }
+
+	  Tooltip.prototype.setContent = function () {
+	    var $tip  = this.tip()
+	    var title = this.getTitle()
+
+	    $tip.find('.tooltip-inner')[this.options.html ? 'html' : 'text'](title)
+	    $tip.removeClass('fade in top bottom left right')
+	  }
+
+	  Tooltip.prototype.hide = function (callback) {
+	    var that = this
+	    var $tip = $(this.$tip)
+	    var e    = $.Event('hide.bs.' + this.type)
+
+	    function complete() {
+	      if (that.hoverState != 'in') $tip.detach()
+	      that.$element
+	        .removeAttr('aria-describedby')
+	        .trigger('hidden.bs.' + that.type)
+	      callback && callback()
+	    }
+
+	    this.$element.trigger(e)
+
+	    if (e.isDefaultPrevented()) return
+
+	    $tip.removeClass('in')
+
+	    $.support.transition && $tip.hasClass('fade') ?
+	      $tip
+	        .one('bsTransitionEnd', complete)
+	        .emulateTransitionEnd(Tooltip.TRANSITION_DURATION) :
+	      complete()
+
+	    this.hoverState = null
+
+	    return this
+	  }
+
+	  Tooltip.prototype.fixTitle = function () {
+	    var $e = this.$element
+	    if ($e.attr('title') || typeof $e.attr('data-original-title') != 'string') {
+	      $e.attr('data-original-title', $e.attr('title') || '').attr('title', '')
+	    }
+	  }
+
+	  Tooltip.prototype.hasContent = function () {
+	    return this.getTitle()
+	  }
+
+	  Tooltip.prototype.getPosition = function ($element) {
+	    $element   = $element || this.$element
+
+	    var el     = $element[0]
+	    var isBody = el.tagName == 'BODY'
+
+	    var elRect    = el.getBoundingClientRect()
+	    if (elRect.width == null) {
+	      // width and height are missing in IE8, so compute them manually; see https://github.com/twbs/bootstrap/issues/14093
+	      elRect = $.extend({}, elRect, { width: elRect.right - elRect.left, height: elRect.bottom - elRect.top })
+	    }
+	    var elOffset  = isBody ? { top: 0, left: 0 } : $element.offset()
+	    var scroll    = { scroll: isBody ? document.documentElement.scrollTop || document.body.scrollTop : $element.scrollTop() }
+	    var outerDims = isBody ? { width: $(window).width(), height: $(window).height() } : null
+
+	    return $.extend({}, elRect, scroll, outerDims, elOffset)
+	  }
+
+	  Tooltip.prototype.getCalculatedOffset = function (placement, pos, actualWidth, actualHeight) {
+	    return placement == 'bottom' ? { top: pos.top + pos.height,   left: pos.left + pos.width / 2 - actualWidth / 2 } :
+	           placement == 'top'    ? { top: pos.top - actualHeight, left: pos.left + pos.width / 2 - actualWidth / 2 } :
+	           placement == 'left'   ? { top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left - actualWidth } :
+	        /* placement == 'right' */ { top: pos.top + pos.height / 2 - actualHeight / 2, left: pos.left + pos.width }
+
+	  }
+
+	  Tooltip.prototype.getViewportAdjustedDelta = function (placement, pos, actualWidth, actualHeight) {
+	    var delta = { top: 0, left: 0 }
+	    if (!this.$viewport) return delta
+
+	    var viewportPadding = this.options.viewport && this.options.viewport.padding || 0
+	    var viewportDimensions = this.getPosition(this.$viewport)
+
+	    if (/right|left/.test(placement)) {
+	      var topEdgeOffset    = pos.top - viewportPadding - viewportDimensions.scroll
+	      var bottomEdgeOffset = pos.top + viewportPadding - viewportDimensions.scroll + actualHeight
+	      if (topEdgeOffset < viewportDimensions.top) { // top overflow
+	        delta.top = viewportDimensions.top - topEdgeOffset
+	      } else if (bottomEdgeOffset > viewportDimensions.top + viewportDimensions.height) { // bottom overflow
+	        delta.top = viewportDimensions.top + viewportDimensions.height - bottomEdgeOffset
+	      }
+	    } else {
+	      var leftEdgeOffset  = pos.left - viewportPadding
+	      var rightEdgeOffset = pos.left + viewportPadding + actualWidth
+	      if (leftEdgeOffset < viewportDimensions.left) { // left overflow
+	        delta.left = viewportDimensions.left - leftEdgeOffset
+	      } else if (rightEdgeOffset > viewportDimensions.right) { // right overflow
+	        delta.left = viewportDimensions.left + viewportDimensions.width - rightEdgeOffset
+	      }
+	    }
+
+	    return delta
+	  }
+
+	  Tooltip.prototype.getTitle = function () {
+	    var title
+	    var $e = this.$element
+	    var o  = this.options
+
+	    title = $e.attr('data-original-title')
+	      || (typeof o.title == 'function' ? o.title.call($e[0]) :  o.title)
+
+	    return title
+	  }
+
+	  Tooltip.prototype.getUID = function (prefix) {
+	    do prefix += ~~(Math.random() * 1000000)
+	    while (document.getElementById(prefix))
+	    return prefix
+	  }
+
+	  Tooltip.prototype.tip = function () {
+	    if (!this.$tip) {
+	      this.$tip = $(this.options.template)
+	      if (this.$tip.length != 1) {
+	        throw new Error(this.type + ' `template` option must consist of exactly 1 top-level element!')
+	      }
+	    }
+	    return this.$tip
+	  }
+
+	  Tooltip.prototype.arrow = function () {
+	    return (this.$arrow = this.$arrow || this.tip().find('.tooltip-arrow'))
+	  }
+
+	  Tooltip.prototype.enable = function () {
+	    this.enabled = true
+	  }
+
+	  Tooltip.prototype.disable = function () {
+	    this.enabled = false
+	  }
+
+	  Tooltip.prototype.toggleEnabled = function () {
+	    this.enabled = !this.enabled
+	  }
+
+	  Tooltip.prototype.toggle = function (e) {
+	    var self = this
+	    if (e) {
+	      self = $(e.currentTarget).data('bs.' + this.type)
+	      if (!self) {
+	        self = new this.constructor(e.currentTarget, this.getDelegateOptions())
+	        $(e.currentTarget).data('bs.' + this.type, self)
+	      }
+	    }
+
+	    if (e) {
+	      self.inState.click = !self.inState.click
+	      if (self.isInStateTrue()) self.enter(self)
+	      else self.leave(self)
+	    } else {
+	      self.tip().hasClass('in') ? self.leave(self) : self.enter(self)
+	    }
+	  }
+
+	  Tooltip.prototype.destroy = function () {
+	    var that = this
+	    clearTimeout(this.timeout)
+	    this.hide(function () {
+	      that.$element.off('.' + that.type).removeData('bs.' + that.type)
+	      if (that.$tip) {
+	        that.$tip.detach()
+	      }
+	      that.$tip = null
+	      that.$arrow = null
+	      that.$viewport = null
+	    })
+	  }
+
+
+	  // TOOLTIP PLUGIN DEFINITION
+	  // =========================
+
+	  function Plugin(option) {
+	    return this.each(function () {
+	      var $this   = $(this)
+	      var data    = $this.data('bs.tooltip')
+	      var options = typeof option == 'object' && option
+
+	      if (!data && /destroy|hide/.test(option)) return
+	      if (!data) $this.data('bs.tooltip', (data = new Tooltip(this, options)))
+	      if (typeof option == 'string') data[option]()
+	    })
+	  }
+
+	  var old = $.fn.tooltip
+
+	  $.fn.tooltip             = Plugin
+	  $.fn.tooltip.Constructor = Tooltip
+
+
+	  // TOOLTIP NO CONFLICT
+	  // ===================
+
+	  $.fn.tooltip.noConflict = function () {
+	    $.fn.tooltip = old
+	    return this
+	  }
+
+	}(jQuery);
+
+
+/***/ },
+/* 299 */
+/***/ function(module, exports) {
+
+	/* ========================================================================
+	 * Bootstrap: popover.js v3.3.6
+	 * http://getbootstrap.com/javascript/#popovers
+	 * ========================================================================
+	 * Copyright 2011-2015 Twitter, Inc.
+	 * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+	 * ======================================================================== */
+
+
+	+function ($) {
+	  'use strict';
+
+	  // POPOVER PUBLIC CLASS DEFINITION
+	  // ===============================
+
+	  var Popover = function (element, options) {
+	    this.init('popover', element, options)
+	  }
+
+	  if (!$.fn.tooltip) throw new Error('Popover requires tooltip.js')
+
+	  Popover.VERSION  = '3.3.6'
+
+	  Popover.DEFAULTS = $.extend({}, $.fn.tooltip.Constructor.DEFAULTS, {
+	    placement: 'right',
+	    trigger: 'click',
+	    content: '',
+	    template: '<div class="popover" role="tooltip"><div class="arrow"></div><h3 class="popover-title"></h3><div class="popover-content"></div></div>'
+	  })
+
+
+	  // NOTE: POPOVER EXTENDS tooltip.js
+	  // ================================
+
+	  Popover.prototype = $.extend({}, $.fn.tooltip.Constructor.prototype)
+
+	  Popover.prototype.constructor = Popover
+
+	  Popover.prototype.getDefaults = function () {
+	    return Popover.DEFAULTS
+	  }
+
+	  Popover.prototype.setContent = function () {
+	    var $tip    = this.tip()
+	    var title   = this.getTitle()
+	    var content = this.getContent()
+
+	    $tip.find('.popover-title')[this.options.html ? 'html' : 'text'](title)
+	    $tip.find('.popover-content').children().detach().end()[ // we use append for html objects to maintain js events
+	      this.options.html ? (typeof content == 'string' ? 'html' : 'append') : 'text'
+	    ](content)
+
+	    $tip.removeClass('fade top bottom left right in')
+
+	    // IE8 doesn't accept hiding via the `:empty` pseudo selector, we have to do
+	    // this manually by checking the contents.
+	    if (!$tip.find('.popover-title').html()) $tip.find('.popover-title').hide()
+	  }
+
+	  Popover.prototype.hasContent = function () {
+	    return this.getTitle() || this.getContent()
+	  }
+
+	  Popover.prototype.getContent = function () {
+	    var $e = this.$element
+	    var o  = this.options
+
+	    return $e.attr('data-content')
+	      || (typeof o.content == 'function' ?
+	            o.content.call($e[0]) :
+	            o.content)
+	  }
+
+	  Popover.prototype.arrow = function () {
+	    return (this.$arrow = this.$arrow || this.tip().find('.arrow'))
+	  }
+
+
+	  // POPOVER PLUGIN DEFINITION
+	  // =========================
+
+	  function Plugin(option) {
+	    return this.each(function () {
+	      var $this   = $(this)
+	      var data    = $this.data('bs.popover')
+	      var options = typeof option == 'object' && option
+
+	      if (!data && /destroy|hide/.test(option)) return
+	      if (!data) $this.data('bs.popover', (data = new Popover(this, options)))
+	      if (typeof option == 'string') data[option]()
+	    })
+	  }
+
+	  var old = $.fn.popover
+
+	  $.fn.popover             = Plugin
+	  $.fn.popover.Constructor = Popover
+
+
+	  // POPOVER NO CONFLICT
+	  // ===================
+
+	  $.fn.popover.noConflict = function () {
+	    $.fn.popover = old
+	    return this
+	  }
+
+	}(jQuery);
+
+
+/***/ },
+/* 300 */
+/***/ function(module, exports) {
+
+	/* ========================================================================
+	 * Bootstrap: scrollspy.js v3.3.6
+	 * http://getbootstrap.com/javascript/#scrollspy
+	 * ========================================================================
+	 * Copyright 2011-2015 Twitter, Inc.
+	 * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+	 * ======================================================================== */
+
+
+	+function ($) {
+	  'use strict';
+
+	  // SCROLLSPY CLASS DEFINITION
+	  // ==========================
+
+	  function ScrollSpy(element, options) {
+	    this.$body          = $(document.body)
+	    this.$scrollElement = $(element).is(document.body) ? $(window) : $(element)
+	    this.options        = $.extend({}, ScrollSpy.DEFAULTS, options)
+	    this.selector       = (this.options.target || '') + ' .nav li > a'
+	    this.offsets        = []
+	    this.targets        = []
+	    this.activeTarget   = null
+	    this.scrollHeight   = 0
+
+	    this.$scrollElement.on('scroll.bs.scrollspy', $.proxy(this.process, this))
+	    this.refresh()
+	    this.process()
+	  }
+
+	  ScrollSpy.VERSION  = '3.3.6'
+
+	  ScrollSpy.DEFAULTS = {
+	    offset: 10
+	  }
+
+	  ScrollSpy.prototype.getScrollHeight = function () {
+	    return this.$scrollElement[0].scrollHeight || Math.max(this.$body[0].scrollHeight, document.documentElement.scrollHeight)
+	  }
+
+	  ScrollSpy.prototype.refresh = function () {
+	    var that          = this
+	    var offsetMethod  = 'offset'
+	    var offsetBase    = 0
+
+	    this.offsets      = []
+	    this.targets      = []
+	    this.scrollHeight = this.getScrollHeight()
+
+	    if (!$.isWindow(this.$scrollElement[0])) {
+	      offsetMethod = 'position'
+	      offsetBase   = this.$scrollElement.scrollTop()
+	    }
+
+	    this.$body
+	      .find(this.selector)
+	      .map(function () {
+	        var $el   = $(this)
+	        var href  = $el.data('target') || $el.attr('href')
+	        var $href = /^#./.test(href) && $(href)
+
+	        return ($href
+	          && $href.length
+	          && $href.is(':visible')
+	          && [[$href[offsetMethod]().top + offsetBase, href]]) || null
+	      })
+	      .sort(function (a, b) { return a[0] - b[0] })
+	      .each(function () {
+	        that.offsets.push(this[0])
+	        that.targets.push(this[1])
+	      })
+	  }
+
+	  ScrollSpy.prototype.process = function () {
+	    var scrollTop    = this.$scrollElement.scrollTop() + this.options.offset
+	    var scrollHeight = this.getScrollHeight()
+	    var maxScroll    = this.options.offset + scrollHeight - this.$scrollElement.height()
+	    var offsets      = this.offsets
+	    var targets      = this.targets
+	    var activeTarget = this.activeTarget
+	    var i
+
+	    if (this.scrollHeight != scrollHeight) {
+	      this.refresh()
+	    }
+
+	    if (scrollTop >= maxScroll) {
+	      return activeTarget != (i = targets[targets.length - 1]) && this.activate(i)
+	    }
+
+	    if (activeTarget && scrollTop < offsets[0]) {
+	      this.activeTarget = null
+	      return this.clear()
+	    }
+
+	    for (i = offsets.length; i--;) {
+	      activeTarget != targets[i]
+	        && scrollTop >= offsets[i]
+	        && (offsets[i + 1] === undefined || scrollTop < offsets[i + 1])
+	        && this.activate(targets[i])
+	    }
+	  }
+
+	  ScrollSpy.prototype.activate = function (target) {
+	    this.activeTarget = target
+
+	    this.clear()
+
+	    var selector = this.selector +
+	      '[data-target="' + target + '"],' +
+	      this.selector + '[href="' + target + '"]'
+
+	    var active = $(selector)
+	      .parents('li')
+	      .addClass('active')
+
+	    if (active.parent('.dropdown-menu').length) {
+	      active = active
+	        .closest('li.dropdown')
+	        .addClass('active')
+	    }
+
+	    active.trigger('activate.bs.scrollspy')
+	  }
+
+	  ScrollSpy.prototype.clear = function () {
+	    $(this.selector)
+	      .parentsUntil(this.options.target, '.active')
+	      .removeClass('active')
+	  }
+
+
+	  // SCROLLSPY PLUGIN DEFINITION
+	  // ===========================
+
+	  function Plugin(option) {
+	    return this.each(function () {
+	      var $this   = $(this)
+	      var data    = $this.data('bs.scrollspy')
+	      var options = typeof option == 'object' && option
+
+	      if (!data) $this.data('bs.scrollspy', (data = new ScrollSpy(this, options)))
+	      if (typeof option == 'string') data[option]()
+	    })
+	  }
+
+	  var old = $.fn.scrollspy
+
+	  $.fn.scrollspy             = Plugin
+	  $.fn.scrollspy.Constructor = ScrollSpy
+
+
+	  // SCROLLSPY NO CONFLICT
+	  // =====================
+
+	  $.fn.scrollspy.noConflict = function () {
+	    $.fn.scrollspy = old
+	    return this
+	  }
+
+
+	  // SCROLLSPY DATA-API
+	  // ==================
+
+	  $(window).on('load.bs.scrollspy.data-api', function () {
+	    $('[data-spy="scroll"]').each(function () {
+	      var $spy = $(this)
+	      Plugin.call($spy, $spy.data())
+	    })
+	  })
+
+	}(jQuery);
+
+
+/***/ },
+/* 301 */
+/***/ function(module, exports) {
+
+	/* ========================================================================
+	 * Bootstrap: tab.js v3.3.6
+	 * http://getbootstrap.com/javascript/#tabs
+	 * ========================================================================
+	 * Copyright 2011-2015 Twitter, Inc.
+	 * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+	 * ======================================================================== */
+
+
+	+function ($) {
+	  'use strict';
+
+	  // TAB CLASS DEFINITION
+	  // ====================
+
+	  var Tab = function (element) {
+	    // jscs:disable requireDollarBeforejQueryAssignment
+	    this.element = $(element)
+	    // jscs:enable requireDollarBeforejQueryAssignment
+	  }
+
+	  Tab.VERSION = '3.3.6'
+
+	  Tab.TRANSITION_DURATION = 150
+
+	  Tab.prototype.show = function () {
+	    var $this    = this.element
+	    var $ul      = $this.closest('ul:not(.dropdown-menu)')
+	    var selector = $this.data('target')
+
+	    if (!selector) {
+	      selector = $this.attr('href')
+	      selector = selector && selector.replace(/.*(?=#[^\s]*$)/, '') // strip for ie7
+	    }
+
+	    if ($this.parent('li').hasClass('active')) return
+
+	    var $previous = $ul.find('.active:last a')
+	    var hideEvent = $.Event('hide.bs.tab', {
+	      relatedTarget: $this[0]
+	    })
+	    var showEvent = $.Event('show.bs.tab', {
+	      relatedTarget: $previous[0]
+	    })
+
+	    $previous.trigger(hideEvent)
+	    $this.trigger(showEvent)
+
+	    if (showEvent.isDefaultPrevented() || hideEvent.isDefaultPrevented()) return
+
+	    var $target = $(selector)
+
+	    this.activate($this.closest('li'), $ul)
+	    this.activate($target, $target.parent(), function () {
+	      $previous.trigger({
+	        type: 'hidden.bs.tab',
+	        relatedTarget: $this[0]
+	      })
+	      $this.trigger({
+	        type: 'shown.bs.tab',
+	        relatedTarget: $previous[0]
+	      })
+	    })
+	  }
+
+	  Tab.prototype.activate = function (element, container, callback) {
+	    var $active    = container.find('> .active')
+	    var transition = callback
+	      && $.support.transition
+	      && ($active.length && $active.hasClass('fade') || !!container.find('> .fade').length)
+
+	    function next() {
+	      $active
+	        .removeClass('active')
+	        .find('> .dropdown-menu > .active')
+	          .removeClass('active')
+	        .end()
+	        .find('[data-toggle="tab"]')
+	          .attr('aria-expanded', false)
+
+	      element
+	        .addClass('active')
+	        .find('[data-toggle="tab"]')
+	          .attr('aria-expanded', true)
+
+	      if (transition) {
+	        element[0].offsetWidth // reflow for transition
+	        element.addClass('in')
+	      } else {
+	        element.removeClass('fade')
+	      }
+
+	      if (element.parent('.dropdown-menu').length) {
+	        element
+	          .closest('li.dropdown')
+	            .addClass('active')
+	          .end()
+	          .find('[data-toggle="tab"]')
+	            .attr('aria-expanded', true)
+	      }
+
+	      callback && callback()
+	    }
+
+	    $active.length && transition ?
+	      $active
+	        .one('bsTransitionEnd', next)
+	        .emulateTransitionEnd(Tab.TRANSITION_DURATION) :
+	      next()
+
+	    $active.removeClass('in')
+	  }
+
+
+	  // TAB PLUGIN DEFINITION
+	  // =====================
+
+	  function Plugin(option) {
+	    return this.each(function () {
+	      var $this = $(this)
+	      var data  = $this.data('bs.tab')
+
+	      if (!data) $this.data('bs.tab', (data = new Tab(this)))
+	      if (typeof option == 'string') data[option]()
+	    })
+	  }
+
+	  var old = $.fn.tab
+
+	  $.fn.tab             = Plugin
+	  $.fn.tab.Constructor = Tab
+
+
+	  // TAB NO CONFLICT
+	  // ===============
+
+	  $.fn.tab.noConflict = function () {
+	    $.fn.tab = old
+	    return this
+	  }
+
+
+	  // TAB DATA-API
+	  // ============
+
+	  var clickHandler = function (e) {
+	    e.preventDefault()
+	    Plugin.call($(this), 'show')
+	  }
+
+	  $(document)
+	    .on('click.bs.tab.data-api', '[data-toggle="tab"]', clickHandler)
+	    .on('click.bs.tab.data-api', '[data-toggle="pill"]', clickHandler)
+
+	}(jQuery);
+
+
+/***/ },
+/* 302 */
+/***/ function(module, exports) {
+
+	/* ========================================================================
+	 * Bootstrap: affix.js v3.3.6
+	 * http://getbootstrap.com/javascript/#affix
+	 * ========================================================================
+	 * Copyright 2011-2015 Twitter, Inc.
+	 * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
+	 * ======================================================================== */
+
+
+	+function ($) {
+	  'use strict';
+
+	  // AFFIX CLASS DEFINITION
+	  // ======================
+
+	  var Affix = function (element, options) {
+	    this.options = $.extend({}, Affix.DEFAULTS, options)
+
+	    this.$target = $(this.options.target)
+	      .on('scroll.bs.affix.data-api', $.proxy(this.checkPosition, this))
+	      .on('click.bs.affix.data-api',  $.proxy(this.checkPositionWithEventLoop, this))
+
+	    this.$element     = $(element)
+	    this.affixed      = null
+	    this.unpin        = null
+	    this.pinnedOffset = null
+
+	    this.checkPosition()
+	  }
+
+	  Affix.VERSION  = '3.3.6'
+
+	  Affix.RESET    = 'affix affix-top affix-bottom'
+
+	  Affix.DEFAULTS = {
+	    offset: 0,
+	    target: window
+	  }
+
+	  Affix.prototype.getState = function (scrollHeight, height, offsetTop, offsetBottom) {
+	    var scrollTop    = this.$target.scrollTop()
+	    var position     = this.$element.offset()
+	    var targetHeight = this.$target.height()
+
+	    if (offsetTop != null && this.affixed == 'top') return scrollTop < offsetTop ? 'top' : false
+
+	    if (this.affixed == 'bottom') {
+	      if (offsetTop != null) return (scrollTop + this.unpin <= position.top) ? false : 'bottom'
+	      return (scrollTop + targetHeight <= scrollHeight - offsetBottom) ? false : 'bottom'
+	    }
+
+	    var initializing   = this.affixed == null
+	    var colliderTop    = initializing ? scrollTop : position.top
+	    var colliderHeight = initializing ? targetHeight : height
+
+	    if (offsetTop != null && scrollTop <= offsetTop) return 'top'
+	    if (offsetBottom != null && (colliderTop + colliderHeight >= scrollHeight - offsetBottom)) return 'bottom'
+
+	    return false
+	  }
+
+	  Affix.prototype.getPinnedOffset = function () {
+	    if (this.pinnedOffset) return this.pinnedOffset
+	    this.$element.removeClass(Affix.RESET).addClass('affix')
+	    var scrollTop = this.$target.scrollTop()
+	    var position  = this.$element.offset()
+	    return (this.pinnedOffset = position.top - scrollTop)
+	  }
+
+	  Affix.prototype.checkPositionWithEventLoop = function () {
+	    setTimeout($.proxy(this.checkPosition, this), 1)
+	  }
+
+	  Affix.prototype.checkPosition = function () {
+	    if (!this.$element.is(':visible')) return
+
+	    var height       = this.$element.height()
+	    var offset       = this.options.offset
+	    var offsetTop    = offset.top
+	    var offsetBottom = offset.bottom
+	    var scrollHeight = Math.max($(document).height(), $(document.body).height())
+
+	    if (typeof offset != 'object')         offsetBottom = offsetTop = offset
+	    if (typeof offsetTop == 'function')    offsetTop    = offset.top(this.$element)
+	    if (typeof offsetBottom == 'function') offsetBottom = offset.bottom(this.$element)
+
+	    var affix = this.getState(scrollHeight, height, offsetTop, offsetBottom)
+
+	    if (this.affixed != affix) {
+	      if (this.unpin != null) this.$element.css('top', '')
+
+	      var affixType = 'affix' + (affix ? '-' + affix : '')
+	      var e         = $.Event(affixType + '.bs.affix')
+
+	      this.$element.trigger(e)
+
+	      if (e.isDefaultPrevented()) return
+
+	      this.affixed = affix
+	      this.unpin = affix == 'bottom' ? this.getPinnedOffset() : null
+
+	      this.$element
+	        .removeClass(Affix.RESET)
+	        .addClass(affixType)
+	        .trigger(affixType.replace('affix', 'affixed') + '.bs.affix')
+	    }
+
+	    if (affix == 'bottom') {
+	      this.$element.offset({
+	        top: scrollHeight - height - offsetBottom
+	      })
+	    }
+	  }
+
+
+	  // AFFIX PLUGIN DEFINITION
+	  // =======================
+
+	  function Plugin(option) {
+	    return this.each(function () {
+	      var $this   = $(this)
+	      var data    = $this.data('bs.affix')
+	      var options = typeof option == 'object' && option
+
+	      if (!data) $this.data('bs.affix', (data = new Affix(this, options)))
+	      if (typeof option == 'string') data[option]()
+	    })
+	  }
+
+	  var old = $.fn.affix
+
+	  $.fn.affix             = Plugin
+	  $.fn.affix.Constructor = Affix
+
+
+	  // AFFIX NO CONFLICT
+	  // =================
+
+	  $.fn.affix.noConflict = function () {
+	    $.fn.affix = old
+	    return this
+	  }
+
+
+	  // AFFIX DATA-API
+	  // ==============
+
+	  $(window).on('load', function () {
+	    $('[data-spy="affix"]').each(function () {
+	      var $spy = $(this)
+	      var data = $spy.data()
+
+	      data.offset = data.offset || {}
+
+	      if (data.offsetBottom != null) data.offset.bottom = data.offsetBottom
+	      if (data.offsetTop    != null) data.offset.top    = data.offsetTop
+
+	      Plugin.call($spy, data)
+	    })
+	  })
+
+	}(jQuery);
+
+
+/***/ },
+/* 303 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Products = function (_React$Component) {
+		_inherits(Products, _React$Component);
+
+		function Products(props) {
+			_classCallCheck(this, Products);
+
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Products).call(this, props));
+
+			_this.displayName = 'Products';
+			return _this;
+		}
+
+		_createClass(Products, [{
+			key: 'render',
+			value: function render() {
+				return _react2.default.createElement(
+					'section',
+					{ id: 'main-content' },
+					_react2.default.createElement(
+						'section',
+						{ className: 'wrapper' },
+						_react2.default.createElement(
+							'div',
+							{ className: 'row mt' },
+							_react2.default.createElement(
+								'div',
+								{ className: 'col-lg-12' },
+								_react2.default.createElement(
+									'div',
+									{ className: 'form-panel' },
+									_react2.default.createElement(
+										'h4',
+										{ className: 'mb' },
+										_react2.default.createElement('i', { className: 'fa fa-angle-right' }),
+										' Add Local Committee'
+									),
+									_react2.default.createElement(
+										'p',
+										null,
+										'add entity field'
+									)
+								)
+							)
+						),
+						_react2.default.createElement(
+							'div',
+							{ className: 'row mt' },
+							_react2.default.createElement(
+								'div',
+								{ className: 'col-lg-12' },
+								_react2.default.createElement(
+									'div',
+									{ className: 'content-panel' },
+									_react2.default.createElement(
+										'h4',
+										null,
+										_react2.default.createElement('i', { className: 'fa fa-angle-right' }),
+										' Local Committees'
+									),
+									_react2.default.createElement('hr', null),
+									_react2.default.createElement(
+										'table',
+										{ className: 'table table-striped table-advance table-hover' },
+										_react2.default.createElement(
+											'thead',
+											null,
+											_react2.default.createElement(
+												'tr',
+												null,
+												_react2.default.createElement(
+													'th',
+													null,
+													_react2.default.createElement('i', { className: 'fa fa-bookmark' }),
+													' id'
+												),
+												_react2.default.createElement(
+													'th',
+													null,
+													_react2.default.createElement('i', { className: 'fa fa-bookmark' }),
+													' EXPA id'
+												),
+												_react2.default.createElement(
+													'th',
+													null,
+													_react2.default.createElement('i', { className: 'fa fa-question-circle' }),
+													' EXPA Name'
+												),
+												_react2.default.createElement(
+													'th',
+													null,
+													_react2.default.createElement('i', { className: 'fa fa-question-circle' }),
+													' URL Name'
+												),
+												_react2.default.createElement(
+													'th',
+													null,
+													_react2.default.createElement('i', { className: 'fa fa-question-circle' }),
+													' Full Name'
+												),
+												_react2.default.createElement('th', null)
+											)
+										),
+										_react2.default.createElement(
+											'tbody',
+											{ id: 'lc-{{ $lc[\'id\'] }}' },
+											_react2.default.createElement(
+												'tr',
+												null,
+												_react2.default.createElement(
+													'td',
+													{ id: '{{ $lc[\'id\'] }}' },
+													'id'
+												),
+												_react2.default.createElement(
+													'td',
+													{ id: 'expa-id-{{ $lc[\'id\'] }}' },
+													'expa_id'
+												),
+												_react2.default.createElement(
+													'td',
+													{ id: 'expa-name-{{ $lc[\'id\'] }}' },
+													'expa_name'
+												),
+												_react2.default.createElement(
+													'td',
+													{ id: 'url-name-{{ $lc[\'id\'] }}' },
+													'url_name'
+												),
+												_react2.default.createElement(
+													'td',
+													{ id: 'full-name-{{ $lc[\'id\'] }}' },
+													'full_name'
+												),
+												_react2.default.createElement(
+													'td',
+													null,
+													_react2.default.createElement(
+														'button',
+														{ 'data-toggle': 'modal', 'data-target': '#edit-Modal', className: 'btn btn-primary btn-xs edit-lc', id: 'edit-lc-{{ $lc[\'id\'] }}' },
+														_react2.default.createElement('i', { className: 'fa fa-pencil' })
+													),
+													_react2.default.createElement(
+														'button',
+														{ className: 'btn btn-danger btn-xs delete-lc', id: 'delete-lc-{{ $lc[\'id\'] }}' },
+														_react2.default.createElement('i', { className: 'fa fa-trash-o ' })
+													)
+												)
+											)
+										)
+									)
+								)
+							)
+						),
+						_react2.default.createElement(
+							'div',
+							{ className: 'modal fade', id: 'edit-Modal', tabindex: '-1', role: 'dialog', 'aria-labelledby': 'myModalLabel', 'aria-hidden': 'true' },
+							_react2.default.createElement(
+								'div',
+								{ className: 'modal-dialog' },
+								_react2.default.createElement(
+									'div',
+									{ className: 'modal-content' },
+									_react2.default.createElement(
+										'div',
+										{ className: 'modal-header' },
+										_react2.default.createElement(
+											'button',
+											{ type: 'button', className: 'close', 'data-dismiss': 'modal', 'aria-hidden': 'true' },
+											'×'
+										),
+										_react2.default.createElement(
+											'h4',
+											{ className: 'modal-title', id: 'myModalLabel' },
+											'Edit Local Committee'
+										)
+									),
+									_react2.default.createElement(
+										'div',
+										{ className: 'modal-body' },
+										_react2.default.createElement(
+											'p',
+											null,
+											'edit form'
+										)
+									),
+									_react2.default.createElement(
+										'div',
+										{ className: 'modal-footer' },
+										_react2.default.createElement(
+											'button',
+											{ type: 'button', className: 'btn btn-default', 'data-dismiss': 'modal' },
+											'Cancel'
+										)
+									)
+								)
+							)
+						)
+					)
+				);
+			}
+		}]);
+
+		return Products;
+	}(_react2.default.Component);
+
+	exports.default = Products;
+
+/***/ },
+/* 304 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _store = __webpack_require__(243);
+
+	var _store2 = _interopRequireDefault(_store);
+
+	var _reactRedux = __webpack_require__(217);
+
+	var _EntitiesApi = __webpack_require__(305);
+
+	var _EntityList = __webpack_require__(307);
+
+	var _EntityList2 = _interopRequireDefault(_EntityList);
+
+	var _AddEntity = __webpack_require__(309);
+
+	var _AddEntity2 = _interopRequireDefault(_AddEntity);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var EntitiesContainer = function (_React$Component) {
+		_inherits(EntitiesContainer, _React$Component);
+
+		function EntitiesContainer() {
+			_classCallCheck(this, EntitiesContainer);
+
+			return _possibleConstructorReturn(this, Object.getPrototypeOf(EntitiesContainer).apply(this, arguments));
+		}
+
+		_createClass(EntitiesContainer, [{
+			key: 'componentDidMount',
+			value: function componentDidMount() {
+				(0, _EntitiesApi.getEntities)();
+			}
+		}, {
+			key: 'addNew',
+			value: function addNew(entity) {
+				(0, _EntitiesApi.addEntity)(entity);
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				return _react2.default.createElement(
+					'section',
+					{ id: 'main-content' },
+					_react2.default.createElement(
+						'section',
+						{ className: 'wrapper' },
+						_react2.default.createElement(
+							'div',
+							{ className: 'row mt' },
+							_react2.default.createElement(
+								'div',
+								{ className: 'col-lg-12' },
+								_react2.default.createElement(
+									'div',
+									{ className: 'form-panel' },
+									_react2.default.createElement(_AddEntity2.default, { addNew: this.addNew, ref: 'child' })
+								)
+							)
+						),
+						_react2.default.createElement(
+							'div',
+							{ className: 'row mt' },
+							_react2.default.createElement(
+								'div',
+								{ className: 'col-lg-12' },
+								_react2.default.createElement(
+									'div',
+									{ className: 'content-panel' },
+									_react2.default.createElement(
+										'h4',
+										null,
+										_react2.default.createElement('i', { className: 'fa fa-angle-right' }),
+										' Entities'
+									),
+									_react2.default.createElement('hr', null),
+									_react2.default.createElement(
+										'table',
+										{ className: 'table table-striped table-advance table-hover' },
+										_react2.default.createElement(
+											'thead',
+											null,
+											_react2.default.createElement(
+												'tr',
+												null,
+												_react2.default.createElement(
+													'th',
+													null,
+													_react2.default.createElement('i', { className: 'fa fa-bookmark' }),
+													' id'
+												),
+												_react2.default.createElement(
+													'th',
+													null,
+													_react2.default.createElement('i', { className: 'fa fa-question-circle' }),
+													' Full Name'
+												),
+												_react2.default.createElement(
+													'th',
+													null,
+													_react2.default.createElement('i', { className: 'fa fa-bookmark' }),
+													' EXPA id'
+												),
+												_react2.default.createElement(
+													'th',
+													null,
+													_react2.default.createElement('i', { className: 'fa fa-question-circle' }),
+													' EXPA Name'
+												),
+												_react2.default.createElement(
+													'th',
+													null,
+													_react2.default.createElement('i', { className: 'fa fa-question-circle' }),
+													' URL Name'
+												),
+												_react2.default.createElement('th', null)
+											)
+										),
+										_react2.default.createElement(_EntityList2.default, { entities: this.props.entities,
+											deleteEntity: _EntitiesApi.deleteEntity,
+											updateEntity: _EntitiesApi.updateEntity })
+									)
+								)
+							)
+						)
+					)
+				);
+			}
+		}]);
+
+		return EntitiesContainer;
+	}(_react2.default.Component);
+
+	var mapStateToProps = function mapStateToProps(store) {
+		return {
+			entities: store.entityState.entities
+		};
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(EntitiesContainer);
+
+/***/ },
+/* 305 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.getEntities = getEntities;
+	exports.deleteEntity = deleteEntity;
+	exports.updateEntity = updateEntity;
+	exports.addEntity = addEntity;
+
+	var _axios = __webpack_require__(257);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	var _store = __webpack_require__(243);
+
+	var _store2 = _interopRequireDefault(_store);
+
+	var _Config = __webpack_require__(282);
+
+	var _Config2 = _interopRequireDefault(_Config);
+
+	var _underscore = __webpack_require__(283);
+
+	var _underscore2 = _interopRequireDefault(_underscore);
+
+	var _EntityActions = __webpack_require__(306);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function getEntities() {
+		return _axios2.default.get(_Config2.default.serverUrl + 'entities/', {
+			headers: {
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
+			} }).then(function (response) {
+			window.hideLoadingSpinner();
+			_store2.default.dispatch((0, _EntityActions.getEntitiesSuccess)(response.data));
+			return response;
+		}).catch(function (response) {
+			//todo ogarnąć errory
+			{
+				data: null;
+			}
+			if (response.data.error.code && response.data.error.title) {
+				if (response.data.error.code == 401) {
+					//todo co się dzieje jeśli 401
+				}
+				window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
+			} else {
+					window.showError(response.status + " " + response.data.error, ""); //method from common-scripts.js
+				}
+
+			window.hideLoadingSpinner();
+			deleteSession();
+			window.location.reload();
+		});
+	}
+
+	function deleteEntity(entityId) {
+		window.showLoadingSpinner();
+		return _axios2.default.delete(_Config2.default.serverUrl + 'entities/' + entityId, {
+			headers: {
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
+			} }).then(function (response) {
+			window.hideLoadingSpinner();
+			_store2.default.dispatch((0, _EntityActions.deleteEntitySuccess)(entityId));
+			return response;
+		}).catch(function (response) {
+			window.hideLoadingSpinner();
+			if (response.data.error.code && response.data.error.title) {
+				window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
+			} else {
+					window.showError(response.status + " " + response.data.error, ""); //method from common-scripts.js
+				}
+		});
+	}
+
+	function updateEntity(entity) {
+		window.showLoadingSpinner();
+		var config = {
+			headers: { 'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken') }
+		};
+		_axios2.default.put(_Config2.default.serverUrl + 'entities/' + entity.id, {
+			name: entity.name,
+			slug: entity.slug,
+			expa_id: entity.expa_id,
+			expa_name: entity.expa_name
+		}, config).then(function (response) {
+			window.hideLoadingSpinner();
+			_store2.default.dispatch((0, _EntityActions.updateEntitySuccess)(response.data));
+			return response;
+		}).catch(function (response) {
+			if (response.data.error.code && response.data.error.title) {
+				window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
+			} else {
+					window.showError(response.status, "Unknown error.");
+					console.log(response.data);
+				}
+			window.hideLoadingSpinner();
+		});
+	}
+
+	function addEntity(entity) {
+		window.showLoadingSpinner();
+		var config = {
+			headers: { 'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken') }
+		};
+		return _axios2.default.post(_Config2.default.serverUrl + 'entities', {
+			name: entity.name,
+			slug: entity.slug,
+			expa_id: entity.expa_id,
+			expa_name: entity.expa_name
+		}, config).then(function (response) {
+			window.hideLoadingSpinner();
+			_store2.default.dispatch((0, _EntityActions.addEntitySuccess)(response.data));
+			return response;
+		}).catch(function (response) {
+			if (response.data.error.code && response.data.error.title) {
+				window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
+			} else {
+					window.showError(response.status + " " + response.data.error, ""); //method from common-scripts.js
+				}
+			window.hideLoadingSpinner();
+		});
+	}
+
+/***/ },
+/* 306 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.getEntitiesSuccess = getEntitiesSuccess;
+	exports.deleteEntitySuccess = deleteEntitySuccess;
+	exports.updateEntitySuccess = updateEntitySuccess;
+	exports.addEntitySuccess = addEntitySuccess;
+
+	var _ActionTypes = __webpack_require__(246);
+
+	var types = _interopRequireWildcard(_ActionTypes);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function getEntitiesSuccess(entities) {
+	  return {
+	    type: types.GET_ENTITIES_SUCCESS,
+	    entities: entities
+	  };
+	}
+
+	function deleteEntitySuccess(entityId) {
+	  return {
+	    type: types.DELETE_ENTITY_SUCCESS,
+	    entityId: entityId
+	  };
+	}
+
+	function updateEntitySuccess(entity) {
+	  return {
+	    type: types.UPDATE_ENTITY_SUCCESS,
+	    entity: entity
+	  };
+	}
+
+	function addEntitySuccess(entity) {
+	  return {
+	    type: types.ADD_ENTITY_SUCCESS,
+	    entity: entity
+	  };
+	}
+
+/***/ },
+/* 307 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _EditEntity = __webpack_require__(308);
+
+	var _EditEntity2 = _interopRequireDefault(_EditEntity);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var EntityList = function (_React$Component) {
+		_inherits(EntityList, _React$Component);
+
+		function EntityList(props) {
+			_classCallCheck(this, EntityList);
+
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(EntityList).call(this, props));
+
+			_this.displayName = 'EntityList';
+			return _this;
+		}
+
+		_createClass(EntityList, [{
+			key: 'render',
+			value: function render() {
+				var _this2 = this;
+
+				return _react2.default.createElement(
+					'tbody',
+					null,
+					this.props.entities.map(function (entity) {
+						return _react2.default.createElement(
+							'tr',
+							{ key: entity.id },
+							_react2.default.createElement(
+								'td',
+								{ id: 'id' },
+								entity.id
+							),
+							_react2.default.createElement(
+								'td',
+								{ id: 'name' },
+								entity.name,
+								' '
+							),
+							_react2.default.createElement(
+								'td',
+								{ id: 'expa-id' },
+								entity.expa_id
+							),
+							_react2.default.createElement(
+								'td',
+								{ id: 'expa-name' },
+								' ',
+								entity.expa_name,
+								' '
+							),
+							_react2.default.createElement(
+								'td',
+								{ id: 'slug' },
+								entity.slug,
+								' '
+							),
+							_react2.default.createElement(
+								'td',
+								null,
+								_react2.default.createElement(
+									'button',
+									{
+										'data-toggle': 'modal', 'data-target': "#editEntityModal-" + entity.id,
+										className: 'btn btn-primary btn-xs edit-entity',
+										id: "edit-entity-" + entity.id },
+									_react2.default.createElement('i', { className: 'fa fa-pencil' })
+								),
+								_react2.default.createElement(
+									'button',
+									{ onClick: _this2.props.deleteEntity.bind(null, entity.id),
+										className: 'btn btn-danger btn-xs delete-entity',
+										id: "delete-entity-" + entity.id },
+									_react2.default.createElement('i', { className: 'fa fa-trash-o ' })
+								),
+								_react2.default.createElement(_EditEntity2.default, { updateEntity: _this2.props.updateEntity,
+									entity: entity })
+							)
+						);
+					})
+				);
+			}
+		}]);
+
+		return EntityList;
+	}(_react2.default.Component);
+
+	exports.default = EntityList;
+
+/***/ },
+/* 308 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var EditEntity = function (_React$Component) {
+		_inherits(EditEntity, _React$Component);
+
+		function EditEntity(props) {
+			_classCallCheck(this, EditEntity);
+
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(EditEntity).call(this, props));
+
+			_this.displayName = 'EditEntity';
+			return _this;
+		}
+
+		_createClass(EditEntity, [{
+			key: 'getQuery',
+			value: function getQuery(e) {
+				e.preventDefault();
+				var entity = {
+					id: this.refs.id.value,
+					expa_id: this.refs.expa_id.value,
+					expa_name: this.refs.expa_name.value,
+					name: this.refs.name.value,
+					slug: this.refs.slug.value
+				};
+				$("#editEntityModal-" + entity.id).modal('toggle');
+				this.props.updateEntity(entity);
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				var _this2 = this;
+
+				return _react2.default.createElement(
+					'div',
+					{ className: 'modal fade',
+						id: "editEntityModal-" + this.props.entity.id,
+						tabindex: '-1',
+						role: 'dialog',
+						'aria-labelledby': 'myModalLabel',
+						'aria-hidden': 'false' },
+					_react2.default.createElement(
+						'div',
+						{ className: 'modal-dialog' },
+						_react2.default.createElement(
+							'div',
+							{ className: 'modal-content' },
+							_react2.default.createElement(
+								'div',
+								{ className: 'modal-header' },
+								_react2.default.createElement(
+									'button',
+									{ type: 'button',
+										className: 'close',
+										'data-dismiss': 'modal',
+										'aria-hidden': 'true' },
+									'×'
+								),
+								_react2.default.createElement(
+									'h4',
+									{ className: 'modal-title', id: 'myModalLabel' },
+									'Edit Local Committee'
+								)
+							),
+							_react2.default.createElement(
+								'div',
+								{ className: 'modal-body' },
+								_react2.default.createElement(
+									'form',
+									{ onSubmit: function onSubmit(e) {
+											return _this2.getQuery(e);
+										},
+										'accept-charset': 'UTF-8',
+										className: 'form-horizontal style-form', id: 'edit-entity' },
+									_react2.default.createElement(
+										'div',
+										null,
+										_react2.default.createElement(
+											'label',
+											{ 'for': 'id' },
+											' ID '
+										),
+										_react2.default.createElement('input', { className: 'form-inline', name: 'id', type: 'number', id: 'id',
+											ref: 'id', disabled: true, defaultValue: this.props.entity.id })
+									),
+									_react2.default.createElement(
+										'div',
+										null,
+										_react2.default.createElement(
+											'label',
+											{ 'for': 'expa_id' },
+											' EXPA ID '
+										),
+										_react2.default.createElement('input', { className: 'form-inline', name: 'expa_id', type: 'number', id: 'expa_id',
+											ref: 'expa_id', defaultValue: this.props.entity.expa_id })
+									),
+									_react2.default.createElement(
+										'div',
+										null,
+										_react2.default.createElement(
+											'label',
+											{ 'for': 'expa_name' },
+											' EXPA Name '
+										),
+										_react2.default.createElement('input', { className: 'form-inline', name: 'expa_name', type: 'text', id: 'expa_name',
+											ref: 'expa_name', defaultValue: this.props.entity.expa_name })
+									),
+									_react2.default.createElement(
+										'div',
+										null,
+										_react2.default.createElement(
+											'label',
+											{ 'for': 'slug' },
+											' URL Name '
+										),
+										_react2.default.createElement('input', { className: 'form-inline', name: 'slug', type: 'text', id: 'slug',
+											ref: 'slug', defaultValue: this.props.entity.slug })
+									),
+									_react2.default.createElement(
+										'div',
+										null,
+										_react2.default.createElement(
+											'label',
+											{ 'for': 'name' },
+											' Full Name '
+										),
+										_react2.default.createElement('input', { className: 'form-inline', name: 'name', type: 'text', id: 'name',
+											ref: 'name', defaultValue: this.props.entity.name })
+									),
+									_react2.default.createElement(
+										'button',
+										{ className: 'btn btn-theme' },
+										'Update'
+									)
+								)
+							),
+							_react2.default.createElement(
+								'div',
+								{ className: 'modal-footer' },
+								_react2.default.createElement(
+									'button',
+									{ type: 'button', className: 'btn btn-default', 'data-dismiss': 'modal' },
+									'Cancel'
+								)
+							)
+						)
+					)
+				);
+			}
+		}]);
+
+		return EditEntity;
+	}(_react2.default.Component);
+
+	exports.default = EditEntity;
+
+/***/ },
+/* 309 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	         value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _axios = __webpack_require__(257);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var AddEntity = function (_React$Component) {
+	         _inherits(AddEntity, _React$Component);
+
+	         function AddEntity() {
+	                  _classCallCheck(this, AddEntity);
+
+	                  return _possibleConstructorReturn(this, Object.getPrototypeOf(AddEntity).apply(this, arguments));
+	         }
+
+	         _createClass(AddEntity, [{
+	                  key: 'getQuery',
+	                  value: function getQuery(e) {
+	                           e.preventDefault();
+	                           var entity = {
+	                                    expa_id: this.refs.expa_id.value,
+	                                    expa_name: this.refs.expa_name.value,
+	                                    name: this.refs.name.value,
+	                                    slug: this.refs.slug.value
+	                           };
+	                           this.refs.expa_id.value = "";
+	                           this.refs.expa_name.value = "";
+	                           this.refs.name.value = "";
+	                           this.refs.slug.value = "";
+
+	                           this.props.addNew(entity);
+	                  }
+	         }, {
+	                  key: 'render',
+	                  value: function render() {
+	                           var _this2 = this;
+
+	                           return _react2.default.createElement(
+	                                    'div',
+	                                    null,
+	                                    _react2.default.createElement(
+	                                             'h4',
+	                                             { className: 'mb' },
+	                                             _react2.default.createElement('i', { className: 'fa fa-angle-right' }),
+	                                             ' Add Entity'
+	                                    ),
+	                                    _react2.default.createElement(
+	                                             'form',
+	                                             { onSubmit: function onSubmit(e) {
+	                                                               return _this2.getQuery(e);
+	                                                      }, 'accept-charset': 'UTF-8', className: 'form-inline', id: 'add-lc' },
+	                                             _react2.default.createElement(
+	                                                      'label',
+	                                                      { 'for': 'expa_id' },
+	                                                      ' EXPA ID '
+	                                             ),
+	                                             _react2.default.createElement('input', { className: 'form-inline', name: 'expa_id', type: 'number', id: 'expa_id',
+	                                                      ref: 'expa_id' }),
+	                                             _react2.default.createElement(
+	                                                      'label',
+	                                                      { 'for': 'expa_name' },
+	                                                      ' EXPA Name '
+	                                             ),
+	                                             _react2.default.createElement('input', { className: 'form-inline', name: 'expa_name', type: 'text', id: 'expa_name',
+	                                                      ref: 'expa_name' }),
+	                                             _react2.default.createElement(
+	                                                      'label',
+	                                                      { 'for': 'slug' },
+	                                                      ' URL Name '
+	                                             ),
+	                                             _react2.default.createElement('input', { className: 'form-inline', name: 'slug', type: 'text', id: 'slug',
+	                                                      ref: 'slug' }),
+	                                             _react2.default.createElement(
+	                                                      'label',
+	                                                      { 'for': 'name' },
+	                                                      ' Full Name '
+	                                             ),
+	                                             _react2.default.createElement('input', { className: 'form-inline', name: 'name', type: 'text', id: 'name',
+	                                                      ref: 'name' }),
+	                                             _react2.default.createElement(
+	                                                      'button',
+	                                                      { className: 'btn btn-theme' },
+	                                                      'Add'
+	                                             )
+	                                    )
+	                           );
+	                  }
+	         }]);
+
+	         return AddEntity;
+	}(_react2.default.Component);
+
+	exports.default = AddEntity;
 
 /***/ }
 /******/ ]);

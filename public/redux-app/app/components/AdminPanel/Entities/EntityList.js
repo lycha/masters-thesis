@@ -14,10 +14,10 @@ class EntityList extends React.Component {
 		        return (
 		          <tr key={entity.id}>
 			          <td id="id">{entity.id}</td>
+			          <td id="name">{entity.name} </td>
 			          <td id="expa-id">{entity.expa_id}</td>
 			          <td id="expa-name"> {entity.expa_name} </td>
 			          <td id="slug">{entity.slug} </td>
-			          <td id="name">{entity.name} </td>
 			          <td>
 			          	<button 
 			          		data-toggle="modal" data-target={"#editEntityModal-"+entity.id}

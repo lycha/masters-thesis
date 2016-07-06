@@ -13,7 +13,7 @@ class SideMenu extends React.Component {
         }
     }
     componentWillMount() {
-    	getEntities()
+    	/*getEntities()
 			.then(function(response){
 				window.hideLoadingSpinner();
 				if (response) {
@@ -21,7 +21,7 @@ class SideMenu extends React.Component {
 				      entities: response.data
 				    })
 				}
-			}.bind(this))
+			}.bind(this))*/
     }
     componentDidMount() {
     	window.startAccordion();

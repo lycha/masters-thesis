@@ -1,0 +1,47 @@
+import React from 'react';
+import store from '../../store';
+import { connect } from 'react-redux';
+import { login } from '../../api/UserApi'
+import LoginForm from './LoginForm'
+import backstretch from 'jquery.backstretch';
+
+class LoginContainer extends React.Component {
+	constructor(props) {
+        super(props);
+		this.login = this.login.bind(this);
+	}
+    componentDidMount(){
+    	if (localStorage.getItem('trackingToolAuthToken')) {
+			this.props.history.pushState(null, '/');
+		}
+		jQuery.backstretch("assets/img/login-bg.jpg", {transitionDuration: 500});
+	}
+
+	login(username, password) {
+		login(username, password).then(function(response){
+			this.props.history.pushState(null, '/');
+		}.bind(this));
+	}
+
+	componentWillUnmount() {
+		jQuery.backstretch('destroy');
+	}
+
+    render() {
+        return (
+        	<div id="login-page">
+		  		<div className="container">
+		  			<LoginForm login={this.login}/>
+		  		</div>
+		  	</div>
+        );
+    }
+}
+
+const mapStateToProps = function(store) {
+  return {
+    token: store.authenticationState.token
+  };
+};
+
+export default connect(mapStateToProps)(LoginContainer);

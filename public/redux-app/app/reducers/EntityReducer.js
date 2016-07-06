@@ -2,7 +2,7 @@ import * as types from '../actions/ActionTypes';
 import _ from 'lodash';
 
 const initialState = {
-  entities: []
+  entities: [] 
 };
 
 const EntityReducer = function(state = initialState, action) {
@@ -10,18 +10,24 @@ const EntityReducer = function(state = initialState, action) {
   switch(action.type) {
 
     case types.GET_ENTITIES_SUCCESS:
-      return Object.assign({}, state, { entities: action.entities });
+      var entities = _.sortBy(action.entities, 'name');
+      return Object.assign({}, state, { entities: entities });
 
     case types.DELETE_ENTITY_SUCCESS:
-      const newData = _.filter(state.entities, entity => entity.id != action.entityId);
-      return Object.assign({}, state, { entities: newData });
+      var newData = _.filter(state.entities, entity => entity.id != action.entityId);
+      var entities = _.sortBy(newData, 'name');
+      return Object.assign({}, state, { entities: entities });
 
     case types.ADD_ENTITY_SUCCESS:
       var newEntity = state.entities.concat([action.entity]);
-      return Object.assign({}, state, { entities: newEntity });
+      var entities = _.sortBy(newEntity, 'name');
+      return Object.assign({}, state, { entities: entities });
 
     case types.UPDATE_ENTITY_SUCCESS:
-      return Object.assign({}, state, { entities: action.entities });
+      var newData = _.filter(state.entities, entity => entity.id != action.entity.id);
+      var newEntities = newData.concat([action.entity]);
+      var entities = _.sortBy(newEntities, 'name');
+      return Object.assign({}, state, { entities: entities });
   }
 
   return state;

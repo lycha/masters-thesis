@@ -3,37 +3,36 @@ import Header from './Header'
 import SideMenu from './SideMenu/SideMenu'
 import Dashboard from './Dashboard'
 import axios from 'axios';
+import store from '../store';
+import { connect } from 'react-redux';
+import { getAuthenticatedUser } from '../api/UserApi'
+import {deleteSession} from '../utils/SessionManager';
 
 class Main extends React.Component {
-    constructor(props) {
+	constructor(props) {
         super(props);
-        this.displayName = 'Main';
-        this.state = {
-        	userRole: '', 
-        }
+		this.logout = this.logout.bind(this);
+	}
+
+	componentDidMount() {
+   	    getAuthenticatedUser();
     }
+
     componentWillMount(){
-		if (!localStorage.getItem('trackingToolAuthToken')) {
-			this.props.history.pushState(null, 'auth/login');
+		if (!localStorage.getItem('trackingToolAuthToken') || 
+				localStorage.getItem('trackingToolAuthToken') == 'undefined') {
+			this.props.history.pushState(null, 'auth/login'); 
 		}
-		axios.get('../../api/v1/authenticate/user',{
-		headers: {
-        	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
-        }})
-		.then((response) => {
-		    this.setState({
-		      userRole: response.data.user.roles[0].slug
-		    });
-		})
-		.catch((response) => { 
-		    console.log(response);
-		});
+	}
+	logout() {
+		deleteSession();
+		this.props.history.pushState(null, 'auth/login');
 	}
     render() {
         return (
 			<section id="container">
-	        	<Header />
-	        	<SideMenu userRole={this.state.userRole}/>
+	        	<Header logout={this.logout}/>
+	        	<SideMenu userRole={this.userRole}/>
           {this.props.children}
 	        </section>
 	        
@@ -41,8 +40,10 @@ class Main extends React.Component {
     }
 }
 
-Main.PropTypes = {
-  history: React.PropTypes.object.isRequired
-}
+const mapStateToProps = function(store) {
+  return {
+    userRole: store.authenticationState.userRole
+  };
+};
 
-export default Main;
+export default connect(mapStateToProps)(Main);

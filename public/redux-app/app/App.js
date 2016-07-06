@@ -8,16 +8,16 @@ import store from './store';
 
 import Main from './components/Main';
 import Home from './components/Home';
-import Login from './components/Login';
+import LoginContainer from './components/Login/LoginContainer';
 import Dashboard from './components/Dashboard';
 import Users from './components/AdminPanel/Users';
 import Products from './components/AdminPanel/Products';
-import EntitiesContainer from './components/AdminPanel/EntitiesContainer';
+import EntitiesContainer from './components/AdminPanel/Entities/EntitiesContainer';
 
 ReactDOM.render (( 
 	<Provider store={store}>
 	  	<Router history={browserHistory} >
-	  		<Route path='auth/login' component={Login} history={history} />
+	  		<Route path='auth/login' component={LoginContainer} history={history} />
 		  	<Route path='/' component={Main} history={history} >
 		    	<Route path='users' component={Users} />
 		    	<Route path='entities' component={EntitiesContainer} />

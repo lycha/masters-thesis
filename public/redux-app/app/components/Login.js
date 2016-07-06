@@ -4,7 +4,6 @@ import backstretch from 'jquery.backstretch';
 import axios from 'axios';
 import {Router, browserHistory} from 'react-router';
 import {createSession} from '../utils/SessionManager';
-import {login} from '../utils/ServerRequests';
 
 class Login extends React.Component {
     constructor(props) {
@@ -51,14 +50,15 @@ class Login extends React.Component {
           return;
         }
 
-        login(email, password)
+        
+        /*login(email, password)
         	.then(function(response){
 				window.hideLoadingSpinner();
 				if (response) {
 					createSession(response.token)
 				    this.redirectOnSuccess();
 				}
-			}.bind(this))
+			}.bind(this))*/
 
         return;
 	}
