@@ -3,14 +3,12 @@ import SettingsMenu from './SettingsMenu';
 import TotalAnalisysMenu from './TotalAnalisysMenu';
 import {getEntities} from '../../utils/ServerRequests';
 import {Link} from 'react-router';
+import EntitiesMenu from './EntitiesMenu';
 
 class SideMenu extends React.Component {
     constructor(props) {
         super(props);
         this.displayName = 'SideMenu';
-        this.state = {
-        	entities: []
-        }
     }
     componentWillMount() {
     	/*getEntities()
@@ -28,20 +26,8 @@ class SideMenu extends React.Component {
     	window.commonScript();
     }
     render() {
-    	var entities = this.state.entities.sort(function(a, b) {
-		    return a.name - b.name;
-		});
-    	entities = entities.map((entity, index)=>{
-			return (
-				<li className="sub-menu" key={index}>
-		              
-					<Link to={entity.slug}>
-						<i className="fa fa-bar-chart-o"></i>
-		                <span>{entity.name}</span>
-					</Link>
-		          </li>
-			)
-		})
+    	/**/
+
         return (
 			<aside>
 			  <div id="sidebar"  className="nav-collapse ">
@@ -50,7 +36,7 @@ class SideMenu extends React.Component {
 			      	  <p className="centered"><a href="#"><img src="../public/assets/img/aiesec_launcher.png" className="img-circle" width="60" /></a></p>
 			      	  <h5 className="centered">AIESEC in Poland</h5>
 			          
-				      <SettingsMenu userRole={this.props.userRole}/>
+				      <SettingsMenu user={this.props.user}/>
 			          
 			          <li className="sub-menu">
 			              <a href="/generate-url" >
@@ -59,8 +45,7 @@ class SideMenu extends React.Component {
 			              </a>
 			          </li>
 			          <TotalAnalisysMenu />
-			          {entities}
-
+			          <EntitiesMenu entities={this.props.entities}/>
 			          <li className="sub-menu">
 			              <a href="javascript:;"  >
 			                  <i className="fa fa-bar-chart-o"></i>
@@ -95,7 +80,4 @@ class SideMenu extends React.Component {
     }
 }
 
-SideMenu.PropTypes = {
-  userRole: React.PropTypes.string.isRequired
-}
 export default SideMenu;

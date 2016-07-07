@@ -13,7 +13,7 @@ const AuthenticationReducer = function(state = initialState, action) {
 	      return Object.assign({}, state, { token: action.token });
 
 	    case types.GET_AUTHENTICATED_USER_SUCCESS:
-	    	return Object.assign({}, state, { token: action.user });
+	    	return Object.assign({}, state, { user: action.user });
 	}
 
   return state;

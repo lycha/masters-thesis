@@ -14,15 +14,17 @@ class SettingsMenu extends React.Component {
                     <span>Settings</span>
                 </a>
                 {function(){
-			        if (this.props.userRole == 'admin') {
-			          return (
-			          	<ul className="sub">
-                            <li><Link to="/users">Users</Link></li>
-                            <li><Link to="/entities">Entities</Link></li>
-                            <li><Link to="/products">Products</Link></li>
-		                    <li><Link to="/account-settings">Account Settings</Link></li>
-		                </ul>
-			          ) 
+			        if (typeof this.props.user.roles !== 'undefined') {
+                        if (this.props.user.roles[0].slug == 'admin') {
+    			          return (
+    			          	<ul className="sub">
+                                <li><Link to="/users">Users</Link></li>
+                                <li><Link to="/entities">Entities</Link></li>
+                                <li><Link to="/products">Products</Link></li>
+    		                    <li><Link to="/account-settings">Account Settings</Link></li>
+    		                </ul>
+    			          ) 
+                        }
 			          } else {
 			          	return (
 				          	<ul className="sub">
@@ -34,10 +36,6 @@ class SettingsMenu extends React.Component {
             </li>
         );
     }
-}
-
-SettingsMenu.PropTypes = {
-  userRole: React.PropTypes.string.isRequired
 }
 
 export default SettingsMenu;

@@ -7,6 +7,7 @@ import store from '../store';
 import { connect } from 'react-redux';
 import { getAuthenticatedUser } from '../api/UserApi'
 import {deleteSession} from '../utils/SessionManager';
+import {getEntities} from '../api/EntitiesApi';
 
 class Main extends React.Component {
 	constructor(props) {
@@ -14,15 +15,13 @@ class Main extends React.Component {
 		this.logout = this.logout.bind(this);
 	}
 
-	componentDidMount() {
-   	    getAuthenticatedUser();
-    }
-
     componentWillMount(){
 		if (!localStorage.getItem('trackingToolAuthToken') || 
 				localStorage.getItem('trackingToolAuthToken') == 'undefined') {
 			this.props.history.pushState(null, 'auth/login'); 
 		}
+   	    getAuthenticatedUser();
+   	    getEntities();
 	}
 	logout() {
 		deleteSession();
@@ -32,7 +31,7 @@ class Main extends React.Component {
         return (
 			<section id="container">
 	        	<Header logout={this.logout}/>
-	        	<SideMenu userRole={this.user}/>
+	        	<SideMenu user={this.props.user} entities={this.props.entities} products={this.props.products} />
           {this.props.children}
 	        </section>
         );
@@ -41,7 +40,9 @@ class Main extends React.Component {
 
 const mapStateToProps = function(store) {
   return {
-    user: store.authenticationState.user
+    user: store.authenticationState.user,
+    entities: store.entityState.entities,
+    products: store.productState.products
   };
 };
 
