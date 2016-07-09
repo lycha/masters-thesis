@@ -2,6 +2,7 @@ import axios from 'axios';
 import store from '../store';
 import Config from 'Config';
 import _ from 'underscore';
+import {deleteSession} from '../utils/SessionManager'
 import { getEntitiesSuccess, deleteEntitySuccess, addEntitySuccess, updateEntitySuccess } from '../actions/EntityActions';
 
 export function getEntities() {
@@ -14,21 +15,13 @@ export function getEntities() {
 			store.dispatch(getEntitiesSuccess(response.data));
 			return response;
 		})
-		.catch((response) => { //todo ogarnąć errory
-			debugger;
-			{data: null}
-			if (response.data.error.code && response.data.error.title) {
-				if (response.data.error.code == 401) {
-					//todo co się dzieje jeśli 401
-				}
-				window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
-			} else {
-				window.showError(response.status + " " + response.data.error, ""); //method from common-scripts.js
+		.catch((response) => {
+			window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			if (response.data.error.code == 401) {
+				deleteSession();
+				window.location.reload();
 			}
-
 			window.hideLoadingSpinner();
-			deleteSession();
-			window.location.reload();
 		});
 }
 
@@ -43,13 +36,13 @@ export function deleteEntity(entityId) {
 			store.dispatch(deleteEntitySuccess(entityId));
 			return response;
 		})
-		.catch((response) => { 
-			window.hideLoadingSpinner();
-			if (response.data.error.code && response.data.error.title) {
-				window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
-			} else {
-				window.showError(response.status + " " + response.data.error, ""); //method from common-scripts.js
+		.catch((response) => {
+			window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			if (response.data.error.code == 401) {
+				deleteSession();
+				window.location.reload();
 			}
+			window.hideLoadingSpinner();
 		});
 }
 
@@ -70,11 +63,10 @@ export function updateEntity(entity) {
 		return response;
 	})
 	.catch((response) => {
-		if (response.data.error.code && response.data.error.title) {
-			window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
-		} else {
-			window.showError(response.status, "Unknown error.");
-			console.log(response.data);
+		window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+		if (response.data.error.code == 401) {
+			deleteSession();
+			window.location.reload();
 		}
 		window.hideLoadingSpinner();
 	});
@@ -97,10 +89,10 @@ export function addEntity(entity) {
 			return response;
 		})
 		.catch((response) => {
-			if (response.data.error.code && response.data.error.title) {
-				window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
-			} else {
-				window.showError(response.status + " " + response.data.error, ""); //method from common-scripts.js
+			window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			if (response.data.error.code == 401) {
+				deleteSession();
+				window.location.reload();
 			}
 			window.hideLoadingSpinner();
 		});

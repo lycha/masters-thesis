@@ -13,10 +13,17 @@ function startAccordion() {
     });
 };
 
-function showError(errorCode, errorMessage) {
+function showError(errorStatus, errorData) {
+    let errorMessage = errorData;
+    if (errorData.title === 'undefined') {
+        errorMessage = errorData.title;
+    }
+    if (errorMessage == 'token_invalid') {
+        errorMessage = errorMessage + " Please log out and try again";
+    }
     $.gritter.add({
             // (string | mandatory) the heading of the notification
-            title: 'Error ' + errorCode,
+            title: 'Error ' + errorStatus,
             // (string | mandatory) the text inside the notification
             text: errorMessage,
             // (string | optional) the image to display on the left

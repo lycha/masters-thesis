@@ -2,6 +2,7 @@ import axios from 'axios';
 import store from '../store';
 import Config from 'Config';
 import _ from 'underscore';
+import {deleteSession} from '../utils/SessionManager'
 import { getProductsSuccess, deleteProductSuccess, updateProductSuccess, addProductSuccess } from '../actions/ProductActions';
 
 export function getProducts() {
@@ -15,20 +16,12 @@ export function getProducts() {
 			store.dispatch(getProductsSuccess(response.data));
 			return response;
 		})
-		.catch((response) => { //todo ogarnąć errory
-	    	debugger;
-			{data: null}
-			if (response.data.error.code && response.data.error.title) {
-				if (response.data.error.code == 401) {
-					//todo co się dzieje jeśli 401
-				}
-				window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
-			} else {
-				window.showError(response.status + " " + response.data.error, ""); //method from common-scripts.js
+		.catch((response) => {
+			window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			if (response.data.error.code == 401) {
+				deleteSession();
+				window.location.reload();
 			}
-
 			window.hideLoadingSpinner();
-			deleteSession();
-			window.location.reload();
 		});
 }

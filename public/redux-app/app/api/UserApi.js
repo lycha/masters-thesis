@@ -3,7 +3,7 @@ import store from '../store';
 import Config from 'Config';
 import _ from 'underscore';
 import { loginSuccess, getAuthenticatedUserSuccess } from '../actions/AuthenticationActions';
-import {createSession} from '../utils/SessionManager';
+import {createSession, deleteSession} from '../utils/SessionManager';
 
 export function login(email, password) {
 	window.showLoadingSpinner();
@@ -18,10 +18,10 @@ export function login(email, password) {
 			return response;
 		})
 		.catch((response) => {
-			if (response.data.error.code && response.data.error.title) {
-				window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
-			} else {
-				window.showError(response.status + " " + response.data.error, ""); //method from common-scripts.js
+			window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			if (response.data.error.code == 401) {
+				deleteSession();
+				window.location.reload();
 			}
 			window.hideLoadingSpinner();
 		});
@@ -38,11 +38,11 @@ export function getAuthenticatedUser() {
 		    store.dispatch(getAuthenticatedUserSuccess(response.data.user));
 			return response;
 		})
-		.catch((response) => { 
-			if (response.data.error.code && response.data.error.title) {
-				window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
-			} else {
-				window.showError(response.status + " " + response.data.error, ""); //method from common-scripts.js
+		.catch((response) => {
+			window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			if (response.data.error.code == 401) {
+				deleteSession();
+				window.location.reload();
 			}
 			window.hideLoadingSpinner();
 		});

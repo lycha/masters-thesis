@@ -66,23 +66,23 @@
 
 	var _Main2 = _interopRequireDefault(_Main);
 
-	var _LoginContainer = __webpack_require__(291);
+	var _LoginContainer = __webpack_require__(292);
 
 	var _LoginContainer2 = _interopRequireDefault(_LoginContainer);
 
-	var _Dashboard = __webpack_require__(277);
+	var _Dashboard = __webpack_require__(278);
 
 	var _Dashboard2 = _interopRequireDefault(_Dashboard);
 
-	var _Users = __webpack_require__(294);
+	var _Users = __webpack_require__(295);
 
 	var _Users2 = _interopRequireDefault(_Users);
 
-	var _Products = __webpack_require__(308);
+	var _Products = __webpack_require__(309);
 
 	var _Products2 = _interopRequireDefault(_Products);
 
-	var _EntitiesContainer = __webpack_require__(309);
+	var _EntitiesContainer = __webpack_require__(310);
 
 	var _EntitiesContainer2 = _interopRequireDefault(_EntitiesContainer);
 
@@ -43065,7 +43065,7 @@
 
 	var _SideMenu2 = _interopRequireDefault(_SideMenu);
 
-	var _Dashboard = __webpack_require__(277);
+	var _Dashboard = __webpack_require__(278);
 
 	var _Dashboard2 = _interopRequireDefault(_Dashboard);
 
@@ -43079,13 +43079,13 @@
 
 	var _reactRedux = __webpack_require__(217);
 
-	var _UserApi = __webpack_require__(283);
+	var _UserApi = __webpack_require__(284);
 
 	var _SessionManager = __webpack_require__(257);
 
-	var _EntitiesApi = __webpack_require__(287);
+	var _EntitiesApi = __webpack_require__(288);
 
-	var _ProductsApi = __webpack_require__(289);
+	var _ProductsApi = __webpack_require__(290);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -44965,7 +44965,7 @@
 
 	var _reactRouter = __webpack_require__(33);
 
-	var _EntitiesProductSubMenu = __webpack_require__(313);
+	var _EntitiesProductSubMenu = __webpack_require__(277);
 
 	var _EntitiesProductSubMenu2 = _interopRequireDefault(_EntitiesProductSubMenu);
 
@@ -45035,6 +45035,64 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(33);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var EntitiesProductSubMenu = function (_React$Component) {
+	    _inherits(EntitiesProductSubMenu, _React$Component);
+
+	    function EntitiesProductSubMenu(props) {
+	        _classCallCheck(this, EntitiesProductSubMenu);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(EntitiesProductSubMenu).call(this, props));
+
+	        _this.displayName = 'EntitiesProductSubMenu';
+	        return _this;
+	    }
+
+	    _createClass(EntitiesProductSubMenu, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'li',
+	                null,
+	                _react2.default.createElement(
+	                    _reactRouter.Link,
+	                    { to: "analysis/" + this.props.entity.slug + "/" + this.props.product.slug },
+	                    'Global Citizen'
+	                )
+	            );
+	        }
+	    }]);
+
+	    return EntitiesProductSubMenu;
+	}(_react2.default.Component);
+
+	exports.default = EntitiesProductSubMenu;
+
+/***/ },
+/* 278 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 
@@ -45044,23 +45102,23 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _ProgramLogo = __webpack_require__(278);
+	var _ProgramLogo = __webpack_require__(279);
 
 	var _ProgramLogo2 = _interopRequireDefault(_ProgramLogo);
 
-	var _GlobalStatistics = __webpack_require__(279);
+	var _GlobalStatistics = __webpack_require__(280);
 
 	var _GlobalStatistics2 = _interopRequireDefault(_GlobalStatistics);
 
-	var _Conversion = __webpack_require__(280);
+	var _Conversion = __webpack_require__(281);
 
 	var _Conversion2 = _interopRequireDefault(_Conversion);
 
-	var _ProductStatistics = __webpack_require__(281);
+	var _ProductStatistics = __webpack_require__(282);
 
 	var _ProductStatistics2 = _interopRequireDefault(_ProductStatistics);
 
-	var _LineChart = __webpack_require__(282);
+	var _LineChart = __webpack_require__(283);
 
 	var _LineChart2 = _interopRequireDefault(_LineChart);
 
@@ -45163,7 +45221,7 @@
 	exports.default = Dashboard;
 
 /***/ },
-/* 278 */
+/* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -45227,7 +45285,7 @@
 	exports.default = ProgramLogo;
 
 /***/ },
-/* 279 */
+/* 280 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -45335,7 +45393,7 @@
 	exports.default = GlobalStatistics;
 
 /***/ },
-/* 280 */
+/* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -45409,7 +45467,7 @@
 	exports.default = Conversion;
 
 /***/ },
-/* 281 */
+/* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -45521,7 +45579,7 @@
 	exports.default = ProductStatistics;
 
 /***/ },
-/* 282 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -45587,7 +45645,7 @@
 	exports.default = LineChart;
 
 /***/ },
-/* 283 */
+/* 284 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -45606,15 +45664,15 @@
 
 	var _store2 = _interopRequireDefault(_store);
 
-	var _Config = __webpack_require__(284);
+	var _Config = __webpack_require__(285);
 
 	var _Config2 = _interopRequireDefault(_Config);
 
-	var _underscore = __webpack_require__(285);
+	var _underscore = __webpack_require__(286);
 
 	var _underscore2 = _interopRequireDefault(_underscore);
 
-	var _AuthenticationActions = __webpack_require__(286);
+	var _AuthenticationActions = __webpack_require__(287);
 
 	var _SessionManager = __webpack_require__(257);
 
@@ -45631,11 +45689,11 @@
 			(0, _SessionManager.createSession)(response.data.token);
 			return response;
 		}).catch(function (response) {
-			if (response.data.error.code && response.data.error.title) {
-				window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
-			} else {
-					window.showError(response.status + " " + response.data.error, ""); //method from common-scripts.js
-				}
+			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			if (response.data.error.code == 401) {
+				(0, _SessionManager.deleteSession)();
+				window.location.reload();
+			}
 			window.hideLoadingSpinner();
 		});
 	}
@@ -45650,23 +45708,23 @@
 			_store2.default.dispatch((0, _AuthenticationActions.getAuthenticatedUserSuccess)(response.data.user));
 			return response;
 		}).catch(function (response) {
-			if (response.data.error.code && response.data.error.title) {
-				window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
-			} else {
-					window.showError(response.status + " " + response.data.error, ""); //method from common-scripts.js
-				}
+			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			if (response.data.error.code == 401) {
+				(0, _SessionManager.deleteSession)();
+				window.location.reload();
+			}
 			window.hideLoadingSpinner();
 		});
 	}
 
 /***/ },
-/* 284 */
+/* 285 */
 /***/ function(module, exports) {
 
 	module.exports = {"serverUrl":"../../api/v1/"};
 
 /***/ },
-/* 285 */
+/* 286 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;//     Underscore.js 1.8.3
@@ -47220,7 +47278,7 @@
 
 
 /***/ },
-/* 286 */
+/* 287 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -47252,7 +47310,7 @@
 	}
 
 /***/ },
-/* 287 */
+/* 288 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -47273,15 +47331,17 @@
 
 	var _store2 = _interopRequireDefault(_store);
 
-	var _Config = __webpack_require__(284);
+	var _Config = __webpack_require__(285);
 
 	var _Config2 = _interopRequireDefault(_Config);
 
-	var _underscore = __webpack_require__(285);
+	var _underscore = __webpack_require__(286);
 
 	var _underscore2 = _interopRequireDefault(_underscore);
 
-	var _EntityActions = __webpack_require__(288);
+	var _SessionManager = __webpack_require__(257);
+
+	var _EntityActions = __webpack_require__(289);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -47294,23 +47354,12 @@
 			_store2.default.dispatch((0, _EntityActions.getEntitiesSuccess)(response.data));
 			return response;
 		}).catch(function (response) {
-			//todo ogarnąć errory
-			debugger;
-			{
-				data: null;
+			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			if (response.data.error.code == 401) {
+				(0, _SessionManager.deleteSession)();
+				window.location.reload();
 			}
-			if (response.data.error.code && response.data.error.title) {
-				if (response.data.error.code == 401) {
-					//todo co się dzieje jeśli 401
-				}
-				window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
-			} else {
-					window.showError(response.status + " " + response.data.error, ""); //method from common-scripts.js
-				}
-
 			window.hideLoadingSpinner();
-			deleteSession();
-			window.location.reload();
 		});
 	}
 
@@ -47324,12 +47373,12 @@
 			_store2.default.dispatch((0, _EntityActions.deleteEntitySuccess)(entityId));
 			return response;
 		}).catch(function (response) {
+			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			if (response.data.error.code == 401) {
+				(0, _SessionManager.deleteSession)();
+				window.location.reload();
+			}
 			window.hideLoadingSpinner();
-			if (response.data.error.code && response.data.error.title) {
-				window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
-			} else {
-					window.showError(response.status + " " + response.data.error, ""); //method from common-scripts.js
-				}
 		});
 	}
 
@@ -47348,12 +47397,11 @@
 			_store2.default.dispatch((0, _EntityActions.updateEntitySuccess)(response.data));
 			return response;
 		}).catch(function (response) {
-			if (response.data.error.code && response.data.error.title) {
-				window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
-			} else {
-					window.showError(response.status, "Unknown error.");
-					console.log(response.data);
-				}
+			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			if (response.data.error.code == 401) {
+				(0, _SessionManager.deleteSession)();
+				window.location.reload();
+			}
 			window.hideLoadingSpinner();
 		});
 	}
@@ -47373,17 +47421,17 @@
 			_store2.default.dispatch((0, _EntityActions.addEntitySuccess)(response.data));
 			return response;
 		}).catch(function (response) {
-			if (response.data.error.code && response.data.error.title) {
-				window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
-			} else {
-					window.showError(response.status + " " + response.data.error, ""); //method from common-scripts.js
-				}
+			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			if (response.data.error.code == 401) {
+				(0, _SessionManager.deleteSession)();
+				window.location.reload();
+			}
 			window.hideLoadingSpinner();
 		});
 	}
 
 /***/ },
-/* 288 */
+/* 289 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -47431,7 +47479,7 @@
 	}
 
 /***/ },
-/* 289 */
+/* 290 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -47449,15 +47497,17 @@
 
 	var _store2 = _interopRequireDefault(_store);
 
-	var _Config = __webpack_require__(284);
+	var _Config = __webpack_require__(285);
 
 	var _Config2 = _interopRequireDefault(_Config);
 
-	var _underscore = __webpack_require__(285);
+	var _underscore = __webpack_require__(286);
 
 	var _underscore2 = _interopRequireDefault(_underscore);
 
-	var _ProductActions = __webpack_require__(290);
+	var _SessionManager = __webpack_require__(257);
+
+	var _ProductActions = __webpack_require__(291);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -47471,28 +47521,17 @@
 			_store2.default.dispatch((0, _ProductActions.getProductsSuccess)(response.data));
 			return response;
 		}).catch(function (response) {
-			//todo ogarnąć errory
-			debugger;
-			{
-				data: null;
+			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			if (response.data.error.code == 401) {
+				(0, _SessionManager.deleteSession)();
+				window.location.reload();
 			}
-			if (response.data.error.code && response.data.error.title) {
-				if (response.data.error.code == 401) {
-					//todo co się dzieje jeśli 401
-				}
-				window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
-			} else {
-					window.showError(response.status + " " + response.data.error, ""); //method from common-scripts.js
-				}
-
 			window.hideLoadingSpinner();
-			deleteSession();
-			window.location.reload();
 		});
 	}
 
 /***/ },
-/* 290 */
+/* 291 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -47540,7 +47579,7 @@
 	}
 
 /***/ },
-/* 291 */
+/* 292 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -47561,13 +47600,13 @@
 
 	var _reactRedux = __webpack_require__(217);
 
-	var _UserApi = __webpack_require__(283);
+	var _UserApi = __webpack_require__(284);
 
-	var _LoginForm = __webpack_require__(292);
+	var _LoginForm = __webpack_require__(293);
 
 	var _LoginForm2 = _interopRequireDefault(_LoginForm);
 
-	var _jquery = __webpack_require__(293);
+	var _jquery = __webpack_require__(294);
 
 	var _jquery2 = _interopRequireDefault(_jquery);
 
@@ -47638,7 +47677,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(LoginContainer);
 
 /***/ },
-/* 292 */
+/* 293 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -47727,7 +47766,7 @@
 	exports.default = LoginForm;
 
 /***/ },
-/* 293 */
+/* 294 */
 /***/ function(module, exports) {
 
 	/*
@@ -49205,7 +49244,7 @@
 
 
 /***/ },
-/* 294 */
+/* 295 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -49220,7 +49259,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _bootstrap = __webpack_require__(295);
+	var _bootstrap = __webpack_require__(296);
 
 	var _bootstrap2 = _interopRequireDefault(_bootstrap);
 
@@ -49440,11 +49479,10 @@
 	exports.default = Users;
 
 /***/ },
-/* 295 */
+/* 296 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// This file is autogenerated via the `commonjs` Grunt task. You can require() this file in a CommonJS environment.
-	__webpack_require__(296)
 	__webpack_require__(297)
 	__webpack_require__(298)
 	__webpack_require__(299)
@@ -49456,9 +49494,10 @@
 	__webpack_require__(305)
 	__webpack_require__(306)
 	__webpack_require__(307)
+	__webpack_require__(308)
 
 /***/ },
-/* 296 */
+/* 297 */
 /***/ function(module, exports) {
 
 	/* ========================================================================
@@ -49523,7 +49562,7 @@
 
 
 /***/ },
-/* 297 */
+/* 298 */
 /***/ function(module, exports) {
 
 	/* ========================================================================
@@ -49623,7 +49662,7 @@
 
 
 /***/ },
-/* 298 */
+/* 299 */
 /***/ function(module, exports) {
 
 	/* ========================================================================
@@ -49749,7 +49788,7 @@
 
 
 /***/ },
-/* 299 */
+/* 300 */
 /***/ function(module, exports) {
 
 	/* ========================================================================
@@ -49992,7 +50031,7 @@
 
 
 /***/ },
-/* 300 */
+/* 301 */
 /***/ function(module, exports) {
 
 	/* ========================================================================
@@ -50209,7 +50248,7 @@
 
 
 /***/ },
-/* 301 */
+/* 302 */
 /***/ function(module, exports) {
 
 	/* ========================================================================
@@ -50380,7 +50419,7 @@
 
 
 /***/ },
-/* 302 */
+/* 303 */
 /***/ function(module, exports) {
 
 	/* ========================================================================
@@ -50723,7 +50762,7 @@
 
 
 /***/ },
-/* 303 */
+/* 304 */
 /***/ function(module, exports) {
 
 	/* ========================================================================
@@ -51243,7 +51282,7 @@
 
 
 /***/ },
-/* 304 */
+/* 305 */
 /***/ function(module, exports) {
 
 	/* ========================================================================
@@ -51357,7 +51396,7 @@
 
 
 /***/ },
-/* 305 */
+/* 306 */
 /***/ function(module, exports) {
 
 	/* ========================================================================
@@ -51535,7 +51574,7 @@
 
 
 /***/ },
-/* 306 */
+/* 307 */
 /***/ function(module, exports) {
 
 	/* ========================================================================
@@ -51696,7 +51735,7 @@
 
 
 /***/ },
-/* 307 */
+/* 308 */
 /***/ function(module, exports) {
 
 	/* ========================================================================
@@ -51864,7 +51903,7 @@
 
 
 /***/ },
-/* 308 */
+/* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52095,7 +52134,7 @@
 	exports.default = Products;
 
 /***/ },
-/* 309 */
+/* 310 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52116,13 +52155,13 @@
 
 	var _reactRedux = __webpack_require__(217);
 
-	var _EntitiesApi = __webpack_require__(287);
+	var _EntitiesApi = __webpack_require__(288);
 
-	var _EntityList = __webpack_require__(310);
+	var _EntityList = __webpack_require__(311);
 
 	var _EntityList2 = _interopRequireDefault(_EntityList);
 
-	var _AddEntity = __webpack_require__(312);
+	var _AddEntity = __webpack_require__(313);
 
 	var _AddEntity2 = _interopRequireDefault(_AddEntity);
 
@@ -52257,7 +52296,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(EntitiesContainer);
 
 /***/ },
-/* 310 */
+/* 311 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52272,7 +52311,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _EditEntity = __webpack_require__(311);
+	var _EditEntity = __webpack_require__(312);
 
 	var _EditEntity2 = _interopRequireDefault(_EditEntity);
 
@@ -52370,7 +52409,7 @@
 	exports.default = EntityList;
 
 /***/ },
-/* 311 */
+/* 312 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52548,7 +52587,7 @@
 	exports.default = EditEntity;
 
 /***/ },
-/* 312 */
+/* 313 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52662,64 +52701,6 @@
 	}(_react2.default.Component);
 
 	exports.default = AddEntity;
-
-/***/ },
-/* 313 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRouter = __webpack_require__(33);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var EntitiesProductSubMenu = function (_React$Component) {
-	    _inherits(EntitiesProductSubMenu, _React$Component);
-
-	    function EntitiesProductSubMenu(props) {
-	        _classCallCheck(this, EntitiesProductSubMenu);
-
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(EntitiesProductSubMenu).call(this, props));
-
-	        _this.displayName = 'EntitiesProductSubMenu';
-	        return _this;
-	    }
-
-	    _createClass(EntitiesProductSubMenu, [{
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement(
-	                'li',
-	                null,
-	                _react2.default.createElement(
-	                    _reactRouter.Link,
-	                    { to: "analysis/" + this.props.entity.slug + "/" + this.props.product.slug },
-	                    'Global Citizen'
-	                )
-	            );
-	        }
-	    }]);
-
-	    return EntitiesProductSubMenu;
-	}(_react2.default.Component);
-
-	exports.default = EntitiesProductSubMenu;
 
 /***/ }
 /******/ ]);
