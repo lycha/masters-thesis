@@ -78,11 +78,11 @@
 
 	var _Users2 = _interopRequireDefault(_Users);
 
-	var _Products = __webpack_require__(309);
+	var _ProductsContainer = __webpack_require__(309);
 
-	var _Products2 = _interopRequireDefault(_Products);
+	var _ProductsContainer2 = _interopRequireDefault(_ProductsContainer);
 
-	var _EntitiesContainer = __webpack_require__(310);
+	var _EntitiesContainer = __webpack_require__(312);
 
 	var _EntitiesContainer2 = _interopRequireDefault(_EntitiesContainer);
 
@@ -100,7 +100,7 @@
 				{ path: '/', component: _Main2.default, history: history },
 				_react2.default.createElement(_reactRouter.Route, { path: 'users', component: _Users2.default }),
 				_react2.default.createElement(_reactRouter.Route, { path: 'entities', component: _EntitiesContainer2.default }),
-				_react2.default.createElement(_reactRouter.Route, { path: 'products', component: _Products2.default }),
+				_react2.default.createElement(_reactRouter.Route, { path: 'products', component: _ProductsContainer2.default }),
 				_react2.default.createElement(_reactRouter.Route, { path: 'analysis/:entity/:product', component: _Dashboard2.default }),
 				_react2.default.createElement(_reactRouter.IndexRoute, { component: _Dashboard2.default })
 			)
@@ -45075,7 +45075,7 @@
 	                _react2.default.createElement(
 	                    _reactRouter.Link,
 	                    { to: "analysis/" + this.props.entity.slug + "/" + this.props.product.slug },
-	                    'Global Citizen'
+	                    this.props.product.name
 	                )
 	            );
 	        }
@@ -47346,6 +47346,7 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function getEntities() {
+		window.showLoadingSpinner();
 		return _axios2.default.get(_Config2.default.serverUrl + 'entities/', {
 			headers: {
 				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
@@ -47488,6 +47489,9 @@
 		value: true
 	});
 	exports.getProducts = getProducts;
+	exports.deleteProduct = deleteProduct;
+	exports.updateProduct = updateProduct;
+	exports.addProduct = addProduct;
 
 	var _axios = __webpack_require__(258);
 
@@ -47519,6 +47523,71 @@
 			} }).then(function (response) {
 			window.hideLoadingSpinner();
 			_store2.default.dispatch((0, _ProductActions.getProductsSuccess)(response.data));
+			return response;
+		}).catch(function (response) {
+			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			if (response.data.error.code == 401) {
+				(0, _SessionManager.deleteSession)();
+				window.location.reload();
+			}
+			window.hideLoadingSpinner();
+		});
+	}
+
+	function deleteProduct(productId) {
+		window.showLoadingSpinner();
+		return _axios2.default.delete(_Config2.default.serverUrl + 'products/' + productId, {
+			headers: {
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
+			} }).then(function (response) {
+			window.hideLoadingSpinner();
+			_store2.default.dispatch((0, _ProductActions.deleteProductSuccess)(productId));
+			return response;
+		}).catch(function (response) {
+			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			if (response.data.error.code == 401) {
+				(0, _SessionManager.deleteSession)();
+				window.location.reload();
+			}
+			window.hideLoadingSpinner();
+		});
+	}
+
+	function updateProduct(product) {
+		window.showLoadingSpinner();
+		var config = {
+			headers: { 'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken') }
+		};
+		_axios2.default.put(_Config2.default.serverUrl + 'products/' + product.id, {
+			name: product.name,
+			slug: product.slug,
+			description: product.description
+		}, config).then(function (response) {
+			window.hideLoadingSpinner();
+			_store2.default.dispatch((0, _ProductActions.updateProductSuccess)(response.data));
+			return response;
+		}).catch(function (response) {
+			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			if (response.data.error.code == 401) {
+				(0, _SessionManager.deleteSession)();
+				window.location.reload();
+			}
+			window.hideLoadingSpinner();
+		});
+	}
+
+	function addProduct(product) {
+		window.showLoadingSpinner();
+		var config = {
+			headers: { 'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken') }
+		};
+		return _axios2.default.post(_Config2.default.serverUrl + 'products', {
+			name: product.name,
+			slug: product.slug,
+			description: product.description
+		}, config).then(function (response) {
+			window.hideLoadingSpinner();
+			_store2.default.dispatch((0, _ProductActions.addProductSuccess)(response.data));
 			return response;
 		}).catch(function (response) {
 			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
@@ -51918,6 +51987,22 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _store = __webpack_require__(243);
+
+	var _store2 = _interopRequireDefault(_store);
+
+	var _reactRedux = __webpack_require__(217);
+
+	var _ProductsApi = __webpack_require__(290);
+
+	var _ProductsList = __webpack_require__(310);
+
+	var _ProductsList2 = _interopRequireDefault(_ProductsList);
+
+	var _AddProduct = __webpack_require__(311);
+
+	var _AddProduct2 = _interopRequireDefault(_AddProduct);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -51926,19 +52011,26 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var Products = function (_React$Component) {
-		_inherits(Products, _React$Component);
+	var ProductsContainer = function (_React$Component) {
+		_inherits(ProductsContainer, _React$Component);
 
-		function Products(props) {
-			_classCallCheck(this, Products);
+		function ProductsContainer() {
+			_classCallCheck(this, ProductsContainer);
 
-			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Products).call(this, props));
-
-			_this.displayName = 'Products';
-			return _this;
+			return _possibleConstructorReturn(this, Object.getPrototypeOf(ProductsContainer).apply(this, arguments));
 		}
 
-		_createClass(Products, [{
+		_createClass(ProductsContainer, [{
+			key: 'componentDidMount',
+			value: function componentDidMount() {
+				(0, _ProductsApi.getProducts)();
+			}
+		}, {
+			key: 'addNew',
+			value: function addNew(product) {
+				(0, _ProductsApi.addProduct)(product);
+			}
+		}, {
 			key: 'render',
 			value: function render() {
 				return _react2.default.createElement(
@@ -51956,17 +52048,7 @@
 								_react2.default.createElement(
 									'div',
 									{ className: 'form-panel' },
-									_react2.default.createElement(
-										'h4',
-										{ className: 'mb' },
-										_react2.default.createElement('i', { className: 'fa fa-angle-right' }),
-										' Add Local Committee'
-									),
-									_react2.default.createElement(
-										'p',
-										null,
-										'add entity field'
-									)
+									_react2.default.createElement(_AddProduct2.default, { addNew: this.addNew, ref: 'child' })
 								)
 							)
 						),
@@ -51983,7 +52065,7 @@
 										'h4',
 										null,
 										_react2.default.createElement('i', { className: 'fa fa-angle-right' }),
-										' Local Committees'
+										' Products'
 									),
 									_react2.default.createElement('hr', null),
 									_react2.default.createElement(
@@ -52004,14 +52086,14 @@
 												_react2.default.createElement(
 													'th',
 													null,
-													_react2.default.createElement('i', { className: 'fa fa-bookmark' }),
-													' EXPA id'
+													_react2.default.createElement('i', { className: 'fa fa-question-circle' }),
+													' Name'
 												),
 												_react2.default.createElement(
 													'th',
 													null,
-													_react2.default.createElement('i', { className: 'fa fa-question-circle' }),
-													' EXPA Name'
+													_react2.default.createElement('i', { className: 'fa fa-bookmark' }),
+													' Description'
 												),
 												_react2.default.createElement(
 													'th',
@@ -52019,106 +52101,12 @@
 													_react2.default.createElement('i', { className: 'fa fa-question-circle' }),
 													' URL Name'
 												),
-												_react2.default.createElement(
-													'th',
-													null,
-													_react2.default.createElement('i', { className: 'fa fa-question-circle' }),
-													' Full Name'
-												),
 												_react2.default.createElement('th', null)
 											)
 										),
-										_react2.default.createElement(
-											'tbody',
-											{ id: 'lc-{{ $lc[\'id\'] }}' },
-											_react2.default.createElement(
-												'tr',
-												null,
-												_react2.default.createElement(
-													'td',
-													{ id: '{{ $lc[\'id\'] }}' },
-													'id'
-												),
-												_react2.default.createElement(
-													'td',
-													{ id: 'expa-id-{{ $lc[\'id\'] }}' },
-													'expa_id'
-												),
-												_react2.default.createElement(
-													'td',
-													{ id: 'expa-name-{{ $lc[\'id\'] }}' },
-													'expa_name'
-												),
-												_react2.default.createElement(
-													'td',
-													{ id: 'url-name-{{ $lc[\'id\'] }}' },
-													'url_name'
-												),
-												_react2.default.createElement(
-													'td',
-													{ id: 'full-name-{{ $lc[\'id\'] }}' },
-													'full_name'
-												),
-												_react2.default.createElement(
-													'td',
-													null,
-													_react2.default.createElement(
-														'button',
-														{ 'data-toggle': 'modal', 'data-target': '#edit-Modal', className: 'btn btn-primary btn-xs edit-lc', id: 'edit-lc-{{ $lc[\'id\'] }}' },
-														_react2.default.createElement('i', { className: 'fa fa-pencil' })
-													),
-													_react2.default.createElement(
-														'button',
-														{ className: 'btn btn-danger btn-xs delete-lc', id: 'delete-lc-{{ $lc[\'id\'] }}' },
-														_react2.default.createElement('i', { className: 'fa fa-trash-o ' })
-													)
-												)
-											)
-										)
-									)
-								)
-							)
-						),
-						_react2.default.createElement(
-							'div',
-							{ className: 'modal fade', id: 'edit-Modal', tabindex: '-1', role: 'dialog', 'aria-labelledby': 'myModalLabel', 'aria-hidden': 'true' },
-							_react2.default.createElement(
-								'div',
-								{ className: 'modal-dialog' },
-								_react2.default.createElement(
-									'div',
-									{ className: 'modal-content' },
-									_react2.default.createElement(
-										'div',
-										{ className: 'modal-header' },
-										_react2.default.createElement(
-											'button',
-											{ type: 'button', className: 'close', 'data-dismiss': 'modal', 'aria-hidden': 'true' },
-											'×'
-										),
-										_react2.default.createElement(
-											'h4',
-											{ className: 'modal-title', id: 'myModalLabel' },
-											'Edit Local Committee'
-										)
-									),
-									_react2.default.createElement(
-										'div',
-										{ className: 'modal-body' },
-										_react2.default.createElement(
-											'p',
-											null,
-											'edit form'
-										)
-									),
-									_react2.default.createElement(
-										'div',
-										{ className: 'modal-footer' },
-										_react2.default.createElement(
-											'button',
-											{ type: 'button', className: 'btn btn-default', 'data-dismiss': 'modal' },
-											'Cancel'
-										)
+										_react2.default.createElement(_ProductsList2.default, { products: this.props.products,
+											deleteProduct: _ProductsApi.deleteProduct,
+											updateProduct: _ProductsApi.updateProduct })
 									)
 								)
 							)
@@ -52128,13 +52116,234 @@
 			}
 		}]);
 
-		return Products;
+		return ProductsContainer;
 	}(_react2.default.Component);
 
-	exports.default = Products;
+	var mapStateToProps = function mapStateToProps(store) {
+		return {
+			products: store.productState.products
+		};
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(ProductsContainer);
 
 /***/ },
 /* 310 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _EditProduct = __webpack_require__(316);
+
+	var _EditProduct2 = _interopRequireDefault(_EditProduct);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ProductsList = function (_React$Component) {
+		_inherits(ProductsList, _React$Component);
+
+		function ProductsList(props) {
+			_classCallCheck(this, ProductsList);
+
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ProductsList).call(this, props));
+
+			_this.displayName = 'ProductsList';
+			return _this;
+		}
+
+		_createClass(ProductsList, [{
+			key: 'render',
+			value: function render() {
+				var _this2 = this;
+
+				return _react2.default.createElement(
+					'tbody',
+					null,
+					this.props.products.map(function (product) {
+						return _react2.default.createElement(
+							'tr',
+							{ key: product.id },
+							_react2.default.createElement(
+								'td',
+								{ id: 'id' },
+								product.id
+							),
+							_react2.default.createElement(
+								'td',
+								{ id: 'name' },
+								product.name,
+								' '
+							),
+							_react2.default.createElement(
+								'td',
+								{ id: 'description' },
+								' ',
+								product.description,
+								' '
+							),
+							_react2.default.createElement(
+								'td',
+								{ id: 'slug' },
+								product.slug,
+								' '
+							),
+							_react2.default.createElement(
+								'td',
+								null,
+								_react2.default.createElement(
+									'button',
+									{
+										'data-toggle': 'modal', 'data-target': "#editProductModal-" + product.id,
+										className: 'btn btn-primary btn-xs edit-product',
+										id: "edit-product-" + product.id },
+									_react2.default.createElement('i', { className: 'fa fa-pencil' })
+								),
+								_react2.default.createElement(
+									'button',
+									{ onClick: _this2.props.deleteProduct.bind(null, product.id),
+										className: 'btn btn-danger btn-xs delete-product',
+										id: "delete-product-" + product.id },
+									_react2.default.createElement('i', { className: 'fa fa-trash-o ' })
+								),
+								_react2.default.createElement(_EditProduct2.default, { updateProduct: _this2.props.updateProduct,
+									product: product })
+							)
+						);
+					})
+				);
+			}
+		}]);
+
+		return ProductsList;
+	}(_react2.default.Component);
+
+	exports.default = ProductsList;
+
+/***/ },
+/* 311 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _axios = __webpack_require__(258);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var AddProduct = function (_React$Component) {
+	  _inherits(AddProduct, _React$Component);
+
+	  function AddProduct() {
+	    _classCallCheck(this, AddProduct);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(AddProduct).apply(this, arguments));
+	  }
+
+	  _createClass(AddProduct, [{
+	    key: 'getQuery',
+	    value: function getQuery(e) {
+	      e.preventDefault();
+	      var product = {
+	        name: this.refs.name.value,
+	        description: this.refs.description.value,
+	        slug: this.refs.slug.value
+	      };
+	      this.refs.name.value = "";
+	      this.refs.description.value = "";
+	      this.refs.slug.value = "";
+
+	      this.props.addNew(product);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'h4',
+	          { className: 'mb' },
+	          _react2.default.createElement('i', { className: 'fa fa-angle-right' }),
+	          ' Add Product'
+	        ),
+	        _react2.default.createElement(
+	          'form',
+	          { onSubmit: function onSubmit(e) {
+	              return _this2.getQuery(e);
+	            }, 'accept-charset': 'UTF-8', className: 'form-inline', id: 'add-lc' },
+	          _react2.default.createElement(
+	            'label',
+	            { 'for': 'name' },
+	            ' Name '
+	          ),
+	          _react2.default.createElement('input', { className: 'form-inline', name: 'name', type: 'text', id: 'name',
+	            ref: 'name' }),
+	          _react2.default.createElement(
+	            'label',
+	            { 'for': 'name' },
+	            ' Description '
+	          ),
+	          _react2.default.createElement('input', { className: 'form-inline', name: 'name', type: 'text', id: 'description',
+	            ref: 'description' }),
+	          _react2.default.createElement(
+	            'label',
+	            { 'for': 'slug' },
+	            ' URL Name '
+	          ),
+	          _react2.default.createElement('input', { className: 'form-inline', name: 'slug', type: 'text', id: 'slug',
+	            ref: 'slug' }),
+	          _react2.default.createElement(
+	            'button',
+	            { className: 'btn btn-theme' },
+	            'Add'
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return AddProduct;
+	}(_react2.default.Component);
+
+	exports.default = AddProduct;
+
+/***/ },
+/* 312 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52157,11 +52366,11 @@
 
 	var _EntitiesApi = __webpack_require__(288);
 
-	var _EntityList = __webpack_require__(311);
+	var _EntityList = __webpack_require__(313);
 
 	var _EntityList2 = _interopRequireDefault(_EntityList);
 
-	var _AddEntity = __webpack_require__(313);
+	var _AddEntity = __webpack_require__(315);
 
 	var _AddEntity2 = _interopRequireDefault(_AddEntity);
 
@@ -52296,7 +52505,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(EntitiesContainer);
 
 /***/ },
-/* 311 */
+/* 313 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52311,7 +52520,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _EditEntity = __webpack_require__(312);
+	var _EditEntity = __webpack_require__(314);
 
 	var _EditEntity2 = _interopRequireDefault(_EditEntity);
 
@@ -52409,7 +52618,7 @@
 	exports.default = EntityList;
 
 /***/ },
-/* 312 */
+/* 314 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52587,7 +52796,7 @@
 	exports.default = EditEntity;
 
 /***/ },
-/* 313 */
+/* 315 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52701,6 +52910,172 @@
 	}(_react2.default.Component);
 
 	exports.default = AddEntity;
+
+/***/ },
+/* 316 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var EditProduct = function (_React$Component) {
+		_inherits(EditProduct, _React$Component);
+
+		function EditProduct(props) {
+			_classCallCheck(this, EditProduct);
+
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(EditProduct).call(this, props));
+
+			_this.displayName = 'EditProduct';
+			return _this;
+		}
+
+		_createClass(EditProduct, [{
+			key: 'getQuery',
+			value: function getQuery(e) {
+				e.preventDefault();
+				var product = {
+					id: this.refs.id.value,
+					name: this.refs.name.value,
+					description: this.refs.description.value,
+					slug: this.refs.slug.value
+				};
+				$("#editProductModal-" + product.id).modal('toggle');
+				this.props.updateproduct(product);
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				var _this2 = this;
+
+				return _react2.default.createElement(
+					'div',
+					{ className: 'modal fade',
+						id: "editProductModal-" + this.props.product.id,
+						tabindex: '-1',
+						role: 'dialog',
+						'aria-labelledby': 'myModalLabel',
+						'aria-hidden': 'false' },
+					_react2.default.createElement(
+						'div',
+						{ className: 'modal-dialog' },
+						_react2.default.createElement(
+							'div',
+							{ className: 'modal-content' },
+							_react2.default.createElement(
+								'div',
+								{ className: 'modal-header' },
+								_react2.default.createElement(
+									'button',
+									{ type: 'button',
+										className: 'close',
+										'data-dismiss': 'modal',
+										'aria-hidden': 'true' },
+									'×'
+								),
+								_react2.default.createElement(
+									'h4',
+									{ className: 'modal-title', id: 'myModalLabel' },
+									'Edit Product'
+								)
+							),
+							_react2.default.createElement(
+								'div',
+								{ className: 'modal-body' },
+								_react2.default.createElement(
+									'form',
+									{ onSubmit: function onSubmit(e) {
+											return _this2.getQuery(e);
+										},
+										'accept-charset': 'UTF-8',
+										className: 'form-horizontal style-form', id: 'edit-product' },
+									_react2.default.createElement(
+										'div',
+										null,
+										_react2.default.createElement(
+											'label',
+											{ 'for': 'id' },
+											' ID '
+										),
+										_react2.default.createElement('input', { className: 'form-inline', name: 'id', type: 'number', id: 'id',
+											ref: 'id', disabled: true, defaultValue: this.props.product.id })
+									),
+									_react2.default.createElement(
+										'div',
+										null,
+										_react2.default.createElement(
+											'label',
+											{ 'for': 'name' },
+											' Name '
+										),
+										_react2.default.createElement('input', { className: 'form-inline', name: 'name', type: 'text', id: 'name',
+											ref: 'name', defaultValue: this.props.product.name })
+									),
+									_react2.default.createElement(
+										'div',
+										null,
+										_react2.default.createElement(
+											'label',
+											{ 'for': 'description' },
+											' Description '
+										),
+										_react2.default.createElement('input', { className: 'form-inline', name: 'description', type: 'text', id: 'description',
+											ref: 'description', defaultValue: this.props.product.description })
+									),
+									_react2.default.createElement(
+										'div',
+										null,
+										_react2.default.createElement(
+											'label',
+											{ 'for': 'slug' },
+											' URL Name '
+										),
+										_react2.default.createElement('input', { className: 'form-inline', name: 'slug', type: 'text', id: 'slug',
+											ref: 'slug', defaultValue: this.props.product.slug })
+									),
+									_react2.default.createElement(
+										'button',
+										{ className: 'btn btn-theme' },
+										'Update'
+									)
+								)
+							),
+							_react2.default.createElement(
+								'div',
+								{ className: 'modal-footer' },
+								_react2.default.createElement(
+									'button',
+									{ type: 'button', className: 'btn btn-default', 'data-dismiss': 'modal' },
+									'Cancel'
+								)
+							)
+						)
+					)
+				);
+			}
+		}]);
+
+		return EditProduct;
+	}(_react2.default.Component);
+
+	exports.default = EditProduct;
 
 /***/ }
 /******/ ]);

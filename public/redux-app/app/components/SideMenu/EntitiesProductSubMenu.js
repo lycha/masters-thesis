@@ -9,7 +9,7 @@ class EntitiesProductSubMenu extends React.Component {
     render() {
         return (
         	<li>
-        		<Link to={"analysis/" + this.props.entity.slug + "/" + this.props.product.slug}>Global Citizen</Link>
+        		<Link to={"analysis/" + this.props.entity.slug + "/" + this.props.product.slug}>{this.props.product.name}</Link>
         	</li>
         );
     }

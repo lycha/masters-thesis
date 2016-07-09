@@ -10,7 +10,7 @@ import Main from './components/Main';
 import LoginContainer from './components/Login/LoginContainer';
 import Dashboard from './components/Dashboard';
 import Users from './components/AdminPanel/Users';
-import Products from './components/AdminPanel/Products';
+import ProductsContainer from './components/AdminPanel/Products/ProductsContainer';
 import EntitiesContainer from './components/AdminPanel/Entities/EntitiesContainer';
 
 ReactDOM.render (( 
@@ -20,7 +20,7 @@ ReactDOM.render ((
 		  	<Route path='/' component={Main} history={history} >
 		    	<Route path='users' component={Users} />
 		    	<Route path='entities' component={EntitiesContainer} />
-		    	<Route path='products' component={Products} />
+		    	<Route path='products' component={ProductsContainer} />
 		    	<Route path='analysis/:entity/:product' component={Dashboard} />
 		    	<IndexRoute component={Dashboard} />
 		  	</Route>

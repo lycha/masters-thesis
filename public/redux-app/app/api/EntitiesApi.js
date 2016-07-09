@@ -6,6 +6,7 @@ import {deleteSession} from '../utils/SessionManager'
 import { getEntitiesSuccess, deleteEntitySuccess, addEntitySuccess, updateEntitySuccess } from '../actions/EntityActions';
 
 export function getEntities() {
+	window.showLoadingSpinner();
   	return axios.get(Config.serverUrl+'entities/',{
 		headers: {
 	    	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
