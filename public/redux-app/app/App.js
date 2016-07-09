@@ -9,7 +9,7 @@ import store from './store';
 import Main from './components/Main';
 import LoginContainer from './components/Login/LoginContainer';
 import Dashboard from './components/Dashboard';
-import Users from './components/AdminPanel/Users';
+import UsersContainer from './components/AdminPanel/Users/UsersContainer';
 import ProductsContainer from './components/AdminPanel/Products/ProductsContainer';
 import EntitiesContainer from './components/AdminPanel/Entities/EntitiesContainer';
 
@@ -18,7 +18,7 @@ ReactDOM.render ((
 	  	<Router history={browserHistory} >
 	  		<Route path='auth/login' component={LoginContainer} history={history} />
 		  	<Route path='/' component={Main} history={history} >
-		    	<Route path='users' component={Users} />
+		    	<Route path='users' component={UsersContainer} />
 		    	<Route path='entities' component={EntitiesContainer} />
 		    	<Route path='products' component={ProductsContainer} />
 		    	<Route path='analysis/:entity/:product' component={Dashboard} />

@@ -47,3 +47,19 @@ export function getAuthenticatedUser() {
 			window.hideLoadingSpinner();
 		});
 }
+
+export function getUsersSuccess(){
+
+}
+
+export function deleteUserSuccess(){
+
+}
+
+export function updateUserSuccess(){
+
+}
+
+export function addUserSuccess(){
+
+}
