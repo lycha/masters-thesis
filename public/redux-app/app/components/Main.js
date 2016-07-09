@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { getAuthenticatedUser } from '../api/UserApi'
 import {deleteSession} from '../utils/SessionManager';
 import {getEntities} from '../api/EntitiesApi';
+import {getProducts} from '../api/ProductsApi';
 
 class Main extends React.Component {
 	constructor(props) {
@@ -21,7 +22,11 @@ class Main extends React.Component {
 			this.props.history.pushState(null, 'auth/login'); 
 		}
    	    getAuthenticatedUser();
-   	    getEntities();
+   	    getEntities()
+   	    	.then(response => {
+        		window.startAccordion();
+		});
+   	    getProducts(); 
 	}
 	logout() {
 		deleteSession();

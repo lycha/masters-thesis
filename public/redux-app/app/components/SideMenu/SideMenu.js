@@ -10,24 +10,10 @@ class SideMenu extends React.Component {
         super(props);
         this.displayName = 'SideMenu';
     }
-    componentWillMount() {
-    	/*getEntities()
-			.then(function(response){
-				window.hideLoadingSpinner();
-				if (response) {
-					this.setState({
-				      entities: response.data
-				    })
-				}
-			}.bind(this))*/
-    }
     componentDidMount() {
-    	window.startAccordion();
     	window.commonScript();
     }
     render() {
-    	/**/
-
         return (
 			<aside>
 			  <div id="sidebar"  className="nav-collapse ">
@@ -45,7 +31,12 @@ class SideMenu extends React.Component {
 			              </a>
 			          </li>
 			          <TotalAnalisysMenu />
-			          <EntitiesMenu entities={this.props.entities}/>
+			          {this.props.entities.map((entity, index)=>{
+							return (
+								<EntitiesMenu entity={entity} products={this.props.products} key={index} />
+							)
+		    			})}
+
 			          <li className="sub-menu">
 			              <a href="javascript:;"  >
 			                  <i className="fa fa-bar-chart-o"></i>
@@ -79,5 +70,4 @@ class SideMenu extends React.Component {
         );
     }
 }
-
 export default SideMenu;

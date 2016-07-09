@@ -15,6 +15,7 @@ export function getEntities() {
 			return response;
 		})
 		.catch((response) => { //todo ogarnąć errory
+			debugger;
 			{data: null}
 			if (response.data.error.code && response.data.error.title) {
 				if (response.data.error.code == 401) {

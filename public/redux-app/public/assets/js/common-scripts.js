@@ -2,7 +2,7 @@
 function startAccordion() {
     $('#nav-accordion').dcAccordion({
         eventType: 'click',
-        autoClose: true,
+        autoClose: false,
         saveState: true,
         disableLink: true,
         speed: 'slow',
@@ -37,7 +37,10 @@ function hideLoadingSpinner(errorCode, errorMessage) {
 };
 
 function commonScript () {
+
+
 //    sidebar dropdown menu auto scrolling
+
     jQuery('#sidebar .sub-menu > a').click(function () {
         var o = ($(this).offset());
         diff = 250 - o.top;

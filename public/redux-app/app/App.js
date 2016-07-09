@@ -7,7 +7,6 @@ import { Provider } from 'react-redux';
 import store from './store';
 
 import Main from './components/Main';
-import Home from './components/Home';
 import LoginContainer from './components/Login/LoginContainer';
 import Dashboard from './components/Dashboard';
 import Users from './components/AdminPanel/Users';

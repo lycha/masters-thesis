@@ -62,31 +62,27 @@
 
 	var _store2 = _interopRequireDefault(_store);
 
-	var _Main = __webpack_require__(250);
+	var _Main = __webpack_require__(251);
 
 	var _Main2 = _interopRequireDefault(_Main);
 
-	var _Home = __webpack_require__(286);
-
-	var _Home2 = _interopRequireDefault(_Home);
-
-	var _LoginContainer = __webpack_require__(287);
+	var _LoginContainer = __webpack_require__(291);
 
 	var _LoginContainer2 = _interopRequireDefault(_LoginContainer);
 
-	var _Dashboard = __webpack_require__(276);
+	var _Dashboard = __webpack_require__(277);
 
 	var _Dashboard2 = _interopRequireDefault(_Dashboard);
 
-	var _Users = __webpack_require__(290);
+	var _Users = __webpack_require__(294);
 
 	var _Users2 = _interopRequireDefault(_Users);
 
-	var _Products = __webpack_require__(304);
+	var _Products = __webpack_require__(308);
 
 	var _Products2 = _interopRequireDefault(_Products);
 
-	var _EntitiesContainer = __webpack_require__(305);
+	var _EntitiesContainer = __webpack_require__(309);
 
 	var _EntitiesContainer2 = _interopRequireDefault(_EntitiesContainer);
 
@@ -26403,17 +26399,22 @@
 
 	var _AuthenticationReducer2 = _interopRequireDefault(_AuthenticationReducer);
 
+	var _ProductReducer = __webpack_require__(250);
+
+	var _ProductReducer2 = _interopRequireDefault(_ProductReducer);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	// Combine Reducers
-
-
-	// Reducers
 	var reducers = (0, _redux.combineReducers)({
 		entityState: _EntityReducer2.default,
-		authenticationState: _AuthenticationReducer2.default
+		authenticationState: _AuthenticationReducer2.default,
+		productState: _ProductReducer2.default
 
 	});
+
+	// Reducers
+
 
 	exports.default = reducers;
 
@@ -26498,6 +26499,12 @@
 	//Authentication
 	var LOGIN_SUCCESS = exports.LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 	var GET_AUTHENTICATED_USER_SUCCESS = exports.GET_AUTHENTICATED_USER_SUCCESS = 'GET_AUTHENTICATED_USER_SUCCESS';
+
+	//Products
+	var GET_PRODUCTS_SUCCESS = exports.GET_PRODUCTS_SUCCESS = 'GET_PRODUCTS_SUCCESS';
+	var DELETE_PRODUCT_SUCCESS = exports.DELETE_PRODUCT_SUCCESS = 'DELETE_PRODUCT_SUCCESS';
+	var ADD_PRODUCT_SUCCESS = exports.ADD_PRODUCT_SUCCESS = 'ADD_PRODUCT_SUCCESS';
+	var UPDATE_PRODUCT_SUCCESS = exports.UPDATE_PRODUCT_SUCCESS = 'UPDATE_PRODUCT_SUCCESS';
 
 /***/ },
 /* 247 */
@@ -42978,7 +42985,70 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-		value: true
+	  value: true
+	});
+
+	var _ActionTypes = __webpack_require__(246);
+
+	var types = _interopRequireWildcard(_ActionTypes);
+
+	var _lodash = __webpack_require__(247);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	var initialState = {
+	  products: []
+	};
+
+	var ProductReducer = function ProductReducer() {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? initialState : arguments[0];
+	  var action = arguments[1];
+
+
+	  switch (action.type) {
+
+	    case types.GET_PRODUCTS_SUCCESS:
+	      var products = _lodash2.default.sortBy(action.products, 'name');
+	      return Object.assign({}, state, { products: products });
+
+	    case types.DELETE_PRODUCT_SUCCESS:
+	      var newData = _lodash2.default.filter(state.products, function (product) {
+	        return product.id != action.productId;
+	      });
+	      var products = _lodash2.default.sortBy(newData, 'name');
+	      return Object.assign({}, state, { products: products });
+
+	    case types.ADD_PRODUCT_SUCCESS:
+	      var newProduct = state.products.concat([action.product]);
+	      var products = _lodash2.default.sortBy(newProduct, 'name');
+	      return Object.assign({}, state, { products: products });
+
+	    case types.UPDATE_PRODUCT_SUCCESS:
+	      var newData = _lodash2.default.filter(state.products, function (product) {
+	        return product.id != action.product.id;
+	      });
+	      var newEntities = newData.concat([action.product]);
+	      var products = _lodash2.default.sortBy(newEntities, 'name');
+	      return Object.assign({}, state, { products: products });
+	  }
+
+	  return state;
+	};
+
+	exports.default = ProductReducer;
+
+/***/ },
+/* 251 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -42987,19 +43057,19 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Header = __webpack_require__(251);
+	var _Header = __webpack_require__(252);
 
 	var _Header2 = _interopRequireDefault(_Header);
 
-	var _SideMenu = __webpack_require__(252);
+	var _SideMenu = __webpack_require__(253);
 
 	var _SideMenu2 = _interopRequireDefault(_SideMenu);
 
-	var _Dashboard = __webpack_require__(276);
+	var _Dashboard = __webpack_require__(277);
 
 	var _Dashboard2 = _interopRequireDefault(_Dashboard);
 
-	var _axios = __webpack_require__(257);
+	var _axios = __webpack_require__(258);
 
 	var _axios2 = _interopRequireDefault(_axios);
 
@@ -43009,11 +43079,13 @@
 
 	var _reactRedux = __webpack_require__(217);
 
-	var _UserApi = __webpack_require__(282);
+	var _UserApi = __webpack_require__(283);
 
-	var _SessionManager = __webpack_require__(256);
+	var _SessionManager = __webpack_require__(257);
 
-	var _EntitiesApi = __webpack_require__(306);
+	var _EntitiesApi = __webpack_require__(287);
+
+	var _ProductsApi = __webpack_require__(289);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -43024,60 +43096,63 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var Main = function (_React$Component) {
-		_inherits(Main, _React$Component);
+	  _inherits(Main, _React$Component);
 
-		function Main(props) {
-			_classCallCheck(this, Main);
+	  function Main(props) {
+	    _classCallCheck(this, Main);
 
-			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Main).call(this, props));
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Main).call(this, props));
 
-			_this.logout = _this.logout.bind(_this);
-			return _this;
-		}
+	    _this.logout = _this.logout.bind(_this);
+	    return _this;
+	  }
 
-		_createClass(Main, [{
-			key: 'componentWillMount',
-			value: function componentWillMount() {
-				if (!localStorage.getItem('trackingToolAuthToken') || localStorage.getItem('trackingToolAuthToken') == 'undefined') {
-					this.props.history.pushState(null, 'auth/login');
-				}
-				(0, _UserApi.getAuthenticatedUser)();
-				(0, _EntitiesApi.getEntities)();
-			}
-		}, {
-			key: 'logout',
-			value: function logout() {
-				(0, _SessionManager.deleteSession)();
-				this.props.history.pushState(null, 'auth/login');
-			}
-		}, {
-			key: 'render',
-			value: function render() {
-				return _react2.default.createElement(
-					'section',
-					{ id: 'container' },
-					_react2.default.createElement(_Header2.default, { logout: this.logout }),
-					_react2.default.createElement(_SideMenu2.default, { user: this.props.user, entities: this.props.entities, products: this.props.products }),
-					this.props.children
-				);
-			}
-		}]);
+	  _createClass(Main, [{
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      if (!localStorage.getItem('trackingToolAuthToken') || localStorage.getItem('trackingToolAuthToken') == 'undefined') {
+	        this.props.history.pushState(null, 'auth/login');
+	      }
+	      (0, _UserApi.getAuthenticatedUser)();
+	      (0, _EntitiesApi.getEntities)().then(function (response) {
+	        window.startAccordion();
+	      });
+	      (0, _ProductsApi.getProducts)();
+	    }
+	  }, {
+	    key: 'logout',
+	    value: function logout() {
+	      (0, _SessionManager.deleteSession)();
+	      this.props.history.pushState(null, 'auth/login');
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'section',
+	        { id: 'container' },
+	        _react2.default.createElement(_Header2.default, { logout: this.logout }),
+	        _react2.default.createElement(_SideMenu2.default, { user: this.props.user, entities: this.props.entities, products: this.props.products }),
+	        this.props.children
+	      );
+	    }
+	  }]);
 
-		return Main;
+	  return Main;
 	}(_react2.default.Component);
 
 	var mapStateToProps = function mapStateToProps(store) {
-		return {
-			user: store.authenticationState.user,
-			entities: store.entityState.entities,
-			products: store.productState.products
-		};
+	  return {
+	    user: store.authenticationState.user,
+	    entities: store.entityState.entities,
+	    products: store.productState.products
+	  };
 	};
 
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(Main);
 
 /***/ },
-/* 251 */
+/* 252 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -43169,13 +43244,13 @@
 	exports.default = Header;
 
 /***/ },
-/* 252 */
+/* 253 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-		value: true
+					value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -43184,19 +43259,19 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _SettingsMenu = __webpack_require__(253);
+	var _SettingsMenu = __webpack_require__(254);
 
 	var _SettingsMenu2 = _interopRequireDefault(_SettingsMenu);
 
-	var _TotalAnalisysMenu = __webpack_require__(254);
+	var _TotalAnalisysMenu = __webpack_require__(255);
 
 	var _TotalAnalisysMenu2 = _interopRequireDefault(_TotalAnalisysMenu);
 
-	var _ServerRequests = __webpack_require__(255);
+	var _ServerRequests = __webpack_require__(256);
 
 	var _reactRouter = __webpack_require__(33);
 
-	var _EntitiesMenu = __webpack_require__(275);
+	var _EntitiesMenu = __webpack_require__(276);
 
 	var _EntitiesMenu2 = _interopRequireDefault(_EntitiesMenu);
 
@@ -43209,220 +43284,208 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var SideMenu = function (_React$Component) {
-		_inherits(SideMenu, _React$Component);
+					_inherits(SideMenu, _React$Component);
 
-		function SideMenu(props) {
-			_classCallCheck(this, SideMenu);
+					function SideMenu(props) {
+									_classCallCheck(this, SideMenu);
 
-			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SideMenu).call(this, props));
+									var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SideMenu).call(this, props));
 
-			_this.displayName = 'SideMenu';
-			return _this;
-		}
+									_this.displayName = 'SideMenu';
+									return _this;
+					}
 
-		_createClass(SideMenu, [{
-			key: 'componentWillMount',
-			value: function componentWillMount() {
-				/*getEntities()
-	   .then(function(response){
-	   window.hideLoadingSpinner();
-	   if (response) {
-	   this.setState({
-	        entities: response.data
-	      })
-	   }
-	   }.bind(this))*/
-			}
-		}, {
-			key: 'componentDidMount',
-			value: function componentDidMount() {
-				window.startAccordion();
-				window.commonScript();
-			}
-		}, {
-			key: 'render',
-			value: function render() {
-				/**/
+					_createClass(SideMenu, [{
+									key: 'componentDidMount',
+									value: function componentDidMount() {
+													window.commonScript();
+									}
+					}, {
+									key: 'render',
+									value: function render() {
+													var _this2 = this;
 
-				return _react2.default.createElement(
-					'aside',
-					null,
-					_react2.default.createElement(
-						'div',
-						{ id: 'sidebar', className: 'nav-collapse ' },
-						_react2.default.createElement(
-							'ul',
-							{ className: 'sidebar-menu', id: 'nav-accordion' },
-							_react2.default.createElement(
-								'p',
-								{ className: 'centered' },
-								_react2.default.createElement(
-									'a',
-									{ href: '#' },
-									_react2.default.createElement('img', { src: '../public/assets/img/aiesec_launcher.png', className: 'img-circle', width: '60' })
-								)
-							),
-							_react2.default.createElement(
-								'h5',
-								{ className: 'centered' },
-								'AIESEC in Poland'
-							),
-							_react2.default.createElement(_SettingsMenu2.default, { user: this.props.user }),
-							_react2.default.createElement(
-								'li',
-								{ className: 'sub-menu' },
-								_react2.default.createElement(
-									'a',
-									{ href: '/generate-url' },
-									_react2.default.createElement('i', { className: 'fa fa-bar-chart-o' }),
-									_react2.default.createElement(
-										'span',
-										null,
-										'URL Generator'
-									)
-								)
-							),
-							_react2.default.createElement(_TotalAnalisysMenu2.default, null),
-							_react2.default.createElement(_EntitiesMenu2.default, { entities: this.props.entities }),
-							_react2.default.createElement(
-								'li',
-								{ className: 'sub-menu' },
-								_react2.default.createElement(
-									'a',
-									{ href: 'javascript:;' },
-									_react2.default.createElement('i', { className: 'fa fa-bar-chart-o' }),
-									_react2.default.createElement(
-										'span',
-										null,
-										'MC promo'
-									)
-								),
-								_react2.default.createElement(
-									'ul',
-									{ className: 'sub' },
-									_react2.default.createElement(
-										'li',
-										null,
-										_react2.default.createElement(
-											'a',
-											{ href: '/national/gc' },
-											'Global Citizen'
-										)
-									),
-									_react2.default.createElement(
-										'li',
-										null,
-										_react2.default.createElement(
-											'a',
-											{ href: '/national/gt' },
-											'Global Talents'
-										)
-									),
-									_react2.default.createElement(
-										'li',
-										null,
-										_react2.default.createElement(
-											'a',
-											{ href: '/national/gh' },
-											'Global Host'
-										)
-									),
-									_react2.default.createElement(
-										'li',
-										null,
-										_react2.default.createElement(
-											'a',
-											{ href: '/national/fl' },
-											'Future Leaders'
-										)
-									),
-									_react2.default.createElement(
-										'li',
-										null,
-										_react2.default.createElement(
-											'a',
-											{ href: '/national/au' },
-											'Aiesec University'
-										)
-									)
-								)
-							),
-							_react2.default.createElement(
-								'li',
-								{ className: 'sub-menu' },
-								_react2.default.createElement(
-									'a',
-									{ href: 'javascript:;' },
-									_react2.default.createElement('i', { className: 'fa fa-bar-chart-o' }),
-									_react2.default.createElement(
-										'span',
-										null,
-										'LC'
-									)
-								),
-								_react2.default.createElement(
-									'ul',
-									{ className: 'sub' },
-									_react2.default.createElement(
-										'li',
-										null,
-										_react2.default.createElement(
-											'a',
-											{ href: '/gc' },
-											'Global Citizen'
-										)
-									),
-									_react2.default.createElement(
-										'li',
-										null,
-										_react2.default.createElement(
-											'a',
-											{ href: '/gt' },
-											'Global Talents'
-										)
-									),
-									_react2.default.createElement(
-										'li',
-										null,
-										_react2.default.createElement(
-											'a',
-											{ href: '/gh' },
-											'Global Host'
-										)
-									),
-									_react2.default.createElement(
-										'li',
-										null,
-										_react2.default.createElement(
-											'a',
-											{ href: '/fl' },
-											'Future Leaders'
-										)
-									),
-									_react2.default.createElement(
-										'li',
-										null,
-										_react2.default.createElement(
-											'a',
-											{ href: '/au' },
-											'Aiesec University'
-										)
-									)
-								)
-							)
-						)
-					)
-				);
-			}
-		}]);
+													return _react2.default.createElement(
+																	'aside',
+																	null,
+																	_react2.default.createElement(
+																					'div',
+																					{ id: 'sidebar', className: 'nav-collapse ' },
+																					_react2.default.createElement(
+																									'ul',
+																									{ className: 'sidebar-menu', id: 'nav-accordion' },
+																									_react2.default.createElement(
+																													'p',
+																													{ className: 'centered' },
+																													_react2.default.createElement(
+																																	'a',
+																																	{ href: '#' },
+																																	_react2.default.createElement('img', { src: '../public/assets/img/aiesec_launcher.png', className: 'img-circle', width: '60' })
+																													)
+																									),
+																									_react2.default.createElement(
+																													'h5',
+																													{ className: 'centered' },
+																													'AIESEC in Poland'
+																									),
+																									_react2.default.createElement(_SettingsMenu2.default, { user: this.props.user }),
+																									_react2.default.createElement(
+																													'li',
+																													{ className: 'sub-menu' },
+																													_react2.default.createElement(
+																																	'a',
+																																	{ href: '/generate-url' },
+																																	_react2.default.createElement('i', { className: 'fa fa-bar-chart-o' }),
+																																	_react2.default.createElement(
+																																					'span',
+																																					null,
+																																					'URL Generator'
+																																	)
+																													)
+																									),
+																									_react2.default.createElement(_TotalAnalisysMenu2.default, null),
+																									this.props.entities.map(function (entity, index) {
+																													return _react2.default.createElement(_EntitiesMenu2.default, { entity: entity, products: _this2.props.products, key: index });
+																									}),
+																									_react2.default.createElement(
+																													'li',
+																													{ className: 'sub-menu' },
+																													_react2.default.createElement(
+																																	'a',
+																																	{ href: 'javascript:;' },
+																																	_react2.default.createElement('i', { className: 'fa fa-bar-chart-o' }),
+																																	_react2.default.createElement(
+																																					'span',
+																																					null,
+																																					'MC promo'
+																																	)
+																													),
+																													_react2.default.createElement(
+																																	'ul',
+																																	{ className: 'sub' },
+																																	_react2.default.createElement(
+																																					'li',
+																																					null,
+																																					_react2.default.createElement(
+																																									'a',
+																																									{ href: '/national/gc' },
+																																									'Global Citizen'
+																																					)
+																																	),
+																																	_react2.default.createElement(
+																																					'li',
+																																					null,
+																																					_react2.default.createElement(
+																																									'a',
+																																									{ href: '/national/gt' },
+																																									'Global Talents'
+																																					)
+																																	),
+																																	_react2.default.createElement(
+																																					'li',
+																																					null,
+																																					_react2.default.createElement(
+																																									'a',
+																																									{ href: '/national/gh' },
+																																									'Global Host'
+																																					)
+																																	),
+																																	_react2.default.createElement(
+																																					'li',
+																																					null,
+																																					_react2.default.createElement(
+																																									'a',
+																																									{ href: '/national/fl' },
+																																									'Future Leaders'
+																																					)
+																																	),
+																																	_react2.default.createElement(
+																																					'li',
+																																					null,
+																																					_react2.default.createElement(
+																																									'a',
+																																									{ href: '/national/au' },
+																																									'Aiesec University'
+																																					)
+																																	)
+																													)
+																									),
+																									_react2.default.createElement(
+																													'li',
+																													{ className: 'sub-menu' },
+																													_react2.default.createElement(
+																																	'a',
+																																	{ href: 'javascript:;' },
+																																	_react2.default.createElement('i', { className: 'fa fa-bar-chart-o' }),
+																																	_react2.default.createElement(
+																																					'span',
+																																					null,
+																																					'LC'
+																																	)
+																													),
+																													_react2.default.createElement(
+																																	'ul',
+																																	{ className: 'sub' },
+																																	_react2.default.createElement(
+																																					'li',
+																																					null,
+																																					_react2.default.createElement(
+																																									'a',
+																																									{ href: '/gc' },
+																																									'Global Citizen'
+																																					)
+																																	),
+																																	_react2.default.createElement(
+																																					'li',
+																																					null,
+																																					_react2.default.createElement(
+																																									'a',
+																																									{ href: '/gt' },
+																																									'Global Talents'
+																																					)
+																																	),
+																																	_react2.default.createElement(
+																																					'li',
+																																					null,
+																																					_react2.default.createElement(
+																																									'a',
+																																									{ href: '/gh' },
+																																									'Global Host'
+																																					)
+																																	),
+																																	_react2.default.createElement(
+																																					'li',
+																																					null,
+																																					_react2.default.createElement(
+																																									'a',
+																																									{ href: '/fl' },
+																																									'Future Leaders'
+																																					)
+																																	),
+																																	_react2.default.createElement(
+																																					'li',
+																																					null,
+																																					_react2.default.createElement(
+																																									'a',
+																																									{ href: '/au' },
+																																									'Aiesec University'
+																																					)
+																																	)
+																													)
+																									)
+																					)
+																	)
+													);
+									}
+					}]);
 
-		return SideMenu;
+					return SideMenu;
 	}(_react2.default.Component);
 
 	exports.default = SideMenu;
 
 /***/ },
-/* 253 */
+/* 254 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -43545,7 +43608,7 @@
 	exports.default = SettingsMenu;
 
 /***/ },
-/* 254 */
+/* 255 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -43655,7 +43718,7 @@
 	exports.default = TotalAnalisysMenu;
 
 /***/ },
-/* 255 */
+/* 256 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -43667,13 +43730,13 @@
 
 	var _reactRouter = __webpack_require__(33);
 
-	var _SessionManager = __webpack_require__(256);
+	var _SessionManager = __webpack_require__(257);
 
 	var _SessionManager2 = _interopRequireDefault(_SessionManager);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var axios = __webpack_require__(257);
+	var axios = __webpack_require__(258);
 	function login(email, password) {
 		window.showLoadingSpinner();
 		return axios.post('../../api/v1/authenticate', {
@@ -43692,7 +43755,7 @@
 	}
 
 /***/ },
-/* 256 */
+/* 257 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -43711,25 +43774,25 @@
 	}
 
 /***/ },
-/* 257 */
+/* 258 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(258);
+	module.exports = __webpack_require__(259);
 
 /***/ },
-/* 258 */
+/* 259 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var defaults = __webpack_require__(259);
-	var utils = __webpack_require__(260);
-	var dispatchRequest = __webpack_require__(261);
-	var InterceptorManager = __webpack_require__(270);
-	var isAbsoluteURL = __webpack_require__(271);
-	var combineURLs = __webpack_require__(272);
-	var bind = __webpack_require__(273);
-	var transformData = __webpack_require__(265);
+	var defaults = __webpack_require__(260);
+	var utils = __webpack_require__(261);
+	var dispatchRequest = __webpack_require__(262);
+	var InterceptorManager = __webpack_require__(271);
+	var isAbsoluteURL = __webpack_require__(272);
+	var combineURLs = __webpack_require__(273);
+	var bind = __webpack_require__(274);
+	var transformData = __webpack_require__(266);
 
 	function Axios(defaultConfig) {
 	  this.defaults = utils.merge({}, defaultConfig);
@@ -43814,7 +43877,7 @@
 	axios.all = function all(promises) {
 	  return Promise.all(promises);
 	};
-	axios.spread = __webpack_require__(274);
+	axios.spread = __webpack_require__(275);
 
 	// Provide aliases for supported request methods
 	utils.forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {
@@ -43842,12 +43905,12 @@
 
 
 /***/ },
-/* 259 */
+/* 260 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(260);
+	var utils = __webpack_require__(261);
 
 	var PROTECTION_PREFIX = /^\)\]\}',?\n/;
 	var DEFAULT_CONTENT_TYPE = {
@@ -43914,7 +43977,7 @@
 
 
 /***/ },
-/* 260 */
+/* 261 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -44186,7 +44249,7 @@
 
 
 /***/ },
-/* 261 */
+/* 262 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
@@ -44208,10 +44271,10 @@
 	        adapter = config.adapter;
 	      } else if (typeof XMLHttpRequest !== 'undefined') {
 	        // For browsers use XHR adapter
-	        adapter = __webpack_require__(262);
+	        adapter = __webpack_require__(263);
 	      } else if (typeof process !== 'undefined') {
 	        // For node use HTTP adapter
-	        adapter = __webpack_require__(262);
+	        adapter = __webpack_require__(263);
 	      }
 
 	      if (typeof adapter === 'function') {
@@ -44227,18 +44290,18 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 262 */
+/* 263 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
 
-	var utils = __webpack_require__(260);
-	var buildURL = __webpack_require__(263);
-	var parseHeaders = __webpack_require__(264);
-	var transformData = __webpack_require__(265);
-	var isURLSameOrigin = __webpack_require__(266);
-	var btoa = (typeof window !== 'undefined' && window.btoa) || __webpack_require__(267);
-	var settle = __webpack_require__(268);
+	var utils = __webpack_require__(261);
+	var buildURL = __webpack_require__(264);
+	var parseHeaders = __webpack_require__(265);
+	var transformData = __webpack_require__(266);
+	var isURLSameOrigin = __webpack_require__(267);
+	var btoa = (typeof window !== 'undefined' && window.btoa) || __webpack_require__(268);
+	var settle = __webpack_require__(269);
 
 	module.exports = function xhrAdapter(resolve, reject, config) {
 	  var requestData = config.data;
@@ -44337,7 +44400,7 @@
 	  // This is only done if running in a standard browser environment.
 	  // Specifically not if we're in a web worker, or react-native.
 	  if (utils.isStandardBrowserEnv()) {
-	    var cookies = __webpack_require__(269);
+	    var cookies = __webpack_require__(270);
 
 	    // Add xsrf header
 	    var xsrfValue = config.withCredentials || isURLSameOrigin(config.url) ?
@@ -44398,12 +44461,12 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
 /***/ },
-/* 263 */
+/* 264 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(260);
+	var utils = __webpack_require__(261);
 
 	function encode(val) {
 	  return encodeURIComponent(val).
@@ -44471,12 +44534,12 @@
 
 
 /***/ },
-/* 264 */
+/* 265 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(260);
+	var utils = __webpack_require__(261);
 
 	/**
 	 * Parse headers into an object
@@ -44514,12 +44577,12 @@
 
 
 /***/ },
-/* 265 */
+/* 266 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(260);
+	var utils = __webpack_require__(261);
 
 	/**
 	 * Transform the data for a request or a response
@@ -44540,12 +44603,12 @@
 
 
 /***/ },
-/* 266 */
+/* 267 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(260);
+	var utils = __webpack_require__(261);
 
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -44614,7 +44677,7 @@
 
 
 /***/ },
-/* 267 */
+/* 268 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -44656,7 +44719,7 @@
 
 
 /***/ },
-/* 268 */
+/* 269 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -44680,12 +44743,12 @@
 
 
 /***/ },
-/* 269 */
+/* 270 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(260);
+	var utils = __webpack_require__(261);
 
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -44739,12 +44802,12 @@
 
 
 /***/ },
-/* 270 */
+/* 271 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var utils = __webpack_require__(260);
+	var utils = __webpack_require__(261);
 
 	function InterceptorManager() {
 	  this.handlers = [];
@@ -44797,7 +44860,7 @@
 
 
 /***/ },
-/* 271 */
+/* 272 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -44817,7 +44880,7 @@
 
 
 /***/ },
-/* 272 */
+/* 273 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -44835,7 +44898,7 @@
 
 
 /***/ },
-/* 273 */
+/* 274 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -44852,7 +44915,7 @@
 
 
 /***/ },
-/* 274 */
+/* 275 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -44885,124 +44948,6 @@
 
 
 /***/ },
-/* 275 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _reactRouter = __webpack_require__(33);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var EntitiesMenu = function (_React$Component) {
-		_inherits(EntitiesMenu, _React$Component);
-
-		function EntitiesMenu(props) {
-			_classCallCheck(this, EntitiesMenu);
-
-			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(EntitiesMenu).call(this, props));
-
-			_this.displayName = 'EntitiesMenu';
-			return _this;
-		}
-
-		_createClass(EntitiesMenu, [{
-			key: 'render',
-			value: function render() {
-				/*    	var entities = this.props.entities.sort(function(a, b) {
-	   		    return a.name - b.name;
-	   		});
-	       	entities = entities.map((entity, index)=>{
-	   			return (
-	   				<li className="sub-menu" key={index}>
-	   		              
-	   					<Link to={entity.slug}>
-	   						<i className="fa fa-bar-chart-o"></i>
-	   		                <span>{entity.name}</span>
-	   					</Link>
-	   		          </li>
-	   			)
-	   		});*/
-				return _react2.default.createElement(
-					'div',
-					null,
-					this.props.entities.map(function (entity, index) {
-						return _react2.default.createElement(
-							'li',
-							{ className: 'sub-menu', key: index },
-							_react2.default.createElement(
-								_reactRouter.Link,
-								{ to: entity.slug },
-								_react2.default.createElement('i', { className: 'fa fa-bar-chart-o' }),
-								_react2.default.createElement(
-									'span',
-									null,
-									entity.name
-								)
-							)
-						);
-					})
-				);
-			}
-		}]);
-
-		return EntitiesMenu;
-	}(_react2.default.Component);
-
-	/*return (
-		<tbody>
-	      {this.props.entities.map(entity => {
-	        return (
-	          <tr key={entity.id}>
-		          <td id="id">{entity.id}</td>
-		          <td id="name">{entity.name} </td>
-		          <td id="expa-id">{entity.expa_id}</td>
-		          <td id="expa-name"> {entity.expa_name} </td>
-		          <td id="slug">{entity.slug} </td>
-		          <td>
-		          	<button 
-		          		data-toggle="modal" data-target={"#editEntityModal-"+entity.id}
-		          		className="btn btn-primary btn-xs edit-entity" 
-		          		id={"edit-entity-"+entity.id}>
-		          		<i className="fa fa-pencil"></i>
-		          	</button>
-		            <button onClick={this.props.deleteEntity.bind(null, entity.id)}
-		            	className="btn btn-danger btn-xs delete-entity" 
-		            	id={"delete-entity-"+entity.id}>
-		            	<i className="fa fa-trash-o "></i>
-		            </button>
-
-		          <EditEntity updateEntity={this.props.updateEntity}
-	      			entity={entity} />
-		          </td>
-			    </tr>
-
-	      		
-	        );
-	      })}
-
-		</tbody>
-	  );*/
-
-	exports.default = EntitiesMenu;
-
-/***/ },
 /* 276 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -45018,23 +44963,104 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _ProgramLogo = __webpack_require__(277);
+	var _reactRouter = __webpack_require__(33);
+
+	var _EntitiesProductSubMenu = __webpack_require__(313);
+
+	var _EntitiesProductSubMenu2 = _interopRequireDefault(_EntitiesProductSubMenu);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var EntitiesMenu = function (_React$Component) {
+	  _inherits(EntitiesMenu, _React$Component);
+
+	  function EntitiesMenu(props) {
+	    _classCallCheck(this, EntitiesMenu);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(EntitiesMenu).call(this, props));
+
+	    _this.displayName = 'EntitiesMenu';
+	    return _this;
+	  }
+
+	  _createClass(EntitiesMenu, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {}
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      console.log(this.props.products);
+	      return _react2.default.createElement(
+	        'li',
+	        { className: 'sub-menu dcjq-parent-li' },
+	        _react2.default.createElement(
+	          'a',
+	          { href: 'javascript:;', className: 'dcjq-parent' },
+	          _react2.default.createElement('i', { className: 'fa fa-bar-chart-o' }),
+	          _react2.default.createElement(
+	            'span',
+	            null,
+	            this.props.entity.name
+	          ),
+	          _react2.default.createElement('span', { 'class': 'dcjq-icon' })
+	        ),
+	        this.props.products.map(function (product, index) {
+	          return _react2.default.createElement(
+	            'ul',
+	            { className: 'sub', style: { display: 'none' }, key: index },
+	            _react2.default.createElement(_EntitiesProductSubMenu2.default, { entity: _this2.props.entity, product: product, key: index })
+	          );
+	        })
+	      );
+	    }
+	  }]);
+
+	  return EntitiesMenu;
+	}(_react2.default.Component);
+
+	exports.default = EntitiesMenu;
+
+/***/ },
+/* 277 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _ProgramLogo = __webpack_require__(278);
 
 	var _ProgramLogo2 = _interopRequireDefault(_ProgramLogo);
 
-	var _GlobalStatistics = __webpack_require__(278);
+	var _GlobalStatistics = __webpack_require__(279);
 
 	var _GlobalStatistics2 = _interopRequireDefault(_GlobalStatistics);
 
-	var _Conversion = __webpack_require__(279);
+	var _Conversion = __webpack_require__(280);
 
 	var _Conversion2 = _interopRequireDefault(_Conversion);
 
-	var _ProductStatistics = __webpack_require__(280);
+	var _ProductStatistics = __webpack_require__(281);
 
 	var _ProductStatistics2 = _interopRequireDefault(_ProductStatistics);
 
-	var _LineChart = __webpack_require__(281);
+	var _LineChart = __webpack_require__(282);
 
 	var _LineChart2 = _interopRequireDefault(_LineChart);
 
@@ -45137,7 +45163,7 @@
 	exports.default = Dashboard;
 
 /***/ },
-/* 277 */
+/* 278 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -45201,7 +45227,7 @@
 	exports.default = ProgramLogo;
 
 /***/ },
-/* 278 */
+/* 279 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -45309,7 +45335,7 @@
 	exports.default = GlobalStatistics;
 
 /***/ },
-/* 279 */
+/* 280 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -45383,7 +45409,7 @@
 	exports.default = Conversion;
 
 /***/ },
-/* 280 */
+/* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -45495,7 +45521,7 @@
 	exports.default = ProductStatistics;
 
 /***/ },
-/* 281 */
+/* 282 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -45561,7 +45587,7 @@
 	exports.default = LineChart;
 
 /***/ },
-/* 282 */
+/* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -45572,7 +45598,7 @@
 	exports.login = login;
 	exports.getAuthenticatedUser = getAuthenticatedUser;
 
-	var _axios = __webpack_require__(257);
+	var _axios = __webpack_require__(258);
 
 	var _axios2 = _interopRequireDefault(_axios);
 
@@ -45580,17 +45606,17 @@
 
 	var _store2 = _interopRequireDefault(_store);
 
-	var _Config = __webpack_require__(283);
+	var _Config = __webpack_require__(284);
 
 	var _Config2 = _interopRequireDefault(_Config);
 
-	var _underscore = __webpack_require__(284);
+	var _underscore = __webpack_require__(285);
 
 	var _underscore2 = _interopRequireDefault(_underscore);
 
-	var _AuthenticationActions = __webpack_require__(285);
+	var _AuthenticationActions = __webpack_require__(286);
 
-	var _SessionManager = __webpack_require__(256);
+	var _SessionManager = __webpack_require__(257);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -45634,13 +45660,13 @@
 	}
 
 /***/ },
-/* 283 */
+/* 284 */
 /***/ function(module, exports) {
 
 	module.exports = {"serverUrl":"../../api/v1/"};
 
 /***/ },
-/* 284 */
+/* 285 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;//     Underscore.js 1.8.3
@@ -47194,7 +47220,7 @@
 
 
 /***/ },
-/* 285 */
+/* 286 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -47226,29 +47252,295 @@
 	}
 
 /***/ },
-/* 286 */
+/* 287 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
-	var React = __webpack_require__(1);
-
-	var Home = React.createClass({
-	  displayName: "Home",
-
-	  render: function render() {
-	    return React.createElement(
-	      "h2",
-	      { className: "text-center" },
-	      "Search By Github Username Above"
-	    );
-	  }
+	Object.defineProperty(exports, "__esModule", {
+		value: true
 	});
+	exports.getEntities = getEntities;
+	exports.deleteEntity = deleteEntity;
+	exports.updateEntity = updateEntity;
+	exports.addEntity = addEntity;
 
-	module.exports = Home;
+	var _axios = __webpack_require__(258);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	var _store = __webpack_require__(243);
+
+	var _store2 = _interopRequireDefault(_store);
+
+	var _Config = __webpack_require__(284);
+
+	var _Config2 = _interopRequireDefault(_Config);
+
+	var _underscore = __webpack_require__(285);
+
+	var _underscore2 = _interopRequireDefault(_underscore);
+
+	var _EntityActions = __webpack_require__(288);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function getEntities() {
+		return _axios2.default.get(_Config2.default.serverUrl + 'entities/', {
+			headers: {
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
+			} }).then(function (response) {
+			window.hideLoadingSpinner();
+			_store2.default.dispatch((0, _EntityActions.getEntitiesSuccess)(response.data));
+			return response;
+		}).catch(function (response) {
+			//todo ogarnąć errory
+			debugger;
+			{
+				data: null;
+			}
+			if (response.data.error.code && response.data.error.title) {
+				if (response.data.error.code == 401) {
+					//todo co się dzieje jeśli 401
+				}
+				window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
+			} else {
+					window.showError(response.status + " " + response.data.error, ""); //method from common-scripts.js
+				}
+
+			window.hideLoadingSpinner();
+			deleteSession();
+			window.location.reload();
+		});
+	}
+
+	function deleteEntity(entityId) {
+		window.showLoadingSpinner();
+		return _axios2.default.delete(_Config2.default.serverUrl + 'entities/' + entityId, {
+			headers: {
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
+			} }).then(function (response) {
+			window.hideLoadingSpinner();
+			_store2.default.dispatch((0, _EntityActions.deleteEntitySuccess)(entityId));
+			return response;
+		}).catch(function (response) {
+			window.hideLoadingSpinner();
+			if (response.data.error.code && response.data.error.title) {
+				window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
+			} else {
+					window.showError(response.status + " " + response.data.error, ""); //method from common-scripts.js
+				}
+		});
+	}
+
+	function updateEntity(entity) {
+		window.showLoadingSpinner();
+		var config = {
+			headers: { 'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken') }
+		};
+		_axios2.default.put(_Config2.default.serverUrl + 'entities/' + entity.id, {
+			name: entity.name,
+			slug: entity.slug,
+			expa_id: entity.expa_id,
+			expa_name: entity.expa_name
+		}, config).then(function (response) {
+			window.hideLoadingSpinner();
+			_store2.default.dispatch((0, _EntityActions.updateEntitySuccess)(response.data));
+			return response;
+		}).catch(function (response) {
+			if (response.data.error.code && response.data.error.title) {
+				window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
+			} else {
+					window.showError(response.status, "Unknown error.");
+					console.log(response.data);
+				}
+			window.hideLoadingSpinner();
+		});
+	}
+
+	function addEntity(entity) {
+		window.showLoadingSpinner();
+		var config = {
+			headers: { 'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken') }
+		};
+		return _axios2.default.post(_Config2.default.serverUrl + 'entities', {
+			name: entity.name,
+			slug: entity.slug,
+			expa_id: entity.expa_id,
+			expa_name: entity.expa_name
+		}, config).then(function (response) {
+			window.hideLoadingSpinner();
+			_store2.default.dispatch((0, _EntityActions.addEntitySuccess)(response.data));
+			return response;
+		}).catch(function (response) {
+			if (response.data.error.code && response.data.error.title) {
+				window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
+			} else {
+					window.showError(response.status + " " + response.data.error, ""); //method from common-scripts.js
+				}
+			window.hideLoadingSpinner();
+		});
+	}
 
 /***/ },
-/* 287 */
+/* 288 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.getEntitiesSuccess = getEntitiesSuccess;
+	exports.deleteEntitySuccess = deleteEntitySuccess;
+	exports.updateEntitySuccess = updateEntitySuccess;
+	exports.addEntitySuccess = addEntitySuccess;
+
+	var _ActionTypes = __webpack_require__(246);
+
+	var types = _interopRequireWildcard(_ActionTypes);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function getEntitiesSuccess(entities) {
+	  return {
+	    type: types.GET_ENTITIES_SUCCESS,
+	    entities: entities
+	  };
+	}
+
+	function deleteEntitySuccess(entityId) {
+	  return {
+	    type: types.DELETE_ENTITY_SUCCESS,
+	    entityId: entityId
+	  };
+	}
+
+	function updateEntitySuccess(entity) {
+	  return {
+	    type: types.UPDATE_ENTITY_SUCCESS,
+	    entity: entity
+	  };
+	}
+
+	function addEntitySuccess(entity) {
+	  return {
+	    type: types.ADD_ENTITY_SUCCESS,
+	    entity: entity
+	  };
+	}
+
+/***/ },
+/* 289 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.getProducts = getProducts;
+
+	var _axios = __webpack_require__(258);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	var _store = __webpack_require__(243);
+
+	var _store2 = _interopRequireDefault(_store);
+
+	var _Config = __webpack_require__(284);
+
+	var _Config2 = _interopRequireDefault(_Config);
+
+	var _underscore = __webpack_require__(285);
+
+	var _underscore2 = _interopRequireDefault(_underscore);
+
+	var _ProductActions = __webpack_require__(290);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function getProducts() {
+		window.showLoadingSpinner();
+		return _axios2.default.get(_Config2.default.serverUrl + 'products/', {
+			headers: {
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
+			} }).then(function (response) {
+			window.hideLoadingSpinner();
+			_store2.default.dispatch((0, _ProductActions.getProductsSuccess)(response.data));
+			return response;
+		}).catch(function (response) {
+			//todo ogarnąć errory
+			debugger;
+			{
+				data: null;
+			}
+			if (response.data.error.code && response.data.error.title) {
+				if (response.data.error.code == 401) {
+					//todo co się dzieje jeśli 401
+				}
+				window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
+			} else {
+					window.showError(response.status + " " + response.data.error, ""); //method from common-scripts.js
+				}
+
+			window.hideLoadingSpinner();
+			deleteSession();
+			window.location.reload();
+		});
+	}
+
+/***/ },
+/* 290 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.getProductsSuccess = getProductsSuccess;
+	exports.deleteProductSuccess = deleteProductSuccess;
+	exports.updateProductSuccess = updateProductSuccess;
+	exports.addProductSuccess = addProductSuccess;
+
+	var _ActionTypes = __webpack_require__(246);
+
+	var types = _interopRequireWildcard(_ActionTypes);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function getProductsSuccess(products) {
+	  return {
+	    type: types.GET_PRODUCTS_SUCCESS,
+	    products: products
+	  };
+	}
+
+	function deleteProductSuccess(productId) {
+	  return {
+	    type: types.DELETE_PRODUCT_SUCCESS,
+	    productId: productId
+	  };
+	}
+
+	function updateProductSuccess(product) {
+	  return {
+	    type: types.UPDATE_PRODUCT_SUCCESS,
+	    product: product
+	  };
+	}
+
+	function addProductSuccess(product) {
+	  return {
+	    type: types.ADD_PRODUCT_SUCCESS,
+	    product: product
+	  };
+	}
+
+/***/ },
+/* 291 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -47269,13 +47561,13 @@
 
 	var _reactRedux = __webpack_require__(217);
 
-	var _UserApi = __webpack_require__(282);
+	var _UserApi = __webpack_require__(283);
 
-	var _LoginForm = __webpack_require__(288);
+	var _LoginForm = __webpack_require__(292);
 
 	var _LoginForm2 = _interopRequireDefault(_LoginForm);
 
-	var _jquery = __webpack_require__(289);
+	var _jquery = __webpack_require__(293);
 
 	var _jquery2 = _interopRequireDefault(_jquery);
 
@@ -47346,7 +47638,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(LoginContainer);
 
 /***/ },
-/* 288 */
+/* 292 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -47435,7 +47727,7 @@
 	exports.default = LoginForm;
 
 /***/ },
-/* 289 */
+/* 293 */
 /***/ function(module, exports) {
 
 	/*
@@ -48913,7 +49205,7 @@
 
 
 /***/ },
-/* 290 */
+/* 294 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -48928,7 +49220,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _bootstrap = __webpack_require__(291);
+	var _bootstrap = __webpack_require__(295);
 
 	var _bootstrap2 = _interopRequireDefault(_bootstrap);
 
@@ -49148,14 +49440,10 @@
 	exports.default = Users;
 
 /***/ },
-/* 291 */
+/* 295 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// This file is autogenerated via the `commonjs` Grunt task. You can require() this file in a CommonJS environment.
-	__webpack_require__(292)
-	__webpack_require__(293)
-	__webpack_require__(294)
-	__webpack_require__(295)
 	__webpack_require__(296)
 	__webpack_require__(297)
 	__webpack_require__(298)
@@ -49164,9 +49452,13 @@
 	__webpack_require__(301)
 	__webpack_require__(302)
 	__webpack_require__(303)
+	__webpack_require__(304)
+	__webpack_require__(305)
+	__webpack_require__(306)
+	__webpack_require__(307)
 
 /***/ },
-/* 292 */
+/* 296 */
 /***/ function(module, exports) {
 
 	/* ========================================================================
@@ -49231,7 +49523,7 @@
 
 
 /***/ },
-/* 293 */
+/* 297 */
 /***/ function(module, exports) {
 
 	/* ========================================================================
@@ -49331,7 +49623,7 @@
 
 
 /***/ },
-/* 294 */
+/* 298 */
 /***/ function(module, exports) {
 
 	/* ========================================================================
@@ -49457,7 +49749,7 @@
 
 
 /***/ },
-/* 295 */
+/* 299 */
 /***/ function(module, exports) {
 
 	/* ========================================================================
@@ -49700,7 +49992,7 @@
 
 
 /***/ },
-/* 296 */
+/* 300 */
 /***/ function(module, exports) {
 
 	/* ========================================================================
@@ -49917,7 +50209,7 @@
 
 
 /***/ },
-/* 297 */
+/* 301 */
 /***/ function(module, exports) {
 
 	/* ========================================================================
@@ -50088,7 +50380,7 @@
 
 
 /***/ },
-/* 298 */
+/* 302 */
 /***/ function(module, exports) {
 
 	/* ========================================================================
@@ -50431,7 +50723,7 @@
 
 
 /***/ },
-/* 299 */
+/* 303 */
 /***/ function(module, exports) {
 
 	/* ========================================================================
@@ -50951,7 +51243,7 @@
 
 
 /***/ },
-/* 300 */
+/* 304 */
 /***/ function(module, exports) {
 
 	/* ========================================================================
@@ -51065,7 +51357,7 @@
 
 
 /***/ },
-/* 301 */
+/* 305 */
 /***/ function(module, exports) {
 
 	/* ========================================================================
@@ -51243,7 +51535,7 @@
 
 
 /***/ },
-/* 302 */
+/* 306 */
 /***/ function(module, exports) {
 
 	/* ========================================================================
@@ -51404,7 +51696,7 @@
 
 
 /***/ },
-/* 303 */
+/* 307 */
 /***/ function(module, exports) {
 
 	/* ========================================================================
@@ -51572,7 +51864,7 @@
 
 
 /***/ },
-/* 304 */
+/* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51803,7 +52095,7 @@
 	exports.default = Products;
 
 /***/ },
-/* 305 */
+/* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -51824,13 +52116,13 @@
 
 	var _reactRedux = __webpack_require__(217);
 
-	var _EntitiesApi = __webpack_require__(306);
+	var _EntitiesApi = __webpack_require__(287);
 
-	var _EntityList = __webpack_require__(308);
+	var _EntityList = __webpack_require__(310);
 
 	var _EntityList2 = _interopRequireDefault(_EntityList);
 
-	var _AddEntity = __webpack_require__(310);
+	var _AddEntity = __webpack_require__(312);
 
 	var _AddEntity2 = _interopRequireDefault(_AddEntity);
 
@@ -51965,185 +52257,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(EntitiesContainer);
 
 /***/ },
-/* 306 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-		value: true
-	});
-	exports.getEntities = getEntities;
-	exports.deleteEntity = deleteEntity;
-	exports.updateEntity = updateEntity;
-	exports.addEntity = addEntity;
-
-	var _axios = __webpack_require__(257);
-
-	var _axios2 = _interopRequireDefault(_axios);
-
-	var _store = __webpack_require__(243);
-
-	var _store2 = _interopRequireDefault(_store);
-
-	var _Config = __webpack_require__(283);
-
-	var _Config2 = _interopRequireDefault(_Config);
-
-	var _underscore = __webpack_require__(284);
-
-	var _underscore2 = _interopRequireDefault(_underscore);
-
-	var _EntityActions = __webpack_require__(307);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function getEntities() {
-		return _axios2.default.get(_Config2.default.serverUrl + 'entities/', {
-			headers: {
-				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
-			} }).then(function (response) {
-			window.hideLoadingSpinner();
-			_store2.default.dispatch((0, _EntityActions.getEntitiesSuccess)(response.data));
-			return response;
-		}).catch(function (response) {
-			//todo ogarnąć errory
-			{
-				data: null;
-			}
-			if (response.data.error.code && response.data.error.title) {
-				if (response.data.error.code == 401) {
-					//todo co się dzieje jeśli 401
-				}
-				window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
-			} else {
-					window.showError(response.status + " " + response.data.error, ""); //method from common-scripts.js
-				}
-
-			window.hideLoadingSpinner();
-			deleteSession();
-			window.location.reload();
-		});
-	}
-
-	function deleteEntity(entityId) {
-		window.showLoadingSpinner();
-		return _axios2.default.delete(_Config2.default.serverUrl + 'entities/' + entityId, {
-			headers: {
-				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
-			} }).then(function (response) {
-			window.hideLoadingSpinner();
-			_store2.default.dispatch((0, _EntityActions.deleteEntitySuccess)(entityId));
-			return response;
-		}).catch(function (response) {
-			window.hideLoadingSpinner();
-			if (response.data.error.code && response.data.error.title) {
-				window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
-			} else {
-					window.showError(response.status + " " + response.data.error, ""); //method from common-scripts.js
-				}
-		});
-	}
-
-	function updateEntity(entity) {
-		window.showLoadingSpinner();
-		var config = {
-			headers: { 'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken') }
-		};
-		_axios2.default.put(_Config2.default.serverUrl + 'entities/' + entity.id, {
-			name: entity.name,
-			slug: entity.slug,
-			expa_id: entity.expa_id,
-			expa_name: entity.expa_name
-		}, config).then(function (response) {
-			window.hideLoadingSpinner();
-			_store2.default.dispatch((0, _EntityActions.updateEntitySuccess)(response.data));
-			return response;
-		}).catch(function (response) {
-			if (response.data.error.code && response.data.error.title) {
-				window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
-			} else {
-					window.showError(response.status, "Unknown error.");
-					console.log(response.data);
-				}
-			window.hideLoadingSpinner();
-		});
-	}
-
-	function addEntity(entity) {
-		window.showLoadingSpinner();
-		var config = {
-			headers: { 'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken') }
-		};
-		return _axios2.default.post(_Config2.default.serverUrl + 'entities', {
-			name: entity.name,
-			slug: entity.slug,
-			expa_id: entity.expa_id,
-			expa_name: entity.expa_name
-		}, config).then(function (response) {
-			window.hideLoadingSpinner();
-			_store2.default.dispatch((0, _EntityActions.addEntitySuccess)(response.data));
-			return response;
-		}).catch(function (response) {
-			if (response.data.error.code && response.data.error.title) {
-				window.showError(response.status + " " + response.data.error.code, response.data.error.title); //method from common-scripts.js
-			} else {
-					window.showError(response.status + " " + response.data.error, ""); //method from common-scripts.js
-				}
-			window.hideLoadingSpinner();
-		});
-	}
-
-/***/ },
-/* 307 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.getEntitiesSuccess = getEntitiesSuccess;
-	exports.deleteEntitySuccess = deleteEntitySuccess;
-	exports.updateEntitySuccess = updateEntitySuccess;
-	exports.addEntitySuccess = addEntitySuccess;
-
-	var _ActionTypes = __webpack_require__(246);
-
-	var types = _interopRequireWildcard(_ActionTypes);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	function getEntitiesSuccess(entities) {
-	  return {
-	    type: types.GET_ENTITIES_SUCCESS,
-	    entities: entities
-	  };
-	}
-
-	function deleteEntitySuccess(entityId) {
-	  return {
-	    type: types.DELETE_ENTITY_SUCCESS,
-	    entityId: entityId
-	  };
-	}
-
-	function updateEntitySuccess(entity) {
-	  return {
-	    type: types.UPDATE_ENTITY_SUCCESS,
-	    entity: entity
-	  };
-	}
-
-	function addEntitySuccess(entity) {
-	  return {
-	    type: types.ADD_ENTITY_SUCCESS,
-	    entity: entity
-	  };
-	}
-
-/***/ },
-/* 308 */
+/* 310 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52158,7 +52272,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _EditEntity = __webpack_require__(309);
+	var _EditEntity = __webpack_require__(311);
 
 	var _EditEntity2 = _interopRequireDefault(_EditEntity);
 
@@ -52256,7 +52370,7 @@
 	exports.default = EntityList;
 
 /***/ },
-/* 309 */
+/* 311 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52434,7 +52548,7 @@
 	exports.default = EditEntity;
 
 /***/ },
-/* 310 */
+/* 312 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -52449,7 +52563,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _axios = __webpack_require__(257);
+	var _axios = __webpack_require__(258);
 
 	var _axios2 = _interopRequireDefault(_axios);
 
@@ -52548,6 +52662,64 @@
 	}(_react2.default.Component);
 
 	exports.default = AddEntity;
+
+/***/ },
+/* 313 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(33);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var EntitiesProductSubMenu = function (_React$Component) {
+	    _inherits(EntitiesProductSubMenu, _React$Component);
+
+	    function EntitiesProductSubMenu(props) {
+	        _classCallCheck(this, EntitiesProductSubMenu);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(EntitiesProductSubMenu).call(this, props));
+
+	        _this.displayName = 'EntitiesProductSubMenu';
+	        return _this;
+	    }
+
+	    _createClass(EntitiesProductSubMenu, [{
+	        key: 'render',
+	        value: function render() {
+	            return _react2.default.createElement(
+	                'li',
+	                null,
+	                _react2.default.createElement(
+	                    _reactRouter.Link,
+	                    { to: "analysis/" + this.props.entity.slug + "/" + this.props.product.slug },
+	                    'Global Citizen'
+	                )
+	            );
+	        }
+	    }]);
+
+	    return EntitiesProductSubMenu;
+	}(_react2.default.Component);
+
+	exports.default = EntitiesProductSubMenu;
 
 /***/ }
 /******/ ]);
