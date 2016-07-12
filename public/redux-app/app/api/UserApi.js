@@ -3,6 +3,7 @@ import store from '../store';
 import Config from 'Config';
 import _ from 'underscore';
 import { loginSuccess, getAuthenticatedUserSuccess } from '../actions/AuthenticationActions';
+import { getUsersSuccess } from '../actions/UserActions';
 import {createSession, deleteSession} from '../utils/SessionManager';
 
 export function login(email, password) {
@@ -48,18 +49,37 @@ export function getAuthenticatedUser() {
 		});
 }
 
-export function getUsersSuccess(){
+export function getUsers(){
+	window.showLoadingSpinner();
+  	return axios.get(Config.serverUrl+'users/',{
+		headers: {
+	    	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
+	    }})
+	    .then(response => {
+	    	debugger;
+			window.hideLoadingSpinner();
+			store.dispatch(getUsersSuccess(response.data));
+			return response;
+		})
+		.catch((response) => {
+			debugger;
+			window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			if (response.data.error.code == 401) {
+				deleteSession();
+				window.location.reload();
+			}
+			window.hideLoadingSpinner();
+		});
+}
+
+export function deleteUser(){
 
 }
 
-export function deleteUserSuccess(){
+export function updateUser(){
 
 }
 
-export function updateUserSuccess(){
-
-}
-
-export function addUserSuccess(){
+export function addUser(){
 
 }

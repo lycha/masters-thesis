@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { login } from '../../api/UserApi'
 import LoginForm from './LoginForm'
 import backstretch from 'jquery.backstretch';
+import jwtDecode from 'jwt-decode';
 
 class LoginContainer extends React.Component {
 	constructor(props) {
@@ -11,9 +12,6 @@ class LoginContainer extends React.Component {
 		this.login = this.login.bind(this);
 	}
     componentDidMount(){
-    	if (localStorage.getItem('trackingToolAuthToken')) {
-			this.props.history.pushState(null, '/');
-		}
 		jQuery.backstretch("assets/img/login-bg.jpg", {transitionDuration: 500});
 	}
 

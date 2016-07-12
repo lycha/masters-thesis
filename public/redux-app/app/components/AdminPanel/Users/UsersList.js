@@ -16,7 +16,7 @@ class UsersList extends React.Component {
 			          <td id="name">{user.name} </td>
 			          <td id="email"> {user.email} </td>
 			          <td>
-			            <button onClick={this.props.deleteuser.bind(null, user.id)}
+			            <button onClick={this.props.deleteUser.bind(null, user.id)}
 			            	className="btn btn-danger btn-xs delete-user" 
 			            	id={"delete-user-"+user.id}>
 			            	<i className="fa fa-trash-o "></i>

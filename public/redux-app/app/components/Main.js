@@ -9,6 +9,7 @@ import { getAuthenticatedUser } from '../api/UserApi'
 import {deleteSession} from '../utils/SessionManager';
 import {getEntities} from '../api/EntitiesApi';
 import {getProducts} from '../api/ProductsApi';
+import jwtDecode from 'jwt-decode';
 
 class Main extends React.Component {
 	constructor(props) {
@@ -17,21 +18,28 @@ class Main extends React.Component {
 	}
 
     componentWillMount(){
-		if (!localStorage.getItem('trackingToolAuthToken') || 
-				localStorage.getItem('trackingToolAuthToken') == 'undefined') {
-			this.props.history.pushState(null, 'auth/login'); 
-		}
-   	    getAuthenticatedUser();
-   	    getEntities()
-   	    	.then(response => {
-        		window.startAccordion();
-		});
-   	    getProducts(); 
+    	let currentEpoch = Math.floor(Date.now() / 1000);
+    	let decodedJwt = jwtDecode(localStorage.getItem('trackingToolAuthToken'));
+    	
+		if ((localStorage.getItem('trackingToolAuthToken') || 
+				localStorage.getItem('trackingToolAuthToken') != 'undefined') && 
+					(decodedJwt.exp > currentEpoch)) {
+			getAuthenticatedUser();
+	   	    getEntities()
+	   	    	.then(response => {
+	        		window.startAccordion();
+			});
+	   	    getProducts(); 
+		} else {
+			this.props.history.pushState(null, 'auth/login');
+		}   
 	}
+
 	logout() {
 		deleteSession();
 		this.props.history.pushState(null, 'auth/login');
 	}
+    
     render() {
         return (
 			<section id="container">

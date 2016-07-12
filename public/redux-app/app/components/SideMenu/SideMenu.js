@@ -11,7 +11,7 @@ class SideMenu extends React.Component {
         this.displayName = 'SideMenu';
     }
     componentDidMount() {
-    	window.commonScript();
+    	//window.commonScript();
     }
     render() {
         return (
