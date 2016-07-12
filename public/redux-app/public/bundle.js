@@ -45739,8 +45739,8 @@
 	exports.getAuthenticatedUser = getAuthenticatedUser;
 	exports.getUsers = getUsers;
 	exports.deleteUser = deleteUser;
-	exports.updateUser = updateUser;
 	exports.addUser = addUser;
+	exports.updateUser = updateUser;
 
 	var _axios = __webpack_require__(259);
 
@@ -45811,12 +45811,10 @@
 			headers: {
 				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
 			} }).then(function (response) {
-			debugger;
 			window.hideLoadingSpinner();
 			_store2.default.dispatch((0, _UserActions.getUsersSuccess)(response.data));
 			return response;
 		}).catch(function (response) {
-			debugger;
 			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
 			if (response.data.error.code == 401) {
 				(0, _SessionManager.deleteSession)();
@@ -45826,11 +45824,49 @@
 		});
 	}
 
-	function deleteUser() {}
+	function deleteUser(userId) {
+		window.showLoadingSpinner();
+		return _axios2.default.delete(_Config2.default.serverUrl + 'users/' + userId, {
+			headers: {
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
+			} }).then(function (response) {
+			window.hideLoadingSpinner();
+			_store2.default.dispatch((0, _UserActions.deleteUserSuccess)(userId));
+			return response;
+		}).catch(function (response) {
+			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			if (response.data.error.code == 401) {
+				(0, _SessionManager.deleteSession)();
+				window.location.reload();
+			}
+			window.hideLoadingSpinner();
+		});
+	}
+
+	function addUser(user) {
+		window.showLoadingSpinner();
+		var config = {
+			headers: { 'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken') }
+		};
+		return _axios2.default.post(_Config2.default.serverUrl + 'users', {
+			name: user.name,
+			email: user.email,
+			password: user.password
+		}, config).then(function (response) {
+			window.hideLoadingSpinner();
+			_store2.default.dispatch((0, _UserActions.addUserSuccess)(response.data));
+			return response;
+		}).catch(function (response) {
+			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			if (response.data.error.code == 401) {
+				(0, _SessionManager.deleteSession)();
+				window.location.reload();
+			}
+			window.hideLoadingSpinner();
+		});
+	}
 
 	function updateUser() {}
-
-	function addUser() {}
 
 /***/ },
 /* 286 */
@@ -49738,11 +49774,11 @@
 	            }, 'accept-charset': 'UTF-8', className: 'form-inline', id: 'add-lc' },
 	          _react2.default.createElement(
 	            'label',
-	            { 'for': 'expa_name' },
+	            { 'for': 'name' },
 	            ' Name '
 	          ),
-	          _react2.default.createElement('input', { className: 'form-inline', name: 'expa_name', type: 'text', id: 'expa_name',
-	            ref: 'expa_name' }),
+	          _react2.default.createElement('input', { className: 'form-inline', name: 'name', type: 'text', id: 'name',
+	            ref: 'name' }),
 	          _react2.default.createElement(
 	            'label',
 	            { 'for': 'email' },

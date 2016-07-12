@@ -3,7 +3,7 @@ import store from '../store';
 import Config from 'Config';
 import _ from 'underscore';
 import { loginSuccess, getAuthenticatedUserSuccess } from '../actions/AuthenticationActions';
-import { getUsersSuccess } from '../actions/UserActions';
+import { getUsersSuccess, deleteUserSuccess, addUserSuccess } from '../actions/UserActions';
 import {createSession, deleteSession} from '../utils/SessionManager';
 
 export function login(email, password) {
@@ -56,13 +56,11 @@ export function getUsers(){
 	    	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
 	    }})
 	    .then(response => {
-	    	debugger;
 			window.hideLoadingSpinner();
 			store.dispatch(getUsersSuccess(response.data));
 			return response;
 		})
 		.catch((response) => {
-			debugger;
 			window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
 			if (response.data.error.code == 401) {
 				deleteSession();
@@ -72,14 +70,53 @@ export function getUsers(){
 		});
 }
 
-export function deleteUser(){
+export function deleteUser(userId){
+	window.showLoadingSpinner();
+	return axios.delete(Config.serverUrl+'users/'+userId, {
+		headers: {
+        	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
+        }})
+		.then((response) => {
+			window.hideLoadingSpinner();
+			store.dispatch(deleteUserSuccess(userId));
+			return response;
+		})
+		.catch((response) => {
+			window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			if (response.data.error.code == 401) {
+				deleteSession();
+				window.location.reload();
+			}
+			window.hideLoadingSpinner();
+		});
+}
 
+export function addUser(user){
+	window.showLoadingSpinner();
+	var config = {
+		  headers: {'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')}
+		};
+    return axios.post(Config.serverUrl+'users', {
+		    name: user.name,
+		    email: user.email,
+		    password: user.password
+		}, config)
+		.then((response) => {
+			window.hideLoadingSpinner();
+			store.dispatch(addUserSuccess(response.data));
+			return response;
+		})
+		.catch((response) => {
+			window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			if (response.data.error.code == 401) {
+				deleteSession();
+				window.location.reload();
+			}
+			window.hideLoadingSpinner();
+		});
 }
 
 export function updateUser(){
 
 }
 
-export function addUser(){
-
-}
