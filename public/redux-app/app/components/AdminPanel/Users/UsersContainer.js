@@ -28,7 +28,7 @@ class UsersContainer extends React.Component {
 				<div className="row mt">
 					<div className="col-lg-12">
 	      				<div className="content-panel">
-	      				<h4><i className="fa fa-angle-right"></i> users</h4>
+	      				<h4><i className="fa fa-angle-right"></i> Users</h4>
 					  	<hr />
 					      <table className="table table-striped table-advance table-hover">
 					          <thead>

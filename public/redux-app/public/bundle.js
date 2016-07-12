@@ -49558,7 +49558,7 @@
 																																					'h4',
 																																					null,
 																																					_react2.default.createElement('i', { className: 'fa fa-angle-right' }),
-																																					' users'
+																																					' Users'
 																																	),
 																																	_react2.default.createElement('hr', null),
 																																	_react2.default.createElement(
@@ -49754,6 +49754,12 @@
 	      this.props.addNew(user);
 	    }
 	  }, {
+	    key: 'generatePassword',
+	    value: function generatePassword(e) {
+	      e.preventDefault();
+	      this.refs.password.value = Math.random().toString(36).substr(2, 10);
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _this2 = this;
@@ -49798,6 +49804,13 @@
 	            { className: 'btn btn-theme' },
 	            'Add'
 	          )
+	        ),
+	        _react2.default.createElement(
+	          'button',
+	          { className: 'btn btn-theme', onClick: function onClick(e) {
+	              return _this2.generatePassword(e);
+	            } },
+	          'Generate password'
 	        )
 	      );
 	    }

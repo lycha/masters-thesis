@@ -16,6 +16,12 @@ class AddUser extends React.Component {
 
     this.props.addNew(user);
   }
+  
+  generatePassword(e) {
+    e.preventDefault();
+    this.refs.password.value = Math.random().toString(36).substr(2, 10);
+  }
+
   render() {
       return (
       	<div>
@@ -32,6 +38,8 @@ class AddUser extends React.Component {
 			            		ref="password"/>
             <button className="btn btn-theme" >Add</button>
 	    		</form>
+
+            <button className="btn btn-theme" onClick={(e) => this.generatePassword(e)} >Generate password</button>
       	</div>
       );
   }
