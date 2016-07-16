@@ -9,6 +9,17 @@ Premium: http://www.gridgum.com
 /* Import fonts */
 @import url(http://fonts.googleapis.com/css?family=Ruda:400,700,900);
 
+.full-page-message {
+    width: 100%;
+    color: #000;
+    font-size: 90px;
+    margin-bottom: 30px;
+    margin-top: 50px;
+    display: inline-block;
+    text-align: center;
+    font-weight: 400;
+}
+
 input.form-inline {
     margin: 0 5px 0 5px;
 }

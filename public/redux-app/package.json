@@ -25,6 +25,7 @@
     "lodash": "^4.13.1",
     "query-string": "^4.1.0",
     "react-addons-update": "^15.0.2",
+    "react-forms-builder": "0.0.1",
     "react-redux": "^4.4.5",
     "react-router": "^1.0.1",
     "react-value-link": "^1.0.0",

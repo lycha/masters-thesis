@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { browserHistory } from 'react-router'
-import { Router, Route, Link, IndexRoute } from 'react-router';
+import { Router, Route, Link, IndexRoute, Redirect } from 'react-router';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import store from './store';
@@ -12,6 +12,7 @@ import Dashboard from './components/Dashboard';
 import UsersContainer from './components/AdminPanel/Users/UsersContainer';
 import ProductsContainer from './components/AdminPanel/Products/ProductsContainer';
 import EntitiesContainer from './components/AdminPanel/Entities/EntitiesContainer';
+import Component404 from './components/Component404';
 
 ReactDOM.render (( 
 	<Provider store={store}>
@@ -24,6 +25,8 @@ ReactDOM.render ((
 		    	<Route path='analysis/:entity/:product' component={Dashboard} />
 		    	<IndexRoute component={Dashboard} />
 		  	</Route>
+		  	<Route path='/404' component={Component404} />
+			<Redirect from='*' to='/404' />
 	 	</Router> 
  	</Provider>
 ), document.getElementById('app')); 

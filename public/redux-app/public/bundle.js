@@ -66,7 +66,7 @@
 
 	var _Main2 = _interopRequireDefault(_Main);
 
-	var _LoginContainer = __webpack_require__(293);
+	var _LoginContainer = __webpack_require__(297);
 
 	var _LoginContainer2 = _interopRequireDefault(_LoginContainer);
 
@@ -74,17 +74,21 @@
 
 	var _Dashboard2 = _interopRequireDefault(_Dashboard);
 
-	var _UsersContainer = __webpack_require__(296);
+	var _UsersContainer = __webpack_require__(300);
 
 	var _UsersContainer2 = _interopRequireDefault(_UsersContainer);
 
-	var _ProductsContainer = __webpack_require__(299);
+	var _ProductsContainer = __webpack_require__(303);
 
 	var _ProductsContainer2 = _interopRequireDefault(_ProductsContainer);
 
-	var _EntitiesContainer = __webpack_require__(303);
+	var _EntitiesContainer = __webpack_require__(307);
 
 	var _EntitiesContainer2 = _interopRequireDefault(_EntitiesContainer);
+
+	var _Component = __webpack_require__(312);
+
+	var _Component2 = _interopRequireDefault(_Component);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -103,7 +107,9 @@
 				_react2.default.createElement(_reactRouter.Route, { path: 'products', component: _ProductsContainer2.default }),
 				_react2.default.createElement(_reactRouter.Route, { path: 'analysis/:entity/:product', component: _Dashboard2.default }),
 				_react2.default.createElement(_reactRouter.IndexRoute, { component: _Dashboard2.default })
-			)
+			),
+			_react2.default.createElement(_reactRouter.Route, { path: '/404', component: _Component2.default }),
+			_react2.default.createElement(_reactRouter.Redirect, { from: '*', to: '/404' })
 		)
 	), document.getElementById('app'));
 
@@ -43122,7 +43128,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-			value: true
+		value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -43157,11 +43163,11 @@
 
 	var _SessionManager = __webpack_require__(258);
 
-	var _EntitiesApi = __webpack_require__(289);
+	var _EntitiesApi = __webpack_require__(290);
 
-	var _ProductsApi = __webpack_require__(291);
+	var _ProductsApi = __webpack_require__(292);
 
-	var _jwtDecode = __webpack_require__(307);
+	var _jwtDecode = __webpack_require__(294);
 
 	var _jwtDecode2 = _interopRequireDefault(_jwtDecode);
 
@@ -43174,61 +43180,65 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var Main = function (_React$Component) {
-			_inherits(Main, _React$Component);
+		_inherits(Main, _React$Component);
 
-			function Main(props) {
-					_classCallCheck(this, Main);
+		function Main(props) {
+			_classCallCheck(this, Main);
 
-					var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Main).call(this, props));
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Main).call(this, props));
 
-					_this.logout = _this.logout.bind(_this);
-					return _this;
+			_this.logout = _this.logout.bind(_this);
+			return _this;
+		}
+
+		_createClass(Main, [{
+			key: 'componentWillMount',
+			value: function componentWillMount() {
+				var currentEpoch = Math.floor(Date.now() / 1000);
+
+				if (localStorage.getItem('trackingToolAuthToken') != null) {
+					var decodedJwt = (0, _jwtDecode2.default)(localStorage.getItem('trackingToolAuthToken'));
+					if (decodedJwt.exp > currentEpoch) {
+						(0, _UserApi.getAuthenticatedUser)();
+						(0, _EntitiesApi.getEntities)().then(function (response) {
+							window.startAccordion();
+						});
+						(0, _ProductsApi.getProducts)();
+					} else {
+						this.props.history.pushState(null, 'auth/login');
+					}
+				} else {
+					this.props.history.pushState(null, 'auth/login');
+				}
 			}
+		}, {
+			key: 'logout',
+			value: function logout() {
+				(0, _SessionManager.deleteSession)();
+				this.props.history.pushState(null, 'auth/login');
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				return _react2.default.createElement(
+					'section',
+					{ id: 'container' },
+					_react2.default.createElement(_Header2.default, { logout: this.logout }),
+					_react2.default.createElement(_SideMenu2.default, { user: this.props.user, entities: this.props.entities, products: this.props.products }),
+					this.props.children
+				);
+			}
+		}]);
 
-			_createClass(Main, [{
-					key: 'componentWillMount',
-					value: function componentWillMount() {
-							var currentEpoch = Math.floor(Date.now() / 1000);
-							var decodedJwt = (0, _jwtDecode2.default)(localStorage.getItem('trackingToolAuthToken'));
-
-							if ((localStorage.getItem('trackingToolAuthToken') || localStorage.getItem('trackingToolAuthToken') != 'undefined') && decodedJwt.exp > currentEpoch) {
-									(0, _UserApi.getAuthenticatedUser)();
-									(0, _EntitiesApi.getEntities)().then(function (response) {
-											window.startAccordion();
-									});
-									(0, _ProductsApi.getProducts)();
-							} else {
-									this.props.history.pushState(null, 'auth/login');
-							}
-					}
-			}, {
-					key: 'logout',
-					value: function logout() {
-							(0, _SessionManager.deleteSession)();
-							this.props.history.pushState(null, 'auth/login');
-					}
-			}, {
-					key: 'render',
-					value: function render() {
-							return _react2.default.createElement(
-									'section',
-									{ id: 'container' },
-									_react2.default.createElement(_Header2.default, { logout: this.logout }),
-									_react2.default.createElement(_SideMenu2.default, { user: this.props.user, entities: this.props.entities, products: this.props.products }),
-									this.props.children
-							);
-					}
-			}]);
-
-			return Main;
+		return Main;
 	}(_react2.default.Component);
 
 	var mapStateToProps = function mapStateToProps(store) {
-			return {
-					user: store.authenticationState.user,
-					entities: store.entityState.entities,
-					products: store.productState.products
-			};
+		return {
+			user: store.authenticationState.user,
+			entities: store.entityState.entities,
+			products: store.productState.products
+		};
 	};
 
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(Main);
@@ -45760,7 +45770,7 @@
 
 	var _AuthenticationActions = __webpack_require__(288);
 
-	var _UserActions = __webpack_require__(310);
+	var _UserActions = __webpack_require__(289);
 
 	var _SessionManager = __webpack_require__(258);
 
@@ -47467,6 +47477,54 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.getUsersSuccess = getUsersSuccess;
+	exports.deleteUserSuccess = deleteUserSuccess;
+	exports.updateUserSuccess = updateUserSuccess;
+	exports.addUserSuccess = addUserSuccess;
+
+	var _ActionTypes = __webpack_require__(246);
+
+	var types = _interopRequireWildcard(_ActionTypes);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function getUsersSuccess(users) {
+	  return {
+	    type: types.GET_USERS_SUCCESS,
+	    users: users
+	  };
+	}
+
+	function deleteUserSuccess(userId) {
+	  return {
+	    type: types.DELETE_USER_SUCCESS,
+	    userId: userId
+	  };
+	}
+
+	function updateUserSuccess(user) {
+	  return {
+	    type: types.ADD_USER_SUCCESS,
+	    user: user
+	  };
+	}
+
+	function addUserSuccess(user) {
+	  return {
+	    type: types.UPDATE_USER_SUCCESS,
+	    user: user
+	  };
+	}
+
+/***/ },
+/* 290 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
 		value: true
 	});
 	exports.getEntities = getEntities;
@@ -47492,7 +47550,7 @@
 
 	var _SessionManager = __webpack_require__(258);
 
-	var _EntityActions = __webpack_require__(290);
+	var _EntityActions = __webpack_require__(291);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -47583,7 +47641,7 @@
 	}
 
 /***/ },
-/* 290 */
+/* 291 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -47631,7 +47689,7 @@
 	}
 
 /***/ },
-/* 291 */
+/* 292 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -47662,7 +47720,7 @@
 
 	var _SessionManager = __webpack_require__(258);
 
-	var _ProductActions = __webpack_require__(292);
+	var _ProductActions = __webpack_require__(293);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -47676,6 +47734,7 @@
 			_store2.default.dispatch((0, _ProductActions.getProductsSuccess)(response.data));
 			return response;
 		}).catch(function (response) {
+			debugger;
 			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
 			if (response.data.error.code == 401) {
 				(0, _SessionManager.deleteSession)();
@@ -47751,7 +47810,7 @@
 	}
 
 /***/ },
-/* 292 */
+/* 293 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -47799,7 +47858,106 @@
 	}
 
 /***/ },
-/* 293 */
+/* 294 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var base64_url_decode = __webpack_require__(295);
+
+	module.exports = function (token) {
+	  if (typeof token !== 'string') {
+	    throw new Error('Invalid token specified');
+	  }
+	  
+	  return JSON.parse(base64_url_decode(token.split('.')[1]));
+	};
+
+
+/***/ },
+/* 295 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var atob = __webpack_require__(296);
+
+	function b64DecodeUnicode(str) {
+	  return decodeURIComponent(atob(str).replace(/(.)/g, function (m, p) {
+	    var code = p.charCodeAt(0).toString(16).toUpperCase();
+	    if (code.length < 2) {
+	      code = '0' + code;
+	    }
+	    return '%' + code;
+	  }));
+	}
+
+	module.exports = function(str) {
+	  var output = str.replace(/-/g, "+").replace(/_/g, "/");
+	  switch (output.length % 4) {
+	    case 0:
+	      break;
+	    case 2:
+	      output += "==";
+	      break;
+	    case 3:
+	      output += "=";
+	      break;
+	    default:
+	      throw "Illegal base64url string!";
+	  }
+
+	  try{
+	    return b64DecodeUnicode(output);
+	  } catch (err) {
+	    return atob(output);
+	  }
+	};
+
+
+/***/ },
+/* 296 */
+/***/ function(module, exports) {
+
+	/**
+	 * The code was extracted from:
+	 * https://github.com/davidchambers/Base64.js
+	 */
+
+	var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+
+	function InvalidCharacterError(message) {
+	  this.message = message;
+	}
+
+	InvalidCharacterError.prototype = new Error();
+	InvalidCharacterError.prototype.name = 'InvalidCharacterError';
+
+	function polyfill (input) {
+	  var str = String(input).replace(/=+$/, '');
+	  if (str.length % 4 == 1) {
+	    throw new InvalidCharacterError("'atob' failed: The string to be decoded is not correctly encoded.");
+	  }
+	  for (
+	    // initialize result and counters
+	    var bc = 0, bs, buffer, idx = 0, output = '';
+	    // get next character
+	    buffer = str.charAt(idx++);
+	    // character found in table? initialize bit storage and add its ascii value;
+	    ~buffer && (bs = bc % 4 ? bs * 64 + buffer : buffer,
+	      // and if not first of each 4 characters,
+	      // convert the first 8 bits to one ascii character
+	      bc++ % 4) ? output += String.fromCharCode(255 & bs >> (-2 * bc & 6)) : 0
+	  ) {
+	    // try to find character in table (0-63, not found => -1)
+	    buffer = chars.indexOf(buffer);
+	  }
+	  return output;
+	}
+
+
+	module.exports = typeof window !== 'undefined' && window.atob || polyfill;
+
+/***/ },
+/* 297 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -47822,15 +47980,15 @@
 
 	var _UserApi = __webpack_require__(285);
 
-	var _LoginForm = __webpack_require__(294);
+	var _LoginForm = __webpack_require__(298);
 
 	var _LoginForm2 = _interopRequireDefault(_LoginForm);
 
-	var _jquery = __webpack_require__(295);
+	var _jquery = __webpack_require__(299);
 
 	var _jquery2 = _interopRequireDefault(_jquery);
 
-	var _jwtDecode = __webpack_require__(307);
+	var _jwtDecode = __webpack_require__(294);
 
 	var _jwtDecode2 = _interopRequireDefault(_jwtDecode);
 
@@ -47898,7 +48056,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(LoginContainer);
 
 /***/ },
-/* 294 */
+/* 298 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -47987,7 +48145,7 @@
 	exports.default = LoginForm;
 
 /***/ },
-/* 295 */
+/* 299 */
 /***/ function(module, exports) {
 
 	/*
@@ -49465,7 +49623,7 @@
 
 
 /***/ },
-/* 296 */
+/* 300 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -49488,11 +49646,11 @@
 
 	var _UserApi = __webpack_require__(285);
 
-	var _UsersList = __webpack_require__(297);
+	var _UsersList = __webpack_require__(301);
 
 	var _UsersList2 = _interopRequireDefault(_UsersList);
 
-	var _AddUser = __webpack_require__(298);
+	var _AddUser = __webpack_require__(302);
 
 	var _AddUser2 = _interopRequireDefault(_AddUser);
 
@@ -49614,7 +49772,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(UsersContainer);
 
 /***/ },
-/* 297 */
+/* 301 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -49702,7 +49860,7 @@
 	exports.default = UsersList;
 
 /***/ },
-/* 298 */
+/* 302 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -49822,7 +49980,7 @@
 	exports.default = AddUser;
 
 /***/ },
-/* 299 */
+/* 303 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -49843,13 +50001,13 @@
 
 	var _reactRedux = __webpack_require__(217);
 
-	var _ProductsApi = __webpack_require__(291);
+	var _ProductsApi = __webpack_require__(292);
 
-	var _ProductsList = __webpack_require__(300);
+	var _ProductsList = __webpack_require__(304);
 
 	var _ProductsList2 = _interopRequireDefault(_ProductsList);
 
-	var _AddProduct = __webpack_require__(302);
+	var _AddProduct = __webpack_require__(306);
 
 	var _AddProduct2 = _interopRequireDefault(_AddProduct);
 
@@ -49978,7 +50136,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(ProductsContainer);
 
 /***/ },
-/* 300 */
+/* 304 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -49993,7 +50151,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _EditProduct = __webpack_require__(301);
+	var _EditProduct = __webpack_require__(305);
 
 	var _EditProduct2 = _interopRequireDefault(_EditProduct);
 
@@ -50086,7 +50244,7 @@
 	exports.default = ProductsList;
 
 /***/ },
-/* 301 */
+/* 305 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50252,7 +50410,7 @@
 	exports.default = EditProduct;
 
 /***/ },
-/* 302 */
+/* 306 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50359,7 +50517,7 @@
 	exports.default = AddProduct;
 
 /***/ },
-/* 303 */
+/* 307 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50380,13 +50538,13 @@
 
 	var _reactRedux = __webpack_require__(217);
 
-	var _EntitiesApi = __webpack_require__(289);
+	var _EntitiesApi = __webpack_require__(290);
 
-	var _EntityList = __webpack_require__(304);
+	var _EntityList = __webpack_require__(308);
 
 	var _EntityList2 = _interopRequireDefault(_EntityList);
 
-	var _AddEntity = __webpack_require__(306);
+	var _AddEntity = __webpack_require__(310);
 
 	var _AddEntity2 = _interopRequireDefault(_AddEntity);
 
@@ -50521,7 +50679,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(EntitiesContainer);
 
 /***/ },
-/* 304 */
+/* 308 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50536,7 +50694,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _EditEntity = __webpack_require__(305);
+	var _EditEntity = __webpack_require__(309);
 
 	var _EditEntity2 = _interopRequireDefault(_EditEntity);
 
@@ -50634,7 +50792,7 @@
 	exports.default = EntityList;
 
 /***/ },
-/* 305 */
+/* 309 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50812,7 +50970,7 @@
 	exports.default = EditEntity;
 
 /***/ },
-/* 306 */
+/* 310 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -50928,151 +51086,84 @@
 	exports.default = AddEntity;
 
 /***/ },
-/* 307 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var base64_url_decode = __webpack_require__(308);
-
-	module.exports = function (token) {
-	  if (typeof token !== 'string') {
-	    throw new Error('Invalid token specified');
-	  }
-	  
-	  return JSON.parse(base64_url_decode(token.split('.')[1]));
-	};
-
-
-/***/ },
-/* 308 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var atob = __webpack_require__(309);
-
-	function b64DecodeUnicode(str) {
-	  return decodeURIComponent(atob(str).replace(/(.)/g, function (m, p) {
-	    var code = p.charCodeAt(0).toString(16).toUpperCase();
-	    if (code.length < 2) {
-	      code = '0' + code;
-	    }
-	    return '%' + code;
-	  }));
-	}
-
-	module.exports = function(str) {
-	  var output = str.replace(/-/g, "+").replace(/_/g, "/");
-	  switch (output.length % 4) {
-	    case 0:
-	      break;
-	    case 2:
-	      output += "==";
-	      break;
-	    case 3:
-	      output += "=";
-	      break;
-	    default:
-	      throw "Illegal base64url string!";
-	  }
-
-	  try{
-	    return b64DecodeUnicode(output);
-	  } catch (err) {
-	    return atob(output);
-	  }
-	};
-
-
-/***/ },
-/* 309 */
-/***/ function(module, exports) {
-
-	/**
-	 * The code was extracted from:
-	 * https://github.com/davidchambers/Base64.js
-	 */
-
-	var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
-
-	function InvalidCharacterError(message) {
-	  this.message = message;
-	}
-
-	InvalidCharacterError.prototype = new Error();
-	InvalidCharacterError.prototype.name = 'InvalidCharacterError';
-
-	function polyfill (input) {
-	  var str = String(input).replace(/=+$/, '');
-	  if (str.length % 4 == 1) {
-	    throw new InvalidCharacterError("'atob' failed: The string to be decoded is not correctly encoded.");
-	  }
-	  for (
-	    // initialize result and counters
-	    var bc = 0, bs, buffer, idx = 0, output = '';
-	    // get next character
-	    buffer = str.charAt(idx++);
-	    // character found in table? initialize bit storage and add its ascii value;
-	    ~buffer && (bs = bc % 4 ? bs * 64 + buffer : buffer,
-	      // and if not first of each 4 characters,
-	      // convert the first 8 bits to one ascii character
-	      bc++ % 4) ? output += String.fromCharCode(255 & bs >> (-2 * bc & 6)) : 0
-	  ) {
-	    // try to find character in table (0-63, not found => -1)
-	    buffer = chars.indexOf(buffer);
-	  }
-	  return output;
-	}
-
-
-	module.exports = typeof window !== 'undefined' && window.atob || polyfill;
-
-/***/ },
-/* 310 */
+/* 311 */,
+/* 312 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+					value: true
 	});
-	exports.getUsersSuccess = getUsersSuccess;
-	exports.deleteUserSuccess = deleteUserSuccess;
-	exports.updateUserSuccess = updateUserSuccess;
-	exports.addUserSuccess = addUserSuccess;
 
-	var _ActionTypes = __webpack_require__(246);
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var types = _interopRequireWildcard(_ActionTypes);
+	var _react = __webpack_require__(1);
 
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+	var _react2 = _interopRequireDefault(_react);
 
-	function getUsersSuccess(users) {
-	  return {
-	    type: types.GET_USERS_SUCCESS,
-	    users: users
-	  };
-	}
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function deleteUserSuccess(userId) {
-	  return {
-	    type: types.DELETE_USER_SUCCESS,
-	    userId: userId
-	  };
-	}
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	function updateUserSuccess(user) {
-	  return {
-	    type: types.ADD_USER_SUCCESS,
-	    user: user
-	  };
-	}
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-	function addUserSuccess(user) {
-	  return {
-	    type: types.UPDATE_USER_SUCCESS,
-	    user: user
-	  };
-	}
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Component404 = function (_React$Component) {
+					_inherits(Component404, _React$Component);
+
+					function Component404(props) {
+									_classCallCheck(this, Component404);
+
+									var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Component404).call(this, props));
+
+									_this.displayName = 'Component404';
+									return _this;
+					}
+
+					_createClass(Component404, [{
+									key: 'render',
+									value: function render() {
+													return _react2.default.createElement(
+																	'section',
+																	{ id: 'container' },
+																	_react2.default.createElement(
+																					'div',
+																					{ className: 'row mt' },
+																					_react2.default.createElement(
+																									'div',
+																									{ className: 'col-lg-12' },
+																									_react2.default.createElement(
+																													'div',
+																													{ className: 'full-page-message' },
+																													_react2.default.createElement('img', { src: '../public/assets/img/aiesec_launcher.png', className: 'img-circle', width: '120' }),
+																													_react2.default.createElement(
+																																	'p',
+																																	null,
+																																	'404'
+																													),
+																													_react2.default.createElement(
+																																	'h2',
+																																	null,
+																																	'Ooops... Looks like site wasn\'t found.'
+																													),
+																													_react2.default.createElement(
+																																	'h2',
+																																	null,
+																																	'Try again later or do some exchange in the meanwhile.'
+																													)
+																									)
+																					)
+																	)
+													);
+									}
+					}]);
+
+					return Component404;
+	}(_react2.default.Component);
+
+	exports.default = Component404;
 
 /***/ }
 /******/ ]);

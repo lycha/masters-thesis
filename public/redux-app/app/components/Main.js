@@ -19,17 +19,19 @@ class Main extends React.Component {
 
     componentWillMount(){
     	let currentEpoch = Math.floor(Date.now() / 1000);
-    	let decodedJwt = jwtDecode(localStorage.getItem('trackingToolAuthToken'));
     	
-		if ((localStorage.getItem('trackingToolAuthToken') || 
-				localStorage.getItem('trackingToolAuthToken') != 'undefined') && 
-					(decodedJwt.exp > currentEpoch)) {
-			getAuthenticatedUser();
-	   	    getEntities()
-	   	    	.then(response => {
-	        		window.startAccordion();
-			});
-	   	    getProducts(); 
+		if (localStorage.getItem('trackingToolAuthToken') != null) { 
+			let decodedJwt = jwtDecode(localStorage.getItem('trackingToolAuthToken'));
+			if (decodedJwt.exp > currentEpoch) {
+				getAuthenticatedUser();
+		   	    getEntities()
+		   	    	.then(response => {
+		        		window.startAccordion();
+				});
+		   	    getProducts(); 
+	   		} else {
+				this.props.history.pushState(null, 'auth/login');
+			} 
 		} else {
 			this.props.history.pushState(null, 'auth/login');
 		}   

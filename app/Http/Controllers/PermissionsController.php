@@ -13,14 +13,15 @@ class PermissionsController extends Controller
 
 	public function create()
 	{
-		
 		$userForAdminPerm = $this->createUserForAdminPermissions();
 		$leadForAdminPerm = $this->createLeadForAdminPermissions();
 		$campaignForAdminPerm = $this->createCampaignForAdminPermissions();
 		$customerForAdminPerm = $this->createCustomerForAdminPermissions();
 		$entityForAdminPerm = $this->createEntityForAdminPermissions();
 		$productForAdminPerm = $this->createProductForAdminPermissions();
+		$productForUserPerm = $this->createProductForUserPermissions();
 
+		var_dump('aaa'.$productForUserPerm);
 		$userForUserPerm = $this->createUserForUserPermissions();
 
 		if ($userForAdminPerm && 
@@ -29,6 +30,7 @@ class PermissionsController extends Controller
 			$customerForAdminPerm &&
 			$entityForAdminPerm &&
 			$productForAdminPerm &&
+			$productForUserPerm &&
 			$userForUserPerm) {
 			return response()->json([], 201);
 		} else {
@@ -138,5 +140,21 @@ class PermissionsController extends Controller
 		    ],
 		    'description' => 'Manage product permissions for admin role'
 		]);
+	}
+
+	public function createProductForUserPermissions()
+	{
+		$permission = new Permission();
+		return $perm = $permission->create([ 
+		    'name'        => 'product.user',
+		    'slug'        => [          // pass an array of permissions.
+		        'create'     => false,
+		        'view'       => true,
+		        'update'     => false,
+		        'delete'     => false
+		    ],
+		    'description' => 'Manage product permissions for user role'
+		]);
+		var_dump($permission);
 	}
 }
