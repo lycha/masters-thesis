@@ -12,6 +12,7 @@
     "babel-core": "^6.8.0",
     "babel-loader": "^6.2.4",
     "babel-preset-react": "^6.5.0",
+    "css-loader": "^0.23.1",
     "webpack": "^1.13.0"
   },
   "dependencies": {
@@ -23,8 +24,10 @@
     "jquery.backstretch": "^2.1.13",
     "jwt-decode": "^2.0.1",
     "lodash": "^4.13.1",
+    "moment": "^2.14.1",
     "query-string": "^4.1.0",
     "react-addons-update": "^15.0.2",
+    "react-datepicker": "^0.28.1",
     "react-forms-builder": "0.0.1",
     "react-redux": "^4.4.5",
     "react-router": "^1.0.1",

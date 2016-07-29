@@ -2,7 +2,7 @@
 function startAccordion() {
     $('#nav-accordion').dcAccordion({
         eventType: 'click',
-        autoClose: false,
+        autoClose: true,
         saveState: true,
         disableLink: true,
         speed: 'slow',
@@ -125,11 +125,11 @@ function commonScript () {
 
 //    tool tips
 
-    $('.tooltips').tooltip();
+    //$('.tooltips').tooltip();
 
 //    popovers
 
-    $('.popovers').popover();
+    //$('.popovers').popover();
 
 
 

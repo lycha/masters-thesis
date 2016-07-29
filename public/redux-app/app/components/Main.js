@@ -27,6 +27,7 @@ class Main extends React.Component {
 		   	    getEntities()
 		   	    	.then(response => {
 		        		window.startAccordion();
+    					window.commonScript();
 				});
 		   	    getProducts(); 
 	   		} else {
@@ -60,5 +61,4 @@ const mapStateToProps = function(store) {
     products: store.productState.products
   };
 };
-
 export default connect(mapStateToProps)(Main);

@@ -134,9 +134,9 @@ class InstallController extends Controller {
 			return array('migration_success' => 'Migrations passed.');
 
 	    } catch (\PDOException $e) {		
-	    	return ErrorManager::error500(ErrorManager::$MIGRATIONS_ERROR, 'Migrations error.');
+	    	return ErrorManager::error500(ErrorManager::$MIGRATIONS_ERROR, 'Migrations error.'.$e);
 		} catch (Exception $e) {		
-			return ErrorManager::error500(ErrorManager::$MIGRATIONS_ERROR, 'Migrations error.');
+			return ErrorManager::error500(ErrorManager::$MIGRATIONS_ERROR, 'Migrations error.'.$e);
 	    }
 	}
 

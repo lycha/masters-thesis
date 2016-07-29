@@ -1,4 +1,5 @@
 import React from 'react';
+import bootstrap from 'bootstrap';
 
 class EditEntity extends React.Component {
     constructor(props) {

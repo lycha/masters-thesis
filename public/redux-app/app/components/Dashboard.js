@@ -3,7 +3,7 @@ import ProgramLogo from './Dashboard/ProgramLogo';
 import GlobalStatistics from './Dashboard/GlobalStatistics';
 import Conversion from './Dashboard/Conversion';
 import ProductStatistics from './Dashboard/ProductStatistics';
-import LineChart from './Dashboard/LineChart';
+import LeadsStatisticsChart from './Dashboard/LeadsStatisticsChart';
 
 class Dashboard extends React.Component {
     constructor(props) {
@@ -35,7 +35,7 @@ class Dashboard extends React.Component {
             
           </div>
           <div className="row mt">
-            <LineChart />
+            <LeadsStatisticsChart />
           </div>
           <div className="row mt">
             <div className="col-lg-12">

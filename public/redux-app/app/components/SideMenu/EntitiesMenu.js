@@ -10,7 +10,6 @@ class EntitiesMenu extends React.Component {
     componentDidMount() {
     }
     render() {
-        console.log(this.props.products);
         return (
           <li className="sub-menu dcjq-parent-li" >
             <a href="javascript:;" className="dcjq-parent" >

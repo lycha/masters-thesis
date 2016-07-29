@@ -27,7 +27,6 @@ class RolesController extends Controller
 			if (!$newAdmin) {
 				return ErrorManager::error400(ErrorManager::$OBJECT_DUPLICATED, 'Admin is already created.');
 			}
-
 			return response()->json(array_merge_recursive($adminOutput, $userOutput, ['admin' => $newAdmin]), 201);
 		}
 	}
@@ -65,7 +64,7 @@ class RolesController extends Controller
 			$roleUser->description = 'standard user privileges';
 			$roleUser->save();
 			$roleUser->assignPermission('user.user'); //todo add all future permissions
-			$roleUser->assignPermission('products.user'); //todo add all future permissions
+			//$roleUser->assignPermission('products.user'); //todo add all future permissions
 
 			if ($roleUser->exists) {
 				return array('success_user_role' => 'Created User role.');
