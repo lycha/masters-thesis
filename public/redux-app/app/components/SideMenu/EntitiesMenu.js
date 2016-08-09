@@ -20,7 +20,7 @@ class EntitiesMenu extends React.Component {
             {this.props.products.map((product, index)=>{
               return (
                 <ul className="sub" style={{display: 'none'}} key={index}>
-                  <EntitiesProductSubMenu entity={this.props.entity} product={product} key={index} />
+                  <EntitiesProductSubMenu entity={this.props.entity} product={product} key={index} onAnalysisSelected={this.props.onAnalysisSelected}/>
                 </ul>
               )
             })}  

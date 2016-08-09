@@ -4,13 +4,22 @@ import moment from 'moment';
 
 const initialState = {
   leadsStatistics: [],
+  registrationsStatistics: [],
   analysisParams: {},
   startDate: moment().subtract(14, 'days'),
-  endDate: moment()
+  endDate: moment(),
+  analysisEntity: {},
+  analysisProduct: {}
 };
 
 const AnalysisReducer = function(state = initialState, action) {
 	switch(action.type) {
+	    case types.ANALYSIS_ENTITY_SELECTED:
+	      return Object.assign({}, state, { analysisEntity: action.analysisEntity });
+
+	    case types.ANALYSIS_PRODUCT_SELECTED:
+	      return Object.assign({}, state, { analysisProduct: action.analysisProduct });
+
 	    case types.START_DATE_SELECTED:
 	      return Object.assign({}, state, { startDate: action.startDate });
 
@@ -19,6 +28,9 @@ const AnalysisReducer = function(state = initialState, action) {
 
 	    case types.GET_LEADS_STATISTICS_SUCCESS:
 	    	return Object.assign({}, state, { leadsStatistics: action.leadsStatistics });
+	    	
+	    case types.GET_REGISTRATIONS_STATISTICS_SUCCESS:
+	    	return Object.assign({}, state, { registrationsStatistics: action.registrationsStatistics });
 	}
 
   return state;

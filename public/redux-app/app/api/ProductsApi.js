@@ -17,7 +17,6 @@ export function getProducts() {
 			return response;
 		})
 		.catch((response) => {
-	debugger;
 			window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
 			if (response.data.error.code == 401) {
 				deleteSession();

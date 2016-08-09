@@ -4,11 +4,13 @@ import GlobalStatistics from './GlobalStatistics';
 import Conversion from './Conversion';
 import ProductStatistics from './ProductStatistics';
 import LeadsStatisticsChart from './LeadsStatisticsChart';
+import RegisterationsStatisticsChart from './RegisterationsStatisticsChart';
 import AnalysisParameters from './AnalysisParameters'
 import store from '../../store';
 import {getCampaigns} from '../../api/CampaignsApi';
-import {getLeadsStatistics} from '../../api/AnalysisApi';
+import {getLeadsStatistics, getRegistrationsStatistics} from '../../api/AnalysisApi';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 
 class DashboardContainer extends React.Component {
     constructor(props) {
@@ -16,19 +18,39 @@ class DashboardContainer extends React.Component {
         this.displayName = 'DashboardContainer';
         this.showAnalysis = this.showAnalysis.bind(this);
         getCampaigns();
-        getLeadsStatistics(this.props.startDate,
-          this.props.endDate, 1);
+        this.entity = "";
+        this.product = "";
     }
+    
+    componentWillUpdate() {
+      let pathArray = this.props.location.pathname.split("/");
+      let entity = this.props.analysisEntity;
+      let product = this.props.analysisProduct;
+      if (this.entity != entity || this.product != product) {
+        this.entity = entity;
+        this.product = product;
+        getLeadsStatistics(this.props.startDate, this.props.endDate, this.props.analysisProduct.id, this.props.analysisEntity.id);
+        getRegistrationsStatistics(this.props.startDate, this.props.endDate, this.props.analysisProduct.id, this.props.analysisEntity.id);
+      }
+    }
+
     showAnalysis() {
       getLeadsStatistics(this.props.startDate,
-        this.props.endDate, 3,1);
+        this.props.endDate, 2,1);
+      getRegistrationsStatistics(this.props.startDate,
+        this.props.endDate, 2,1);
     }
     render() {
+        let title = "";
+        if (typeof this.analysisProduct != 'undefined' && typeof this.analysisEntity != 'undefined') { 
+          title = this.analysisProduct.name + ' in ' + this.analysisEntity.name;
+        }
         return (
           <section id="main-content">
           <section className="wrapper">
           <div className="row mt">
             <div className="col-md-12 col-sm-12 mb">
+            <h1>{title}</h1>
               <AnalysisParameters 
                 campaigns={this.props.campaigns} 
                 startDate={this.props.startDate}
@@ -55,14 +77,7 @@ class DashboardContainer extends React.Component {
             <LeadsStatisticsChart leadsStatistics={this.props.leadsStatistics}/>
           </div>
           <div className="row mt">
-            <div className="col-lg-12">
-              <div className="content-panel">
-                  <h4><i className="fa fa-angle-right"></i> Open</h4>
-                  <div className="panel-body">
-                      <div id="openChart" styles="height: 250px;"></div>
-                  </div>
-              </div>
-            </div>
+            <RegisterationsStatisticsChart registrationsStatistics={this.props.registrationsStatistics}/>
           </div>
           </section>
           </section>
@@ -77,7 +92,10 @@ const mapStateToProps = function(store) {
     products: store.productState.products,
     startDate: store.analysisState.startDate,
     endDate: store.analysisState.endDate,
-    leadsStatistics: store.analysisState.leadsStatistics
+    leadsStatistics: store.analysisState.leadsStatistics,
+    registrationsStatistics: store.analysisState.registrationsStatistics,
+    analysisEntity: store.analysisState.analysisEntity,
+    analysisProduct: store.analysisState.analysisProduct
   };
 };
 

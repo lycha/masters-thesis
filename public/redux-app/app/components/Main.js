@@ -44,6 +44,7 @@ class Main extends React.Component {
 	}
     
     render() {
+    	console.log("main render");
         return (
 			<section id="container">
 	        	<Header logout={this.logout}/>

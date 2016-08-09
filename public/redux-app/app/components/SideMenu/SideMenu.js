@@ -4,6 +4,8 @@ import TotalAnalisysMenu from './TotalAnalisysMenu';
 import {getEntities} from '../../utils/ServerRequests';
 import {Link} from 'react-router';
 import EntitiesMenu from './EntitiesMenu';
+import store from '../../store';
+import { setAnalysisEntity, setAnalysisProduct } from '../../actions/AnalysisActions';
 
 class SideMenu extends React.Component {
     constructor(props) {
@@ -11,6 +13,11 @@ class SideMenu extends React.Component {
         this.displayName = 'SideMenu';
     }
     componentDidMount() {
+    }
+    onAnalysisSelected(entity, product) {
+    	debugger;
+    	store.dispatch(setAnalysisEntity(entity));
+    	store.dispatch(setAnalysisProduct(product));
     }
     render() {
         return (
@@ -32,7 +39,7 @@ class SideMenu extends React.Component {
 			          <TotalAnalisysMenu />
 			          {this.props.entities.map((entity, index)=>{
 							return (
-								<EntitiesMenu entity={entity} products={this.props.products} key={index} />
+								<EntitiesMenu entity={entity} products={this.props.products} key={index} onAnalysisSelected={this.onAnalysisSelected}/>
 							)
 		    			})}
 

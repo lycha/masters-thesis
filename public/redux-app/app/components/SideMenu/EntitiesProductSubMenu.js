@@ -6,10 +6,13 @@ class EntitiesProductSubMenu extends React.Component {
         super(props);
         this.displayName = 'EntitiesProductSubMenu';
     }
+    onClick(e) {
+        this.props.onAnalysisSelected(this.props.entity, this.props.product);
+    }
     render() {
         return (
         	<li>
-        		<Link to={"analysis/" + this.props.entity.slug + "/" + this.props.product.slug}>{this.props.product.name}</Link>
+        		<Link to={"analysis/" + this.props.entity.slug + "/" + this.props.product.slug} onClick={(e) => this.onClick(e)}>{this.props.product.name}</Link>
         	</li>
         );
     }

@@ -4,8 +4,8 @@ class RegisterationsStatisticsChart extends React.Component {
     componentDidMount() {
         this.keys = ['twitter'];
         //const keys = ['facebook', 'twitter', 'my_source', 'website'];
-        this.leadChart = Morris.Line({
-            element: "leadChart",
+        this.registrationChart = Morris.Line({
+            element: "registrationChart",
             data: this.props.registrationsStatistics,
             xkey: "date",
             ykeys: this.keys,
@@ -20,9 +20,9 @@ class RegisterationsStatisticsChart extends React.Component {
                 this.keys.push(k);  
             }
         }
-        this.leadChart.options.ykeys = this.keys;
-        this.leadChart.options.labels = this.keys;
-        this.leadChart.setData(nextProps.registrationsStatistics);
+        this.registrationChart.options.ykeys = this.keys;
+        this.registrationChart.options.labels = this.keys;
+        this.registrationChart.setData(nextProps.registrationsStatistics);
     }
     render() {
         return (
@@ -30,7 +30,7 @@ class RegisterationsStatisticsChart extends React.Component {
               <div className="content-panel">
                 <h4><i className="fa fa-angle-right"></i> Registrations</h4>
                 <div className="panel-body">
-                    <div id="leadChart" styles="height: 250px;"></div>
+                    <div id="registrationChart" styles="height: 250px;"></div>
                 </div>
               </div>
             </div>
