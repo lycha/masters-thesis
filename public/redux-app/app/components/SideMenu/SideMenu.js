@@ -15,7 +15,6 @@ class SideMenu extends React.Component {
     componentDidMount() {
     }
     onAnalysisSelected(entity, product) {
-    	debugger;
     	store.dispatch(setAnalysisEntity(entity));
     	store.dispatch(setAnalysisProduct(product));
     }
@@ -36,14 +35,14 @@ class SideMenu extends React.Component {
 			                  <span>URL Generator</span>
 			              </a>
 			          </li>
-			          <TotalAnalisysMenu />
+			          {/*<TotalAnalisysMenu products={this.props.products}/>*/}
 			          {this.props.entities.map((entity, index)=>{
 							return (
 								<EntitiesMenu entity={entity} products={this.props.products} key={index} onAnalysisSelected={this.onAnalysisSelected}/>
 							)
 		    			})}
 
-			          <li className="sub-menu">
+			          {/*<li className="sub-menu">
 			              <a href="javascript:;"  >
 			                  <i className="fa fa-bar-chart-o"></i>
 			                  <span>MC promo</span>
@@ -69,7 +68,7 @@ class SideMenu extends React.Component {
 			                    <li><a  href="/fl">Future Leaders</a></li>
 			                    <li><a  href="/au">Aiesec University</a></li>
 			                </ul>
-			            </li>
+			            </li>*/}
 			      </ul>
 			  </div>
 			</aside>

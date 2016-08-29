@@ -1,11 +1,11 @@
 import React from 'react';
 import ProgramLogo from './ProgramLogo';
-import GlobalStatistics from './GlobalStatistics';
 import Conversion from './Conversion';
-import ProductStatistics from './ProductStatistics';
+import NumberStatistics from './NumberStatistics';
 import LeadsStatisticsChart from './LeadsStatisticsChart';
 import RegisterationsStatisticsChart from './RegisterationsStatisticsChart';
 import AnalysisParameters from './AnalysisParameters'
+import DashboardHeader from './DashboardHeader'
 import store from '../../store';
 import {getCampaigns} from '../../api/CampaignsApi';
 import {getLeadsStatistics, getRegistrationsStatistics} from '../../api/AnalysisApi';
@@ -18,39 +18,53 @@ class DashboardContainer extends React.Component {
         this.displayName = 'DashboardContainer';
         this.showAnalysis = this.showAnalysis.bind(this);
         getCampaigns();
-        this.entity = "";
-        this.product = "";
+        this.entitySlug = "";
+        this.productSlug = "";
+        this.entity = {};
+        this.product = {};
     }
     
-    componentWillUpdate() {
-      let pathArray = this.props.location.pathname.split("/");
-      let entity = this.props.analysisEntity;
-      let product = this.props.analysisProduct;
-      if (this.entity != entity || this.product != product) {
-        this.entity = entity;
-        this.product = product;
-        getLeadsStatistics(this.props.startDate, this.props.endDate, this.props.analysisProduct.id, this.props.analysisEntity.id);
-        getRegistrationsStatistics(this.props.startDate, this.props.endDate, this.props.analysisProduct.id, this.props.analysisEntity.id);
+    componentWillMount() {
+      getLeadsStatistics(this.props.startDate, this.props.endDate, 
+        this.props.params.product, 
+        this.props.params.entity);
+      getRegistrationsStatistics(this.props.startDate, this.props.endDate, 
+        this.props.params.product, 
+        this.props.params.entity);
+    }
+
+    componentWillUpdate(nextProps, nextState) {
+      this.entity = _.find(nextProps.entities, function(o) { return o.slug == nextProps.params.entity; }.bind(this));
+      this.product = _.find(nextProps.products, function(o) { return o.slug == nextProps.params.product; }.bind(this));
+      if (this.entitySlug != nextProps.params.entity || this.productSlug != nextProps.params.product) {
+        getLeadsStatistics(nextProps.startDate, nextProps.endDate, 
+          nextProps.params.product, 
+          nextProps.params.entity);
+        getRegistrationsStatistics(nextProps.startDate, nextProps.endDate, 
+          nextProps.params.product, 
+          nextProps.params.entity);
       }
+      
+      this.entitySlug = nextProps.params.entity;
+      this.productSlug = nextProps.params.product;
     }
 
     showAnalysis() {
       getLeadsStatistics(this.props.startDate,
-        this.props.endDate, 2,1);
+        this.props.endDate, this.props.analysisProduct.slug, this.props.analysisEntity.slug);
       getRegistrationsStatistics(this.props.startDate,
-        this.props.endDate, 2,1);
+        this.props.endDate, this.props.analysisProduct.slug, this.props.analysisEntity.slug);
     }
     render() {
-        let title = "";
-        if (typeof this.analysisProduct != 'undefined' && typeof this.analysisEntity != 'undefined') { 
-          title = this.analysisProduct.name + ' in ' + this.analysisEntity.name;
-        }
         return (
           <section id="main-content">
           <section className="wrapper">
           <div className="row mt">
             <div className="col-md-12 col-sm-12 mb">
-            <h1>{title}</h1>
+            <DashboardHeader 
+              entity={this.entity}
+              product={this.product}
+            />
               <AnalysisParameters 
                 campaigns={this.props.campaigns} 
                 startDate={this.props.startDate}
@@ -63,15 +77,13 @@ class DashboardContainer extends React.Component {
             </div>
           </div>
           <div className="row mt">
-            
-            <ProgramLogo />
 
-            <GlobalStatistics />
+            <NumberStatistics type="Leads" entityName={this.props.analysisEntity.name} stats={this.props.leadsStatistics.length}/>
+
+            <NumberStatistics type="Registrations" entityName={this.props.analysisEntity.name} stats={this.props.registrationsStatistics.length}/>
             
             <Conversion />
 
-            <ProductStatistics />
-            
           </div>
           <div className="row mt">
             <LeadsStatisticsChart leadsStatistics={this.props.leadsStatistics}/>

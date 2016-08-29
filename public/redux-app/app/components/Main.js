@@ -1,7 +1,6 @@
 import React from 'react';
 import Header from './Header'
 import SideMenu from './SideMenu/SideMenu'
-import Dashboard from './Dashboard'
 import axios from 'axios';
 import store from '../store';
 import { connect } from 'react-redux';
@@ -17,19 +16,19 @@ class Main extends React.Component {
 		this.logout = this.logout.bind(this);
 	}
 
-    componentWillMount(){
+    componentDidMount(){
     	let currentEpoch = Math.floor(Date.now() / 1000);
     	
 		if (localStorage.getItem('trackingToolAuthToken') != null) { 
 			let decodedJwt = jwtDecode(localStorage.getItem('trackingToolAuthToken'));
 			if (decodedJwt.exp > currentEpoch) {
 				getAuthenticatedUser();
+				getProducts(); 
 		   	    getEntities()
 		   	    	.then(response => {
 		        		window.startAccordion();
     					window.commonScript();
 				});
-		   	    getProducts(); 
 	   		} else {
 				this.props.history.pushState(null, 'auth/login');
 			} 
@@ -44,7 +43,6 @@ class Main extends React.Component {
 	}
     
     render() {
-    	console.log("main render");
         return (
 			<section id="container">
 	        	<Header logout={this.logout}/>

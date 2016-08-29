@@ -87,12 +87,12 @@ class CustomerController extends Controller
                 $source;
         }
 
-        $where = "WHERE product_id = ".$request->product;
+        $where = "WHERE product_id = (SELECT id FROM products WHERE slug = '".$request->product."')";
         if (!empty($request->entity)) {
-            $where = $where." AND entity_id = ".$request->entity;
+            $where = $where." AND entity_id = (SELECT id FROM entities WHERE slug = '".$request->entity."')"; 
         }
         if (!empty($request->utm_campaign)) {
-            $where = $where." AND utm_campaign_id = ".$request->utm_campaign;
+            $where = $where." AND utm_campaign_id = (SELECT id FROM campaigns WHERE slug = '".$request->utm_campaign."')";
         }
 
         $select = "SELECT

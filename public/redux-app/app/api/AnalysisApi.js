@@ -5,17 +5,15 @@ import _ from 'underscore';
 import {deleteSession} from '../utils/SessionManager'
 import { getLeadsStatsSuccess, getRegistrationsStatsSuccess } from '../actions/AnalysisActions';
 
-export function getLeadsStatistics(startDate, endDate, productId, entityId, campaignId) {
-if (!_.isEmpty(productId)) {}
-debugger;
+export function getLeadsStatistics(startDate, endDate, product, entity, campaign) {
 	window.showLoadingSpinner();
 	let body = {
 	    date_from: startDate.format('YYYY-MM-DD'),
 	    date_to: endDate.format('YYYY-MM-DD'),
-	    product: productId
+	    product: product
 	};
-	if (typeof entityId != 'undefined') { body['entity'] = entityId; };
-	if (typeof campaignId != 'undefined') { body['utm_campaign'] = campaignId; };
+	if (typeof entity != 'undefined') { body['entity'] = entity; };
+	if (typeof campaign != 'undefined') { body['utm_campaign'] = campaign; };
 
 	var config = {
 		  headers: {'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')}
@@ -36,15 +34,15 @@ debugger;
 		});
 }
 
-export function getRegistrationsStatistics(startDate, endDate, productId, campaignId, entityId) {
+export function getRegistrationsStatistics(startDate, endDate, product, entity, campaign) {
 	window.showLoadingSpinner();
 	let body = {
 	    date_from: startDate.format('YYYY-MM-DD'),
 	    date_to: endDate.format('YYYY-MM-DD'),
-	    product: productId
+	    product: product
 	};
-	if (typeof entityId != 'undefined') { body['entity'] = entityId; };
-	if (typeof campaignId != 'undefined') { body['utm_campaign'] = campaignId; };
+	if (typeof entity != 'undefined') { body['entity'] = entity; };
+	if (typeof campaign != 'undefined') { body['utm_campaign'] = campaign; };
 
 	var config = {
 		  headers: {'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')}
@@ -63,4 +61,8 @@ export function getRegistrationsStatistics(startDate, endDate, productId, campai
 			}
 			window.hideLoadingSpinner();
 		});
+}
+
+export function getLeadsCount(startDate, endDate, productId, campaignId, entityId) {
+	// body...
 }
