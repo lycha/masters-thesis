@@ -9,7 +9,9 @@ const initialState = {
   startDate: moment().subtract(14, 'days'),
   endDate: moment(),
   analysisEntity: {},
-  analysisProduct: {}
+  analysisProduct: {},
+  leadsCount: 0,
+  registrationsCount: 0,
 };
 
 const AnalysisReducer = function(state = initialState, action) {
@@ -31,6 +33,12 @@ const AnalysisReducer = function(state = initialState, action) {
 	    	
 	    case types.GET_REGISTRATIONS_STATISTICS_SUCCESS:
 	    	return Object.assign({}, state, { registrationsStatistics: action.registrationsStatistics });
+
+	    case types.GET_LEADS_COUNT_SUCCESS:
+	    	return Object.assign({}, state, { leadsCount: action.leadsCount[0] });
+	    	
+	    case types.GET_REGISTRATIONS_COUNT_SUCCESS:
+	    	return Object.assign({}, state, { registrationsCount: action.registrationsCount[0] });
 	}
 
   return state;

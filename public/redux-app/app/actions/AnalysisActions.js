@@ -41,3 +41,17 @@ export function getRegistrationsStatsSuccess(registrationsStatistics) {
 	    registrationsStatistics
   };
 }
+
+export function getLeadsCountSuccess(leadsCount) {
+	return {
+	    type: types.GET_LEADS_COUNT_SUCCESS,
+	    leadsCount
+  };
+}
+
+export function getRegistrationsCountSuccess(registrationsCount) {
+	return {
+	    type: types.GET_REGISTRATIONS_COUNT_SUCCESS,
+	    registrationsCount
+  };
+}

@@ -60,23 +60,18 @@ class LeadController extends Controller
         if (!$this->validateCountInput($request)) {
             return ErrorManager::error400(ErrorManager::$INVALID_PAYLOAD, 'Some elements are not provided.');
         } 
-        $count = "";
         
-        //if entity_id is not provided return for all entities
-        if (empty($request->entity)) {
-            $count = DB::table('leads')
-                ->whereBetween('created_at',[$request->date_from, $request->date_to])
-                ->where('product_id', $request->product)
-                ->count();
-        } else {
-            $count = DB::table('leads')
-                ->whereBetween('created_at',[$request->date_from, $request->date_to])
-                ->where('entity_id', $request->entity)
-                ->where('product_id', $request->product)
-                ->count();
+        $where = "where \"created_at\" between '".$request->date_from."' and '".$request->date_to."' and \"product_id\" = (SELECT id FROM products WHERE slug = '".$request->product."')";
+
+        if (!empty($request->entity)) {
+            $where = $where." AND \"entity_id\" = (SELECT id FROM entities WHERE slug = '".$request->entity."')"; 
         }
-        
-        return response()->json(['leads'=>['count'=>$count]]);
+        if (!empty($request->utm_campaign)) {
+            $where = $where." AND \"utm_campaign_id\" = (SELECT id FROM campaigns WHERE slug = '".$request->utm_campaign."')";
+        }
+
+        $count = DB::select("select count (*) from \"leads\" ".$where);
+        return $count;
     }
 
     public function getLeadsAnalysis(Request $request)

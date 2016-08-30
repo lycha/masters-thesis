@@ -51,22 +51,18 @@ class CustomerController extends Controller
 		if (!$this->validateCountInput($request)) {
         	return ErrorManager::error400(ErrorManager::$INVALID_PAYLOAD, 'Some elements are not provided.');
 		} 
-		$count = "";
-		//if entity_id is not provided return for all entities
-		if (empty($request->entity)) {
-			$count = DB::table('lead_customer')
-				->whereBetween('customer_created_at',[$request->date_from, $request->date_to])
-				->where('product_id', $request->product)
-				->count();
-		} else {
-			$count = DB::table('lead_customer')
-				->whereBetween('customer_created_at',[$request->date_from, $request->date_to])
-				->where('entity_id', $request->entity)
-				->where('product_id', $request->product)
-				->count();
-		}
-		
-		return response()->json(['customers'=>['count'=>$count]]);
+
+        $where = "where \"customer_created_at\" between '".$request->date_from."' and '".$request->date_to."' and \"product_id\" = (SELECT id FROM products WHERE slug = '".$request->product."')";
+
+        if (!empty($request->entity)) {
+            $where = $where." AND \"entity_id\" = (SELECT id FROM entities WHERE slug = '".$request->entity."')"; 
+        }
+        if (!empty($request->utm_campaign)) {
+            $where = $where." AND \"utm_campaign_id\" = (SELECT id FROM campaigns WHERE slug = '".$request->utm_campaign."')";
+        }
+
+        $count = DB::select("select count (*) from \"lead_customer\" ".$where);
+        return $count;
 	}
 
 	public function getCustomersAnalysis(Request $request)

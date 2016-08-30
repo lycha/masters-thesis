@@ -8,7 +8,7 @@ import AnalysisParameters from './AnalysisParameters'
 import DashboardHeader from './DashboardHeader'
 import store from '../../store';
 import {getCampaigns} from '../../api/CampaignsApi';
-import {getLeadsStatistics, getRegistrationsStatistics} from '../../api/AnalysisApi';
+import {getLeadsStatistics, getRegistrationsStatistics, getLeadsCount, getRegistrationsCount} from '../../api/AnalysisApi';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
@@ -31,6 +31,13 @@ class DashboardContainer extends React.Component {
       getRegistrationsStatistics(this.props.startDate, this.props.endDate, 
         this.props.params.product, 
         this.props.params.entity);
+      getLeadsCount(this.props.startDate, this.props.endDate, 
+        this.props.params.product, 
+        this.props.params.entity);
+      getRegistrationsCount(this.props.startDate, this.props.endDate, 
+        this.props.params.product, 
+        this.props.params.entity);
+
     }
 
     componentWillUpdate(nextProps, nextState) {
@@ -43,6 +50,13 @@ class DashboardContainer extends React.Component {
         getRegistrationsStatistics(nextProps.startDate, nextProps.endDate, 
           nextProps.params.product, 
           nextProps.params.entity);
+
+        getLeadsCount(nextProps.startDate, nextProps.endDate, 
+          nextProps.params.product, 
+          nextProps.params.entity);
+        getRegistrationsCount(nextProps.startDate, nextProps.endDate, 
+          nextProps.params.product, 
+          nextProps.params.entity);
       }
       
       this.entitySlug = nextProps.params.entity;
@@ -50,9 +64,15 @@ class DashboardContainer extends React.Component {
     }
 
     showAnalysis() {
+      debugger;
       getLeadsStatistics(this.props.startDate,
         this.props.endDate, this.props.analysisProduct.slug, this.props.analysisEntity.slug);
       getRegistrationsStatistics(this.props.startDate,
+        this.props.endDate, this.props.analysisProduct.slug, this.props.analysisEntity.slug);
+
+      getLeadsCount(this.props.startDate,
+        this.props.endDate, this.props.analysisProduct.slug, this.props.analysisEntity.slug);
+      getRegistrationsCount(this.props.startDate,
         this.props.endDate, this.props.analysisProduct.slug, this.props.analysisEntity.slug);
     }
     render() {
@@ -78,11 +98,11 @@ class DashboardContainer extends React.Component {
           </div>
           <div className="row mt">
 
-            <NumberStatistics type="Leads" entityName={this.props.analysisEntity.name} stats={this.props.leadsStatistics.length}/>
+            <NumberStatistics type="Leads" entity={this.entity} stats={this.props.leadsCount}/>
 
-            <NumberStatistics type="Registrations" entityName={this.props.analysisEntity.name} stats={this.props.registrationsStatistics.length}/>
+            <NumberStatistics type="Registrations" entity={this.entity} stats={this.props.registrationsCount}/>
             
-            <Conversion />
+            <Conversion leadsCount={this.props.leadsCount} registrationsCount={this.props.registrationsCount}/>
 
           </div>
           <div className="row mt">
@@ -107,7 +127,9 @@ const mapStateToProps = function(store) {
     leadsStatistics: store.analysisState.leadsStatistics,
     registrationsStatistics: store.analysisState.registrationsStatistics,
     analysisEntity: store.analysisState.analysisEntity,
-    analysisProduct: store.analysisState.analysisProduct
+    analysisProduct: store.analysisState.analysisProduct,
+    leadsCount: store.analysisState.leadsCount,
+    registrationsCount: store.analysisState.registrationsCount
   };
 };
 

@@ -26555,6 +26555,8 @@
 	var GET_REGISTRATIONS_STATISTICS_SUCCESS = exports.GET_REGISTRATIONS_STATISTICS_SUCCESS = 'GET_REGISTRATIONS_STATISTICS_SUCCESS';
 	var ANALYSIS_ENTITY_SELECTED = exports.ANALYSIS_ENTITY_SELECTED = 'ANALYSIS_ENTITY_SELECTED';
 	var ANALYSIS_PRODUCT_SELECTED = exports.ANALYSIS_PRODUCT_SELECTED = 'ANALYSIS_PRODUCT_SELECTED';
+	var GET_LEADS_COUNT_SUCCESS = exports.GET_LEADS_COUNT_SUCCESS = 'GET_LEADS_COUNT_SUCCESS';
+	var GET_REGISTRATIONS_COUNT_SUCCESS = exports.GET_REGISTRATIONS_COUNT_SUCCESS = 'GET_REGISTRATIONS_COUNT_SUCCESS';
 
 /***/ },
 /* 247 */
@@ -57290,7 +57292,9 @@
 			startDate: (0, _moment2.default)().subtract(14, 'days'),
 			endDate: (0, _moment2.default)(),
 			analysisEntity: {},
-			analysisProduct: {}
+			analysisProduct: {},
+			leadsCount: 0,
+			registrationsCount: 0
 	};
 
 	var AnalysisReducer = function AnalysisReducer() {
@@ -57315,6 +57319,12 @@
 
 					case types.GET_REGISTRATIONS_STATISTICS_SUCCESS:
 							return Object.assign({}, state, { registrationsStatistics: action.registrationsStatistics });
+
+					case types.GET_LEADS_COUNT_SUCCESS:
+							return Object.assign({}, state, { leadsCount: action.leadsCount[0] });
+
+					case types.GET_REGISTRATIONS_COUNT_SUCCESS:
+							return Object.assign({}, state, { registrationsCount: action.registrationsCount[0] });
 			}
 
 			return state;
@@ -59281,6 +59291,8 @@
 	exports.setEndDate = setEndDate;
 	exports.getLeadsStatsSuccess = getLeadsStatsSuccess;
 	exports.getRegistrationsStatsSuccess = getRegistrationsStatsSuccess;
+	exports.getLeadsCountSuccess = getLeadsCountSuccess;
+	exports.getRegistrationsCountSuccess = getRegistrationsCountSuccess;
 
 	var _ActionTypes = __webpack_require__(246);
 
@@ -59327,6 +59339,20 @@
 		return {
 			type: types.GET_REGISTRATIONS_STATISTICS_SUCCESS,
 			registrationsStatistics: registrationsStatistics
+		};
+	}
+
+	function getLeadsCountSuccess(leadsCount) {
+		return {
+			type: types.GET_LEADS_COUNT_SUCCESS,
+			leadsCount: leadsCount
+		};
+	}
+
+	function getRegistrationsCountSuccess(registrationsCount) {
+		return {
+			type: types.GET_REGISTRATIONS_COUNT_SUCCESS,
+			registrationsCount: registrationsCount
 		};
 	}
 
@@ -61158,7 +61184,6 @@
 			_store2.default.dispatch((0, _EntityActions.getEntitiesSuccess)(response.data));
 			return response;
 		}).catch(function (response) {
-			debugger;
 			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
 			if (response.data.error.code == 401) {
 				(0, _SessionManager.deleteSession)();
@@ -63305,6 +63330,8 @@
 	    value: function componentWillMount() {
 	      (0, _AnalysisApi.getLeadsStatistics)(this.props.startDate, this.props.endDate, this.props.params.product, this.props.params.entity);
 	      (0, _AnalysisApi.getRegistrationsStatistics)(this.props.startDate, this.props.endDate, this.props.params.product, this.props.params.entity);
+	      (0, _AnalysisApi.getLeadsCount)(this.props.startDate, this.props.endDate, this.props.params.product, this.props.params.entity);
+	      (0, _AnalysisApi.getRegistrationsCount)(this.props.startDate, this.props.endDate, this.props.params.product, this.props.params.entity);
 	    }
 	  }, {
 	    key: 'componentWillUpdate',
@@ -63318,6 +63345,9 @@
 	      if (this.entitySlug != nextProps.params.entity || this.productSlug != nextProps.params.product) {
 	        (0, _AnalysisApi.getLeadsStatistics)(nextProps.startDate, nextProps.endDate, nextProps.params.product, nextProps.params.entity);
 	        (0, _AnalysisApi.getRegistrationsStatistics)(nextProps.startDate, nextProps.endDate, nextProps.params.product, nextProps.params.entity);
+
+	        (0, _AnalysisApi.getLeadsCount)(nextProps.startDate, nextProps.endDate, nextProps.params.product, nextProps.params.entity);
+	        (0, _AnalysisApi.getRegistrationsCount)(nextProps.startDate, nextProps.endDate, nextProps.params.product, nextProps.params.entity);
 	      }
 
 	      this.entitySlug = nextProps.params.entity;
@@ -63326,8 +63356,12 @@
 	  }, {
 	    key: 'showAnalysis',
 	    value: function showAnalysis() {
+	      debugger;
 	      (0, _AnalysisApi.getLeadsStatistics)(this.props.startDate, this.props.endDate, this.props.analysisProduct.slug, this.props.analysisEntity.slug);
 	      (0, _AnalysisApi.getRegistrationsStatistics)(this.props.startDate, this.props.endDate, this.props.analysisProduct.slug, this.props.analysisEntity.slug);
+
+	      (0, _AnalysisApi.getLeadsCount)(this.props.startDate, this.props.endDate, this.props.analysisProduct.slug, this.props.analysisEntity.slug);
+	      (0, _AnalysisApi.getRegistrationsCount)(this.props.startDate, this.props.endDate, this.props.analysisProduct.slug, this.props.analysisEntity.slug);
 	    }
 	  }, {
 	    key: 'render',
@@ -63368,9 +63402,9 @@
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'row mt' },
-	            _react2.default.createElement(_NumberStatistics2.default, { type: 'Leads', entityName: this.props.analysisEntity.name, stats: this.props.leadsStatistics.length }),
-	            _react2.default.createElement(_NumberStatistics2.default, { type: 'Registrations', entityName: this.props.analysisEntity.name, stats: this.props.registrationsStatistics.length }),
-	            _react2.default.createElement(_Conversion2.default, null)
+	            _react2.default.createElement(_NumberStatistics2.default, { type: 'Leads', entity: this.entity, stats: this.props.leadsCount }),
+	            _react2.default.createElement(_NumberStatistics2.default, { type: 'Registrations', entity: this.entity, stats: this.props.registrationsCount }),
+	            _react2.default.createElement(_Conversion2.default, { leadsCount: this.props.leadsCount, registrationsCount: this.props.registrationsCount })
 	          ),
 	          _react2.default.createElement(
 	            'div',
@@ -63400,7 +63434,9 @@
 	    leadsStatistics: store.analysisState.leadsStatistics,
 	    registrationsStatistics: store.analysisState.registrationsStatistics,
 	    analysisEntity: store.analysisState.analysisEntity,
-	    analysisProduct: store.analysisState.analysisProduct
+	    analysisProduct: store.analysisState.analysisProduct,
+	    leadsCount: store.analysisState.leadsCount,
+	    registrationsCount: store.analysisState.registrationsCount
 	  };
 	};
 
@@ -63477,7 +63513,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -63495,51 +63531,56 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var Conversion = function (_React$Component) {
-	    _inherits(Conversion, _React$Component);
+	  _inherits(Conversion, _React$Component);
 
-	    function Conversion(props) {
-	        _classCallCheck(this, Conversion);
+	  function Conversion(props) {
+	    _classCallCheck(this, Conversion);
 
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Conversion).call(this, props));
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Conversion).call(this, props));
 
-	        _this.displayName = 'Conversion';
-	        _this.state = {
-	            conversionLeadToOpen: '22'
-	        };
-	        return _this;
+	    _this.displayName = 'Conversion';
+	    _this.conversionLeadToOpen = 0;
+	    return _this;
+	  }
+
+	  _createClass(Conversion, [{
+	    key: 'componentWillUpdate',
+	    value: function componentWillUpdate(nextProps, nextState) {
+	      if (typeof nextProps.registrationsCount != 'undefined' && typeof nextProps.leadsCount != 'undefined') {
+	        this.conversionLeadToOpen = nextProps.registrationsCount.count / nextProps.leadsCount.count * 100;
+	      }
 	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'col-md-4 col-sm-4 mb' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'green-panel pn' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'green-header' },
+	            _react2.default.createElement(
+	              'h3',
+	              null,
+	              'Conversion ',
+	              _react2.default.createElement(
+	                'val',
+	                { id: 'conversionNumber' },
+	                this.conversionLeadToOpen
+	              ),
+	              '%'
+	            )
+	          ),
+	          _react2.default.createElement('div', { id: 'conversionLeadToOpen', styles: 'height: 170px;' })
+	        )
+	      );
+	    }
+	  }]);
 
-	    _createClass(Conversion, [{
-	        key: 'render',
-	        value: function render() {
-	            return _react2.default.createElement(
-	                'div',
-	                { className: 'col-md-4 col-sm-4 mb' },
-	                _react2.default.createElement(
-	                    'div',
-	                    { className: 'green-panel pn' },
-	                    _react2.default.createElement(
-	                        'div',
-	                        { className: 'green-header' },
-	                        _react2.default.createElement(
-	                            'h3',
-	                            null,
-	                            'Conversion ',
-	                            _react2.default.createElement(
-	                                'val',
-	                                { id: 'conversionNumber' },
-	                                this.state.conversionLeadToOpen
-	                            ),
-	                            '%'
-	                        )
-	                    ),
-	                    _react2.default.createElement('div', { id: 'conversionLeadToOpen', styles: 'height: 170px;' })
-	                )
-	            );
-	        }
-	    }]);
-
-	    return Conversion;
+	  return Conversion;
 	}(_react2.default.Component);
 
 	exports.default = Conversion;
@@ -63577,10 +63618,22 @@
 	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(NumberStatistics).call(this, props));
 
 	        _this.displayName = 'NumberStatistics';
+	        _this.statsCount = "";
+	        _this.entityName = "";
 	        return _this;
 	    }
 
 	    _createClass(NumberStatistics, [{
+	        key: 'componentWillUpdate',
+	        value: function componentWillUpdate(nextProps, nextState) {
+	            if (typeof nextProps.stats != "undefined") {
+	                this.statsCount = nextProps.stats.count;
+	            }
+	            if (typeof nextProps.entity != "undefined") {
+	                this.entityName = nextProps.entity.name;
+	            }
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            return _react2.default.createElement(
@@ -63597,7 +63650,7 @@
 	                            null,
 	                            this.props.type,
 	                            ' in ',
-	                            this.props.entityName
+	                            this.entityName
 	                        )
 	                    ),
 	                    _react2.default.createElement(
@@ -63619,7 +63672,7 @@
 	                                _react2.default.createElement(
 	                                    'val',
 	                                    { id: 'stats' },
-	                                    this.props.stats
+	                                    this.statsCount
 	                                )
 	                            )
 	                        )
@@ -64224,7 +64277,6 @@
 	        key: 'componentWillUpdate',
 	        value: function componentWillUpdate(nextProps, nextState) {
 	            if (typeof nextProps.product != 'undefined' && typeof nextProps.entity != 'undefined') {
-	                console.log(nextProps);
 	                this.title = nextProps.product.name + ' in ' + nextProps.entity.name;
 	            }
 	        }
@@ -64434,6 +64486,7 @@
 	exports.getLeadsStatistics = getLeadsStatistics;
 	exports.getRegistrationsStatistics = getRegistrationsStatistics;
 	exports.getLeadsCount = getLeadsCount;
+	exports.getRegistrationsCount = getRegistrationsCount;
 
 	var _axios = __webpack_require__(364);
 
@@ -64519,8 +64572,66 @@
 		});
 	}
 
-	function getLeadsCount(startDate, endDate, productId, campaignId, entityId) {
-		// body...
+	function getLeadsCount(startDate, endDate, product, entity, campaign) {
+		window.showLoadingSpinner();
+		var body = {
+			date_from: startDate.format('YYYY-MM-DD'),
+			date_to: endDate.format('YYYY-MM-DD'),
+			product: product
+		};
+		if (typeof entity != 'undefined') {
+			body['entity'] = entity;
+		};
+		if (typeof campaign != 'undefined') {
+			body['utm_campaign'] = campaign;
+		};
+
+		var config = {
+			headers: { 'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken') }
+		};
+		return _axios2.default.post(_Config2.default.serverUrl + 'leads/count/', body, config).then(function (response) {
+			window.hideLoadingSpinner();
+			_store2.default.dispatch((0, _AnalysisActions.getLeadsCountSuccess)(response.data));
+			return response;
+		}).catch(function (response) {
+			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			if (response.data.error.code == 401) {
+				(0, _SessionManager.deleteSession)();
+				window.location.reload();
+			}
+			window.hideLoadingSpinner();
+		});
+	}
+
+	function getRegistrationsCount(startDate, endDate, product, entity, campaign) {
+		window.showLoadingSpinner();
+		var body = {
+			date_from: startDate.format('YYYY-MM-DD'),
+			date_to: endDate.format('YYYY-MM-DD'),
+			product: product
+		};
+		if (typeof entity != 'undefined') {
+			body['entity'] = entity;
+		};
+		if (typeof campaign != 'undefined') {
+			body['utm_campaign'] = campaign;
+		};
+
+		var config = {
+			headers: { 'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken') }
+		};
+		return _axios2.default.post(_Config2.default.serverUrl + 'customers/count/', body, config).then(function (response) {
+			window.hideLoadingSpinner();
+			_store2.default.dispatch((0, _AnalysisActions.getRegistrationsCountSuccess)(response.data));
+			return response;
+		}).catch(function (response) {
+			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			if (response.data.error.code == 401) {
+				(0, _SessionManager.deleteSession)();
+				window.location.reload();
+			}
+			window.hideLoadingSpinner();
+		});
 	}
 
 /***/ },

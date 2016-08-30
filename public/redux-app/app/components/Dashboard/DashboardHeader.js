@@ -8,7 +8,6 @@ class DashboardHeader extends React.Component {
     }
     componentWillUpdate(nextProps, nextState) {
     	if (typeof nextProps.product != 'undefined' && typeof nextProps.entity != 'undefined') {
-    		console.log(nextProps);
     		this.title = nextProps.product.name + ' in ' + nextProps.entity.name;
     	}
     }
