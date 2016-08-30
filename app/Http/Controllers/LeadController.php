@@ -61,7 +61,7 @@ class LeadController extends Controller
             return ErrorManager::error400(ErrorManager::$INVALID_PAYLOAD, 'Some elements are not provided.');
         } 
         
-        $where = "where \"created_at\" between '".$request->date_from."' and '".$request->date_to."' and \"product_id\" = (SELECT id FROM products WHERE slug = '".$request->product."')";
+        $where = "where \"created_at\" between '".$request->date_from."' and '".$request->date_to." 23:59:59' and \"product_id\" = (SELECT id FROM products WHERE slug = '".$request->product."')";
 
         if (!empty($request->entity)) {
             $where = $where." AND \"entity_id\" = (SELECT id FROM entities WHERE slug = '".$request->entity."')"; 

@@ -26551,6 +26551,7 @@
 	//Analysis
 	var START_DATE_SELECTED = exports.START_DATE_SELECTED = 'START_DATE_SELECTED';
 	var END_DATE_SELECTED = exports.END_DATE_SELECTED = 'END_DATE_SELECTED';
+	var CAMPAIGN_SELECTED = exports.CAMPAIGN_SELECTED = 'CAMPAIGN_SELECTED';
 	var GET_LEADS_STATISTICS_SUCCESS = exports.GET_LEADS_STATISTICS_SUCCESS = 'GET_LEADS_STATISTICS_SUCCESS';
 	var GET_REGISTRATIONS_STATISTICS_SUCCESS = exports.GET_REGISTRATIONS_STATISTICS_SUCCESS = 'GET_REGISTRATIONS_STATISTICS_SUCCESS';
 	var ANALYSIS_ENTITY_SELECTED = exports.ANALYSIS_ENTITY_SELECTED = 'ANALYSIS_ENTITY_SELECTED';
@@ -57291,6 +57292,7 @@
 			analysisParams: {},
 			startDate: (0, _moment2.default)().subtract(14, 'days'),
 			endDate: (0, _moment2.default)(),
+			analysisCampaign: {},
 			analysisEntity: {},
 			analysisProduct: {},
 			leadsCount: 0,
@@ -57313,6 +57315,9 @@
 
 					case types.END_DATE_SELECTED:
 							return Object.assign({}, state, { endDate: action.endDate });
+
+					case types.CAMPAIGN_SELECTED:
+							return Object.assign({}, state, { analysisCampaign: action.campaign });
 
 					case types.GET_LEADS_STATISTICS_SUCCESS:
 							return Object.assign({}, state, { leadsStatistics: action.leadsStatistics });
@@ -59289,6 +59294,7 @@
 	exports.setAnalysisProduct = setAnalysisProduct;
 	exports.setStartDate = setStartDate;
 	exports.setEndDate = setEndDate;
+	exports.setAnalysisCampaign = setAnalysisCampaign;
 	exports.getLeadsStatsSuccess = getLeadsStatsSuccess;
 	exports.getRegistrationsStatsSuccess = getRegistrationsStatsSuccess;
 	exports.getLeadsCountSuccess = getLeadsCountSuccess;
@@ -59325,6 +59331,13 @@
 		return {
 			type: types.END_DATE_SELECTED,
 			endDate: endDate
+		};
+	}
+
+	function setAnalysisCampaign(campaign) {
+		return {
+			type: types.CAMPAIGN_SELECTED,
+			campaign: campaign
 		};
 	}
 
@@ -63356,12 +63369,11 @@
 	  }, {
 	    key: 'showAnalysis',
 	    value: function showAnalysis() {
-	      debugger;
-	      (0, _AnalysisApi.getLeadsStatistics)(this.props.startDate, this.props.endDate, this.props.analysisProduct.slug, this.props.analysisEntity.slug);
-	      (0, _AnalysisApi.getRegistrationsStatistics)(this.props.startDate, this.props.endDate, this.props.analysisProduct.slug, this.props.analysisEntity.slug);
+	      (0, _AnalysisApi.getLeadsStatistics)(this.props.startDate, this.props.endDate, this.product.slug, this.entity.slug, this.props.analysisCampaign.slug);
+	      (0, _AnalysisApi.getRegistrationsStatistics)(this.props.startDate, this.props.endDate, this.product.slug, this.entity.slug, this.props.analysisCampaign.slug);
 
-	      (0, _AnalysisApi.getLeadsCount)(this.props.startDate, this.props.endDate, this.props.analysisProduct.slug, this.props.analysisEntity.slug);
-	      (0, _AnalysisApi.getRegistrationsCount)(this.props.startDate, this.props.endDate, this.props.analysisProduct.slug, this.props.analysisEntity.slug);
+	      (0, _AnalysisApi.getLeadsCount)(this.props.startDate, this.props.endDate, this.product.slug, this.entity.slug, this.props.analysisCampaign.slug);
+	      (0, _AnalysisApi.getRegistrationsCount)(this.props.startDate, this.props.endDate, this.product.slug, this.entity.slug, this.props.analysisCampaign.slug);
 	    }
 	  }, {
 	    key: 'render',
@@ -63436,7 +63448,8 @@
 	    analysisEntity: store.analysisState.analysisEntity,
 	    analysisProduct: store.analysisState.analysisProduct,
 	    leadsCount: store.analysisState.leadsCount,
-	    registrationsCount: store.analysisState.registrationsCount
+	    registrationsCount: store.analysisState.registrationsCount,
+	    analysisCampaign: store.analysisState.analysisCampaign
 	  };
 	};
 
@@ -63547,7 +63560,8 @@
 	    key: 'componentWillUpdate',
 	    value: function componentWillUpdate(nextProps, nextState) {
 	      if (typeof nextProps.registrationsCount != 'undefined' && typeof nextProps.leadsCount != 'undefined') {
-	        this.conversionLeadToOpen = nextProps.registrationsCount.count / nextProps.leadsCount.count * 100;
+	        var conversion = Number((nextProps.registrationsCount.count / nextProps.leadsCount.count * 100).toFixed(1));
+	        this.conversionLeadToOpen = conversion;
 	      }
 	    }
 	  }, {
@@ -63924,7 +63938,7 @@
 		_createClass(AnalysisParameters, [{
 			key: 'setCampaign',
 			value: function setCampaign(campaign) {
-				_store2.default.dispatch((0, _AnalysisActions.setCampaign)(campaign));
+				_store2.default.dispatch((0, _AnalysisActions.setAnalysisCampaign)(campaign));
 			}
 		}, {
 			key: 'handleStartDate',

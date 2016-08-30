@@ -9,7 +9,8 @@ class Conversion extends React.Component {
     
     componentWillUpdate(nextProps, nextState) {
       if (typeof nextProps.registrationsCount != 'undefined' && typeof nextProps.leadsCount != 'undefined') {
-        this.conversionLeadToOpen = nextProps.registrationsCount.count/nextProps.leadsCount.count * 100;
+        let conversion = Number((nextProps.registrationsCount.count/nextProps.leadsCount.count * 100).toFixed(1));
+        this.conversionLeadToOpen = conversion;
       }
     }
 

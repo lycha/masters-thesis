@@ -3,7 +3,7 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import CampaignsSelector from './CampaignsSelector';
 import store from '../../store';
-import { setStartDate, setEndDate, setCampaign } from '../../actions/AnalysisActions';
+import { setStartDate, setEndDate, setAnalysisCampaign } from '../../actions/AnalysisActions';
 
 
 class AnalysisParameters extends React.Component {
@@ -12,7 +12,7 @@ class AnalysisParameters extends React.Component {
         this.displayName = 'AnalysisParameters';
     }
     setCampaign(campaign) {
-    	store.dispatch(setCampaign(campaign));
+    	store.dispatch(setAnalysisCampaign(campaign));
     }
     handleStartDate(date) {  
     	store.dispatch(setStartDate(date));

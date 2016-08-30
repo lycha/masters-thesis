@@ -28,6 +28,13 @@ export function setEndDate(endDate) {
   };
 }
 
+export function setAnalysisCampaign(campaign) {
+	return {
+	    type: types.CAMPAIGN_SELECTED,
+	    campaign
+  };
+}
+
 export function getLeadsStatsSuccess(leadsStatistics) {
 	return {
 	    type: types.GET_LEADS_STATISTICS_SUCCESS,

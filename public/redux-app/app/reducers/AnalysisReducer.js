@@ -8,6 +8,7 @@ const initialState = {
   analysisParams: {},
   startDate: moment().subtract(14, 'days'),
   endDate: moment(),
+  analysisCampaign: {},
   analysisEntity: {},
   analysisProduct: {},
   leadsCount: 0,
@@ -27,6 +28,9 @@ const AnalysisReducer = function(state = initialState, action) {
 
 	    case types.END_DATE_SELECTED:
 	    	return Object.assign({}, state, { endDate: action.endDate });
+	    	
+	    case types.CAMPAIGN_SELECTED:
+	    	return Object.assign({}, state, { analysisCampaign: action.campaign });
 
 	    case types.GET_LEADS_STATISTICS_SUCCESS:
 	    	return Object.assign({}, state, { leadsStatistics: action.leadsStatistics });

@@ -64,16 +64,15 @@ class DashboardContainer extends React.Component {
     }
 
     showAnalysis() {
-      debugger;
       getLeadsStatistics(this.props.startDate,
-        this.props.endDate, this.props.analysisProduct.slug, this.props.analysisEntity.slug);
+        this.props.endDate, this.product.slug, this.entity.slug, this.props.analysisCampaign.slug);
       getRegistrationsStatistics(this.props.startDate,
-        this.props.endDate, this.props.analysisProduct.slug, this.props.analysisEntity.slug);
+        this.props.endDate, this.product.slug, this.entity.slug, this.props.analysisCampaign.slug);
 
       getLeadsCount(this.props.startDate,
-        this.props.endDate, this.props.analysisProduct.slug, this.props.analysisEntity.slug);
+        this.props.endDate, this.product.slug, this.entity.slug, this.props.analysisCampaign.slug);
       getRegistrationsCount(this.props.startDate,
-        this.props.endDate, this.props.analysisProduct.slug, this.props.analysisEntity.slug);
+        this.props.endDate, this.product.slug, this.entity.slug, this.props.analysisCampaign.slug);
     }
     render() {
         return (
@@ -129,7 +128,8 @@ const mapStateToProps = function(store) {
     analysisEntity: store.analysisState.analysisEntity,
     analysisProduct: store.analysisState.analysisProduct,
     leadsCount: store.analysisState.leadsCount,
-    registrationsCount: store.analysisState.registrationsCount
+    registrationsCount: store.analysisState.registrationsCount,
+    analysisCampaign: store.analysisState.analysisCampaign
   };
 };
 
