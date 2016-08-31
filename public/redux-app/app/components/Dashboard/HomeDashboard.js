@@ -7,7 +7,7 @@ import RegisterationsStatisticsChart from './RegisterationsStatisticsChart';
 import AnalysisParameters from './AnalysisParameters'
 import store from '../../store';
 import {getCampaigns} from '../../api/CampaignsApi';
-import {getLeadsStatistics, getRegistrationsStatistics} from '../../api/AnalysisApi';
+import {getLeadsCount, getRegistrationsCount} from '../../api/AnalysisApi';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
@@ -21,17 +21,16 @@ class DashboardContainer extends React.Component {
         this.product = "";
     }
     
-    componentWillUpdate() {
-      let pathArray = this.props.location.pathname.split("/");
-      //getLeadsStatistics(this.props.startDate, this.props.endDate, this.props.analysisProduct.id, this.props.analysisEntity.id);
-      //getRegistrationsStatistics(this.props.startDate, this.props.endDate, this.props.analysisProduct.id, this.props.analysisEntity.id);
+    componentWillMount() {
+      getLeadsCount(this.props.startDate, this.props.endDate);
+      getRegistrationsCount(this.props.startDate, this.props.endDate);
     }
 
-    showAnalysis() {
-      // getLeadsStatistics(this.props.startDate,
-      //   this.props.endDate, 2,1);
-      // getRegistrationsStatistics(this.props.startDate,
-      //   this.props.endDate, 2,1);
+    showAnalysis() { 
+      getLeadsCount(this.props.startDate,
+        this.props.endDate, undefined, undefined, this.props.analysisCampaign.slug);
+      getRegistrationsCount(this.props.startDate,
+        this.props.endDate, undefined, undefined, this.props.analysisCampaign.slug);
     }
     render() {
         let title = "";
@@ -54,18 +53,12 @@ class DashboardContainer extends React.Component {
           </div>
           <div className="row mt">
             
-            <NumberStatistics type="Leads" entityName="total"/>
+            <NumberStatistics type="Leads" entity="total" stats={this.props.leadsCount}/>
 
-            <NumberStatistics type="Registrations" entityName="total"/>
+            <NumberStatistics type="Registrations" entity="total" stats={this.props.registrationsCount}/>
+              
+            <Conversion leadsCount={this.props.leadsCount} registrationsCount={this.props.registrationsCount}/>
             
-            <Conversion />
-            
-          </div>
-          <div className="row mt">
-            <LeadsStatisticsChart leadsStatistics={this.props.leadsStatistics}/>
-          </div>
-          <div className="row mt">
-            <RegisterationsStatisticsChart registrationsStatistics={this.props.registrationsStatistics}/>
           </div>
           </section>
           </section>
@@ -78,8 +71,9 @@ const mapStateToProps = function(store) {
     campaigns: store.campaignState.campaigns,
     startDate: store.analysisState.startDate,
     endDate: store.analysisState.endDate,
-    leadsStatistics: store.analysisState.leadsStatistics,
-    registrationsStatistics: store.analysisState.registrationsStatistics
+    analysisCampaign: store.analysisState.analysisCampaign,
+    leadsCount: store.analysisState.leadsCount,
+    registrationsCount: store.analysisState.registrationsCount
   };
 };
 

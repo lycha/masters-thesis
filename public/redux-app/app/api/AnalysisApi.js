@@ -9,9 +9,9 @@ export function getLeadsStatistics(startDate, endDate, product, entity, campaign
 	window.showLoadingSpinner();
 	let body = {
 	    date_from: startDate.format('YYYY-MM-DD'),
-	    date_to: endDate.format('YYYY-MM-DD'),
-	    product: product
+	    date_to: endDate.format('YYYY-MM-DD')
 	};
+	if (typeof product != 'undefined') { body['product'] = product; };
 	if (typeof entity != 'undefined') { body['entity'] = entity; };
 	if (typeof campaign != 'undefined') { body['utm_campaign'] = campaign; };
 
@@ -38,9 +38,9 @@ export function getRegistrationsStatistics(startDate, endDate, product, entity, 
 	window.showLoadingSpinner();
 	let body = {
 	    date_from: startDate.format('YYYY-MM-DD'),
-	    date_to: endDate.format('YYYY-MM-DD'),
-	    product: product
+	    date_to: endDate.format('YYYY-MM-DD')
 	};
+	if (typeof product != 'undefined') { body['product'] = product; };
 	if (typeof entity != 'undefined') { body['entity'] = entity; };
 	if (typeof campaign != 'undefined') { body['utm_campaign'] = campaign; };
 
@@ -67,9 +67,9 @@ export function getLeadsCount(startDate, endDate, product, entity, campaign) {
 	window.showLoadingSpinner();
 	let body = {
 	    date_from: startDate.format('YYYY-MM-DD'),
-	    date_to: endDate.format('YYYY-MM-DD'),
-	    product: product
+	    date_to: endDate.format('YYYY-MM-DD')
 	};
+	if (typeof product != 'undefined') { body['product'] = product; };
 	if (typeof entity != 'undefined') { body['entity'] = entity; };
 	if (typeof campaign != 'undefined') { body['utm_campaign'] = campaign; };
 
@@ -96,9 +96,9 @@ export function getRegistrationsCount(startDate, endDate, product, entity, campa
 	window.showLoadingSpinner();
 	let body = {
 	    date_from: startDate.format('YYYY-MM-DD'),
-	    date_to: endDate.format('YYYY-MM-DD'),
-	    product: product
+	    date_to: endDate.format('YYYY-MM-DD')
 	};
+	if (typeof product != 'undefined') { body['product'] = product; };
 	if (typeof entity != 'undefined') { body['entity'] = entity; };
 	if (typeof campaign != 'undefined') { body['utm_campaign'] = campaign; };
 

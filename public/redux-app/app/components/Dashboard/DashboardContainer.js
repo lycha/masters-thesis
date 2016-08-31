@@ -37,7 +37,6 @@ class DashboardContainer extends React.Component {
       getRegistrationsCount(this.props.startDate, this.props.endDate, 
         this.props.params.product, 
         this.props.params.entity);
-
     }
 
     componentWillUpdate(nextProps, nextState) {

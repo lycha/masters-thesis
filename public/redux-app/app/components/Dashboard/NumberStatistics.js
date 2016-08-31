@@ -26,8 +26,9 @@ class NumberStatistics extends React.Component {
                 </div>
                 <footer>
                   <div className="centered">
-                    <h4>Number of leads in total. Whoohoo!</h4>
-                    <h3><i className="fa fa-trophy"></i> <val id="stats">{ this.statsCount }</val></h3>
+                    <h1>#<val id="stats">{ this.statsCount }</val></h1>
+                    <h4>Whoohoo! Good Job!</h4>
+                    <h1><i className="fa fa-trophy"></i> </h1>
                   </div>
                 </footer>
               </div>

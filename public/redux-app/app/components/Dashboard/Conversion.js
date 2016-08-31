@@ -19,10 +19,14 @@ class Conversion extends React.Component {
         	<div className="col-md-4 col-sm-4 mb">
               <div className="green-panel pn">
                 <div className="green-header">
-                  <h3>Conversion <val id="conversionNumber">{ this.conversionLeadToOpen }</val>%</h3>
+                  <h3>Conversion</h3>
                 </div>
                 <div id="conversionLeadToOpen" styles="height: 170px;"></div>
-
+                  <div className="centered">
+                    <h1>#<val id="conversionNumber">{ this.conversionLeadToOpen }</val>%</h1>
+                    <h4>That is a kickass conversion!</h4>
+                    <h1><i className="fa fa-thumbs-o-up"></i></h1> 
+                  </div>
               </div>
             </div>
         );

@@ -63579,16 +63579,35 @@
 	            _react2.default.createElement(
 	              'h3',
 	              null,
-	              'Conversion ',
+	              'Conversion'
+	            )
+	          ),
+	          _react2.default.createElement('div', { id: 'conversionLeadToOpen', styles: 'height: 170px;' }),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'centered' },
+	            _react2.default.createElement(
+	              'h1',
+	              null,
+	              '#',
 	              _react2.default.createElement(
 	                'val',
 	                { id: 'conversionNumber' },
 	                this.conversionLeadToOpen
 	              ),
 	              '%'
+	            ),
+	            _react2.default.createElement(
+	              'h4',
+	              null,
+	              'That is a kickass conversion!'
+	            ),
+	            _react2.default.createElement(
+	              'h1',
+	              null,
+	              _react2.default.createElement('i', { className: 'fa fa-thumbs-o-up' })
 	            )
-	          ),
-	          _react2.default.createElement('div', { id: 'conversionLeadToOpen', styles: 'height: 170px;' })
+	          )
 	        )
 	      );
 	    }
@@ -63674,20 +63693,25 @@
 	                            'div',
 	                            { className: 'centered' },
 	                            _react2.default.createElement(
-	                                'h4',
+	                                'h1',
 	                                null,
-	                                'Number of leads in total. Whoohoo!'
-	                            ),
-	                            _react2.default.createElement(
-	                                'h3',
-	                                null,
-	                                _react2.default.createElement('i', { className: 'fa fa-trophy' }),
-	                                ' ',
+	                                '#',
 	                                _react2.default.createElement(
 	                                    'val',
 	                                    { id: 'stats' },
 	                                    this.statsCount
 	                                )
+	                            ),
+	                            _react2.default.createElement(
+	                                'h4',
+	                                null,
+	                                'Whoohoo! Good Job!'
+	                            ),
+	                            _react2.default.createElement(
+	                                'h1',
+	                                null,
+	                                _react2.default.createElement('i', { className: 'fa fa-trophy' }),
+	                                ' '
 	                            )
 	                        )
 	                    )
@@ -64528,8 +64552,10 @@
 		window.showLoadingSpinner();
 		var body = {
 			date_from: startDate.format('YYYY-MM-DD'),
-			date_to: endDate.format('YYYY-MM-DD'),
-			product: product
+			date_to: endDate.format('YYYY-MM-DD')
+		};
+		if (typeof product != 'undefined') {
+			body['product'] = product;
 		};
 		if (typeof entity != 'undefined') {
 			body['entity'] = entity;
@@ -64559,8 +64585,10 @@
 		window.showLoadingSpinner();
 		var body = {
 			date_from: startDate.format('YYYY-MM-DD'),
-			date_to: endDate.format('YYYY-MM-DD'),
-			product: product
+			date_to: endDate.format('YYYY-MM-DD')
+		};
+		if (typeof product != 'undefined') {
+			body['product'] = product;
 		};
 		if (typeof entity != 'undefined') {
 			body['entity'] = entity;
@@ -64590,8 +64618,10 @@
 		window.showLoadingSpinner();
 		var body = {
 			date_from: startDate.format('YYYY-MM-DD'),
-			date_to: endDate.format('YYYY-MM-DD'),
-			product: product
+			date_to: endDate.format('YYYY-MM-DD')
+		};
+		if (typeof product != 'undefined') {
+			body['product'] = product;
 		};
 		if (typeof entity != 'undefined') {
 			body['entity'] = entity;
@@ -64621,8 +64651,10 @@
 		window.showLoadingSpinner();
 		var body = {
 			date_from: startDate.format('YYYY-MM-DD'),
-			date_to: endDate.format('YYYY-MM-DD'),
-			product: product
+			date_to: endDate.format('YYYY-MM-DD')
+		};
+		if (typeof product != 'undefined') {
+			body['product'] = product;
 		};
 		if (typeof entity != 'undefined') {
 			body['entity'] = entity;
@@ -64727,19 +64759,16 @@
 	  }
 
 	  _createClass(DashboardContainer, [{
-	    key: 'componentWillUpdate',
-	    value: function componentWillUpdate() {
-	      var pathArray = this.props.location.pathname.split("/");
-	      //getLeadsStatistics(this.props.startDate, this.props.endDate, this.props.analysisProduct.id, this.props.analysisEntity.id);
-	      //getRegistrationsStatistics(this.props.startDate, this.props.endDate, this.props.analysisProduct.id, this.props.analysisEntity.id);
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      (0, _AnalysisApi.getLeadsCount)(this.props.startDate, this.props.endDate);
+	      (0, _AnalysisApi.getRegistrationsCount)(this.props.startDate, this.props.endDate);
 	    }
 	  }, {
 	    key: 'showAnalysis',
 	    value: function showAnalysis() {
-	      // getLeadsStatistics(this.props.startDate,
-	      //   this.props.endDate, 2,1);
-	      // getRegistrationsStatistics(this.props.startDate,
-	      //   this.props.endDate, 2,1);
+	      (0, _AnalysisApi.getLeadsCount)(this.props.startDate, this.props.endDate, undefined, undefined, this.props.analysisCampaign.slug);
+	      (0, _AnalysisApi.getRegistrationsCount)(this.props.startDate, this.props.endDate, undefined, undefined, this.props.analysisCampaign.slug);
 	    }
 	  }, {
 	    key: 'render',
@@ -64782,19 +64811,9 @@
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'row mt' },
-	            _react2.default.createElement(_NumberStatistics2.default, { type: 'Leads', entityName: 'total' }),
-	            _react2.default.createElement(_NumberStatistics2.default, { type: 'Registrations', entityName: 'total' }),
-	            _react2.default.createElement(_Conversion2.default, null)
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'row mt' },
-	            _react2.default.createElement(_LeadsStatisticsChart2.default, { leadsStatistics: this.props.leadsStatistics })
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'row mt' },
-	            _react2.default.createElement(_RegisterationsStatisticsChart2.default, { registrationsStatistics: this.props.registrationsStatistics })
+	            _react2.default.createElement(_NumberStatistics2.default, { type: 'Leads', entity: 'total', stats: this.props.leadsCount }),
+	            _react2.default.createElement(_NumberStatistics2.default, { type: 'Registrations', entity: 'total', stats: this.props.registrationsCount }),
+	            _react2.default.createElement(_Conversion2.default, { leadsCount: this.props.leadsCount, registrationsCount: this.props.registrationsCount })
 	          )
 	        )
 	      );
@@ -64809,8 +64828,9 @@
 	    campaigns: store.campaignState.campaigns,
 	    startDate: store.analysisState.startDate,
 	    endDate: store.analysisState.endDate,
-	    leadsStatistics: store.analysisState.leadsStatistics,
-	    registrationsStatistics: store.analysisState.registrationsStatistics
+	    analysisCampaign: store.analysisState.analysisCampaign,
+	    leadsCount: store.analysisState.leadsCount,
+	    registrationsCount: store.analysisState.registrationsCount
 	  };
 	};
 
