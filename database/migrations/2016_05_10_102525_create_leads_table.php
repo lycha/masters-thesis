@@ -12,6 +12,8 @@ class CreateLeadsTable extends Migration
      */
     public function up()
     {
+        DB::statement('CREATE EXTENSION IF NOT EXISTS hstore;');
+
         Schema::create('campaigns', function(Blueprint $table)
         {
             $table->increments('id');

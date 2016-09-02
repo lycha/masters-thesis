@@ -28,11 +28,6 @@ class InstallController extends Controller {
 	{
 	}
 
-	/**
-	 * Show the application welcome screen to the user.
-	 *
-	 * @return Response
-	 */
 	public function index()
 	{
 		if(file_exists($this->envFilePath)){

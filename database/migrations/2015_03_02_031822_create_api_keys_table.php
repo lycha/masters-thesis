@@ -15,14 +15,11 @@ class CreateApiKeysTable extends Migration
     {
         Schema::create('api_keys', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->unsigned();
-            $table->string('key', 40);
-            $table->smallInteger('level');
-            $table->boolean('ignore_limits');
+            $table->string('key');
+            $table->string('name');
+            $table->string('description');
             $table->nullableTimestamps();
             $table->softDeletes();
-
-            // unique key
             $table->unique('key');
 
             // Uncomment this if you want to link user ids to your users table

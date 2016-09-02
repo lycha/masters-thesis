@@ -35,7 +35,13 @@ class SideMenu extends React.Component {
 			                  <span>URL Generator</span>
 			              </a>
 			          </li>
-			          {/*<TotalAnalisysMenu products={this.props.products}/>*/}
+
+			          <li className="sub-menu">
+			              <a href="#" >
+			                  <i className="fa fa-bar-chart-o"></i>
+			                  <span>Total analysis</span>
+			              </a>
+			          </li>
 			          {this.props.entities.map((entity, index)=>{
 							return (
 								<EntitiesMenu entity={entity} products={this.props.products} key={index} onAnalysisSelected={this.onAnalysisSelected}/>

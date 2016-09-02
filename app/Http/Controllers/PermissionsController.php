@@ -19,10 +19,16 @@ class PermissionsController extends Controller
 		$customerForAdminPerm = $this->createCustomerForAdminPermissions();
 		$entityForAdminPerm = $this->createEntityForAdminPermissions();
 		$productForAdminPerm = $this->createProductForAdminPermissions();
+
+		$userForUserPerm = $this->createUserForUserPermissions();
+		$leadForUserPerm = $this->createLeadForUserPermissions();
+		$campaignForUserPerm = $this->createCampaignForUserPermissions();
+		$customerForUserPerm = $this->createCustomerForUserPermissions();
+		$entityForUserPerm = $this->createEntityForUserPermissions();
 		$productForUserPerm = $this->createProductForUserPermissions();
 
-		var_dump('aaa'.$productForUserPerm);
-		$userForUserPerm = $this->createUserForUserPermissions();
+		$leadForFormsPerm = $this->createLeadForFormsPermissions();
+		$customerForFormsPerm = $this->createCustomerForFormsPermissions();
 
 		if ($userForAdminPerm && 
 			$leadForAdminPerm &&
@@ -30,8 +36,14 @@ class PermissionsController extends Controller
 			$customerForAdminPerm &&
 			$entityForAdminPerm &&
 			$productForAdminPerm &&
+			$userForUserPerm &&
+			$leadForUserPerm &&
+			$campaignForUserPerm &&
+			$customerForUserPerm &&
+			$entityForUserPerm &&
 			$productForUserPerm &&
-			$userForUserPerm) {
+			$leadForFormsPerm &&
+			$customerForFormsPerm) {
 			return response()->json([], 201);
 		} else {
             return ErrorManager::error400(ErrorManager::$CREATE_PERMISSIONS_FAILED, 'Failed to create permissions.');
@@ -49,21 +61,6 @@ class PermissionsController extends Controller
 		        'delete'     => true
 		    ],
 		    'description' => 'Manage user permissions for admin role'
-		]);
-	}
-
-	private function createUserForUserPermissions() {
-		$permission = new Permission();
-		return $permUser = $permission->create([ 
-		    'name'        => 'user.user',
-		    'slug'        => [          // pass an array of permissions.
-		        'create'     => false,
-		        'view'       => true,
-		        'update'     => true,
-		        'delete'     => false
-		    ],
-            'inherit_id' => Permission::where('name', 'user')->first()->getKey(),
-		    'description' => 'Manage user permissions for user role'
 		]);
 	}
 
@@ -142,6 +139,87 @@ class PermissionsController extends Controller
 		]);
 	}
 
+	/*----------------USER PERMISSIONS --------------*/
+
+	private function createUserForUserPermissions() {
+		$permission = new Permission();
+		return $permUser = $permission->create([ 
+		    'name'        => 'user.user',
+		    'slug'        => [          // pass an array of permissions.
+		        'create'     => false,
+		        'view'       => true,
+		        'update'     => true,
+		        'delete'     => false
+		    ],
+            'inherit_id' => Permission::where('name', 'user')->first()->getKey(),
+		    'description' => 'Manage user permissions for user role'
+		]);
+	}
+
+	public function createLeadForUserPermissions()
+	{
+		$permission = new Permission();
+		return $perm = $permission->create([ 
+		    'name'        => 'lead.user',
+		    'slug'        => [          // pass an array of permissions.
+		        'create'     => true,
+		        'view'       => true,
+		        'update'     => true,
+		        'delete'     => false
+		    ],
+            'inherit_id' => Permission::where('name', 'lead')->first()->getKey(),
+		    'description' => 'Manage lead permissions for user role'
+		]);
+	}
+
+	public function createCampaignForUserPermissions()
+	{
+		$permission = new Permission();
+		return $perm = $permission->create([ 
+		    'name'        => 'campaign.user',
+		    'slug'        => [          // pass an array of permissions.
+		        'create'     => false,
+		        'view'       => true,
+		        'update'     => false,
+		        'delete'     => false
+		    ],
+            'inherit_id' => Permission::where('name', 'campaign')->first()->getKey(),
+		    'description' => 'Manage campaign permissions for user role'
+		]);
+	}
+
+	public function createCustomerForUserPermissions()
+	{
+		$permission = new Permission();
+		return $perm = $permission->create([ 
+		    'name'        => 'customer.user',
+		    'slug'        => [          // pass an array of permissions.
+		        'create'     => true,
+		        'view'       => true,
+		        'update'     => true,
+		        'delete'     => false
+		    ],
+            'inherit_id' => Permission::where('name', 'customer')->first()->getKey(),
+		    'description' => 'Manage customer permissions for user role'
+		]);
+	}
+
+	public function createEntityForUserPermissions()
+	{
+		$permission = new Permission();
+		return $perm = $permission->create([ 
+		    'name'        => 'entity.user',
+		    'slug'        => [          // pass an array of permissions.
+		        'create'     => false,
+		        'view'       => true,
+		        'update'     => false,
+		        'delete'     => false
+		    ],
+            'inherit_id' => Permission::where('name', 'entity')->first()->getKey(),
+		    'description' => 'Manage entity permissions for user role'
+		]);
+	}
+
 	public function createProductForUserPermissions()
 	{
 		$permission = new Permission();
@@ -153,8 +231,43 @@ class PermissionsController extends Controller
 		        'update'     => false,
 		        'delete'     => false
 		    ],
+            'inherit_id' => Permission::where('name', 'product')->first()->getKey(),
 		    'description' => 'Manage product permissions for user role'
 		]);
 		var_dump($permission);
+	}
+
+	/*----------------Forms API --------------*/
+	public function createLeadForFormsPermissions()
+	{
+		$permission = new Permission();
+		return $perm = $permission->create([ 
+		    'name'        => 'lead.forms',
+		    'slug'        => [          // pass an array of permissions.
+		        'create'     => true,
+		        'view'       => false,
+		        'update'     => false,
+		        'delete'     => false
+		    ],
+            'inherit_id' => Permission::where('name', 'lead')->first()->getKey(),
+		    'description' => 'Manage lead permissions for website forms'
+		]);
+	}
+
+
+	public function createCustomerForFormsPermissions()
+	{
+		$permission = new Permission();
+		return $perm = $permission->create([ 
+		    'name'        => 'customer.forms',
+		    'slug'        => [          // pass an array of permissions.
+		        'create'     => true,
+		        'view'       => false,
+		        'update'     => false,
+		        'delete'     => false
+		    ],
+            'inherit_id' => Permission::where('name', 'customer')->first()->getKey(),
+		    'description' => 'Manage customer permissions for website forms'
+		]);
 	}
 }

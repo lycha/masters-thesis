@@ -63,8 +63,12 @@ class RolesController extends Controller
 			$roleUser->slug = 'user';
 			$roleUser->description = 'standard user privileges';
 			$roleUser->save();
-			$roleUser->assignPermission('user.user'); //todo add all future permissions
-			//$roleUser->assignPermission('products.user'); //todo add all future permissions
+			$roleUser->assignPermission('user.user');
+			$roleUser->assignPermission('lead.user'); 
+			$roleUser->assignPermission('campaign.user'); 
+			$roleUser->assignPermission('customer.user'); 
+			$roleUser->assignPermission('entity.user'); 
+			$roleUser->assignPermission('product.user'); 
 
 			if ($roleUser->exists) {
 				return array('success_user_role' => 'Created User role.');

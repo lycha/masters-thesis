@@ -57657,6 +57657,20 @@
 																																	)
 																													)
 																									),
+																									_react2.default.createElement(
+																													'li',
+																													{ className: 'sub-menu' },
+																													_react2.default.createElement(
+																																	'a',
+																																	{ href: '#' },
+																																	_react2.default.createElement('i', { className: 'fa fa-bar-chart-o' }),
+																																	_react2.default.createElement(
+																																					'span',
+																																					null,
+																																					'Total analysis'
+																																	)
+																													)
+																									),
 																									this.props.entities.map(function (entity, index) {
 																													return _react2.default.createElement(_EntitiesMenu2.default, { entity: entity, products: _this2.props.products, key: index, onAnalysisSelected: _this2.onAnalysisSelected });
 																									})
