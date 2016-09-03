@@ -37,7 +37,7 @@ class ApiKeyController extends Controller
         $apiKey->name = $request->name;	
         $apiKey->description = $request->description;	
         $apiKey->expiration_date = $request->expiration_date;
-        $apiKey->key = bcrypt($token);
+        $apiKey->key = $token;
 
 		if (empty($apiKey->name) || empty($apiKey->description) || empty($apiKey->expiration_date) ) {
 			return ErrorManager::error400(ErrorManager::$INVALID_PAYLOAD, 'Some elements are not provided.');
