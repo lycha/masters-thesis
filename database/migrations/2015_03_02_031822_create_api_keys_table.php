@@ -15,9 +15,10 @@ class CreateApiKeysTable extends Migration
     {
         Schema::create('api_keys', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('key');
+            $table->string('key', 1024);
             $table->string('name');
             $table->string('description');
+            $table->string('expiration_date');
             $table->nullableTimestamps();
             $table->softDeletes();
             $table->unique('key');

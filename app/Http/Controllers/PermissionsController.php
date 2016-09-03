@@ -19,6 +19,7 @@ class PermissionsController extends Controller
 		$customerForAdminPerm = $this->createCustomerForAdminPermissions();
 		$entityForAdminPerm = $this->createEntityForAdminPermissions();
 		$productForAdminPerm = $this->createProductForAdminPermissions();
+		$apiKeyForAdminPerm = $this->createApiKeyForAdminPermissions();
 
 		$userForUserPerm = $this->createUserForUserPermissions();
 		$leadForUserPerm = $this->createLeadForUserPermissions();
@@ -36,6 +37,7 @@ class PermissionsController extends Controller
 			$customerForAdminPerm &&
 			$entityForAdminPerm &&
 			$productForAdminPerm &&
+			$apiKeyForAdminPerm &&
 			$userForUserPerm &&
 			$leadForUserPerm &&
 			$campaignForUserPerm &&
@@ -136,6 +138,21 @@ class PermissionsController extends Controller
 		        'delete'     => true
 		    ],
 		    'description' => 'Manage product permissions for admin role'
+		]);
+	}
+
+	public function createApiKeyForAdminPermissions()
+	{
+		$permission = new Permission();
+		return $perm = $permission->create([ 
+		    'name'        => 'api_key',
+		    'slug'        => [          // pass an array of permissions.
+		        'create'     => true,
+		        'view'       => true,
+		        'update'     => true,
+		        'delete'     => true
+		    ],
+		    'description' => 'Manage api keys permissions for admin role'
 		]);
 	}
 

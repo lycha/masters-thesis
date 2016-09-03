@@ -53,7 +53,7 @@ class UserController extends Controller
 
 	public function delete($id)
 	{
-		if ($id == 1) {
+		if ($id == 1 || $id == 2) {
 			return ErrorManager::error400(ErrorManager::$INTERNAL_VIOLATION, 'Can not delete admin.');
 		}
 

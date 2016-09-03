@@ -204,4 +204,22 @@ Route::group(['prefix' => 'api/v1'], function()
         'middleware' => ['jwt.auth', 'acl'], 
         'can' => 'update.product']);
 
+    //////////////**********API keys**************////////////
+    //create new user
+    Route::post('/api-keys', [
+        'uses' => 'ApiKeyController@create',
+        'middleware' => ['jwt.auth', 'acl'], 
+        'can' => 'create.api_key']);
+
+    //delete user by id
+    Route::delete('/api-keys/{id}', [
+        'uses' => 'ApiKeyController@delete',
+        'middleware' => ['jwt.auth', 'acl'], 
+        'can' => 'delete.api_key']);
+
+    //get all users
+    Route::get('/api-keys', [
+        'uses' => 'ApiKeyController@view',
+        'middleware' => ['jwt.auth', 'acl'], 
+        'can' => 'view.api_key']);
 });

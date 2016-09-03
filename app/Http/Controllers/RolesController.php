@@ -2,6 +2,7 @@
 use Kodeine\Acl\Models\Eloquent\Role;
 use Input;
 use App\User;
+use App\ApiUser;
 use App\Admin;
 use App\Http\Utils\ErrorManager;
 /**
@@ -22,8 +23,12 @@ class RolesController extends Controller
 		} else {
 			$adminOutput = $this->createAdminRole();
 			$userOutput = $this->createUserRole();
+			$apiKeyOutput = $this->createApiKeyRole();
 			$admin = new Admin();
 			$newAdmin  = $admin->create($name, $email, $password);
+
+			$apiKeyUser = new ApiUser();
+			$apiKeyUser->create();
 			if (!$newAdmin) {
 				return ErrorManager::error400(ErrorManager::$OBJECT_DUPLICATED, 'Admin is already created.');
 			}
@@ -45,6 +50,7 @@ class RolesController extends Controller
 			$roleAdmin->assignPermission('customer'); 
 			$roleAdmin->assignPermission('entity'); 
 			$roleAdmin->assignPermission('product'); 
+			$roleAdmin->assignPermission('api_key'); 
 			if ($roleAdmin->exists) {
 				return array('success_admin_role' => 'Created Admin role.');
 			} else {
@@ -77,6 +83,27 @@ class RolesController extends Controller
 			}
 		} catch(\Illuminate\Database\QueryException $e) {
 				return ErrorManager::error400(ErrorManager::$OBJECT_CREATION_FAILED, 'User role creation failed.');
+		}
+	}
+
+	private function createApiKeyRole()
+	{
+		try {
+			$roleUser = new Role();
+			$roleUser->name = 'ApiKeyUser';
+			$roleUser->slug = 'api';
+			$roleUser->description = 'priviliges for api calls';
+			$roleUser->save();
+			$roleUser->assignPermission('lead.forms');
+			$roleUser->assignPermission('customer.forms'); 
+
+			if ($roleUser->exists) {
+				return array('success_api_role' => 'Created Api role.');
+			} else {
+				return ErrorManager::error400(ErrorManager::$OBJECT_CREATION_FAILED, 'Api role creation failed.');
+			}
+		} catch(\Illuminate\Database\QueryException $e) {
+				return ErrorManager::error400(ErrorManager::$OBJECT_CREATION_FAILED, 'Api role creation failed.');
 		}
 	}
 }
