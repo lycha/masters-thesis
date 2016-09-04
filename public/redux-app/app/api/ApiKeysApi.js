@@ -55,7 +55,7 @@ export function addApiKey(apiKey) {
     return axios.post(Config.serverUrl+'api-keys', {
 		    name: apiKey.name,
 		    description: apiKey.description,
-		    expiration_date: product.expiration_date
+		    expiration_date: apiKey.expiration_date
 		}, config)
 		.then((response) => {
 			window.hideLoadingSpinner();

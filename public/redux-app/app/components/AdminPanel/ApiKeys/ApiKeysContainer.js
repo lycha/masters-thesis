@@ -21,7 +21,9 @@ class ApiKeysContainer extends React.Component {
 	        	<div className="row mt">
 					<div className="col-lg-12">
 						<div className="form-panel">
-		  	  				<AddApiKey addNew={this.addNew} ref="child"/>
+		  	  				<AddApiKey addNew={this.addNew} 
+					          		expirationDate={this.props.expirationDate}
+					          		ref="child"/>
 						</div>
 					</div>
 				</div>
@@ -42,7 +44,7 @@ class ApiKeysContainer extends React.Component {
 					          </tr>
 					          </thead>
 					          	<ApiKeysList apiKeys={this.props.apiKeys} 
-					          		deleteApiKey={deleteApiKey}  />
+					          		deleteApiKey={deleteApiKey} />
 					      </table>
 						</div>
 	    			</div>  
@@ -55,7 +57,8 @@ class ApiKeysContainer extends React.Component {
 
 const mapStateToProps = function(store) {
   return {
-    apiKeys: store.apiKeysState.apiKeys
+    apiKeys: store.apiKeysState.apiKeys,
+    expirationDate: store.apiKeysState.expirationDate
   };
 };
 

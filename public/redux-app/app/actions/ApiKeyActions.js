@@ -21,3 +21,10 @@ export function addApiKeySuccess(apiKey) {
   };
 }
 
+export function expirationDateSelected(expirationDate) {
+  return {
+    type: types.API_EXPIRATION_DATE_SELECTED,
+    expirationDate
+  };
+}
+

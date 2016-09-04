@@ -1,11 +1,15 @@
 import * as types from '../actions/ActionTypes';
 import _ from 'lodash';
+import moment from 'moment';
+import DatePicker from 'react-datepicker';
+
 
 const initialState = {
-  apiKeys: [] 
+  apiKeys: [],
+  expirationDate: moment()
 };
 
-const ProductReducer = function(state = initialState, action) {
+const ApiKeyReducer = function(state = initialState, action) {
 
   switch(action.type) {
 
@@ -22,9 +26,12 @@ const ProductReducer = function(state = initialState, action) {
       var newApiKey = state.apiKeys.concat([action.apiKey]);
       var apiKeys = _.sortBy(newApiKey, 'name');
       return Object.assign({}, state, { apiKeys: apiKeys });
+
+    case types.API_EXPIRATION_DATE_SELECTED:
+      return Object.assign({}, state, { expirationDate: action.expirationDate });
   }
 
   return state;
 }
 
-export default ProductReducer;
+export default ApiKeyReducer;
