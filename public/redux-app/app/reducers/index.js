@@ -7,6 +7,7 @@ import ProductReducer from './ProductReducer'
 import UserReducer from './UserReducer'
 import CampaignReducer from './CampaignReducer'
 import AnalysisReducer from './AnalysisReducer'
+import ApiKeyReducer from './ApiKeyReducer'
 
 // Combine Reducers
 var reducers = combineReducers({
@@ -15,7 +16,8 @@ var reducers = combineReducers({
 	productState: ProductReducer,
 	userState: UserReducer,
 	campaignState: CampaignReducer,
-	analysisState: AnalysisReducer
+	analysisState: AnalysisReducer,
+	apiKeysState: ApiKeyReducer
 });
 
 export default reducers;

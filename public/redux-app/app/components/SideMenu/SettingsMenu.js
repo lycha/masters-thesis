@@ -21,7 +21,8 @@ class SettingsMenu extends React.Component {
                                 <li><Link to="/users">Users</Link></li>
                                 <li><Link to="/entities">Entities</Link></li>
                                 <li><Link to="/products">Products</Link></li>
-    		                    <li><Link to="/campaigns">Campaigns</Link></li>
+                                <li><Link to="/campaigns">Campaigns</Link></li>
+    		                    <li><Link to="/api-keys">API Keys</Link></li>
     		                </ul>
     			          ) 
                         }

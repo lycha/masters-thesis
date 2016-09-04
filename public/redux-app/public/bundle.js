@@ -94,7 +94,11 @@
 
 	var _CampaignsContainer2 = _interopRequireDefault(_CampaignsContainer);
 
-	var _Component = __webpack_require__(443);
+	var _ApiKeysContainer = __webpack_require__(443);
+
+	var _ApiKeysContainer2 = _interopRequireDefault(_ApiKeysContainer);
+
+	var _Component = __webpack_require__(446);
 
 	var _Component2 = _interopRequireDefault(_Component);
 
@@ -114,6 +118,7 @@
 				_react2.default.createElement(_reactRouter.Route, { path: 'entities', component: _EntitiesContainer2.default }),
 				_react2.default.createElement(_reactRouter.Route, { path: 'products', component: _ProductsContainer2.default }),
 				_react2.default.createElement(_reactRouter.Route, { path: 'campaigns', component: _CampaignsContainer2.default }),
+				_react2.default.createElement(_reactRouter.Route, { path: 'api-keys', component: _ApiKeysContainer2.default }),
 				_react2.default.createElement(_reactRouter.Route, { path: 'analysis/:entity/:product', component: _DashboardContainer2.default }),
 				_react2.default.createElement(_reactRouter.IndexRoute, { component: _HomeDashboard2.default, history: history })
 			),
@@ -26430,20 +26435,25 @@
 
 	var _AnalysisReducer2 = _interopRequireDefault(_AnalysisReducer);
 
+	var _ApiKeyReducer = __webpack_require__(449);
+
+	var _ApiKeyReducer2 = _interopRequireDefault(_ApiKeyReducer);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	// Combine Reducers
-
-
-	// Reducers
 	var reducers = (0, _redux.combineReducers)({
 		entityState: _EntityReducer2.default,
 		authenticationState: _AuthenticationReducer2.default,
 		productState: _ProductReducer2.default,
 		userState: _UserReducer2.default,
 		campaignState: _CampaignReducer2.default,
-		analysisState: _AnalysisReducer2.default
+		analysisState: _AnalysisReducer2.default,
+		apiKeysState: _ApiKeyReducer2.default
 	});
+
+	// Reducers
+
 
 	exports.default = reducers;
 
@@ -26558,6 +26568,11 @@
 	var ANALYSIS_PRODUCT_SELECTED = exports.ANALYSIS_PRODUCT_SELECTED = 'ANALYSIS_PRODUCT_SELECTED';
 	var GET_LEADS_COUNT_SUCCESS = exports.GET_LEADS_COUNT_SUCCESS = 'GET_LEADS_COUNT_SUCCESS';
 	var GET_REGISTRATIONS_COUNT_SUCCESS = exports.GET_REGISTRATIONS_COUNT_SUCCESS = 'GET_REGISTRATIONS_COUNT_SUCCESS';
+
+	//API Keys
+	var GET_API_KEYS_SUCCESS = exports.GET_API_KEYS_SUCCESS = 'GET_API_KEYS_SUCCESS';
+	var DELETE_API_KEYS_SUCCESS = exports.DELETE_API_KEYS_SUCCESS = 'DELETE_API_KEYS_SUCCESS';
+	var ADD_API_KEYS_SUCCESS = exports.ADD_API_KEYS_SUCCESS = 'ADD_API_KEYS_SUCCESS';
 
 /***/ },
 /* 247 */
@@ -57780,6 +57795,15 @@
 	                                        { to: '/campaigns' },
 	                                        'Campaigns'
 	                                    )
+	                                ),
+	                                _react2.default.createElement(
+	                                    'li',
+	                                    null,
+	                                    _react2.default.createElement(
+	                                        _reactRouter.Link,
+	                                        { to: '/api-keys' },
+	                                        'API Keys'
+	                                    )
 	                                )
 	                            );
 	                        }
@@ -69378,6 +69402,303 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _store = __webpack_require__(243);
+
+	var _store2 = _interopRequireDefault(_store);
+
+	var _reactRedux = __webpack_require__(217);
+
+	var _ApiKeysApi = __webpack_require__(444);
+
+	var _ApiKeysList = __webpack_require__(447);
+
+	var _ApiKeysList2 = _interopRequireDefault(_ApiKeysList);
+
+	var _AddApiKey = __webpack_require__(448);
+
+	var _AddApiKey2 = _interopRequireDefault(_AddApiKey);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ApiKeysContainer = function (_React$Component) {
+		_inherits(ApiKeysContainer, _React$Component);
+
+		function ApiKeysContainer() {
+			_classCallCheck(this, ApiKeysContainer);
+
+			return _possibleConstructorReturn(this, Object.getPrototypeOf(ApiKeysContainer).apply(this, arguments));
+		}
+
+		_createClass(ApiKeysContainer, [{
+			key: 'componentDidMount',
+			value: function componentDidMount() {
+				(0, _ApiKeysApi.getApiKeys)();
+			}
+		}, {
+			key: 'addNew',
+			value: function addNew(apiKey) {
+				(0, _ApiKeysApi.addApiKey)(apiKey);
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				return _react2.default.createElement(
+					'section',
+					{ id: 'main-content' },
+					_react2.default.createElement(
+						'section',
+						{ className: 'wrapper' },
+						_react2.default.createElement(
+							'div',
+							{ className: 'row mt' },
+							_react2.default.createElement(
+								'div',
+								{ className: 'col-lg-12' },
+								_react2.default.createElement(
+									'div',
+									{ className: 'form-panel' },
+									_react2.default.createElement(_AddApiKey2.default, { addNew: this.addNew, ref: 'child' })
+								)
+							)
+						),
+						_react2.default.createElement(
+							'div',
+							{ className: 'row mt' },
+							_react2.default.createElement(
+								'div',
+								{ className: 'col-lg-12' },
+								_react2.default.createElement(
+									'div',
+									{ className: 'content-panel' },
+									_react2.default.createElement(
+										'h4',
+										null,
+										_react2.default.createElement('i', { className: 'fa fa-angle-right' }),
+										' Products'
+									),
+									_react2.default.createElement('hr', null),
+									_react2.default.createElement(
+										'table',
+										{ className: 'table table-striped table-advance table-hover' },
+										_react2.default.createElement(
+											'thead',
+											null,
+											_react2.default.createElement(
+												'tr',
+												null,
+												_react2.default.createElement(
+													'th',
+													null,
+													_react2.default.createElement('i', { className: 'fa fa-bookmark' }),
+													' id'
+												),
+												_react2.default.createElement(
+													'th',
+													null,
+													_react2.default.createElement('i', { className: 'fa fa-question-circle' }),
+													' Name'
+												),
+												_react2.default.createElement(
+													'th',
+													null,
+													_react2.default.createElement('i', { className: 'fa fa-bookmark' }),
+													' Description'
+												),
+												_react2.default.createElement(
+													'th',
+													null,
+													_react2.default.createElement('i', { className: 'fa fa-question-circle' }),
+													' Expiration date'
+												),
+												_react2.default.createElement(
+													'th',
+													null,
+													_react2.default.createElement('i', { className: 'fa fa-question-circle' }),
+													' Key'
+												),
+												_react2.default.createElement('th', null)
+											)
+										),
+										_react2.default.createElement(_ApiKeysList2.default, { apiKeys: this.props.apiKeys,
+											deleteApiKey: _ApiKeysApi.deleteApiKey })
+									)
+								)
+							)
+						)
+					)
+				);
+			}
+		}]);
+
+		return ApiKeysContainer;
+	}(_react2.default.Component);
+
+	var mapStateToProps = function mapStateToProps(store) {
+		return {
+			apiKeys: store.apiKeysState.apiKeys
+		};
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(ApiKeysContainer);
+
+/***/ },
+/* 444 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	exports.getApiKeys = getApiKeys;
+	exports.deleteApiKey = deleteApiKey;
+	exports.addApiKey = addApiKey;
+
+	var _axios = __webpack_require__(364);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	var _store = __webpack_require__(243);
+
+	var _store2 = _interopRequireDefault(_store);
+
+	var _Config = __webpack_require__(386);
+
+	var _Config2 = _interopRequireDefault(_Config);
+
+	var _underscore = __webpack_require__(387);
+
+	var _underscore2 = _interopRequireDefault(_underscore);
+
+	var _SessionManager = __webpack_require__(363);
+
+	var _ApiKeyActions = __webpack_require__(445);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function getApiKeys() {
+		window.showLoadingSpinner();
+		return _axios2.default.get(_Config2.default.serverUrl + 'api-keys/', {
+			headers: {
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
+			} }).then(function (response) {
+			window.hideLoadingSpinner();
+			_store2.default.dispatch((0, _ApiKeyActions.getApiKeysSuccess)(response.data));
+			return response;
+		}).catch(function (response) {
+			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			if (response.data.error.code == 401) {
+				(0, _SessionManager.deleteSession)();
+				window.location.reload();
+			}
+			window.hideLoadingSpinner();
+		});
+	}
+
+	function deleteApiKey(keyId) {
+		window.showLoadingSpinner();
+		return _axios2.default.delete(_Config2.default.serverUrl + 'api-keys/' + keyId, {
+			headers: {
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
+			} }).then(function (response) {
+			window.hideLoadingSpinner();
+			_store2.default.dispatch((0, _ApiKeyActions.deleteApiKeySuccess)(keyId));
+			return response;
+		}).catch(function (response) {
+			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			if (response.data.error.code == 401) {
+				(0, _SessionManager.deleteSession)();
+				window.location.reload();
+			}
+			window.hideLoadingSpinner();
+		});
+	}
+
+	function addApiKey(apiKey) {
+		window.showLoadingSpinner();
+		var config = {
+			headers: { 'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken') }
+		};
+		return _axios2.default.post(_Config2.default.serverUrl + 'api-keys', {
+			name: apiKey.name,
+			description: apiKey.description,
+			expiration_date: product.expiration_date
+		}, config).then(function (response) {
+			window.hideLoadingSpinner();
+			_store2.default.dispatch((0, _ApiKeyActions.addApiKeySuccess)(response.data));
+			return response;
+		}).catch(function (response) {
+			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			if (response.data.error.code == 401) {
+				(0, _SessionManager.deleteSession)();
+				window.location.reload();
+			}
+			window.hideLoadingSpinner();
+		});
+	}
+
+/***/ },
+/* 445 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.getApiKeysSuccess = getApiKeysSuccess;
+	exports.deleteApiKeySuccess = deleteApiKeySuccess;
+	exports.addApiKeySuccess = addApiKeySuccess;
+
+	var _ActionTypes = __webpack_require__(246);
+
+	var types = _interopRequireWildcard(_ActionTypes);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function getApiKeysSuccess(apiKeys) {
+	  return {
+	    type: types.GET_API_KEYS_SUCCESS,
+	    apiKeys: apiKeys
+	  };
+	}
+
+	function deleteApiKeySuccess(apiKeyId) {
+	  return {
+	    type: types.DELETE_API_KEYS_SUCCESS,
+	    apiKeyId: apiKeyId
+	  };
+	}
+
+	function addApiKeySuccess(apiKey) {
+	  return {
+	    type: types.ADD_API_KEYS_SUCCESS,
+	    apiKey: apiKey
+	  };
+	}
+
+/***/ },
+/* 446 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
 					value: true
 	});
 
@@ -69449,6 +69770,268 @@
 	}(_react2.default.Component);
 
 	exports.default = Component404;
+
+/***/ },
+/* 447 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var ApiKeysList = function (_React$Component) {
+		_inherits(ApiKeysList, _React$Component);
+
+		function ApiKeysList(props) {
+			_classCallCheck(this, ApiKeysList);
+
+			var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(ApiKeysList).call(this, props));
+
+			_this.displayName = 'ApiKeysList';
+			return _this;
+		}
+
+		_createClass(ApiKeysList, [{
+			key: 'render',
+			value: function render() {
+				var _this2 = this;
+
+				return _react2.default.createElement(
+					'tbody',
+					null,
+					this.props.apiKeys.map(function (apiKey) {
+						return _react2.default.createElement(
+							'tr',
+							{ key: apiKey.id },
+							_react2.default.createElement(
+								'td',
+								{ id: 'id' },
+								apiKey.id
+							),
+							_react2.default.createElement(
+								'td',
+								{ id: 'name' },
+								apiKey.name,
+								' '
+							),
+							_react2.default.createElement(
+								'td',
+								{ id: 'description' },
+								' ',
+								apiKey.description,
+								' '
+							),
+							_react2.default.createElement(
+								'td',
+								{ id: 'expiration_date' },
+								apiKey.expiration_date,
+								' '
+							),
+							_react2.default.createElement(
+								'td',
+								{ className: 'text-wrap', id: 'key' },
+								apiKey.key,
+								' '
+							),
+							_react2.default.createElement(
+								'td',
+								null,
+								_react2.default.createElement(
+									'button',
+									{ onClick: _this2.props.deleteApiKey.bind(null, apiKey.id),
+										className: 'btn btn-danger btn-xs delete-key',
+										id: "delete-key-" + apiKey.id },
+									_react2.default.createElement('i', { className: 'fa fa-trash-o ' })
+								)
+							)
+						);
+					})
+				);
+			}
+		}]);
+
+		return ApiKeysList;
+	}(_react2.default.Component);
+
+	exports.default = ApiKeysList;
+
+/***/ },
+/* 448 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _axios = __webpack_require__(364);
+
+	var _axios2 = _interopRequireDefault(_axios);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var AddApiKey = function (_React$Component) {
+	  _inherits(AddApiKey, _React$Component);
+
+	  function AddApiKey() {
+	    _classCallCheck(this, AddApiKey);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(AddApiKey).apply(this, arguments));
+	  }
+
+	  _createClass(AddApiKey, [{
+	    key: 'getQuery',
+	    value: function getQuery(e) {
+	      e.preventDefault();
+	      var key = {
+	        name: this.refs.name.value,
+	        description: this.refs.description.value,
+	        expiration_date: this.refs.expiration_date.value
+	      };
+	      this.refs.name.value = "";
+	      this.refs.description.value = "";
+	      this.refs.expiration_date.value = "";
+
+	      this.props.addNew(key);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'h4',
+	          { className: 'mb' },
+	          _react2.default.createElement('i', { className: 'fa fa-angle-right' }),
+	          ' Add Product'
+	        ),
+	        _react2.default.createElement(
+	          'form',
+	          { onSubmit: function onSubmit(e) {
+	              return _this2.getQuery(e);
+	            }, 'accept-charset': 'UTF-8', className: 'form-inline', id: 'add-key' },
+	          _react2.default.createElement(
+	            'label',
+	            { 'for': 'name' },
+	            ' Name '
+	          ),
+	          _react2.default.createElement('input', { className: 'form-inline', name: 'name', type: 'text', id: 'name',
+	            ref: 'name' }),
+	          _react2.default.createElement(
+	            'label',
+	            { 'for': 'name' },
+	            ' Description '
+	          ),
+	          _react2.default.createElement('input', { className: 'form-inline', name: 'name', type: 'text', id: 'description',
+	            ref: 'description' }),
+	          _react2.default.createElement(
+	            'label',
+	            { 'for': 'expiration_date' },
+	            ' Expiration Date '
+	          ),
+	          _react2.default.createElement('input', { className: 'form-inline', name: 'expiration_date', type: 'text', id: 'expiration_date',
+	            ref: 'expiration_date' }),
+	          _react2.default.createElement(
+	            'button',
+	            { className: 'btn btn-theme' },
+	            'Add'
+	          )
+	        )
+	      );
+	    }
+	  }]);
+
+	  return AddApiKey;
+	}(_react2.default.Component);
+
+	exports.default = AddApiKey;
+
+/***/ },
+/* 449 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _ActionTypes = __webpack_require__(246);
+
+	var types = _interopRequireWildcard(_ActionTypes);
+
+	var _lodash = __webpack_require__(247);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	var initialState = {
+	  apiKeys: []
+	};
+
+	var ProductReducer = function ProductReducer() {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? initialState : arguments[0];
+	  var action = arguments[1];
+
+
+	  switch (action.type) {
+
+	    case types.GET_API_KEYS_SUCCESS:
+	      var apiKeys = _lodash2.default.sortBy(action.apiKeys, 'name');
+	      return Object.assign({}, state, { apiKeys: apiKeys });
+
+	    case types.DELETE_API_KEYS_SUCCESS:
+	      var newData = _lodash2.default.filter(state.apiKeys, function (apiKey) {
+	        return apiKey.id != action.apiKeyId;
+	      });
+	      var apiKeys = _lodash2.default.sortBy(newData, 'name');
+	      return Object.assign({}, state, { apiKeys: apiKeys });
+
+	    case types.ADD_API_KEYS_SUCCESS:
+	      var newApiKey = state.apiKeys.concat([action.apiKey]);
+	      var apiKeys = _lodash2.default.sortBy(newApiKey, 'name');
+	      return Object.assign({}, state, { apiKeys: apiKeys });
+	  }
+
+	  return state;
+	};
+
+	exports.default = ProductReducer;
 
 /***/ }
 /******/ ]);

@@ -14,6 +14,7 @@ import UsersContainer from './components/AdminPanel/Users/UsersContainer';
 import ProductsContainer from './components/AdminPanel/Products/ProductsContainer';
 import EntitiesContainer from './components/AdminPanel/Entities/EntitiesContainer';
 import CampaignsContainer from './components/AdminPanel/Campaigns/CampaignsContainer';
+import ApiKeysContainer from './components/AdminPanel/ApiKeys/ApiKeysContainer';
 import Component404 from './components/Component404';
 
 ReactDOM.render (( 
@@ -25,6 +26,7 @@ ReactDOM.render ((
 		    	<Route path='entities' component={EntitiesContainer} />
 		    	<Route path='products' component={ProductsContainer} />
 		    	<Route path='campaigns' component={CampaignsContainer} />
+		    	<Route path='api-keys' component={ApiKeysContainer} />
 		    	<Route path='analysis/:entity/:product' component={DashboardContainer} />
 		    	<IndexRoute component={HomeDashboard} history={history}/>
 		  	</Route>
