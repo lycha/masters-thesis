@@ -34,7 +34,7 @@ class CampaignController extends Controller
         try {
         	$campaign->save();
         } catch (\Illuminate\Database\QueryException $e) {
-        	return ErrorManager::error400(ErrorManager::$INVALID_PAYLOAD, 'Invalid payload. Please check date format and unique fields.');
+        	return ErrorManager::error400(ErrorManager::$DATABASE_ERROR, 'Invalid payload. Please check date format and unique fields.');
         }
 
         return response($campaign);

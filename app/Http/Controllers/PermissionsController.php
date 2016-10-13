@@ -20,6 +20,7 @@ class PermissionsController extends Controller
 		$entityForAdminPerm = $this->createEntityForAdminPermissions();
 		$productForAdminPerm = $this->createProductForAdminPermissions();
 		$apiKeyForAdminPerm = $this->createApiKeyForAdminPermissions();
+		$universitiesForAdminPerm = $this->createUniversitiesForAdminPermissions();
 
 		$userForUserPerm = $this->createUserForUserPermissions();
 		$leadForUserPerm = $this->createLeadForUserPermissions();
@@ -30,6 +31,8 @@ class PermissionsController extends Controller
 
 		$leadForFormsPerm = $this->createLeadForFormsPermissions();
 		$customerForFormsPerm = $this->createCustomerForFormsPermissions();
+		$entityForFormsPerm = $this->createEntityForFormsPermissions();
+		$universitiesForFormsPerm = $this->createUniversitiesForFormsPermissions();
 
 		if ($userForAdminPerm && 
 			$leadForAdminPerm &&
@@ -45,7 +48,10 @@ class PermissionsController extends Controller
 			$entityForUserPerm &&
 			$productForUserPerm &&
 			$leadForFormsPerm &&
-			$customerForFormsPerm) {
+			$customerForFormsPerm &&
+			$universitiesForAdminPerm &&
+			$entityForFormsPerm &&
+			$universitiesForFormsPerm) {
 			return response()->json([], 201);
 		} else {
             return ErrorManager::error400(ErrorManager::$CREATE_PERMISSIONS_FAILED, 'Failed to create permissions.');
@@ -153,6 +159,21 @@ class PermissionsController extends Controller
 		        'delete'     => true
 		    ],
 		    'description' => 'Manage api keys permissions for admin role'
+		]);
+	}
+
+	public function createUniversitiesForAdminPermissions() 
+	{
+		$permission = new Permission();
+		return $perm = $permission->create([ 
+		    'name'        => 'university',
+		    'slug'        => [          // pass an array of permissions.
+		        'create'     => true,
+		        'view'       => true,
+		        'update'     => true,
+		        'delete'     => true
+		    ],
+		    'description' => 'Manage Universities permissions for admin role'
 		]);
 	}
 
@@ -271,7 +292,6 @@ class PermissionsController extends Controller
 		]);
 	}
 
-
 	public function createCustomerForFormsPermissions()
 	{
 		$permission = new Permission();
@@ -285,6 +305,38 @@ class PermissionsController extends Controller
 		    ],
             'inherit_id' => Permission::where('name', 'customer')->first()->getKey(),
 		    'description' => 'Manage customer permissions for website forms'
+		]);
+	}
+
+	public function createUniversitiesForFormsPermissions() 
+	{
+		$permission = new Permission();
+		return $perm = $permission->create([ 
+		    'name'        => 'university.forms',
+		    'slug'        => [          // pass an array of permissions.
+		        'create'     => false,
+		        'view'       => true,
+		        'update'     => false,
+		        'delete'     => false
+		    ],
+            'inherit_id' => Permission::where('name', 'university')->first()->getKey(),
+		    'description' => 'Manage Universities permissions for website forms'
+		]);
+	}
+
+	public function createEntityForFormsPermissions()
+	{
+		$permission = new Permission();
+		return $perm = $permission->create([ 
+		    'name'        => 'entity.forms',
+		    'slug'        => [          // pass an array of permissions.
+		        'create'     => false,
+		        'view'       => true,
+		        'update'     => false,
+		        'delete'     => false
+		    ],
+            'inherit_id' => Permission::where('name', 'entity')->first()->getKey(),
+		    'description' => 'Manage entity permissions for user role'
 		]);
 	}
 }

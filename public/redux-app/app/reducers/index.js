@@ -8,6 +8,7 @@ import UserReducer from './UserReducer'
 import CampaignReducer from './CampaignReducer'
 import AnalysisReducer from './AnalysisReducer'
 import ApiKeyReducer from './ApiKeyReducer'
+import UniversityReducer from './UniversityReducer'
 
 // Combine Reducers
 var reducers = combineReducers({
@@ -17,6 +18,7 @@ var reducers = combineReducers({
 	userState: UserReducer,
 	campaignState: CampaignReducer,
 	analysisState: AnalysisReducer,
+	universityState: UniversityReducer,
 	apiKeysState: ApiKeyReducer
 });
 

@@ -6,7 +6,7 @@ import DatePicker from 'react-datepicker';
 
 const initialState = {
   apiKeys: [],
-  expirationDate: moment()
+  expirationDate: moment().add(2, 'years')
 };
 
 const ApiKeyReducer = function(state = initialState, action) {

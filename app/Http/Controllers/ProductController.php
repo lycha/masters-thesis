@@ -30,7 +30,7 @@ class ProductController extends Controller
         try {
         	$product->save();
         } catch (\Illuminate\Database\QueryException $e) {
-        	return ErrorManager::error400(ErrorManager::$INVALID_PAYLOAD, 'Invalid payload.');
+        	return ErrorManager::error400(ErrorManager::$DATABASE_ERROR, 'Query exception while saving to database.');
         }
 
         return response($product);

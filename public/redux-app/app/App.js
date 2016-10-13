@@ -13,6 +13,7 @@ import HomeDashboard from './components/Dashboard/HomeDashboard';
 import UsersContainer from './components/AdminPanel/Users/UsersContainer';
 import ProductsContainer from './components/AdminPanel/Products/ProductsContainer';
 import EntitiesContainer from './components/AdminPanel/Entities/EntitiesContainer';
+import UniversitiesContainer from './components/AdminPanel/Universities/UniversitiesContainer';
 import CampaignsContainer from './components/AdminPanel/Campaigns/CampaignsContainer';
 import ApiKeysContainer from './components/AdminPanel/ApiKeys/ApiKeysContainer';
 import Component404 from './components/Component404';
@@ -25,6 +26,7 @@ ReactDOM.render ((
 		    	<Route path='users' component={UsersContainer} />
 		    	<Route path='entities' component={EntitiesContainer} />
 		    	<Route path='products' component={ProductsContainer} />
+		    	<Route path='universities' component={UniversitiesContainer} />
 		    	<Route path='campaigns' component={CampaignsContainer} />
 		    	<Route path='api-keys' component={ApiKeysContainer} />
 		    	<Route path='analysis/:entity/:product' component={DashboardContainer} />

@@ -51,6 +51,7 @@ class RolesController extends Controller
 			$roleAdmin->assignPermission('entity'); 
 			$roleAdmin->assignPermission('product'); 
 			$roleAdmin->assignPermission('api_key'); 
+			$roleAdmin->assignPermission('university'); 
 			if ($roleAdmin->exists) {
 				return array('success_admin_role' => 'Created Admin role.');
 			} else {
@@ -96,6 +97,8 @@ class RolesController extends Controller
 			$roleUser->save();
 			$roleUser->assignPermission('lead.forms');
 			$roleUser->assignPermission('customer.forms'); 
+			$roleUser->assignPermission('entity.forms'); 
+			$roleUser->assignPermission('university.forms'); 
 
 			if ($roleUser->exists) {
 				return array('success_api_role' => 'Created Api role.');

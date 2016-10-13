@@ -222,4 +222,28 @@ Route::group(['prefix' => 'api/v1'], function()
         'uses' => 'ApiKeyController@view',
         'middleware' => ['jwt.auth', 'acl'], 
         'can' => 'view.api_key']);
+
+    //////////////**********Universities**************////////////
+    Route::post('/universities', [
+        'uses' => 'UniversitiesController@create',
+        'middleware' => ['jwt.auth', 'acl'], 
+        'can' => 'create.university']);
+
+    Route::delete('/universities/{id}', [
+        'uses' => 'UniversitiesController@delete',
+        'middleware' => ['jwt.auth', 'acl'], 
+        'can' => 'delete.university']);
+
+    Route::get('/universities/', [
+        'uses' => 'UniversitiesController@view']);
+
+    Route::get('/universities/{id}', [
+        'uses' => 'UniversitiesController@viewById',
+        'middleware' => ['jwt.auth', 'acl'], 
+        'can' => 'view.university']);
+
+    Route::put('/universities/{id}', [
+        'uses' => 'UniversitiesController@update',
+        'middleware' => ['jwt.auth', 'acl'], 
+        'can' => 'update.university']);
 });

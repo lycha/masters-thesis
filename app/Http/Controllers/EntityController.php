@@ -31,7 +31,7 @@ class EntityController extends Controller
         try {
         	$entity->save();
         } catch (\Illuminate\Database\QueryException $e) {
-        	return ErrorManager::error400(ErrorManager::$INVALID_PAYLOAD, 'Invalid payload.');
+        	return ErrorManager::error400(ErrorManager::$DATABASE_ERROR, 'Query exception while saving to database.');
         }
 
         return response($entity);

@@ -37,7 +37,11 @@ class LeadController extends Controller
         $lead->product_id = $this->getProductId($request->product);
         $lead->subproduct_id = $this->getSubproductId($request->subproduct, $lead->product_id); //this value can be null
         
-        $lead->save();
+        try {
+            $lead->save();
+        } catch (\Illuminate\Database\QueryException $e) {
+            return ErrorManager::error400(ErrorManager::$DATABASE_ERROR, 'Query exception while saving to database.');
+        }
         return response(['lead' => $lead]);
     }
 

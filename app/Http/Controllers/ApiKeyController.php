@@ -46,7 +46,7 @@ class ApiKeyController extends Controller
 	        	$apiKey->save();
 	        } catch (\Illuminate\Database\QueryException $e) {
 	        	return($e);
-	        	return ErrorManager::error400(ErrorManager::$INVALID_PAYLOAD, 'Invalid payload.');
+	        	return ErrorManager::error400(ErrorManager::$DATABASE_ERROR, 'Query exception while saving to database.');
 	        }
 		}
 

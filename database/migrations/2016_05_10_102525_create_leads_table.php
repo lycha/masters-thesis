@@ -29,7 +29,7 @@ class CreateLeadsTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('expa_name');
-            $table->integer('expa_id');
+            $table->integer('expa_id')->unique();
             $table->string('slug')->unique();
             $table->timestamps();
         });
@@ -41,7 +41,7 @@ class CreateLeadsTable extends Migration
             $table->string('description');
             $table->string('slug')->unique();
             $table->timestamps();
-        });
+        }); 
 
         Schema::create('subproducts', function(Blueprint $table)
         {
@@ -126,7 +126,17 @@ class CreateLeadsTable extends Migration
                 GROUP BY leads.utm_source, leads.utm_medium 
                 ORDER BY leads.utm_source;');
 
-
+        Schema::create('universities', function(Blueprint $table)
+        {
+            $table->increments('id');
+            $table->string('name');
+            $table->string('slug')->unique();
+            $table->string('entity_slug');
+            $table->foreign('entity_slug')
+                  ->references('slug')->on('entities')
+                  ->onDelete('cascade');
+            $table->timestamps();
+        }); 
     }
 
     /**
@@ -138,6 +148,7 @@ class CreateLeadsTable extends Migration
     {
         DB::statement('DROP VIEW lead_customer');
         DB::statement('DROP VIEW utm_source_medium');
+        Schema::drop('universities');
         Schema::drop('customers');
         Schema::drop('leads');
         Schema::drop('entities');

@@ -27,7 +27,11 @@ class CustomerController extends Controller
         	return ErrorManager::error400(ErrorManager::$INVALID_PAYLOAD, 'Some elements are not provided.');
 		} 
 
-        $customer->save();
+        try {
+            $customer->save();
+        } catch (\Illuminate\Database\QueryException $e) {
+            return ErrorManager::error400(ErrorManager::$DATABASE_ERROR, 'Query exception while saving to database.');
+        }
         return response($customer);
 	}
 

@@ -47,34 +47,6 @@ class SideMenu extends React.Component {
 								<EntitiesMenu entity={entity} products={this.props.products} key={index} onAnalysisSelected={this.onAnalysisSelected}/>
 							)
 		    			})}
-
-			          {/*<li className="sub-menu">
-			              <a href="javascript:;"  >
-			                  <i className="fa fa-bar-chart-o"></i>
-			                  <span>MC promo</span>
-			              </a>
-			              <ul className="sub">
-			                  <li><a  href="/national/gc">Global Citizen</a></li>
-			                  <li><a  href="/national/gt">Global Talents</a></li>
-			                  <li><a  href="/national/gh">Global Host</a></li>
-			                  <li><a  href="/national/fl">Future Leaders</a></li>
-			                  <li><a  href="/national/au">Aiesec University</a></li>
-			              </ul>
-			          </li>
-			          
-			            <li className="sub-menu">
-			                <a href="javascript:;">
-			                    <i className="fa fa-bar-chart-o"></i>
-			                    <span>LC</span>
-			                </a>
-			                <ul className="sub">
-			                    <li><a  href="/gc">Global Citizen</a></li>
-			                    <li><a  href="/gt">Global Talents</a></li>
-			                    <li><a  href="/gh">Global Host</a></li>
-			                    <li><a  href="/fl">Future Leaders</a></li>
-			                    <li><a  href="/au">Aiesec University</a></li>
-			                </ul>
-			            </li>*/}
 			      </ul>
 			  </div>
 			</aside>
