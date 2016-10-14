@@ -59778,7 +59778,7 @@
 		_axios2.default.get(_Config2.default.serverUrl + 'authenticate/user', {
 			headers: {
 				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-				'Content-Type': 'text/plain'
+				'Content-Type': 'application/json'
 			} }).then(function (response) {
 			window.hideLoadingSpinner();
 			_store2.default.dispatch((0, _AuthenticationActions.getAuthenticatedUserSuccess)(response.data.user));
@@ -59798,7 +59798,7 @@
 		return _axios2.default.get(_Config2.default.serverUrl + 'users/', {
 			headers: {
 				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-				'Content-Type': 'text/plain'
+				'Content-Type': 'application/json'
 			} }).then(function (response) {
 			window.hideLoadingSpinner();
 			_store2.default.dispatch((0, _UserActions.getUsersSuccess)(response.data));
@@ -59818,7 +59818,7 @@
 		return _axios2.default.delete(_Config2.default.serverUrl + 'users/' + userId, {
 			headers: {
 				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-				'Content-Type': 'text/plain'
+				'Content-Type': 'application/json'
 			} }).then(function (response) {
 			window.hideLoadingSpinner();
 			_store2.default.dispatch((0, _UserActions.deleteUserSuccess)(userId));
@@ -59838,7 +59838,7 @@
 		var config = {
 			headers: {
 				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-				'Content-Type': 'text/plain'
+				'Content-Type': 'application/json'
 			}
 		};
 		return _axios2.default.post(_Config2.default.serverUrl + 'users', {
@@ -59865,7 +59865,7 @@
 /* 390 */
 /***/ function(module, exports) {
 
-	module.exports = {"serverUrl":"http://marketing-tracking-tool.herokuapp.com/api/v1/"};
+	module.exports = {"serverUrl":"http://master-tool.dev/api/v1/"};
 
 /***/ },
 /* 391 */
@@ -61542,7 +61542,7 @@
 		return _axios2.default.get(_Config2.default.serverUrl + 'entities/', {
 			headers: {
 				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-				'Content-Type': 'text/plain'
+				'Content-Type': 'application/json'
 			} }).then(function (response) {
 			window.hideLoadingSpinner();
 			_store2.default.dispatch((0, _EntityActions.getEntitiesSuccess)(response.data));
@@ -61562,7 +61562,7 @@
 		return _axios2.default.delete(_Config2.default.serverUrl + 'entities/' + entityId, {
 			headers: {
 				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-				'Content-Type': 'text/plain'
+				'Content-Type': 'application/json'
 			} }).then(function (response) {
 			window.hideLoadingSpinner();
 			_store2.default.dispatch((0, _EntityActions.deleteEntitySuccess)(entityId));
@@ -61582,7 +61582,7 @@
 		var config = {
 			headers: {
 				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-				'Content-Type': 'text/plain'
+				'Content-Type': 'application/json'
 			}
 		};
 		_axios2.default.put(_Config2.default.serverUrl + 'entities/' + entity.id, {
@@ -61609,7 +61609,7 @@
 		var config = {
 			headers: {
 				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-				'Content-Type': 'text/plain'
+				'Content-Type': 'application/json'
 			}
 		};
 		return _axios2.default.post(_Config2.default.serverUrl + 'entities', {
@@ -61720,7 +61720,7 @@
 		return _axios2.default.get(_Config2.default.serverUrl + 'products/', {
 			headers: {
 				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-				'Content-Type': 'text/plain'
+				'Content-Type': 'application/json'
 			} }).then(function (response) {
 			window.hideLoadingSpinner();
 			_store2.default.dispatch((0, _ProductActions.getProductsSuccess)(response.data));
@@ -61740,7 +61740,7 @@
 		return _axios2.default.delete(_Config2.default.serverUrl + 'products/' + productId, {
 			headers: {
 				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-				'Content-Type': 'text/plain'
+				'Content-Type': 'application/json'
 			} }).then(function (response) {
 			window.hideLoadingSpinner();
 			_store2.default.dispatch((0, _ProductActions.deleteProductSuccess)(productId));
@@ -61760,7 +61760,7 @@
 		var config = {
 			headers: {
 				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-				'Content-Type': 'text/plain'
+				'Content-Type': 'application/json'
 			}
 		};
 		_axios2.default.put(_Config2.default.serverUrl + 'products/' + product.id, {
@@ -61786,7 +61786,7 @@
 		var config = {
 			headers: {
 				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-				'Content-Type': 'text/plain'
+				'Content-Type': 'application/json'
 			}
 		};
 		return _axios2.default.post(_Config2.default.serverUrl + 'products', {
@@ -64591,7 +64591,7 @@
 		return _axios2.default.get(_Config2.default.serverUrl + 'campaigns/', {
 			headers: {
 				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-				'Content-Type': 'text/plain'
+				'Content-Type': 'application/json'
 			} }).then(function (response) {
 			window.hideLoadingSpinner();
 			_store2.default.dispatch((0, _CampaignActions.getCampaignsSuccess)(response.data));
@@ -64611,7 +64611,7 @@
 		return _axios2.default.delete(_Config2.default.serverUrl + 'campaigns/' + campaignId, {
 			headers: {
 				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-				'Content-Type': 'text/plain'
+				'Content-Type': 'application/json'
 			} }).then(function (response) {
 			window.hideLoadingSpinner();
 			_store2.default.dispatch((0, _CampaignActions.deleteCampaignSuccess)(campaignId));
@@ -64631,7 +64631,7 @@
 		var config = {
 			headers: {
 				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-				'Content-Type': 'text/plain'
+				'Content-Type': 'application/json'
 			}
 		};
 		_axios2.default.put(_Config2.default.serverUrl + 'campaigns/' + campaign.id, {
@@ -64658,7 +64658,7 @@
 		var config = {
 			headers: {
 				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-				'Content-Type': 'text/plain'
+				'Content-Type': 'application/json'
 			}
 		};
 		return _axios2.default.post(_Config2.default.serverUrl + 'campaigns', {
@@ -64791,7 +64791,7 @@
 		var config = {
 			headers: {
 				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-				'Content-Type': 'text/plain'
+				'Content-Type': 'application/json'
 			}
 		};
 		return _axios2.default.post(_Config2.default.serverUrl + 'leads/leads-statistics/', body, config).then(function (response) {
@@ -64827,7 +64827,7 @@
 		var config = {
 			headers: {
 				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-				'Content-Type': 'text/plain'
+				'Content-Type': 'application/json'
 			}
 		};
 		return _axios2.default.post(_Config2.default.serverUrl + 'customers/customers-statistics/', body, config).then(function (response) {
@@ -64863,7 +64863,7 @@
 		var config = {
 			headers: {
 				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-				'Content-Type': 'text/plain'
+				'Content-Type': 'application/json'
 			}
 		};
 		return _axios2.default.post(_Config2.default.serverUrl + 'leads/count/', body, config).then(function (response) {
@@ -64899,7 +64899,7 @@
 		var config = {
 			headers: {
 				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-				'Content-Type': 'text/plain'
+				'Content-Type': 'application/json'
 			}
 		};
 		return _axios2.default.post(_Config2.default.serverUrl + 'customers/count/', body, config).then(function (response) {
@@ -69160,7 +69160,7 @@
 		return _axios2.default.get(_Config2.default.serverUrl + 'universities/', {
 			headers: {
 				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-				'Content-Type': 'text/plain'
+				'Content-Type': 'application/json'
 			} }).then(function (response) {
 			window.hideLoadingSpinner();
 			_store2.default.dispatch((0, _UniversityActions.getUniversitiesSuccess)(response.data));
@@ -69180,7 +69180,7 @@
 		return _axios2.default.delete(_Config2.default.serverUrl + 'universities/' + universityId, {
 			headers: {
 				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-				'Content-Type': 'text/plain'
+				'Content-Type': 'application/json'
 			} }).then(function (response) {
 			window.hideLoadingSpinner();
 			_store2.default.dispatch((0, _UniversityActions.deleteUniversitySuccess)(universityId));
@@ -69200,7 +69200,7 @@
 		var config = {
 			headers: {
 				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-				'Content-Type': 'text/plain'
+				'Content-Type': 'application/json'
 			}
 		};
 		_axios2.default.put(_Config2.default.serverUrl + 'universities/' + university.id, {
@@ -69226,7 +69226,7 @@
 		var config = {
 			headers: {
 				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-				'Content-Type': 'text/plain'
+				'Content-Type': 'application/json'
 			}
 		};
 		return _axios2.default.post(_Config2.default.serverUrl + 'universities/', {
@@ -70606,7 +70606,7 @@
 		return _axios2.default.get(_Config2.default.serverUrl + 'api-keys/', {
 			headers: {
 				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-				'Content-Type': 'text/plain'
+				'Content-Type': 'application/json'
 			} }).then(function (response) {
 			window.hideLoadingSpinner();
 			_store2.default.dispatch((0, _ApiKeyActions.getApiKeysSuccess)(response.data));
@@ -70626,7 +70626,7 @@
 		return _axios2.default.delete(_Config2.default.serverUrl + 'api-keys/' + keyId, {
 			headers: {
 				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-				'Content-Type': 'text/plain'
+				'Content-Type': 'application/json'
 			} }).then(function (response) {
 			window.hideLoadingSpinner();
 			_store2.default.dispatch((0, _ApiKeyActions.deleteApiKeySuccess)(keyId));
@@ -70646,7 +70646,7 @@
 		var config = {
 			headers: {
 				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-				'Content-Type': 'text/plain'
+				'Content-Type': 'application/json'
 			}
 		};
 		return _axios2.default.post(_Config2.default.serverUrl + 'api-keys', {

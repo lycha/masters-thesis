@@ -11,6 +11,7 @@ class Lead extends Model
      *
      * @var string
      */
+    public $incrementing = false;
     protected $table = 'leads';
     protected $fillable = ['utm_source',
 'utm_campaign_id',

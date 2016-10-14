@@ -10,7 +10,7 @@ export function getUniversities() {
   	return axios.get(Config.serverUrl+'universities/',{
 		headers: {
 	    	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-        	'Content-Type': 'text/plain'
+        	'Content-Type': 'application/json'
 	    }})
 	    .then(response => {
 			window.hideLoadingSpinner();
@@ -32,7 +32,7 @@ export function deleteUniversity(universityId) {
 	return axios.delete(Config.serverUrl+'universities/'+universityId,{
 		headers: {
         	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-        	'Content-Type': 'text/plain'
+        	'Content-Type': 'application/json'
         }})
 		.then((response) => {
 			window.hideLoadingSpinner();
@@ -54,7 +54,7 @@ export function updateUniversity(university) {
 	var config = {
 	  headers: {
 	  	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-        'Content-Type': 'text/plain'
+        'Content-Type': 'application/json'
 	  }
 	};
 	axios.put(Config.serverUrl+'universities/'+university.id, {
@@ -82,7 +82,7 @@ export function addUniversity(university) {
 	var config = {
 		  headers: {
 		  	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-        	'Content-Type': 'text/plain'
+        	'Content-Type': 'application/json'
 		  }
 		};
     return axios.post(Config.serverUrl+'universities/', {

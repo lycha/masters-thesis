@@ -10,7 +10,7 @@ export function getApiKeys() {
 	return axios.get(Config.serverUrl+'api-keys/',{
 		headers: {
 	    	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-        	'Content-Type': 'text/plain'
+        	'Content-Type': 'application/json'
 	    }})
 	    .then(response => {
 			window.hideLoadingSpinner();
@@ -32,7 +32,7 @@ export function deleteApiKey(keyId) {
 	return axios.delete(Config.serverUrl+'api-keys/'+keyId,{
 		headers: {
         	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-        	'Content-Type': 'text/plain'
+        	'Content-Type': 'application/json'
         }})
 		.then((response) => {
 			window.hideLoadingSpinner();
@@ -54,7 +54,7 @@ export function addApiKey(apiKey) {
 	var config = {
 		  headers: {
 		  	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-        	'Content-Type': 'text/plain'
+        	'Content-Type': 'application/json'
         }
 		};
     return axios.post(Config.serverUrl+'api-keys', {

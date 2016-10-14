@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\University;
-
 use App\Http\Utils\ErrorManager;
+
 //todo implement all CRUD for Expa Leads
 class UniversitiesController extends Controller
 {

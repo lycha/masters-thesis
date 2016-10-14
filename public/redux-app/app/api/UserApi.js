@@ -33,7 +33,7 @@ export function getAuthenticatedUser() {
 	axios.get(Config.serverUrl+'authenticate/user',{
 		headers: {
         	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-        	'Content-Type': 'text/plain'
+        	'Content-Type': 'application/json'
         }})
 		.then((response) => {
 			window.hideLoadingSpinner();
@@ -55,7 +55,7 @@ export function getUsers(){
   	return axios.get(Config.serverUrl+'users/',{
 		headers: {
 	    	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-        	'Content-Type': 'text/plain'
+        	'Content-Type': 'application/json'
 	    }})
 	    .then(response => {
 			window.hideLoadingSpinner();
@@ -77,7 +77,7 @@ export function deleteUser(userId){
 	return axios.delete(Config.serverUrl+'users/'+userId, {
 		headers: {
         	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-        	'Content-Type': 'text/plain'
+        	'Content-Type': 'application/json'
         }})
 		.then((response) => {
 			window.hideLoadingSpinner();
@@ -99,7 +99,7 @@ export function addUser(user){
 	var config = {
 		  headers: {
 		  	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-        	'Content-Type': 'text/plain'
+        	'Content-Type': 'application/json'
           }
 		};
     return axios.post(Config.serverUrl+'users', {

@@ -10,7 +10,7 @@ export function getEntities() {
   	return axios.get(Config.serverUrl+'entities/',{
 		headers: {
 	    	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-        	'Content-Type': 'text/plain'
+        	'Content-Type': 'application/json'
 	    }})
 	    .then(response => {
 			window.hideLoadingSpinner();
@@ -32,7 +32,7 @@ export function deleteEntity(entityId) {
 	return axios.delete(Config.serverUrl+'entities/'+entityId,{
 		headers: {
         	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-        	'Content-Type': 'text/plain'
+        	'Content-Type': 'application/json'
         }})
 		.then((response) => {
 			window.hideLoadingSpinner();
@@ -54,7 +54,7 @@ export function updateEntity(entity) {
 	var config = {
 	  headers: {
 	  	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-        'Content-Type': 'text/plain'
+        'Content-Type': 'application/json'
       }
 	};
 	axios.put(Config.serverUrl+'entities/'+entity.id, {
@@ -83,7 +83,7 @@ export function addEntity(entity) {
 	var config = {
 		  headers: {
 		  	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-        	'Content-Type': 'text/plain'
+        	'Content-Type': 'application/json'
 		  }
 		};
     return axios.post(Config.serverUrl+'entities', {

@@ -10,7 +10,7 @@ export function getCampaigns() {
   	return axios.get(Config.serverUrl+'campaigns/',{
 		headers: {
 	    	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-        	'Content-Type': 'text/plain'
+        	'Content-Type': 'application/json'
 	    }})
 	    .then(response => {
 			window.hideLoadingSpinner();
@@ -32,7 +32,7 @@ export function deleteCampaign(campaignId) {
 	return axios.delete(Config.serverUrl+'campaigns/'+campaignId,{
 		headers: {
         	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-        	'Content-Type': 'text/plain'
+        	'Content-Type': 'application/json'
         }})
 		.then((response) => {
 			window.hideLoadingSpinner();
@@ -54,7 +54,7 @@ export function updateCampaign(campaign) {
 	var config = {
 	  headers: {
 	  	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-        'Content-Type': 'text/plain'
+        'Content-Type': 'application/json'
       }
 	};
 	axios.put(Config.serverUrl+'campaigns/'+campaign.id, {
@@ -83,7 +83,7 @@ export function addCampaign(campaign) {
 	var config = {
 		  headers: {
 		  	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-        	'Content-Type': 'text/plain'
+        	'Content-Type': 'application/json'
         }
 		};
     return axios.post(Config.serverUrl+'campaigns', {

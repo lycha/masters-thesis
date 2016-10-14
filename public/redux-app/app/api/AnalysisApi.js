@@ -18,7 +18,7 @@ export function getLeadsStatistics(startDate, endDate, product, entity, campaign
 	var config = {
 		  headers: {
 		  	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-        	'Content-Type': 'text/plain'
+        	'Content-Type': 'application/json'
         	}
 		};
     return axios.post(Config.serverUrl+'leads/leads-statistics/', body, config)
@@ -50,7 +50,7 @@ export function getRegistrationsStatistics(startDate, endDate, product, entity, 
 	var config = {
 		  headers: {
 		  	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-        	'Content-Type': 'text/plain'
+        	'Content-Type': 'application/json'
         }
 		};
     return axios.post(Config.serverUrl+'customers/customers-statistics/', body, config)
@@ -82,7 +82,7 @@ export function getLeadsCount(startDate, endDate, product, entity, campaign) {
 	var config = {
 		  headers: {
 		  	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-        	'Content-Type': 'text/plain'
+        	'Content-Type': 'application/json'
         }
 		};
     return axios.post(Config.serverUrl+'leads/count/', body, config)
@@ -114,7 +114,7 @@ export function getRegistrationsCount(startDate, endDate, product, entity, campa
 	var config = {
 		  headers: {
 		  	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
-        	'Content-Type': 'text/plain'
+        	'Content-Type': 'application/json'
         }
 		};
     return axios.post(Config.serverUrl+'customers/count/', body, config)

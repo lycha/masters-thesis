@@ -58,7 +58,8 @@ class CreateLeadsTable extends Migration
         
         Schema::create('leads', function(Blueprint $table)
         {
-            $table->increments('id');
+            $table->string('id', 250);
+            $table->primary('id');
             $table->string('utm_source', 250);
             $table->integer('utm_campaign_id');
             $table->foreign('utm_campaign_id')
@@ -85,7 +86,7 @@ class CreateLeadsTable extends Migration
         Schema::create('customers', function(Blueprint $table)
         {
             $table->increments('id');
-            $table->integer('lead_id');
+            $table->string('lead_id', 250);
             $table->foreign('lead_id')
                   ->references('id')->on('leads')
                   ->onDelete('cascade');

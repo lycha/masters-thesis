@@ -28,6 +28,7 @@ class LeadController extends Controller
     public function create(Request $request)
     {
         $lead = new Lead;
+        $lead->id = preg_replace('/[^a-zA-Z0-9_.]/', '_', $request->id);
         $lead->utm_source = preg_replace('/[^a-zA-Z0-9_.]/', '_', $request->utm_source);
         $lead->utm_campaign_id = $this->getCampaignId($request->utm_campaign);
         $lead->utm_medium = preg_replace('/[^a-zA-Z0-9_.]/', '_', $request->utm_medium);
@@ -36,13 +37,14 @@ class LeadController extends Controller
         $lead->entity_id = $this->getEntityId($request->entity);
         $lead->product_id = $this->getProductId($request->product);
         $lead->subproduct_id = $this->getSubproductId($request->subproduct, $lead->product_id); //this value can be null
-        
+        var_dump($lead->id);        
         try {
             $lead->save();
         } catch (\Illuminate\Database\QueryException $e) {
             return ErrorManager::error400(ErrorManager::$DATABASE_ERROR, 'Query exception while saving to database.');
         }
-        return response(['lead' => $lead]);
+
+        return response($lead);
     }
 
     public function delete($id)
