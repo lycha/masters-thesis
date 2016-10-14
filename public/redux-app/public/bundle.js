@@ -94,15 +94,15 @@
 
 	var _UniversitiesContainer2 = _interopRequireDefault(_UniversitiesContainer);
 
-	var _CampaignsContainer = __webpack_require__(447);
+	var _CampaignsContainer = __webpack_require__(448);
 
 	var _CampaignsContainer2 = _interopRequireDefault(_CampaignsContainer);
 
-	var _ApiKeysContainer = __webpack_require__(451);
+	var _ApiKeysContainer = __webpack_require__(452);
 
 	var _ApiKeysContainer2 = _interopRequireDefault(_ApiKeysContainer);
 
-	var _Component = __webpack_require__(456);
+	var _Component = __webpack_require__(457);
 
 	var _Component2 = _interopRequireDefault(_Component);
 
@@ -59859,7 +59859,7 @@
 /* 390 */
 /***/ function(module, exports) {
 
-	module.exports = {"serverUrl":"../../api/v1/"};
+	module.exports = {"serverUrl":"http://marketing-tracking-tool.herokuapp.com/public/index.php/api/v1/"};
 
 /***/ },
 /* 391 */
@@ -68953,7 +68953,7 @@
 
 	var _UniversityList2 = _interopRequireDefault(_UniversityList);
 
-	var _AddUniversity = __webpack_require__(446);
+	var _AddUniversity = __webpack_require__(447);
 
 	var _AddUniversity2 = _interopRequireDefault(_AddUniversity);
 
@@ -69368,7 +69368,7 @@
 
 	var _bootstrap2 = _interopRequireDefault(_bootstrap);
 
-	var _EntitySelector = __webpack_require__(457);
+	var _EntitySelector = __webpack_require__(446);
 
 	var _EntitySelector2 = _interopRequireDefault(_EntitySelector);
 
@@ -69537,6 +69537,83 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var EntitySelector = function (_React$Component) {
+	    _inherits(EntitySelector, _React$Component);
+
+	    function EntitySelector(props) {
+	        _classCallCheck(this, EntitySelector);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(EntitySelector).call(this, props));
+
+	        _this.displayName = 'EntitySelector';
+	        return _this;
+	    }
+
+	    _createClass(EntitySelector, [{
+	        key: 'handleChange',
+	        value: function handleChange(e) {
+	            var slug = e.target.value;
+	            var entity = this.props.entities.filter(function (entity) {
+	                return entity.slug == slug;
+	            });
+	            this.props.setEntity(entity[0]);
+	        }
+	    }, {
+	        key: 'render',
+	        value: function render() {
+	            var _this2 = this;
+
+	            return _react2.default.createElement(
+	                'select',
+	                {
+	                    onChange: function onChange(e) {
+	                        return _this2.handleChange(e);
+	                    } },
+	                _react2.default.createElement(
+	                    'option',
+	                    { value: '0' },
+	                    '-Select entity-'
+	                ),
+	                this.props.entities.map(function (entity) {
+	                    return _react2.default.createElement(
+	                        'option',
+	                        { value: entity.slug, key: entity.slug },
+	                        entity.name
+	                    );
+	                })
+	            );
+	        }
+	    }]);
+
+	    return EntitySelector;
+	}(_react2.default.Component);
+
+	exports.default = EntitySelector;
+
+/***/ },
+/* 447 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 
@@ -69550,7 +69627,7 @@
 
 	var _axios2 = _interopRequireDefault(_axios);
 
-	var _EntitySelector = __webpack_require__(457);
+	var _EntitySelector = __webpack_require__(446);
 
 	var _EntitySelector2 = _interopRequireDefault(_EntitySelector);
 
@@ -69650,7 +69727,7 @@
 	exports.default = AddUniversity;
 
 /***/ },
-/* 447 */
+/* 448 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -69673,11 +69750,11 @@
 
 	var _CampaignsApi = __webpack_require__(413);
 
-	var _CampaignList = __webpack_require__(448);
+	var _CampaignList = __webpack_require__(449);
 
 	var _CampaignList2 = _interopRequireDefault(_CampaignList);
 
-	var _AddCampaign = __webpack_require__(450);
+	var _AddCampaign = __webpack_require__(451);
 
 	var _AddCampaign2 = _interopRequireDefault(_AddCampaign);
 
@@ -69814,7 +69891,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(CampaignsContainer);
 
 /***/ },
-/* 448 */
+/* 449 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -69829,7 +69906,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _EditCampaign = __webpack_require__(449);
+	var _EditCampaign = __webpack_require__(450);
 
 	var _EditCampaign2 = _interopRequireDefault(_EditCampaign);
 
@@ -69936,7 +70013,7 @@
 	exports.default = CampaignList;
 
 /***/ },
-/* 449 */
+/* 450 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -70139,7 +70216,7 @@
 	exports.default = EditCampaign;
 
 /***/ },
-/* 450 */
+/* 451 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -70276,7 +70353,7 @@
 	exports.default = AddCampaign;
 
 /***/ },
-/* 451 */
+/* 452 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -70297,13 +70374,13 @@
 
 	var _reactRedux = __webpack_require__(217);
 
-	var _ApiKeysApi = __webpack_require__(452);
+	var _ApiKeysApi = __webpack_require__(453);
 
-	var _ApiKeysList = __webpack_require__(454);
+	var _ApiKeysList = __webpack_require__(455);
 
 	var _ApiKeysList2 = _interopRequireDefault(_ApiKeysList);
 
-	var _AddApiKey = __webpack_require__(455);
+	var _AddApiKey = __webpack_require__(456);
 
 	var _AddApiKey2 = _interopRequireDefault(_AddApiKey);
 
@@ -70440,7 +70517,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(ApiKeysContainer);
 
 /***/ },
-/* 452 */
+/* 453 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -70470,7 +70547,7 @@
 
 	var _SessionManager = __webpack_require__(367);
 
-	var _ApiKeyActions = __webpack_require__(453);
+	var _ApiKeyActions = __webpack_require__(454);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -70536,7 +70613,7 @@
 	}
 
 /***/ },
-/* 453 */
+/* 454 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -70584,7 +70661,7 @@
 	}
 
 /***/ },
-/* 454 */
+/* 455 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -70684,7 +70761,7 @@
 	exports.default = ApiKeysList;
 
 /***/ },
-/* 455 */
+/* 456 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -70715,7 +70792,7 @@
 
 	var _moment2 = _interopRequireDefault(_moment);
 
-	var _ApiKeyActions = __webpack_require__(453);
+	var _ApiKeyActions = __webpack_require__(454);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -70811,7 +70888,7 @@
 	exports.default = AddApiKey;
 
 /***/ },
-/* 456 */
+/* 457 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -70888,83 +70965,6 @@
 	}(_react2.default.Component);
 
 	exports.default = Component404;
-
-/***/ },
-/* 457 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var EntitySelector = function (_React$Component) {
-	    _inherits(EntitySelector, _React$Component);
-
-	    function EntitySelector(props) {
-	        _classCallCheck(this, EntitySelector);
-
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(EntitySelector).call(this, props));
-
-	        _this.displayName = 'EntitySelector';
-	        return _this;
-	    }
-
-	    _createClass(EntitySelector, [{
-	        key: 'handleChange',
-	        value: function handleChange(e) {
-	            var slug = e.target.value;
-	            var entity = this.props.entities.filter(function (entity) {
-	                return entity.slug == slug;
-	            });
-	            this.props.setEntity(entity[0]);
-	        }
-	    }, {
-	        key: 'render',
-	        value: function render() {
-	            var _this2 = this;
-
-	            return _react2.default.createElement(
-	                'select',
-	                {
-	                    onChange: function onChange(e) {
-	                        return _this2.handleChange(e);
-	                    } },
-	                _react2.default.createElement(
-	                    'option',
-	                    { value: '0' },
-	                    '-Select entity-'
-	                ),
-	                this.props.entities.map(function (entity) {
-	                    return _react2.default.createElement(
-	                        'option',
-	                        { value: entity.slug, key: entity.slug },
-	                        entity.name
-	                    );
-	                })
-	            );
-	        }
-	    }]);
-
-	    return EntitySelector;
-	}(_react2.default.Component);
-
-	exports.default = EntitySelector;
 
 /***/ }
 /******/ ]);
