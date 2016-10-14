@@ -59755,7 +59755,7 @@
 
 	function login(email, password) {
 		window.showLoadingSpinner();
-		return _axios2.default.post('../../api/v1/authenticate', {
+		return _axios2.default.post(_Config2.default.serverUrl + 'authenticate', {
 			email: email,
 			password: password
 		}).then(function (response) {
@@ -59775,9 +59775,10 @@
 
 	function getAuthenticatedUser() {
 		window.showLoadingSpinner();
-		_axios2.default.get('../../api/v1/authenticate/user', {
+		_axios2.default.get(_Config2.default.serverUrl + 'authenticate/user', {
 			headers: {
-				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+				'Content-Type': 'text/plain'
 			} }).then(function (response) {
 			window.hideLoadingSpinner();
 			_store2.default.dispatch((0, _AuthenticationActions.getAuthenticatedUserSuccess)(response.data.user));
@@ -59796,7 +59797,8 @@
 		window.showLoadingSpinner();
 		return _axios2.default.get(_Config2.default.serverUrl + 'users/', {
 			headers: {
-				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+				'Content-Type': 'text/plain'
 			} }).then(function (response) {
 			window.hideLoadingSpinner();
 			_store2.default.dispatch((0, _UserActions.getUsersSuccess)(response.data));
@@ -59815,7 +59817,8 @@
 		window.showLoadingSpinner();
 		return _axios2.default.delete(_Config2.default.serverUrl + 'users/' + userId, {
 			headers: {
-				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+				'Content-Type': 'text/plain'
 			} }).then(function (response) {
 			window.hideLoadingSpinner();
 			_store2.default.dispatch((0, _UserActions.deleteUserSuccess)(userId));
@@ -59833,7 +59836,10 @@
 	function addUser(user) {
 		window.showLoadingSpinner();
 		var config = {
-			headers: { 'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken') }
+			headers: {
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+				'Content-Type': 'text/plain'
+			}
 		};
 		return _axios2.default.post(_Config2.default.serverUrl + 'users', {
 			name: user.name,
@@ -59859,7 +59865,7 @@
 /* 390 */
 /***/ function(module, exports) {
 
-	module.exports = {"serverUrl":"http://marketing-tracking-tool.herokuapp.com/public/index.php/api/v1/"};
+	module.exports = {"serverUrl":"http://marketing-tracking-tool.herokuapp.com/api/v1/"};
 
 /***/ },
 /* 391 */
@@ -61535,7 +61541,8 @@
 		window.showLoadingSpinner();
 		return _axios2.default.get(_Config2.default.serverUrl + 'entities/', {
 			headers: {
-				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+				'Content-Type': 'text/plain'
 			} }).then(function (response) {
 			window.hideLoadingSpinner();
 			_store2.default.dispatch((0, _EntityActions.getEntitiesSuccess)(response.data));
@@ -61554,7 +61561,8 @@
 		window.showLoadingSpinner();
 		return _axios2.default.delete(_Config2.default.serverUrl + 'entities/' + entityId, {
 			headers: {
-				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+				'Content-Type': 'text/plain'
 			} }).then(function (response) {
 			window.hideLoadingSpinner();
 			_store2.default.dispatch((0, _EntityActions.deleteEntitySuccess)(entityId));
@@ -61572,7 +61580,10 @@
 	function updateEntity(entity) {
 		window.showLoadingSpinner();
 		var config = {
-			headers: { 'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken') }
+			headers: {
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+				'Content-Type': 'text/plain'
+			}
 		};
 		_axios2.default.put(_Config2.default.serverUrl + 'entities/' + entity.id, {
 			name: entity.name,
@@ -61596,7 +61607,10 @@
 	function addEntity(entity) {
 		window.showLoadingSpinner();
 		var config = {
-			headers: { 'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken') }
+			headers: {
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+				'Content-Type': 'text/plain'
+			}
 		};
 		return _axios2.default.post(_Config2.default.serverUrl + 'entities', {
 			name: entity.name,
@@ -61705,7 +61719,8 @@
 		window.showLoadingSpinner();
 		return _axios2.default.get(_Config2.default.serverUrl + 'products/', {
 			headers: {
-				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+				'Content-Type': 'text/plain'
 			} }).then(function (response) {
 			window.hideLoadingSpinner();
 			_store2.default.dispatch((0, _ProductActions.getProductsSuccess)(response.data));
@@ -61724,7 +61739,8 @@
 		window.showLoadingSpinner();
 		return _axios2.default.delete(_Config2.default.serverUrl + 'products/' + productId, {
 			headers: {
-				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+				'Content-Type': 'text/plain'
 			} }).then(function (response) {
 			window.hideLoadingSpinner();
 			_store2.default.dispatch((0, _ProductActions.deleteProductSuccess)(productId));
@@ -61742,7 +61758,10 @@
 	function updateProduct(product) {
 		window.showLoadingSpinner();
 		var config = {
-			headers: { 'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken') }
+			headers: {
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+				'Content-Type': 'text/plain'
+			}
 		};
 		_axios2.default.put(_Config2.default.serverUrl + 'products/' + product.id, {
 			name: product.name,
@@ -61765,7 +61784,10 @@
 	function addProduct(product) {
 		window.showLoadingSpinner();
 		var config = {
-			headers: { 'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken') }
+			headers: {
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+				'Content-Type': 'text/plain'
+			}
 		};
 		return _axios2.default.post(_Config2.default.serverUrl + 'products', {
 			name: product.name,
@@ -64568,7 +64590,8 @@
 		window.showLoadingSpinner();
 		return _axios2.default.get(_Config2.default.serverUrl + 'campaigns/', {
 			headers: {
-				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+				'Content-Type': 'text/plain'
 			} }).then(function (response) {
 			window.hideLoadingSpinner();
 			_store2.default.dispatch((0, _CampaignActions.getCampaignsSuccess)(response.data));
@@ -64587,7 +64610,8 @@
 		window.showLoadingSpinner();
 		return _axios2.default.delete(_Config2.default.serverUrl + 'campaigns/' + campaignId, {
 			headers: {
-				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+				'Content-Type': 'text/plain'
 			} }).then(function (response) {
 			window.hideLoadingSpinner();
 			_store2.default.dispatch((0, _CampaignActions.deleteCampaignSuccess)(campaignId));
@@ -64605,7 +64629,10 @@
 	function updateCampaign(campaign) {
 		window.showLoadingSpinner();
 		var config = {
-			headers: { 'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken') }
+			headers: {
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+				'Content-Type': 'text/plain'
+			}
 		};
 		_axios2.default.put(_Config2.default.serverUrl + 'campaigns/' + campaign.id, {
 			name: campaign.name,
@@ -64629,7 +64656,10 @@
 	function addCampaign(campaign) {
 		window.showLoadingSpinner();
 		var config = {
-			headers: { 'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken') }
+			headers: {
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+				'Content-Type': 'text/plain'
+			}
 		};
 		return _axios2.default.post(_Config2.default.serverUrl + 'campaigns', {
 			name: campaign.name,
@@ -64759,7 +64789,10 @@
 		};
 
 		var config = {
-			headers: { 'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken') }
+			headers: {
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+				'Content-Type': 'text/plain'
+			}
 		};
 		return _axios2.default.post(_Config2.default.serverUrl + 'leads/leads-statistics/', body, config).then(function (response) {
 			window.hideLoadingSpinner();
@@ -64792,7 +64825,10 @@
 		};
 
 		var config = {
-			headers: { 'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken') }
+			headers: {
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+				'Content-Type': 'text/plain'
+			}
 		};
 		return _axios2.default.post(_Config2.default.serverUrl + 'customers/customers-statistics/', body, config).then(function (response) {
 			window.hideLoadingSpinner();
@@ -64825,7 +64861,10 @@
 		};
 
 		var config = {
-			headers: { 'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken') }
+			headers: {
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+				'Content-Type': 'text/plain'
+			}
 		};
 		return _axios2.default.post(_Config2.default.serverUrl + 'leads/count/', body, config).then(function (response) {
 			window.hideLoadingSpinner();
@@ -64858,7 +64897,10 @@
 		};
 
 		var config = {
-			headers: { 'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken') }
+			headers: {
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+				'Content-Type': 'text/plain'
+			}
 		};
 		return _axios2.default.post(_Config2.default.serverUrl + 'customers/count/', body, config).then(function (response) {
 			window.hideLoadingSpinner();
@@ -69117,7 +69159,8 @@
 		window.showLoadingSpinner();
 		return _axios2.default.get(_Config2.default.serverUrl + 'universities/', {
 			headers: {
-				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+				'Content-Type': 'text/plain'
 			} }).then(function (response) {
 			window.hideLoadingSpinner();
 			_store2.default.dispatch((0, _UniversityActions.getUniversitiesSuccess)(response.data));
@@ -69136,7 +69179,8 @@
 		window.showLoadingSpinner();
 		return _axios2.default.delete(_Config2.default.serverUrl + 'universities/' + universityId, {
 			headers: {
-				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+				'Content-Type': 'text/plain'
 			} }).then(function (response) {
 			window.hideLoadingSpinner();
 			_store2.default.dispatch((0, _UniversityActions.deleteUniversitySuccess)(universityId));
@@ -69154,7 +69198,10 @@
 	function updateUniversity(university) {
 		window.showLoadingSpinner();
 		var config = {
-			headers: { 'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken') }
+			headers: {
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+				'Content-Type': 'text/plain'
+			}
 		};
 		_axios2.default.put(_Config2.default.serverUrl + 'universities/' + university.id, {
 			name: university.name,
@@ -69177,7 +69224,10 @@
 	function addUniversity(university) {
 		window.showLoadingSpinner();
 		var config = {
-			headers: { 'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken') }
+			headers: {
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+				'Content-Type': 'text/plain'
+			}
 		};
 		return _axios2.default.post(_Config2.default.serverUrl + 'universities/', {
 			name: university.name,
@@ -70555,7 +70605,8 @@
 		window.showLoadingSpinner();
 		return _axios2.default.get(_Config2.default.serverUrl + 'api-keys/', {
 			headers: {
-				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+				'Content-Type': 'text/plain'
 			} }).then(function (response) {
 			window.hideLoadingSpinner();
 			_store2.default.dispatch((0, _ApiKeyActions.getApiKeysSuccess)(response.data));
@@ -70574,7 +70625,8 @@
 		window.showLoadingSpinner();
 		return _axios2.default.delete(_Config2.default.serverUrl + 'api-keys/' + keyId, {
 			headers: {
-				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+				'Content-Type': 'text/plain'
 			} }).then(function (response) {
 			window.hideLoadingSpinner();
 			_store2.default.dispatch((0, _ApiKeyActions.deleteApiKeySuccess)(keyId));
@@ -70592,7 +70644,10 @@
 	function addApiKey(apiKey) {
 		window.showLoadingSpinner();
 		var config = {
-			headers: { 'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken') }
+			headers: {
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+				'Content-Type': 'text/plain'
+			}
 		};
 		return _axios2.default.post(_Config2.default.serverUrl + 'api-keys', {
 			name: apiKey.name,

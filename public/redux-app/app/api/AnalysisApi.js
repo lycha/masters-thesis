@@ -16,7 +16,10 @@ export function getLeadsStatistics(startDate, endDate, product, entity, campaign
 	if (typeof campaign != 'undefined') { body['utm_campaign'] = campaign; };
 
 	var config = {
-		  headers: {'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')}
+		  headers: {
+		  	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+        	'Content-Type': 'text/plain'
+        	}
 		};
     return axios.post(Config.serverUrl+'leads/leads-statistics/', body, config)
 		.then((response) => {
@@ -45,7 +48,10 @@ export function getRegistrationsStatistics(startDate, endDate, product, entity, 
 	if (typeof campaign != 'undefined') { body['utm_campaign'] = campaign; };
 
 	var config = {
-		  headers: {'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')}
+		  headers: {
+		  	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+        	'Content-Type': 'text/plain'
+        }
 		};
     return axios.post(Config.serverUrl+'customers/customers-statistics/', body, config)
 		.then((response) => {
@@ -74,7 +80,10 @@ export function getLeadsCount(startDate, endDate, product, entity, campaign) {
 	if (typeof campaign != 'undefined') { body['utm_campaign'] = campaign; };
 
 	var config = {
-		  headers: {'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')}
+		  headers: {
+		  	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+        	'Content-Type': 'text/plain'
+        }
 		};
     return axios.post(Config.serverUrl+'leads/count/', body, config)
 		.then((response) => {
@@ -103,7 +112,10 @@ export function getRegistrationsCount(startDate, endDate, product, entity, campa
 	if (typeof campaign != 'undefined') { body['utm_campaign'] = campaign; };
 
 	var config = {
-		  headers: {'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')}
+		  headers: {
+		  	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+        	'Content-Type': 'text/plain'
+        }
 		};
     return axios.post(Config.serverUrl+'customers/count/', body, config)
 		.then((response) => {

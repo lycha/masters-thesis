@@ -9,7 +9,8 @@ export function getProducts() {
 	window.showLoadingSpinner();
 	return axios.get(Config.serverUrl+'products/',{
 		headers: {
-	    	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
+	    	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+        	'Content-Type': 'text/plain'
 	    }})
 	    .then(response => {
 			window.hideLoadingSpinner();
@@ -30,7 +31,8 @@ export function deleteProduct(productId) {
 	window.showLoadingSpinner();
 	return axios.delete(Config.serverUrl+'products/'+productId,{
 		headers: {
-        	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
+        	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+        	'Content-Type': 'text/plain'
         }})
 		.then((response) => {
 			window.hideLoadingSpinner();
@@ -50,7 +52,10 @@ export function deleteProduct(productId) {
 export function updateProduct(product) {
 	window.showLoadingSpinner();
 	var config = {
-	  headers: {'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')}
+	  headers: {
+	  	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+        'Content-Type': 'text/plain'
+	  }
 	};
 	axios.put(Config.serverUrl+'products/'+product.id, {
 	    name: product.name,
@@ -75,7 +80,10 @@ export function updateProduct(product) {
 export function addProduct(product) {
 	window.showLoadingSpinner();
 	var config = {
-		  headers: {'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')}
+		  headers: {
+		  	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+        	'Content-Type': 'text/plain'
+		  }
 		};
     return axios.post(Config.serverUrl+'products', {
 		    name: product.name,

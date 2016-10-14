@@ -8,7 +8,7 @@ import {createSession, deleteSession} from '../utils/SessionManager';
 
 export function login(email, password) {
 	window.showLoadingSpinner();
-	return axios.post('../../api/v1/authenticate', {
+	return axios.post(Config.serverUrl+'authenticate', {
 		    email: email,
 		    password: password
 		})
@@ -30,9 +30,10 @@ export function login(email, password) {
 
 export function getAuthenticatedUser() {
 	window.showLoadingSpinner();
-	axios.get('../../api/v1/authenticate/user',{
+	axios.get(Config.serverUrl+'authenticate/user',{
 		headers: {
-        	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
+        	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+        	'Content-Type': 'text/plain'
         }})
 		.then((response) => {
 			window.hideLoadingSpinner();
@@ -53,7 +54,8 @@ export function getUsers(){
 	window.showLoadingSpinner();
   	return axios.get(Config.serverUrl+'users/',{
 		headers: {
-	    	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
+	    	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+        	'Content-Type': 'text/plain'
 	    }})
 	    .then(response => {
 			window.hideLoadingSpinner();
@@ -74,7 +76,8 @@ export function deleteUser(userId){
 	window.showLoadingSpinner();
 	return axios.delete(Config.serverUrl+'users/'+userId, {
 		headers: {
-        	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
+        	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+        	'Content-Type': 'text/plain'
         }})
 		.then((response) => {
 			window.hideLoadingSpinner();
@@ -94,7 +97,10 @@ export function deleteUser(userId){
 export function addUser(user){
 	window.showLoadingSpinner();
 	var config = {
-		  headers: {'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')}
+		  headers: {
+		  	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+        	'Content-Type': 'text/plain'
+          }
 		};
     return axios.post(Config.serverUrl+'users', {
 		    name: user.name,

@@ -9,7 +9,8 @@ export function getUniversities() {
 	window.showLoadingSpinner();
   	return axios.get(Config.serverUrl+'universities/',{
 		headers: {
-	    	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
+	    	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+        	'Content-Type': 'text/plain'
 	    }})
 	    .then(response => {
 			window.hideLoadingSpinner();
@@ -30,7 +31,8 @@ export function deleteUniversity(universityId) {
 	window.showLoadingSpinner();
 	return axios.delete(Config.serverUrl+'universities/'+universityId,{
 		headers: {
-        	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
+        	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+        	'Content-Type': 'text/plain'
         }})
 		.then((response) => {
 			window.hideLoadingSpinner();
@@ -50,7 +52,10 @@ export function deleteUniversity(universityId) {
 export function updateUniversity(university) {
 	window.showLoadingSpinner();
 	var config = {
-	  headers: {'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')}
+	  headers: {
+	  	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+        'Content-Type': 'text/plain'
+	  }
 	};
 	axios.put(Config.serverUrl+'universities/'+university.id, {
 	    name: university.name,
@@ -75,7 +80,10 @@ export function updateUniversity(university) {
 export function addUniversity(university) {
 	window.showLoadingSpinner();
 	var config = {
-		  headers: {'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')}
+		  headers: {
+		  	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+        	'Content-Type': 'text/plain'
+		  }
 		};
     return axios.post(Config.serverUrl+'universities/', {
 		    name: university.name,
