@@ -3,6 +3,7 @@ use Kodeine\Acl\Models\Eloquent\Role;
 use Input;
 use App\User;
 use Validator;
+use App\Http\Utils\ErrorManager;
 /**
 * 
 */
