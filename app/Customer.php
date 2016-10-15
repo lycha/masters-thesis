@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 class Customer extends Model
 {
@@ -29,7 +30,8 @@ class Customer extends Model
 
         $instance = new static;
 
-        $customers = $instance->newQuery()->get($columns)->toArray();
+        //$customers = $instance->newQuery()->get($columns)->toArray();
+        $customers = $instance->newQuery()->with('lead')->get();
         $newCustomers = array();
         foreach ($customers as $customer) {
             $fields = $instance->hstore2json($customer['fields']);
@@ -52,5 +54,9 @@ class Customer extends Model
         $json = str_replace("=>", ":", "{".$hstore."}");
         $json = stripslashes($json);
         return $json;
+    }
+    public function lead()
+    {
+        return $this->hasOne('App\Lead', 'id', 'lead_id');
     }
 }

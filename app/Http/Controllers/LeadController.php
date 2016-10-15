@@ -58,7 +58,7 @@ class LeadController extends Controller
 
 	public function view()
 	{
-		return response()->json(['leads'=>Lead::all()]);
+		return response(Lead::all());
 	}
 
     public function count(Request $request)

@@ -42,7 +42,8 @@ class CustomerController extends Controller
 
 	public function view(Request $request)
 	{
-		return response()->json(['customers'=>Customer::all()]);
+		return response(Customer::all());
+        
 	}
 
 	public function update(Request $request)
