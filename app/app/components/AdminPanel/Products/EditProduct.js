@@ -36,25 +36,25 @@ class EditProduct extends React.Component {
 			      </div>
 			      <div className="modal-body">
 			        <form onSubmit={(e) => this.getQuery(e)} 
-			        		accept-charset="UTF-8" 
+			        		acceptCharset="UTF-8" 
 			        		className="form-horizontal style-form" id="edit-product">
 				        <div>
-					        <label for="id"> ID </label>
+					        <label htmlFor="id"> ID </label>
 					        <input className="form-inline" name="id" type="number" id="id" 
 						            		ref="id" disabled defaultValue={this.props.product.id}/>
 					    </div>
 				        <div>
-				            <label for="name"> Name </label>
+				            <label htmlFor="name"> Name </label>
 				            <input className="form-inline" name="name" type="text" id="name"
 							            		ref="name" defaultValue={this.props.product.name}/>
 						</div>
 				        <div>
-				            <label for="description"> Description </label>
+				            <label htmlFor="description"> Description </label>
 				            <input className="form-inline" name="description" type="text" id="description"
 							            		ref="description" defaultValue={this.props.product.description}/>
 						</div>
 				        <div> 
-				            <label for="slug"> URL Name </label>
+				            <label htmlFor="slug"> URL Name </label>
 				            <input className="form-inline" name="slug" type="text" id="slug"
 							            		ref="slug" defaultValue={this.props.product.slug}/>
 				        </div>

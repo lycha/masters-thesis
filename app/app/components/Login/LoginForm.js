@@ -21,7 +21,7 @@ class LoginForm extends React.Component {
 	        	<h2 className="form-login-heading">sign in now</h2>
 	        	<div className="login-wrap">
 	            	<input type="text" className="form-control" name="name" placeholder="email" 
-	            		autofocus ref="username" />
+	            	 ref="username" />
 	            	<br />
 	            	<input type="password" className="form-control" name="password" placeholder="Password" 
 	            	ref="password" />

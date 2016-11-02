@@ -7,7 +7,7 @@ import { getProductsSuccess, deleteProductSuccess, updateProductSuccess, addProd
 
 export function getProducts() {
 	window.showLoadingSpinner();
-	return axios.get(Config.serverUrl+'products/',{
+	return axios.get(Config.serverUrl+'products',{
 		headers: {
 	    	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
         	'Content-Type': 'application/json'

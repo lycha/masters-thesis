@@ -42,7 +42,21 @@ class CustomerController extends Controller
 
 	public function view(Request $request)
 	{
-		return response(Customer::all());
+        $date_from = $request->date_from;
+        $date_to = $request->date_to;
+
+        $customers = Customer::all();
+
+        if ($date_from && $date_to != null) {
+            $filtered = array_filter($customers, function($k) use($date_from, $date_to){
+                $datetime = explode(" ",$k->created_at);
+                $date = $datetime[0];
+                $time = $datetime[1];
+                return $date > $date_from && $k->created_at < $date_to;
+            });
+            return response($filtered);
+        }
+        return response($customers);
         
 	}
 

@@ -28,8 +28,8 @@ class AnalysisParameters extends React.Component {
         return (
 	      	<div>
 	      		<h4 className="mb"><i className="fa fa-angle-right"></i> Select parameters of analysis</h4>
-	      		<form onSubmit={(e) => this.getQuery(e)} accept-charset="UTF-8" className="form-inline" id="add-campaign">
-	            <label for="name"> Campaign </label>
+	      		<form onSubmit={(e) => this.getQuery(e)} acceptCharset="UTF-8" className="form-inline" id="add-campaign">
+	            <label htmlFor="name"> Campaign </label>
 	            <CampaignsSelector campaigns={this.props.campaigns} setCampaign={this.setCampaign} />
     			<label> Start date </label>
     			<DatePicker

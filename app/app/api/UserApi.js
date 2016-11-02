@@ -52,7 +52,7 @@ export function getAuthenticatedUser() {
 
 export function getUsers(){
 	window.showLoadingSpinner();
-  	return axios.get(Config.serverUrl+'users/',{
+  	return axios.get(Config.serverUrl+'users',{
 		headers: {
 	    	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
         	'Content-Type': 'application/json'

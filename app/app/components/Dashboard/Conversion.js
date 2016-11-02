@@ -1,6 +1,7 @@
 import React from 'react';
 
 class Conversion extends React.Component {
+    
     constructor(props) {
         super(props);
         this.displayName = 'Conversion';
@@ -21,7 +22,7 @@ class Conversion extends React.Component {
                 <div className="green-header">
                   <h3>Conversion</h3>
                 </div>
-                <div id="conversionLeadToOpen" styles="height: 170px;"></div>
+                <div id="conversionLeadToOpen"></div>
                   <div className="centered">
                     <h1>#<val id="conversionNumber">{ this.conversionLeadToOpen }</val>%</h1>
                     <h4>That is a kickass conversion!</h4>

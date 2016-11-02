@@ -21,7 +21,7 @@ export function getLeadsStatistics(startDate, endDate, product, entity, campaign
         	'Content-Type': 'application/json'
         	}
 		};
-    return axios.post(Config.serverUrl+'leads/leads-statistics/', body, config)
+    return axios.post(Config.serverUrl+'leads/leads-statistics', body, config)
 		.then((response) => {
 			window.hideLoadingSpinner();
 			store.dispatch(getLeadsStatsSuccess(response.data));
@@ -53,7 +53,7 @@ export function getRegistrationsStatistics(startDate, endDate, product, entity, 
         	'Content-Type': 'application/json'
         }
 		};
-    return axios.post(Config.serverUrl+'customers/customers-statistics/', body, config)
+    return axios.post(Config.serverUrl+'customers/customers-statistics', body, config)
 		.then((response) => {
 			window.hideLoadingSpinner();
 			store.dispatch(getRegistrationsStatsSuccess(response.data));
@@ -85,7 +85,7 @@ export function getLeadsCount(startDate, endDate, product, entity, campaign) {
         	'Content-Type': 'application/json'
         }
 		};
-    return axios.post(Config.serverUrl+'leads/count/', body, config)
+    return axios.post(Config.serverUrl+'leads/count', body, config)
 		.then((response) => {
 			window.hideLoadingSpinner();
 			store.dispatch(getLeadsCountSuccess(response.data));
@@ -117,7 +117,7 @@ export function getRegistrationsCount(startDate, endDate, product, entity, campa
         	'Content-Type': 'application/json'
         }
 		};
-    return axios.post(Config.serverUrl+'customers/count/', body, config)
+    return axios.post(Config.serverUrl+'customers/count', body, config)
 		.then((response) => {
 			window.hideLoadingSpinner();
 			store.dispatch(getRegistrationsCountSuccess(response.data));

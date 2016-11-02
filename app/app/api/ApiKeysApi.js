@@ -7,7 +7,7 @@ import { getApiKeysSuccess, deleteApiKeySuccess, addApiKeySuccess } from '../act
 
 export function getApiKeys() {
 	window.showLoadingSpinner();
-	return axios.get(Config.serverUrl+'api-keys/',{
+	return axios.get(Config.serverUrl+'api-keys',{
 		headers: {
 	    	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
         	'Content-Type': 'application/json'

@@ -26,14 +26,14 @@ class AddUniversity extends React.Component {
       return (
       	<div>
       		<h4 className="mb"><i className="fa fa-angle-right"></i> Add University</h4>
-      		<form onSubmit={(e) => this.getQuery(e)} accept-charset="UTF-8" className="form-inline" id="add-lc">
-		        <label for="name"> Name </label>
+      		<form onSubmit={(e) => this.getQuery(e)} acceptCharset="UTF-8" className="form-inline" id="add-lc">
+		        <label htmlFor="name"> Name </label>
 		        <input className="form-inline" name="name" type="text" id="name" 
 			            		ref="name"/>
-            <label for="slug"> URL Name </label>
+            <label htmlFor="slug"> URL Name </label>
             <input className="form-inline" name="slug" type="text" id="slug"
 			            		ref="slug"/>
-            <label for="entity"> Entity </label>
+            <label htmlFor="entity"> Entity </label>
             <EntitySelector entities={this.props.entities} setEntity={(entity) => this.setEntity(entity)} />
             <input className="form-inline" name="entity_slug" type="hidden" id="entity_slug"
                       ref="entity_slug"/>

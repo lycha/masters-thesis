@@ -15,7 +15,7 @@ class EntitiesMenu extends React.Component {
             <a href="javascript:;" className="dcjq-parent" >
               <i className="fa fa-bar-chart-o"></i>
               <span>{this.props.entity.name}</span>
-              <span class="dcjq-icon"></span>
+              <span className="dcjq-icon"></span>
             </a> 
             {this.props.products.map((product, index)=>{
               return (

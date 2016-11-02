@@ -30,17 +30,17 @@ class AddCampaign extends React.Component {
       return (
       	<div>
       		<h4 className="mb"><i className="fa fa-angle-right"></i> Add Campaign</h4>
-      		<form onSubmit={(e) => this.getQuery(e)} accept-charset="UTF-8" className="form-inline" id="add-campaign">
-            <label for="name"> Name </label>
+      		<form onSubmit={(e) => this.getQuery(e)} acceptCharset="UTF-8" className="form-inline" id="add-campaign">
+            <label htmlFor="name"> Name </label>
             <input className="form-inline" name="name" type="text" id="name"
                       ref="name"/>
-		        <label for="description"> Description </label>
+		        <label htmlFor="description"> Description </label>
 		        <input className="form-inline" name="description" type="text" id="description" 
 			            		ref="description"/>
-            <label for="slug"> URL Name </label>
+            <label htmlFor="slug"> URL Name </label>
             <input className="form-inline" name="slug" type="text" id="slug"
                       ref="slug"/>
-            <label for="expiration_date"> Expiration Date  </label>
+            <label htmlFor="expiration_date"> Expiration Date  </label>
             <DatePicker
               dateFormat='YYYY-MM-DD 00:00:00'
               selected={this.props.expirationDate}

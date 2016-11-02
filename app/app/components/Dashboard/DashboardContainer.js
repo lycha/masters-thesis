@@ -22,6 +22,7 @@ class DashboardContainer extends React.Component {
         this.productSlug = "";
         this.entity = {};
         this.product = {};
+        this.conversionLeadToOpen = 0;
     }
     
     componentWillMount() {
@@ -60,6 +61,9 @@ class DashboardContainer extends React.Component {
       
       this.entitySlug = nextProps.params.entity;
       this.productSlug = nextProps.params.product;
+      this.conversionLeadToOpen = Number(
+        (nextProps.registrationsCount.count/nextProps.leadsCount.count * 100).toFixed(1));
+
     }
 
     showAnalysis() {

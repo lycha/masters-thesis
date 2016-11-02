@@ -7,7 +7,7 @@ import { getEntitiesSuccess, deleteEntitySuccess, addEntitySuccess, updateEntity
 
 export function getEntities() {
 	window.showLoadingSpinner();
-  	return axios.get(Config.serverUrl+'entities/',{
+  	return axios.get(Config.serverUrl+'entities',{
 		headers: {
 	    	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
         	'Content-Type': 'application/json'

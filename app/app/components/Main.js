@@ -2,6 +2,7 @@ import React from 'react';
 import Header from './Header'
 import SideMenu from './SideMenu/SideMenu'
 import axios from 'axios';
+import { hashHistory } from 'react-router'
 import store from '../store';
 import { connect } from 'react-redux';
 import { getAuthenticatedUser } from '../api/UserApi'
@@ -30,16 +31,16 @@ class Main extends React.Component {
     					window.commonScript();
 				});
 	   		} else {
-				this.props.history.pushState(null, 'auth/login');
+				hashHistory.push('auth/login');
 			} 
 		} else {
-			this.props.history.pushState(null, 'auth/login');
+				hashHistory.push('auth/login');
 		}   
 	}
 
 	logout() {
 		deleteSession();
-		this.props.history.pushState(null, 'auth/login');
+				hashHistory.push('auth/login');
 	}
     
     render() {

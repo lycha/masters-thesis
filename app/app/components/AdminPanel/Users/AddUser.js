@@ -26,14 +26,14 @@ class AddUser extends React.Component {
       return (
       	<div>
       		<h4 className="mb"><i className="fa fa-angle-right"></i> Add User</h4>
-      		<form onSubmit={(e) => this.getQuery(e)} accept-charset="UTF-8" className="form-inline" id="add-lc">
-            <label for="name"> Name </label>
+      		<form onSubmit={(e) => this.getQuery(e)} acceptCharset="UTF-8" className="form-inline" id="add-lc">
+            <label htmlFor="name"> Name </label>
             <input className="form-inline" name="name" type="text" id="name"
 			            		ref="name"/>
-            <label for="email"> Email </label>
+            <label htmlFor="email"> Email </label>
             <input className="form-inline" name="email" type="text" id="email"
 			            		ref="email"/>
-            <label for="password"> Password </label>
+            <label htmlFor="password"> Password </label>
             <input className="form-inline" name="password" type="text" id="password"
 			            		ref="password"/>
             <button className="btn btn-theme" >Add</button>

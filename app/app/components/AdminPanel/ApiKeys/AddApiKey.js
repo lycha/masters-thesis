@@ -28,14 +28,14 @@ class AddApiKey extends React.Component {
       return (
       	<div>
       		<h4 className="mb"><i className="fa fa-angle-right"></i> Add Api Key</h4>
-      		<form onSubmit={(e) => this.getQuery(e)} accept-charset="UTF-8" className="form-inline" id="add-key">
-            <label for="name"> Name </label>
+      		<form onSubmit={(e) => this.getQuery(e)} acceptCharset="UTF-8" className="form-inline" id="add-key">
+            <label htmlFor="name"> Name </label>
             <input className="form-inline" name="name" type="text" id="name"
                       ref="name"/>
-            <label for="name"> Description </label>
+            <label htmlFor="name"> Description </label>
             <input className="form-inline" name="name" type="text" id="description"
                       ref="description"/>
-            <label for="expiration_date"> Expiration Date </label>
+            <label htmlFor="expiration_date"> Expiration Date </label>
             <DatePicker
               dateFormat='YYYY-MM-DD'
               selected={this.props.expirationDate}

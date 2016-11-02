@@ -7,7 +7,7 @@ import { getCampaignsSuccess, deleteCampaignSuccess, addCampaignSuccess, updateC
 
 export function getCampaigns() {
 	window.showLoadingSpinner();
-  	return axios.get(Config.serverUrl+'campaigns/',{
+  	return axios.get(Config.serverUrl+'campaigns',{
 		headers: {
 	    	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
         	'Content-Type': 'application/json'

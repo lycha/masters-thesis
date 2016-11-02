@@ -40,25 +40,25 @@ class EditUniversity extends React.Component {
 			      </div>
 			      <div className="modal-body">
 			        <form onSubmit={(e) => this.getQuery(e)} 
-			        		accept-charset="UTF-8" 
+			        		acceptCharset="UTF-8" 
 			        		className="form-horizontal style-form" id="edit-university">
 				        <div>
-					        <label for="id"> ID </label>
+					        <label htmlFor="id"> ID </label>
 					        <input className="form-inline" name="id" type="number" id="id" 
 						            		ref="id" disabled defaultValue={this.props.university.id}/>
 					    </div>
 					    <div>
-				            <label for="name"> Name </label>
+				            <label htmlFor="name"> Name </label>
 				            <input className="form-inline" name="name" type="text" id="name"
 							            		ref="name" defaultValue={this.props.university.name}/>
 				        </div>
 				        <div> 
-				            <label for="slug"> URL Name </label>
+				            <label htmlFor="slug"> URL Name </label>
 				            <input className="form-inline" name="slug" type="text" id="slug"
 							            		ref="slug" defaultValue={this.props.university.slug}/>
 				        </div>
 				        <div>
-				            <label for="entity_slug"> Entity </label>
+				            <label htmlFor="entity_slug"> Entity </label>
 				            <EntitySelector entities={this.props.entities} setEntity={(entity) => this.setEntity(entity)} />
 				            <input className="form-inline" name="entity_slug" type="hidden" id="entity_slug"
 							            		ref="entity_slug" defaultValue={this.props.university.entity_slug}/>

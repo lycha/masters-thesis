@@ -37,30 +37,30 @@ class EditEntity extends React.Component {
 			      </div>
 			      <div className="modal-body">
 			        <form onSubmit={(e) => this.getQuery(e)} 
-			        		accept-charset="UTF-8" 
+			        		acceptCharset="UTF-8" 
 			        		className="form-horizontal style-form" id="edit-entity">
 				        <div>
-					        <label for="id"> ID </label>
+					        <label htmlFor="id"> ID </label>
 					        <input className="form-inline" name="id" type="number" id="id" 
 						            		ref="id" disabled defaultValue={this.props.entity.id}/>
 					    </div>
 				        <div>
-					        <label for="expa_id"> EXPA ID </label>
+					        <label htmlFor="expa_id"> EXPA ID </label>
 					        <input className="form-inline" name="expa_id" type="number" id="expa_id" 
 						            		ref="expa_id" defaultValue={this.props.entity.expa_id}/>
 					    </div>
 					    <div>
-				            <label for="expa_name"> EXPA Name </label>
+				            <label htmlFor="expa_name"> EXPA Name </label>
 				            <input className="form-inline" name="expa_name" type="text" id="expa_name"
 							            		ref="expa_name" defaultValue={this.props.entity.expa_name}/>
 				        </div>
 				        <div> 
-				            <label for="slug"> URL Name </label>
+				            <label htmlFor="slug"> URL Name </label>
 				            <input className="form-inline" name="slug" type="text" id="slug"
 							            		ref="slug" defaultValue={this.props.entity.slug}/>
 				        </div>
 				        <div>
-				            <label for="name"> Full Name </label>
+				            <label htmlFor="name"> Full Name </label>
 				            <input className="form-inline" name="name" type="text" id="name"
 							            		ref="name" defaultValue={this.props.entity.name}/>
 						</div>

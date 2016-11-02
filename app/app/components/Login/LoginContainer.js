@@ -1,6 +1,7 @@
 import React from 'react';
 import store from '../../store';
 import { connect } from 'react-redux';
+import { hashHistory } from 'react-router';
 import { login } from '../../api/UserApi'
 import LoginForm from './LoginForm'
 import backstretch from 'jquery.backstretch';
@@ -17,7 +18,7 @@ class LoginContainer extends React.Component {
 
 	login(username, password) {
 		login(username, password).then(function(response){
-			this.props.history.pushState(null, '/');
+			hashHistory.push('/');
 		}.bind(this));
 	}
 

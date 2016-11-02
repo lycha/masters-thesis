@@ -22,17 +22,17 @@ class AddEntity extends React.Component {
       return (
       	<div>
       		<h4 className="mb"><i className="fa fa-angle-right"></i> Add Entity</h4>
-      		<form onSubmit={(e) => this.getQuery(e)} accept-charset="UTF-8" className="form-inline" id="add-lc">
-		        <label for="expa_id"> EXPA ID </label>
+      		<form onSubmit={(e) => this.getQuery(e)} acceptCharset="UTF-8" className="form-inline" id="add-lc">
+		        <label htmlFor="expa_id"> EXPA ID </label>
 		        <input className="form-inline" name="expa_id" type="number" id="expa_id" 
 			            		ref="expa_id"/>
-            <label for="expa_name"> EXPA Name </label>
+            <label htmlFor="expa_name"> EXPA Name </label>
             <input className="form-inline" name="expa_name" type="text" id="expa_name"
 			            		ref="expa_name"/>
-            <label for="slug"> URL Name </label>
+            <label htmlFor="slug"> URL Name </label>
             <input className="form-inline" name="slug" type="text" id="slug"
 			            		ref="slug"/>
-            <label for="name"> Full Name </label>
+            <label htmlFor="name"> Full Name </label>
             <input className="form-inline" name="name" type="text" id="name"
 			            		ref="name"/>
             <button className="btn btn-theme" >Add</button>

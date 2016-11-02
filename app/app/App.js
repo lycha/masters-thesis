@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { browserHistory } from 'react-router'
+import { hashHistory } from 'react-router'
 import { Router, Route, Link, IndexRoute, Redirect } from 'react-router';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -20,7 +20,7 @@ import Component404 from './components/Component404';
 
 ReactDOM.render (( 
 	<Provider store={store}>
-	  	<Router history={browserHistory} >
+	  	<Router history={hashHistory} >
 	  		<Route path='auth/login' component={LoginContainer} history={history} />
 		  	<Route path='/' component={Main} history={history} >
 		    	<Route path='users' component={UsersContainer} />

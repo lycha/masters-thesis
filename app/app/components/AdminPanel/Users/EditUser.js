@@ -35,25 +35,25 @@ class EditUser extends React.Component {
 			      </div>
 			      <div className="modal-body">
 			        <form onSubmit={(e) => this.getQuery(e)} 
-			        		accept-charset="UTF-8" 
+			        		acceptCharset="UTF-8" 
 			        		className="form-horizontal style-form" id="edit-user">
 				        <div>
-					        <label for="id"> ID </label>
+					        <label htmlFor="id"> ID </label>
 					        <input className="form-inline" name="id" type="number" id="id" 
 						            		ref="id" disabled defaultValue={this.props.user.id}/>
 					    </div>
 				        <div>
-				            <label for="name"> Name </label>
+				            <label htmlFor="name"> Name </label>
 				            <input className="form-inline" name="name" type="text" id="name"
 							            		ref="name" defaultValue={this.props.user.name}/>
 						</div>
 				        <div> 
-				            <label for="email"> Email </label>
+				            <label htmlFor="email"> Email </label>
 				            <input className="form-inline" name="email" type="text" id="email"
 							            		ref="email" defaultValue={this.props.user.email}/>
 				        </div>
 				        <div> 
-				            <label for="password"> Password </label>
+				            <label htmlFor="password"> Password </label>
 				            <input className="form-inline" name="password" type="text" id="password"
 							            		ref="password" defaultValue={this.props.user.password}/>
 				        </div>

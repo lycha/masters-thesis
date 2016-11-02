@@ -11,13 +11,7 @@
   },
   "host": "master-tool.dev",
   "basePath": "/",
-  "securityDefinitions": {
-    "bearer": {
-      "type": "apiKey",
-      "name": "Authorization",
-      "in": "header"
-    }
-  },
+  "securityDefinitions": {},
   "schemes": [
     "http"
   ],
@@ -28,10 +22,13 @@
     "application/json"
   ],
   "paths": {
-    "/api/v1/user/create": {
-      "post": {
-        "description": "if succesful returns 200 with user object else returns 400 with one of the error codes:\n\nEMAIL_NOT_UNIQUE\nINVALID_PAYLOAD\nREQUEST_FAILED\nf.e.:\n{\n  \"error\": {\n    \"code\": \"EMAIL_NOT_UNIQUE\",\n    \"title\": \"Email already exists in database.\"\n  }\n}\n",
-        "operationId": "Create_http://master-tool.dev/api/v1/user/create_",
+    "/api/v1/products/8": {
+      "put": {
+        "description": "Updates product with given ID\n\n{\n    \"name\": \"Kraków\",\n    \"description\": \"LC Kraków\",\n    \"slug\": \"krakow\"\n}",
+        "tags": [
+          "Products management copy"
+        ],
+        "operationId": "http://master-tool.dev/api/v1/products/{id}",
         "produces": [
           "application/json"
         ],
@@ -42,7 +39,7 @@
             "required": true,
             "x-is-map": false,
             "schema": {
-              "$ref": "#/definitions/http://master-tool.dev/api/v1/user/createRequest"
+              "$ref": "#/definitions/http://master-tool.dev/api/v1/universities/{id}Request"
             }
           }
         ],
@@ -51,20 +48,43 @@
             "description": ""
           }
         },
-        "security": [
+        "security": [],
+        "x-unitTests": [
           {
-            "bearer": []
+            "request": {
+              "method": "PUT",
+              "uri": "/api/v1/products/8",
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": "{\n    \"name\": \"My updated super campaign\",\n    \"description\": \"Tis is description of super campaign\",\n    \"slug\": \"my-campaign-5\",\n    \"expires_on\": \"2017-05-10 15:42:43\"\n}"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/products/{id}",
+            "x-testDescription": "Updates product with given ID\n\n{\n    \"name\": \"Kraków\",\n    \"description\": \"LC Kraków\",\n    \"slug\": \"krakow\"\n}"
           }
-        ]
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
       }
     },
-    "/run-migrations": {
+    "/api/v1/entities/": {
       "get": {
-        "description": "Creates all necessary tables in database.",
-        "tags": [
-          "Instalation"
-        ],
-        "operationId": "Get_http://master-tool.dev/run-migrations_",
+        "description": "",
+        "operationId": "http://master-tool.dev/api/v1/entities/",
         "produces": [
           "application/json"
         ],
@@ -74,16 +94,354 @@
             "description": ""
           }
         },
-        "security": []
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "GET",
+              "uri": "/api/v1/entities/"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/entities/",
+            "x-testDescription": ""
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/api/v1/leads/1": {
+      "delete": {
+        "description": "",
+        "tags": [
+          "Leads management"
+        ],
+        "operationId": "http://master-tool.dev/api/v1/leads{id}",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "x-is-map": false,
+            "schema": {
+              "$ref": "#/definitions/http://master-tool.dev/api/v1/leads{id}Request"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "DELETE",
+              "uri": "/api/v1/leads/1",
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": "{\n    \"utm_source\": \"my-source\",\n    \"utm_campaign\": \"my-campaign\",\n    \"utm_medium\": \"my-medium\",\n    \"utm_content\": \"my-content\",\n    \"utm_term\": \"my-term\",\n    \"entity\": \"krakow\",\n    \"product\": \"gt\",\n    \"subproduct\": \"it\"\n}"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/leads{id}",
+            "x-testDescription": ""
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/api/v1/users/": {
+      "post": {
+        "description": "if succesful returns 200 with user object else returns 400 with one of the error codes:\n\nEMAIL_NOT_UNIQUE\nINVALID_PAYLOAD\nREQUEST_FAILED\nf.e.:\n{\n  \"error\": {\n    \"code\": \"EMAIL_NOT_UNIQUE\",\n    \"title\": \"Email already exists in database.\"\n  }\n}\n",
+        "operationId": "http://master-tool.dev/api/v1/users",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "x-is-map": false,
+            "schema": {
+              "$ref": "#/definitions/http://master-tool.dev/api/v1/usersRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "POST",
+              "uri": "/api/v1/users/",
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": "{\n    \"name\": \"User Kris\",\n    \"email\": \"kris@domain6.pl\",\n    \"password\": \"1234\"\n}"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/users",
+            "x-testDescription": "if succesful returns 200 with user object else returns 400 with one of the error codes:\n\nEMAIL_NOT_UNIQUE\nINVALID_PAYLOAD\nREQUEST_FAILED\nf.e.:\n{\n  \"error\": {\n    \"code\": \"EMAIL_NOT_UNIQUE\",\n    \"title\": \"Email already exists in database.\"\n  }\n}\n"
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/api/v1/universities/": {
+      "get": {
+        "description": "",
+        "operationId": "http://master-tool.dev/api/v1/universities/",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "GET",
+              "uri": "/api/v1/universities/"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/universities/",
+            "x-testDescription": ""
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/api/v1/customers": {
+      "get": {
+        "description": "",
+        "tags": [
+          "Customers management"
+        ],
+        "operationId": "http://master-tool.dev/api/v1/customers",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "x-is-map": false,
+            "schema": {
+              "$ref": "#/definitions/http://master-tool.dev/api/v1/customersRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "GET",
+              "uri": "/api/v1/customers",
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": "{\n    \"lead_id\": \"2\",\n    \"email\": \"aa@aa.pl\",\n    \"fields\": {\n        \"name\": \"Kris\",\n        \"surname\": \"Jack\"\n    }\n}"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/customers",
+            "x-testDescription": ""
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      },
+      "post": {
+        "description": "",
+        "operationId": "http://master-tool.dev/api/v1/customers1",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "x-is-map": false,
+            "schema": {
+              "$ref": "#/definitions/http://master-tool.dev/api/v1/customersRequest23"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "POST",
+              "uri": "/api/v1/customers",
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": "{\n    \"lead_id\": \"dnjkhudsfi3\",\n    \"email\": \"aa@ddabba.pl\",\n    \"fields\": {\n        \"name\": \"Kris\",\n        \"surname\": \"Jack\",\n        \"source\": \"friend\"\n    }\n}"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/customers",
+            "x-testDescription": ""
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/run-migrations": {
+      "get": {
+        "description": "Creates all necessary tables in database.",
+        "tags": [
+          "Instalation"
+        ],
+        "operationId": "http://master-tool.dev/run-migrations",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "GET",
+              "uri": "/run-migrations"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/run-migrations",
+            "x-testDescription": "Creates all necessary tables in database."
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
       }
     },
     "/api/v1/authenticate/user": {
       "get": {
         "description": "Get information abiut authenticated user.",
-        "tags": [
-          "Authentication"
-        ],
-        "operationId": "Get_http://master-tool.dev/api/v1/authenticate/user_",
+        "operationId": "http://master-tool.dev/api/v1/authenticate/user",
         "produces": [
           "application/json"
         ],
@@ -103,13 +461,596 @@
             "description": ""
           }
         },
-        "security": []
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "GET",
+              "uri": "/api/v1/authenticate/user",
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": "{\n    \"email\": \"kris@kris.pl\",\n    \"password\": \"1234\"\n}"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/authenticate/user",
+            "x-testDescription": "Get information abiut authenticated user."
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/api/v1/products/1": {
+      "get": {
+        "description": "",
+        "tags": [
+          "Products management copy"
+        ],
+        "operationId": "http://master-tool.dev/api/v1/products/{id}4",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "GET",
+              "uri": "/api/v1/products/1"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/products/{id}",
+            "x-testDescription": ""
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/api/v1/entities": {
+      "post": {
+        "description": "",
+        "operationId": "http://master-tool.dev/api/v1/entities",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "x-is-map": false,
+            "schema": {
+              "$ref": "#/definitions/http://master-tool.dev/api/v1/entitiesRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "POST",
+              "uri": "/api/v1/entities",
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": "{\n    \"name\": \"Kraków\",\n    \"expa_name\": \"KRAKOW\",\n    \"expa_id\": \"1000\",\n    \"slug\": \"krakow\"\n}"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/entities",
+            "x-testDescription": ""
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/api/v1/products/2/subproducts": {
+      "post": {
+        "description": "",
+        "operationId": "http://master-tool.dev/api/v1/subproducts1",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "x-is-map": false,
+            "schema": {
+              "$ref": "#/definitions/http://master-tool.dev/api/v1/subproductsRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "POST",
+              "uri": "/api/v1/products/2/subproducts",
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": "{\n    \"name\": \"Marketing\",\n    \"description\": \"Marketing subproduct\",\n    \"slug\": \"marketing\"\n}"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/subproducts",
+            "x-testDescription": ""
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/api/v1/campaigns/12": {
+      "delete": {
+        "description": "",
+        "tags": [
+          "Campaigns management"
+        ],
+        "operationId": "http://master-tool.dev/api/v1/campaigns/{id}",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "DELETE",
+              "uri": "/api/v1/campaigns/12"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/campaigns/{id}",
+            "x-testDescription": ""
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/api/v1/products/12": {
+      "delete": {
+        "description": "",
+        "tags": [
+          "Products management copy"
+        ],
+        "operationId": "http://master-tool.dev/api/v1/products/{id}3",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "DELETE",
+              "uri": "/api/v1/products/12"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/products/{id}",
+            "x-testDescription": ""
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/api/v1/campaigns/": {
+      "get": {
+        "description": "",
+        "tags": [
+          "Campaigns management"
+        ],
+        "operationId": "http://master-tool.dev/api/v1/campaigns/",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "GET",
+              "uri": "/api/v1/campaigns/"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/campaigns/",
+            "x-testDescription": ""
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
       }
     },
     "/init-permissions": {
       "post": {
+        "description": "",
+        "tags": [
+          "Instalation"
+        ],
+        "operationId": "http://master-tool.dev/init-permissions",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "POST",
+              "uri": "/init-permissions"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/init-permissions",
+            "x-testDescription": ""
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/api/v1/products": {
+      "post": {
+        "description": "",
+        "tags": [
+          "Products management copy"
+        ],
+        "operationId": "http://master-tool.dev/api/v1/products1",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "x-is-map": false,
+            "schema": {
+              "$ref": "#/definitions/http://master-tool.dev/api/v1/subproductsRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "POST",
+              "uri": "/api/v1/products",
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": "{\n    \"name\": \"Global Citizen\",\n    \"description\": \"Global Citizen\",\n    \"slug\": \"gc\"\n}"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/products",
+            "x-testDescription": ""
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/api/v1/campaigns/8": {
+      "put": {
+        "description": "Updates campaign with given ID\n\n{\n    \"name\": \"My updated super campaign\",\n    \"description\": \"Tis is description of super campaign\",\n    \"slug\": \"my-campaign-5\",\n    \"expires_on\": \"2017-05-10 15:42:43\"\n}",
+        "tags": [
+          "Campaigns management"
+        ],
+        "operationId": "http://master-tool.dev/api/v1/campaigns/{id}1",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "x-is-map": false,
+            "schema": {
+              "$ref": "#/definitions/http://master-tool.dev/api/v1/universities/{id}Request"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "PUT",
+              "uri": "/api/v1/campaigns/8",
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": "{\n    \"name\": \"My updated super campaign\",\n    \"description\": \"Tis is description of super campaign\",\n    \"slug\": \"my-campaign-5\",\n    \"expires_on\": \"2017-05-10 15:42:43\"\n}"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/campaigns/{id}",
+            "x-testDescription": "Updates campaign with given ID\n\n{\n    \"name\": \"My updated super campaign\",\n    \"description\": \"Tis is description of super campaign\",\n    \"slug\": \"my-campaign-5\",\n    \"expires_on\": \"2017-05-10 15:42:43\"\n}"
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/api/v1/leads/count": {
+      "post": {
+        "description": "",
+        "operationId": "http://master-tool.dev/api/v1/leads/count",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "x-is-map": false,
+            "schema": {
+              "$ref": "#/definitions/http://master-tool.dev/api/v1/leads/countRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "POST",
+              "uri": "/api/v1/leads/count",
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": "{\n    \"date_from\": \"2016-05-12 00:28:05\",\n    \"date_to\": \"2016-05-12 15:41:31\",\n    \"product\": 3\n}"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/leads/count",
+            "x-testDescription": ""
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/api/v1/api-keys/2": {
+      "delete": {
+        "description": "",
+        "operationId": "http://master-tool.dev/api/v1/api-keys/{id}",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "DELETE",
+              "uri": "/api/v1/api-keys/2"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/api-keys/{id}",
+            "x-testDescription": ""
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/install": {
+      "post": {
         "description": "Generates .env variable and creates database connection:\n{\n    \"db-host\": \"localhost\",\n    \"db-database\":\"homestead\",\n    \"db-username\":\"homestead\",\n    \"db-password\":\"secret\"\n}\n",
-        "operationId": "Create_http://master-tool.dev/install_",
+        "operationId": "http://master-tool.dev/install",
         "produces": [
           "application/json"
         ],
@@ -129,13 +1070,211 @@
             "description": ""
           }
         },
-        "security": []
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "POST",
+              "uri": "/install",
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": "{\n    \"db-host\": \"localhost\",\n    \"db-database\":\"homestead\",\n    \"db-username\":\"homestead\",\n    \"db-password\":\"secret\"\n}"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/install",
+            "x-testDescription": "Generates .env variable and creates database connection:\n{\n    \"db-host\": \"localhost\",\n    \"db-database\":\"homestead\",\n    \"db-username\":\"homestead\",\n    \"db-password\":\"secret\"\n}\n"
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
       }
     },
-    "/api/v1/user/delete/19": {
-      "delete": {
+    "/api/v1/leads": {
+      "post": {
         "description": "",
-        "operationId": "Delete_http://master-tool.dev/api/v1/user/delete/{id}_",
+        "operationId": "http://master-tool.dev/api/v1/leads",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "x-is-map": false,
+            "schema": {
+              "$ref": "#/definitions/http://master-tool.dev/api/v1/leadsRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "POST",
+              "uri": "/api/v1/leads",
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": "{\n    \"utm_source\": \"my-source\",\n    \"utm_campaign\": \"my-campaign\",\n    \"utm_medium\": \"paid\",\n    \"utm_content\": \"my-content\",\n    \"utm_term\": \"my-term\",\n    \"entity\": \"poznan\",\n    \"product\": \"gc\"\n}"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/leads",
+            "x-testDescription": ""
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/api/v1/leads/": {
+      "get": {
+        "description": "",
+        "operationId": "http://master-tool.dev/api/v1/leads/",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "x-is-map": false,
+            "schema": {
+              "$ref": "#/definitions/http://master-tool.dev/api/v1/leads{id}Request"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "GET",
+              "uri": "/api/v1/leads/",
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": "{\n    \"utm_source\": \"my-source\",\n    \"utm_campaign\": \"my-campaign\",\n    \"utm_medium\": \"my-medium\",\n    \"utm_content\": \"my-content\",\n    \"utm_term\": \"my-term\",\n    \"entity\": \"krakow\",\n    \"product\": \"gt\",\n    \"subproduct\": \"it\"\n}"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/leads/",
+            "x-testDescription": ""
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/api/v1/leads/leads-statistics": {
+      "post": {
+        "description": "{\n    \"date_from\": \"2016-05-12\",\n    \"date_to\": \"2016-05-15\",\n    \"entity\": 2, //optional\n    \"product\": 3, \n    \"utm_campaign\": 1 //optional\n}",
+        "operationId": "http://master-tool.dev/api/v1/leads/leads-statistics",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "x-is-map": false,
+            "schema": {
+              "$ref": "#/definitions/http://master-tool.dev/api/v1/leads/countRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "POST",
+              "uri": "/api/v1/leads/leads-statistics",
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": "{\n    \"date_from\": \"2016-07-27\",\n    \"date_to\": \"2016-07-29\",\n    \"product\": 3\n}"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/leads/leads-statistics",
+            "x-testDescription": "{\n    \"date_from\": \"2016-05-12\",\n    \"date_to\": \"2016-05-15\",\n    \"entity\": 2, //optional\n    \"product\": 3, \n    \"utm_campaign\": 1 //optional\n}"
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/api/v1/products/": {
+      "get": {
+        "description": "",
+        "operationId": "http://master-tool.dev/api/v1/products/1",
         "produces": [
           "application/json"
         ],
@@ -145,7 +1284,327 @@
             "description": ""
           }
         },
-        "security": []
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "GET",
+              "uri": "/api/v1/products/"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/products/",
+            "x-testDescription": ""
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/api/v1/entities/12": {
+      "delete": {
+        "description": "",
+        "operationId": "http://master-tool.dev/api/v1/entities/{id}",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "DELETE",
+              "uri": "/api/v1/entities/12"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/entities/{id}",
+            "x-testDescription": ""
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/api/v1/users": {
+      "get": {
+        "description": "",
+        "operationId": "http://master-tool.dev/api/v1/users/",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "x-is-map": false,
+            "schema": {
+              "$ref": "#/definitions/http://master-tool.dev/api/v1/usersRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "GET",
+              "uri": "/api/v1/users",
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": "{\n    \"name\": \"User Kris\",\n    \"email\": \"kris@domain6.pl\",\n    \"password\": \"1234\"\n}"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/users/",
+            "x-testDescription": ""
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/api/v1/campaigns": {
+      "post": {
+        "description": "",
+        "operationId": "http://master-tool.dev/api/v1/campaigns",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "x-is-map": false,
+            "schema": {
+              "$ref": "#/definitions/http://master-tool.dev/api/v1/universities/{id}Request"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "POST",
+              "uri": "/api/v1/campaigns",
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": "{\n    \"name\": \"My super campaign\",\n    \"description\": \"Tis is description of super campaign\",\n    \"slug\": \"my-campaign-1\",\n    \"expires_on\": \"2016-12-22 00:00:00\"\n}"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/campaigns",
+            "x-testDescription": ""
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/api/v1/campaigns/14": {
+      "get": {
+        "description": "",
+        "operationId": "http://master-tool.dev/api/v1/campaigns/{id}2",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "GET",
+              "uri": "/api/v1/campaigns/14"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/campaigns/{id}",
+            "x-testDescription": ""
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/api/v1/api-keys": {
+      "get": {
+        "description": "",
+        "operationId": "http://master-tool.dev/api/v1/api-keys/",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "x-is-map": false,
+            "schema": {
+              "$ref": "#/definitions/http://master-tool.dev/api/v1/usersRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "GET",
+              "uri": "/api/v1/api-keys",
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": "{\n    \"name\": \"User Kris\",\n    \"email\": \"kris@domain6.pl\",\n    \"password\": \"1234\"\n}"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/api-keys/",
+            "x-testDescription": ""
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/api/v1/users/1": {
+      "delete": {
+        "description": "If 200 is returned user is deleted successfully",
+        "operationId": "http://master-tool.dev/api/v1/users/{id}",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "DELETE",
+              "uri": "/api/v1/users/1"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/users/{id}",
+            "x-testDescription": "If 200 is returned user is deleted successfully"
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
       }
     },
     "/init-roles": {
@@ -154,7 +1613,7 @@
         "tags": [
           "Instalation"
         ],
-        "operationId": "Create_http://master-tool.dev/init-roles_",
+        "operationId": "http://master-tool.dev/init-roles",
         "produces": [
           "application/json"
         ],
@@ -174,7 +1633,37 @@
             "description": ""
           }
         },
-        "security": []
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "POST",
+              "uri": "/init-roles",
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": "{\n    \"name\": \"Kris\",\n    \"email\": \"kris@kris.pl\",\n    \"password\": \"1234\"\n}"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/init-roles",
+            "x-testDescription": "Creates Admin and User roles and creates administrator account\n{\n    \"name\": \"admin_name\",\n    \"email\": \"name@domain.com\",\n    \"password\": \"secretPass\"\n}"
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
       }
     },
     "/api/v1/authenticate": {
@@ -183,7 +1672,7 @@
         "tags": [
           "Authentication"
         ],
-        "operationId": "Create_http://master-tool.dev/api/v1/authenticate_",
+        "operationId": "http://master-tool.dev/api/v1/authenticate",
         "produces": [
           "application/json"
         ],
@@ -203,18 +1692,538 @@
             "description": ""
           }
         },
-        "security": []
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "POST",
+              "uri": "/api/v1/authenticate",
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": "{\n    \"email\": \"kris@kris.pl\",\n    \"password\": \"1234\"\n}"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/authenticate",
+            "x-testDescription": "Authenticates user and returns Auth token\nbody:\n{\n    \"email\": \"username@domain.pl\",\n    \"password\": \"secret\"\n}\n\nreturns: \n{\"token\":\"eyJ0eXAiOiJKV1QiLCJhbGci6Lcij8XmkXPWypDb5N1dRyUH6xXS0nInYpO5BaCfoEs\"}"
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/api/v1/leads/populate": {
+      "get": {
+        "description": "",
+        "operationId": "http://master-tool.dev/api/v1/leads/populate",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "x-is-map": false,
+            "schema": {
+              "$ref": "#/definitions/http://master-tool.dev/api/v1/leads{id}Request"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "GET",
+              "uri": "/api/v1/leads/populate",
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": "{\n    \"utm_source\": \"my-source\",\n    \"utm_campaign\": \"my-campaign\",\n    \"utm_medium\": \"my-medium\",\n    \"utm_content\": \"my-content\",\n    \"utm_term\": \"my-term\",\n    \"entity\": \"krakow\",\n    \"product\": \"gt\",\n    \"subproduct\": \"it\"\n}"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/leads/populate",
+            "x-testDescription": ""
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/api/v1/entities/20": {
+      "put": {
+        "description": "Updates entity with given ID\n\n{\n    \"name\": \"Kraków\",\n    \"description\": \"LC Kraków\",\n    \"slug\": \"krakow\"\n}",
+        "operationId": "http://master-tool.dev/api/v1/entities/{id}1",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "x-is-map": false,
+            "schema": {
+              "$ref": "#/definitions/http://master-tool.dev/api/v1/entitiesRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "PUT",
+              "uri": "/api/v1/entities/20",
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": "{\n    \"name\": \"aaa\",\n    \"slug\": \"fff\",\n    \"expa_id\": \"111\",\n    \"expa_name\": \"ponana\"\n}"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/entities/{id}",
+            "x-testDescription": "Updates entity with given ID\n\n{\n    \"name\": \"Kraków\",\n    \"description\": \"LC Kraków\",\n    \"slug\": \"krakow\"\n}"
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/api/v1/universities/2": {
+      "get": {
+        "description": "",
+        "operationId": "http://master-tool.dev/api/v1/universities/{id}2",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "GET",
+              "uri": "/api/v1/universities/2"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/universities/{id}",
+            "x-testDescription": ""
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/api/v1/api-keys/": {
+      "post": {
+        "description": "",
+        "operationId": "http://master-tool.dev/api/v1/api-keys",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "x-is-map": false,
+            "schema": {
+              "$ref": "#/definitions/http://master-tool.dev/api/v1/api-keysRequest27"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "POST",
+              "uri": "/api/v1/api-keys/",
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": "{\n    \"name\": \"Forms\",\n    \"description\": \"API key for forms\",\n    \"expiration_date\": \"25-04-2202\"\n}"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/api-keys",
+            "x-testDescription": ""
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/api/v1/customers/count": {
+      "get": {
+        "description": "",
+        "operationId": "http://master-tool.dev/api/v1/customers/count",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "x-is-map": false,
+            "schema": {
+              "$ref": "#/definitions/http://master-tool.dev/api/v1/customersRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "GET",
+              "uri": "/api/v1/customers/count",
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": "{\n    \"lead_id\": \"2\",\n    \"email\": \"aa@aa.pl\",\n    \"fields\": {\n        \"name\": \"Kris\",\n        \"surname\": \"Jack\"\n    }\n}"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/customers/count",
+            "x-testDescription": ""
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/api/v1/customers/customers-statistics": {
+      "post": {
+        "description": "{\n    \"date_from\": \"2016-05-12\",\n    \"date_to\": \"2016-05-15\",\n    \"entity\": 2, //optional\n    \"product\": 3, \n    \"utm_campaign\": 1 //optional\n}",
+        "operationId": "http://master-tool.dev/api/v1/customers/customers-statistics",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "x-is-map": false,
+            "schema": {
+              "$ref": "#/definitions/http://master-tool.dev/api/v1/customers/customers-statisticsRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "POST",
+              "uri": "/api/v1/customers/customers-statistics",
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": "{\n    \"date_from\": \"2016-05-12\",\n    \"date_to\": \"2016-05-15\",\n    \"entity\": 2,\n    \"product\": 3,\n    \"utm_campaign\": 1\n}"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/customers/customers-statistics",
+            "x-testDescription": "{\n    \"date_from\": \"2016-05-12\",\n    \"date_to\": \"2016-05-15\",\n    \"entity\": 2, //optional\n    \"product\": 3, \n    \"utm_campaign\": 1 //optional\n}"
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/api/v1/entities/5": {
+      "get": {
+        "description": "",
+        "operationId": "http://master-tool.dev/api/v1/entities/{id}2",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "GET",
+              "uri": "/api/v1/entities/5"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/entities/{id}",
+            "x-testDescription": ""
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
+      }
+    },
+    "/api/v1/universities": {
+      "post": {
+        "description": "",
+        "operationId": "http://master-tool.dev/api/v1/universities",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "x-is-map": false,
+            "schema": {
+              "$ref": "#/definitions/http://master-tool.dev/api/v1/universitiesRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "x-unitTests": [
+          {
+            "request": {
+              "method": "POST",
+              "uri": "/api/v1/universities",
+              "headers": {
+                "Content-Type": "application/json"
+              },
+              "body": "{\n    \"name\": \"AGH Akademia\",\n    \"slug\": \"agh-akademia\",\n    \"entity_slug\": \"generic\"\n}"
+            },
+            "expectedResponse": {
+              "x-allowExtraHeaders": true,
+              "x-bodyMatchMode": "NONE",
+              "x-arrayOrderedMatching": false,
+              "x-arrayCheckCount": false,
+              "x-matchResponseSchema": true,
+              "headers": {}
+            },
+            "x-testShouldPass": true,
+            "x-testEnabled": true,
+            "x-testName": "http://master-tool.dev/api/v1/universities",
+            "x-testDescription": ""
+          }
+        ],
+        "x-operation-settings": {
+          "CollectParameters": false,
+          "AllowDynamicQueryParameters": false,
+          "AllowDynamicFormParameters": false,
+          "IsMultiContentStreaming": false
+        }
       }
     }
   },
   "definitions": {
-    "http://master-tool.dev/api/v1/user/createRequest": {
-      "title": "http://master-tool.dev/api/v1/user/createRequest",
+    "http://master-tool.dev/api/v1/universities/{id}Request": {
+      "title": "http://master-tool.dev/api/v1/universities/{id}Request",
       "type": "object",
       "properties": {
-        "name": {},
-        "email": {},
-        "password": {}
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "expires_on": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "description",
+        "slug",
+        "expires_on"
+      ]
+    },
+    "http://master-tool.dev/api/v1/leads{id}Request": {
+      "title": "http://master-tool.dev/api/v1/leads{id}Request",
+      "type": "object",
+      "properties": {
+        "utm_source": {
+          "type": "string"
+        },
+        "utm_campaign": {
+          "type": "string"
+        },
+        "utm_medium": {
+          "type": "string"
+        },
+        "utm_content": {
+          "type": "string"
+        },
+        "utm_term": {
+          "type": "string"
+        },
+        "entity": {
+          "type": "string"
+        },
+        "product": {
+          "type": "string"
+        },
+        "subproduct": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "utm_source",
+        "utm_campaign",
+        "utm_medium",
+        "utm_content",
+        "utm_term",
+        "entity",
+        "product",
+        "subproduct"
+      ]
+    },
+    "http://master-tool.dev/api/v1/usersRequest": {
+      "title": "http://master-tool.dev/api/v1/usersRequest",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
       },
       "required": [
         "name",
@@ -222,26 +2231,139 @@
         "password"
       ]
     },
+    "http://master-tool.dev/api/v1/customersRequest": {
+      "title": "http://master-tool.dev/api/v1/customersRequest",
+      "type": "object",
+      "properties": {
+        "lead_id": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "fields": {
+          "$ref": "#/definitions/Fields"
+        }
+      },
+      "required": [
+        "lead_id",
+        "email",
+        "fields"
+      ]
+    },
+    "Fields": {
+      "title": "Fields",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "surname"
+      ]
+    },
     "http://master-tool.dev/api/v1/authenticate/userRequest": {
       "title": "http://master-tool.dev/api/v1/authenticate/userRequest",
       "type": "object",
       "properties": {
-        "email": {},
-        "password": {}
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
       },
       "required": [
         "email",
         "password"
       ]
     },
+    "http://master-tool.dev/api/v1/entitiesRequest": {
+      "title": "http://master-tool.dev/api/v1/entitiesRequest",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "expa_name": {
+          "type": "string"
+        },
+        "expa_id": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "expa_name",
+        "expa_id",
+        "slug"
+      ]
+    },
+    "http://master-tool.dev/api/v1/subproductsRequest": {
+      "title": "http://master-tool.dev/api/v1/subproductsRequest",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "description",
+        "slug"
+      ]
+    },
+    "http://master-tool.dev/api/v1/leads/countRequest": {
+      "title": "http://master-tool.dev/api/v1/leads/countRequest",
+      "type": "object",
+      "properties": {
+        "date_from": {
+          "type": "string"
+        },
+        "date_to": {
+          "type": "string"
+        },
+        "product": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "required": [
+        "date_from",
+        "date_to",
+        "product"
+      ]
+    },
     "http://master-tool.dev/installRequest": {
       "title": "http://master-tool.dev/installRequest",
       "type": "object",
       "properties": {
-        "db-host": {},
-        "db-database": {},
-        "db-username": {},
-        "db-password": {}
+        "db-host": {
+          "type": "string"
+        },
+        "db-database": {
+          "type": "string"
+        },
+        "db-username": {
+          "type": "string"
+        },
+        "db-password": {
+          "type": "string"
+        }
       },
       "required": [
         "db-host",
@@ -250,18 +2372,171 @@
         "db-password"
       ]
     },
+    "http://master-tool.dev/api/v1/leadsRequest": {
+      "title": "http://master-tool.dev/api/v1/leadsRequest",
+      "type": "object",
+      "properties": {
+        "utm_source": {
+          "type": "string"
+        },
+        "utm_campaign": {
+          "type": "string"
+        },
+        "utm_medium": {
+          "type": "string"
+        },
+        "utm_content": {
+          "type": "string"
+        },
+        "utm_term": {
+          "type": "string"
+        },
+        "entity": {
+          "type": "string"
+        },
+        "product": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "utm_source",
+        "utm_campaign",
+        "utm_medium",
+        "utm_content",
+        "utm_term",
+        "entity",
+        "product"
+      ]
+    },
     "http://master-tool.dev/init-rolesRequest": {
       "title": "http://master-tool.dev/init-rolesRequest",
       "type": "object",
       "properties": {
-        "name": {},
-        "email": {},
-        "password": {}
+        "name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
       },
       "required": [
         "name",
         "email",
         "password"
+      ]
+    },
+    "http://master-tool.dev/api/v1/customersRequest23": {
+      "title": "http://master-tool.dev/api/v1/customersRequest23",
+      "type": "object",
+      "properties": {
+        "lead_id": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "fields": {
+          "$ref": "#/definitions/Fields24"
+        }
+      },
+      "required": [
+        "lead_id",
+        "email",
+        "fields"
+      ]
+    },
+    "Fields24": {
+      "title": "Fields24",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "surname": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "surname",
+        "source"
+      ]
+    },
+    "http://master-tool.dev/api/v1/api-keysRequest27": {
+      "title": "http://master-tool.dev/api/v1/api-keysRequest27",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "expiration_date": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "description",
+        "expiration_date"
+      ]
+    },
+    "http://master-tool.dev/api/v1/customers/customers-statisticsRequest": {
+      "title": "http://master-tool.dev/api/v1/customers/customers-statisticsRequest",
+      "type": "object",
+      "properties": {
+        "date_from": {
+          "type": "string"
+        },
+        "date_to": {
+          "type": "string"
+        },
+        "entity": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "product": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "utm_campaign": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "required": [
+        "date_from",
+        "date_to",
+        "entity",
+        "product",
+        "utm_campaign"
+      ]
+    },
+    "http://master-tool.dev/api/v1/universitiesRequest": {
+      "title": "http://master-tool.dev/api/v1/universitiesRequest",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "slug": {
+          "type": "string"
+        },
+        "entity_slug": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "slug",
+        "entity_slug"
       ]
     }
   }

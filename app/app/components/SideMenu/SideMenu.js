@@ -24,7 +24,7 @@ class SideMenu extends React.Component {
 			  <div id="sidebar"  className="nav-collapse ">
 			      <ul className="sidebar-menu" id="nav-accordion">
 			      
-			      	  <p className="centered"><a href="#"><img src="../public/assets/img/aiesec_launcher.png" className="img-circle" width="60" /></a></p>
+			      	  <p className="centered"><a href="#"><img src="assets/img/aiesec_launcher.png" className="img-circle" width="60" /></a></p>
 			      	  <h5 className="centered">AIESEC in Poland</h5>
 			          
 				      <SettingsMenu user={this.props.user}/>

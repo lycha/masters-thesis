@@ -7,7 +7,7 @@ import { getUniversitiesSuccess, deleteUniversitySuccess, updateUniversitySucces
 
 export function getUniversities() {
 	window.showLoadingSpinner();
-  	return axios.get(Config.serverUrl+'universities/',{
+  	return axios.get(Config.serverUrl+'universities',{
 		headers: {
 	    	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
         	'Content-Type': 'application/json'
@@ -85,7 +85,7 @@ export function addUniversity(university) {
         	'Content-Type': 'application/json'
 		  }
 		};
-    return axios.post(Config.serverUrl+'universities/', {
+    return axios.post(Config.serverUrl+'universities', {
 		    name: university.name,
 		    slug: university.slug,
 		    entity_slug: university.entity_slug
