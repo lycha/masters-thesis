@@ -27,9 +27,12 @@ class ApiKeyController extends Controller
 
 	public function create(Request $request)
 	{
-        $expiration = strtotime('+10 years', time());
-        $customClaims = ['sub', uniqid(), 'exp', $expiration];
+        $currentTime = strtotime("now");
+        $expirationTime = strtotime($request->expiration_date);
+        $ttl = round(abs($expirationTime - $currentTime) / 60,0);
+        $customClaims = ['sub', uniqid()];
 		$user = User::where('name', 'api')->first();
+		JWTFactory::setTTL($ttl);
 		$token = JWTAuth::fromUser($user, $customClaims);
 
 
@@ -59,7 +62,9 @@ class ApiKeyController extends Controller
 		if ($apiKey == null) {
         	return ErrorManager::error400(ErrorManager::$OBJECT_DOES_NOT_EXIST, 'API key does not exist.');
 		}
-		JWTAuth::setToken($apiKey->key)->invalidate();
+		try {
+			JWTAuth::setToken($apiKey->key)->invalidate();
+		} catch (\Tymon\JWTAuth\Exceptions\TokenExpiredException $e){}
 		$apiKey->delete();
 	}
 
