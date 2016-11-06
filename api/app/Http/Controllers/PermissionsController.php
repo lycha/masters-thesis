@@ -283,7 +283,7 @@ class PermissionsController extends Controller
 		    'name'        => 'lead.forms',
 		    'slug'        => [          // pass an array of permissions.
 		        'create'     => true,
-		        'view'       => false,
+		        'view'       => true,
 		        'update'     => false,
 		        'delete'     => false
 		    ],
@@ -299,7 +299,7 @@ class PermissionsController extends Controller
 		    'name'        => 'customer.forms',
 		    'slug'        => [          // pass an array of permissions.
 		        'create'     => true,
-		        'view'       => false,
+		        'view'       => true,
 		        'update'     => false,
 		        'delete'     => false
 		    ],

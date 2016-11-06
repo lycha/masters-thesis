@@ -7,9 +7,8 @@ import RegisterationsStatisticsChart from './RegisterationsStatisticsChart';
 import AnalysisParameters from './AnalysisParameters'
 import store from '../../store';
 import {getCampaigns} from '../../api/CampaignsApi';
-import {getLeadsCount, getRegistrationsCount} from '../../api/AnalysisApi';
-import { connect } from 'react-redux';
-import _ from 'lodash';
+import {getCsvFile, getLeadsCount, getRegistrationsCount} from '../../api/AnalysisApi';
+import { connect } from 'react-redux';import _ from 'lodash';
 
 class DashboardContainer extends React.Component {
     constructor(props) {
@@ -32,6 +31,10 @@ class DashboardContainer extends React.Component {
       getRegistrationsCount(this.props.startDate,
         this.props.endDate, undefined, undefined, this.props.analysisCampaign.slug);
     }
+
+    getCsv() {
+      let data = getCsvFile();
+    }
     render() {
         let title = "";
         return (
@@ -45,10 +48,13 @@ class DashboardContainer extends React.Component {
                 startDate={this.props.startDate}
                 endDate={this.props.endDate}
                 showAnalysis={this.showAnalysis}/>
-      
+
               <h4>Generate CSV file</h4>
     
-              <button className="btn btn-success" id="generate-xls-button" type="button">Generate Data</button>
+              <button className="btn btn-success" 
+                id="generate-xls-button" 
+                type="button"
+                onClick={(e) => this.getCsv(e)} >Generate Data</button>
             </div>
           </div>
           <div className="row mt">

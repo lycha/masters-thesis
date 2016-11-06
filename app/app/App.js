@@ -17,6 +17,7 @@ import UniversitiesContainer from './components/AdminPanel/Universities/Universi
 import CampaignsContainer from './components/AdminPanel/Campaigns/CampaignsContainer';
 import ApiKeysContainer from './components/AdminPanel/ApiKeys/ApiKeysContainer';
 import Component404 from './components/Component404';
+import UrlGenerator from './components/UrlGenerator';
 
 ReactDOM.render (( 
 	<Provider store={store}>
@@ -29,6 +30,7 @@ ReactDOM.render ((
 		    	<Route path='universities' component={UniversitiesContainer} />
 		    	<Route path='campaigns' component={CampaignsContainer} />
 		    	<Route path='api-keys' component={ApiKeysContainer} />
+		    	<Route path='generate-url' component={UrlGenerator} />
 		    	<Route path='analysis/:entity/:product' component={DashboardContainer} />
 		    	<IndexRoute component={HomeDashboard} history={history}/>
 		  	</Route>

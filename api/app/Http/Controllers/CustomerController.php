@@ -30,7 +30,7 @@ class CustomerController extends Controller
         try {
             $customer->save();
         } catch (\Illuminate\Database\QueryException $e) {
-            return ErrorManager::error400(ErrorManager::$DATABASE_ERROR, 'Query exception while saving to database.');
+            return ErrorManager::error400(ErrorManager::$DATABASE_ERROR, 'Query exception while saving to database.'.$e);
         }
         return response($customer);
 	}
@@ -59,6 +59,39 @@ class CustomerController extends Controller
         return response($customers);
         
 	}
+
+    public function download()
+    {
+        $headers = [
+                'Cache-Control'       => 'must-revalidate, post-check=0, pre-check=0'
+            ,   'Content-type'        => 'text/csv'
+            ,   'Content-Disposition' => 'attachment; filename=customers.csv'
+            ,   'Expires'             => '0'
+            ,   'Pragma'              => 'public'
+        ];
+
+        $dump = DB::select("SELECT * FROM public.lead_customer");
+        $list = json_decode(json_encode($dump), true);
+        //$customers = json_encode(Customer::all());
+        //$array = json_decode($customers, true);
+        
+        //$this->flatten($array);
+        
+        # add headers for each column in the CSV download
+        array_unshift($list, array_keys($list[0]));
+
+        $callback = function() use ($list) 
+        {
+            $FH = fopen('php://output', 'w');
+            foreach ($list as $row) { 
+                fputcsv($FH, $row);
+            }
+            fclose($FH);
+        };
+
+        return \Response::stream($callback, 200, $headers);
+
+    }
 
 	public function update(Request $request)
 	{

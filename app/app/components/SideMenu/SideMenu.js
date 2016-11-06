@@ -30,10 +30,10 @@ class SideMenu extends React.Component {
 				      <SettingsMenu user={this.props.user}/>
 			          
 			          <li className="sub-menu">
-			              <a href="/generate-url" >
+			          		<Link to="/generate-url">
 			                  <i className="fa fa-bar-chart-o"></i>
 			                  <span>URL Generator</span>
-			              </a>
+			                </Link>
 			          </li>
 
 			          <li className="sub-menu">

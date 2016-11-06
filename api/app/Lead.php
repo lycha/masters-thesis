@@ -25,4 +25,9 @@ class Lead extends Model
     {
       return $this->id;
     }
+
+    public function utm_campaign()
+    {
+        return $this->hasOne('App\Campaign', 'id', 'utm_campaign_id');
+    }
 }

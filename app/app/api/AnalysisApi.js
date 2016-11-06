@@ -2,8 +2,31 @@ import axios from 'axios';
 import store from '../store';
 import Config from 'Config';
 import _ from 'underscore';
+import fileDownload from 'react-file-download';
+
 import {deleteSession} from '../utils/SessionManager'
 import { getLeadsStatsSuccess, getRegistrationsStatsSuccess, getLeadsCountSuccess, getRegistrationsCountSuccess } from '../actions/AnalysisActions';
+
+export function getCsvFile() {
+	window.showLoadingSpinner();
+	return axios.get(Config.serverUrl+'customers/csv',{
+		headers: {
+	    	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
+	    }})
+	    .then(response => {
+			window.hideLoadingSpinner();
+      		fileDownload(response.data, 'data.csv');
+			return response.data;
+		})
+		.catch((response) => {
+			window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			if (response.data.error.code == 401) {
+				deleteSession();
+				window.location.reload();
+			}
+			window.hideLoadingSpinner();
+		});
+}
 
 export function getLeadsStatistics(startDate, endDate, product, entity, campaign) {
 	window.showLoadingSpinner();

@@ -92,10 +92,6 @@ class DashboardContainer extends React.Component {
                 startDate={this.props.startDate}
                 endDate={this.props.endDate}
                 showAnalysis={this.showAnalysis}/>
-      
-              <h4>Generate CSV file</h4>
-    
-              <button className="btn btn-success" id="generate-xls-button" type="button">Generate Data</button>
             </div>
           </div>
           <div className="row mt">
