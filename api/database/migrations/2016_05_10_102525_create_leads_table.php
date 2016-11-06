@@ -43,7 +43,7 @@ class CreateLeadsTable extends Migration
             $table->timestamps();
         }); 
 
-        Schema::create('subproducts', function(Blueprint $table)
+        /*Schema::create('subproducts', function(Blueprint $table)
         {
             $table->increments('id');
             $table->integer('product_id');
@@ -54,7 +54,7 @@ class CreateLeadsTable extends Migration
             $table->string('description');
             $table->string('slug');
             $table->timestamps();
-        });
+        });*/
         
         Schema::create('leads', function(Blueprint $table)
         {
@@ -76,10 +76,7 @@ class CreateLeadsTable extends Migration
             $table->foreign('product_id')
                   ->references('id')->on('products')
                   ->onDelete('cascade');
-            $table->integer('subproduct_id')->nullable();
-            $table->foreign('subproduct_id')
-                  ->references('id')->on('subproducts')
-                  ->onDelete('cascade');
+            $table->string('subproduct', 250)->nullable();
             $table->timestamps();
         });
 
@@ -111,15 +108,14 @@ class CreateLeadsTable extends Migration
                 entities.slug AS entity_slug,
                 leads.product_id,
                 products.slug AS product_slug,
-                leads.subproduct_id,
-                subproducts.slug AS subproduct_slug,
+                leads.subproduct,
                 leads.created_at AS lead_created_at
                 FROM customers 
                 JOIN leads ON (customers.lead_id = leads.id)
                 JOIN campaigns ON (campaigns.id = leads.utm_campaign_id)
                 JOIN entities ON (leads.entity_id = entities.id)
-                JOIN products ON (leads.product_id = products.id)
-                LEFT OUTER JOIN subproducts ON (leads.subproduct_id = subproducts.id);');
+                JOIN products ON (leads.product_id = products.id);'
+                );
 
         DB::statement('CREATE OR REPLACE VIEW utm_source_medium AS 
             SELECT leads.utm_source, leads.utm_medium 
@@ -154,7 +150,7 @@ class CreateLeadsTable extends Migration
         Schema::drop('leads');
         Schema::drop('entities');
         Schema::drop('campaigns');
-        Schema::drop('subproducts');
+        /*Schema::drop('subproducts');*/
         Schema::drop('products');
     }
 }

@@ -36,7 +36,7 @@ class LeadController extends Controller
         $lead->utm_term = preg_replace('/[^a-zA-Z0-9_.]/', '_', $request->utm_term);
         $lead->entity_id = $this->getEntityId($request->entity);
         $lead->product_id = $this->getProductId($request->product);
-        $lead->subproduct_id = $this->getSubproductId($request->subproduct, $lead->product_id); //this value can be null
+        $lead->subproduct = preg_replace('/[^a-zA-Z0-9_.]/', '_', ($request->subproduct)); //this value can be null
         try {
             $lead->save();
         } catch (\Illuminate\Database\QueryException $e) {
