@@ -19,7 +19,12 @@ export function login(email, password) {
 			return response;
 		})
 		.catch((response) => {
-			window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				deleteSession();
 				window.location.reload();
@@ -41,7 +46,12 @@ export function getAuthenticatedUser() {
 			return response;
 		})
 		.catch((response) => {
-			window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				deleteSession();
 				window.location.reload();
@@ -63,7 +73,12 @@ export function getUsers(){
 			return response;
 		})
 		.catch((response) => {
-			window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				deleteSession();
 				window.location.reload();
@@ -85,7 +100,12 @@ export function deleteUser(userId){
 			return response;
 		})
 		.catch((response) => {
-			window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				deleteSession();
 				window.location.reload();
@@ -113,7 +133,12 @@ export function addUser(user){
 			return response;
 		})
 		.catch((response) => {
-			window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				deleteSession();
 				window.location.reload();

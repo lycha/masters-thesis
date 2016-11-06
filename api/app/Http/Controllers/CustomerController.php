@@ -60,7 +60,7 @@ class CustomerController extends Controller
         
 	}
 
-    public function download()
+    public function download(Request $request)
     {
         $headers = [
                 'Cache-Control'       => 'must-revalidate, post-check=0, pre-check=0'
@@ -70,7 +70,23 @@ class CustomerController extends Controller
             ,   'Pragma'              => 'public'
         ];
 
-        $dump = DB::select("SELECT * FROM public.lead_customer");
+        if (!$this->validateCountInput($request)) {
+            return ErrorManager::error400(ErrorManager::$INVALID_PAYLOAD, 'Some elements are not provided.');
+        } 
+
+        $where = "WHERE \"customer_created_at\" BETWEEN '".$request->date_from."' AND '".$request->date_to." 23:59:59'";
+
+        if (!empty($request->product)) {
+            $where = $where." AND \"product_id\" = (SELECT id FROM products WHERE slug = '".$request->product."')"; 
+        }
+        if (!empty($request->entity)) {
+            $where = $where." AND \"entity_id\" = (SELECT id FROM entities WHERE slug = '".$request->entity."')"; 
+        }
+        if (!empty($request->utm_campaign)) {
+            $where = $where." AND \"utm_campaign_id\" = (SELECT id FROM campaigns WHERE slug = '".$request->utm_campaign."')";
+        }
+
+        $dump = DB::select("select * from \"lead_customer\" ".$where);
         $list = json_decode(json_encode($dump), true);
         //$customers = json_encode(Customer::all());
         //$array = json_decode($customers, true);

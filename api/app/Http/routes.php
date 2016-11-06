@@ -121,7 +121,7 @@ Route::group(['prefix' => 'api/v1'], function()
         'middleware' => ['jwt.auth', 'acl'], 
         'can' => 'view.customer']);
 
-    Route::get('/customers/csv', [
+    Route::post('/customers/csv', [
         'uses' => 'CustomerController@download',
         'middleware' => ['jwt.auth', 'acl'], 
         'can' => 'view.customer']);

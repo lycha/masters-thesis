@@ -63213,7 +63213,12 @@
 			(0, _SessionManager.createSession)(response.data.token);
 			return response;
 		}).catch(function (response) {
-			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				(0, _SessionManager.deleteSession)();
 				window.location.reload();
@@ -63233,7 +63238,12 @@
 			_store2.default.dispatch((0, _AuthenticationActions.getAuthenticatedUserSuccess)(response.data.user));
 			return response;
 		}).catch(function (response) {
-			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				(0, _SessionManager.deleteSession)();
 				window.location.reload();
@@ -63253,7 +63263,12 @@
 			_store2.default.dispatch((0, _UserActions.getUsersSuccess)(response.data));
 			return response;
 		}).catch(function (response) {
-			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				(0, _SessionManager.deleteSession)();
 				window.location.reload();
@@ -63273,7 +63288,12 @@
 			_store2.default.dispatch((0, _UserActions.deleteUserSuccess)(userId));
 			return response;
 		}).catch(function (response) {
-			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				(0, _SessionManager.deleteSession)();
 				window.location.reload();
@@ -63299,7 +63319,12 @@
 			_store2.default.dispatch((0, _UserActions.addUserSuccess)(response.data));
 			return response;
 		}).catch(function (response) {
-			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				(0, _SessionManager.deleteSession)();
 				window.location.reload();
@@ -64997,7 +65022,12 @@
 			_store2.default.dispatch((0, _EntityActions.getEntitiesSuccess)(response.data));
 			return response;
 		}).catch(function (response) {
-			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				(0, _SessionManager.deleteSession)();
 				window.location.reload();
@@ -65017,7 +65047,12 @@
 			_store2.default.dispatch((0, _EntityActions.deleteEntitySuccess)(entityId));
 			return response;
 		}).catch(function (response) {
-			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				(0, _SessionManager.deleteSession)();
 				window.location.reload();
@@ -65044,7 +65079,12 @@
 			_store2.default.dispatch((0, _EntityActions.updateEntitySuccess)(response.data));
 			return response;
 		}).catch(function (response) {
-			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				(0, _SessionManager.deleteSession)();
 				window.location.reload();
@@ -65071,7 +65111,12 @@
 			_store2.default.dispatch((0, _EntityActions.addEntitySuccess)(response.data));
 			return response;
 		}).catch(function (response) {
-			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				(0, _SessionManager.deleteSession)();
 				window.location.reload();
@@ -65175,7 +65220,12 @@
 			_store2.default.dispatch((0, _ProductActions.getProductsSuccess)(response.data));
 			return response;
 		}).catch(function (response) {
-			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				(0, _SessionManager.deleteSession)();
 				window.location.reload();
@@ -65195,7 +65245,12 @@
 			_store2.default.dispatch((0, _ProductActions.deleteProductSuccess)(productId));
 			return response;
 		}).catch(function (response) {
-			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				(0, _SessionManager.deleteSession)();
 				window.location.reload();
@@ -65221,7 +65276,12 @@
 			_store2.default.dispatch((0, _ProductActions.updateProductSuccess)(response.data));
 			return response;
 		}).catch(function (response) {
-			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				(0, _SessionManager.deleteSession)();
 				window.location.reload();
@@ -65247,7 +65307,12 @@
 			_store2.default.dispatch((0, _ProductActions.addProductSuccess)(response.data));
 			return response;
 		}).catch(function (response) {
-			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				(0, _SessionManager.deleteSession)();
 				window.location.reload();
@@ -68043,7 +68108,12 @@
 			_store2.default.dispatch((0, _CampaignActions.getCampaignsSuccess)(response.data));
 			return response;
 		}).catch(function (response) {
-			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				(0, _SessionManager.deleteSession)();
 				window.location.reload();
@@ -68063,7 +68133,12 @@
 			_store2.default.dispatch((0, _CampaignActions.deleteCampaignSuccess)(campaignId));
 			return response;
 		}).catch(function (response) {
-			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				(0, _SessionManager.deleteSession)();
 				window.location.reload();
@@ -68090,7 +68165,12 @@
 			_store2.default.dispatch((0, _CampaignActions.updateCampaignSuccess)(response.data));
 			return response;
 		}).catch(function (response) {
-			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				(0, _SessionManager.deleteSession)();
 				window.location.reload();
@@ -68117,7 +68197,12 @@
 			_store2.default.dispatch((0, _CampaignActions.addCampaignSuccess)(response.data));
 			return response;
 		}).catch(function (response) {
-			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				(0, _SessionManager.deleteSession)();
 				window.location.reload();
@@ -68223,17 +68308,39 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function getCsvFile() {
+	function getCsvFile(startDate, endDate, product, entity, campaign) {
 		window.showLoadingSpinner();
-		return _axios2.default.get(_Config2.default.serverUrl + 'customers/csv', {
+		var body = {
+			date_from: startDate.format('YYYY-MM-DD'),
+			date_to: endDate.format('YYYY-MM-DD')
+		};
+		if (typeof product != 'undefined') {
+			body['product'] = product;
+		};
+		if (typeof entity != 'undefined') {
+			body['entity'] = entity;
+		};
+		if (typeof campaign != 'undefined') {
+			body['utm_campaign'] = campaign;
+		};
+
+		var config = {
 			headers: {
-				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
-			} }).then(function (response) {
+				'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+				'Content-Type': 'application/json'
+			}
+		};
+		return _axios2.default.post(_Config2.default.serverUrl + 'customers/csv', body, config).then(function (response) {
 			window.hideLoadingSpinner();
 			(0, _reactFileDownload2.default)(response.data, 'data.csv');
 			return response.data;
 		}).catch(function (response) {
-			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				(0, _SessionManager.deleteSession)();
 				window.location.reload();
@@ -68269,7 +68376,12 @@
 			_store2.default.dispatch((0, _AnalysisActions.getLeadsStatsSuccess)(response.data));
 			return response;
 		}).catch(function (response) {
-			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				(0, _SessionManager.deleteSession)();
 				window.location.reload();
@@ -68305,7 +68417,12 @@
 			_store2.default.dispatch((0, _AnalysisActions.getRegistrationsStatsSuccess)(response.data));
 			return response;
 		}).catch(function (response) {
-			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				(0, _SessionManager.deleteSession)();
 				window.location.reload();
@@ -68341,7 +68458,12 @@
 			_store2.default.dispatch((0, _AnalysisActions.getLeadsCountSuccess)(response.data));
 			return response;
 		}).catch(function (response) {
-			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				(0, _SessionManager.deleteSession)();
 				window.location.reload();
@@ -68377,7 +68499,12 @@
 			_store2.default.dispatch((0, _AnalysisActions.getRegistrationsCountSuccess)(response.data));
 			return response;
 		}).catch(function (response) {
-			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				(0, _SessionManager.deleteSession)();
 				window.location.reload();
@@ -68479,7 +68606,7 @@
 	  }, {
 	    key: 'getCsv',
 	    value: function getCsv() {
-	      var data = (0, _AnalysisApi.getCsvFile)();
+	      (0, _AnalysisApi.getCsvFile)(this.props.startDate, this.props.endDate, undefined, undefined, this.props.analysisCampaign.slug);
 	    }
 	  }, {
 	    key: 'render',
@@ -72662,7 +72789,12 @@
 			_store2.default.dispatch((0, _UniversityActions.getUniversitiesSuccess)(response.data));
 			return response;
 		}).catch(function (response) {
-			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				(0, _SessionManager.deleteSession)();
 				window.location.reload();
@@ -72682,7 +72814,12 @@
 			_store2.default.dispatch((0, _UniversityActions.deleteUniversitySuccess)(universityId));
 			return response;
 		}).catch(function (response) {
-			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				(0, _SessionManager.deleteSession)();
 				window.location.reload();
@@ -72708,7 +72845,12 @@
 			_store2.default.dispatch((0, _UniversityActions.updateUniversitySuccess)(response.data));
 			return response;
 		}).catch(function (response) {
-			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				(0, _SessionManager.deleteSession)();
 				window.location.reload();
@@ -72734,7 +72876,12 @@
 			_store2.default.dispatch((0, _UniversityActions.addUniversitySuccess)(response.data));
 			return response;
 		}).catch(function (response) {
-			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				(0, _SessionManager.deleteSession)();
 				window.location.reload();
@@ -74108,7 +74255,12 @@
 			_store2.default.dispatch((0, _ApiKeyActions.getApiKeysSuccess)(response.data));
 			return response;
 		}).catch(function (response) {
-			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				(0, _SessionManager.deleteSession)();
 				window.location.reload();
@@ -74128,7 +74280,12 @@
 			_store2.default.dispatch((0, _ApiKeyActions.deleteApiKeySuccess)(keyId));
 			return response;
 		}).catch(function (response) {
-			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				(0, _SessionManager.deleteSession)();
 				window.location.reload();
@@ -74154,7 +74311,12 @@
 			_store2.default.dispatch((0, _ApiKeyActions.addApiKeySuccess)(response.data));
 			return response;
 		}).catch(function (response) {
-			window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " + response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				(0, _SessionManager.deleteSession)();
 				window.location.reload();

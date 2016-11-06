@@ -18,7 +18,12 @@ export function getApiKeys() {
 			return response;
 		})
 		.catch((response) => {
-			window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				deleteSession();
 				window.location.reload();
@@ -40,7 +45,12 @@ export function deleteApiKey(keyId) {
 			return response;
 		})
 		.catch((response) => {
-			window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				deleteSession();
 				window.location.reload();
@@ -68,7 +78,12 @@ export function addApiKey(apiKey) {
 			return response;
 		})
 		.catch((response) => {
-			window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				deleteSession();
 				window.location.reload();

@@ -7,19 +7,35 @@ import fileDownload from 'react-file-download';
 import {deleteSession} from '../utils/SessionManager'
 import { getLeadsStatsSuccess, getRegistrationsStatsSuccess, getLeadsCountSuccess, getRegistrationsCountSuccess } from '../actions/AnalysisActions';
 
-export function getCsvFile() {
+export function getCsvFile(startDate, endDate, product, entity, campaign) {
 	window.showLoadingSpinner();
-	return axios.get(Config.serverUrl+'customers/csv',{
-		headers: {
-	    	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken')
-	    }})
+	let body = {
+	    date_from: startDate.format('YYYY-MM-DD'),
+	    date_to: endDate.format('YYYY-MM-DD')
+	};
+	if (typeof product != 'undefined') { body['product'] = product; };
+	if (typeof entity != 'undefined') { body['entity'] = entity; };
+	if (typeof campaign != 'undefined') { body['utm_campaign'] = campaign; };
+
+	var config = {
+		  headers: {
+		  	'Authorization': 'Bearer ' + localStorage.getItem('trackingToolAuthToken'),
+        	'Content-Type': 'application/json'
+        }
+	};
+	return axios.post(Config.serverUrl+'customers/csv', body, config)
 	    .then(response => {
 			window.hideLoadingSpinner();
       		fileDownload(response.data, 'data.csv');
 			return response.data;
 		})
 		.catch((response) => {
-			window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				deleteSession();
 				window.location.reload();
@@ -51,7 +67,12 @@ export function getLeadsStatistics(startDate, endDate, product, entity, campaign
 			return response;
 		})
 		.catch((response) => {
-			window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				deleteSession();
 				window.location.reload();
@@ -83,7 +104,12 @@ export function getRegistrationsStatistics(startDate, endDate, product, entity, 
 			return response;
 		})
 		.catch((response) => {
-			window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				deleteSession();
 				window.location.reload();
@@ -115,7 +141,12 @@ export function getLeadsCount(startDate, endDate, product, entity, campaign) {
 			return response;
 		})
 		.catch((response) => {
-			window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				deleteSession();
 				window.location.reload();
@@ -147,7 +178,12 @@ export function getRegistrationsCount(startDate, endDate, product, entity, campa
 			return response;
 		})
 		.catch((response) => {
-			window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				deleteSession();
 				window.location.reload();

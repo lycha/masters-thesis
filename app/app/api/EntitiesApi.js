@@ -18,7 +18,12 @@ export function getEntities() {
 			return response;
 		})
 		.catch((response) => {
-			window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				deleteSession();
 				window.location.reload();
@@ -40,7 +45,12 @@ export function deleteEntity(entityId) {
 			return response;
 		})
 		.catch((response) => {
-			window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				deleteSession();
 				window.location.reload();
@@ -69,7 +79,12 @@ export function updateEntity(entity) {
 		return response;
 	})
 	.catch((response) => {
-		window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+		try {
+			window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+		} catch (e) {
+			window.hideLoadingSpinner();
+			window.showError(response.status, response.statusText); //method from common-scripts.js
+		}
 		if (response.data.error.code == 401) {
 			deleteSession();
 			window.location.reload();
@@ -98,7 +113,12 @@ export function addEntity(entity) {
 			return response;
 		})
 		.catch((response) => {
-			window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			try {
+				window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			} catch (e) {
+				window.hideLoadingSpinner();
+				window.showError(response.status, response.statusText); //method from common-scripts.js
+			}
 			if (response.data.error.code == 401) {
 				deleteSession();
 				window.location.reload();

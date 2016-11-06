@@ -33,7 +33,8 @@ class DashboardContainer extends React.Component {
     }
 
     getCsv() {
-      let data = getCsvFile();
+      getCsvFile(this.props.startDate,
+        this.props.endDate, undefined, undefined, this.props.analysisCampaign.slug);
     }
     render() {
         let title = "";
