@@ -19,7 +19,7 @@ export function getCampaigns() {
 		})
 		.catch((response) => {
 			try {
-				window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+				window.showError(response.status + " " +response.data.error.code, response.data.error.title); //method from common-scripts.js
 			} catch (e) {
 				window.hideLoadingSpinner();
 				window.showError(response.status, response.statusText); //method from common-scripts.js
@@ -46,7 +46,7 @@ export function deleteCampaign(campaignId) {
 		})
 		.catch((response) => {
 			try {
-				window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+				window.showError(response.status + " " +response.data.error.code, response.data.error.title); //method from common-scripts.js
 			} catch (e) {
 				window.hideLoadingSpinner();
 				window.showError(response.status, response.statusText); //method from common-scripts.js
@@ -80,7 +80,7 @@ export function updateCampaign(campaign) {
 	})
 	.catch((response) => {
 			try {
-				window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+				window.showError(response.status + " " +response.data.error.code, response.data.error.title); //method from common-scripts.js
 			} catch (e) {
 				window.hideLoadingSpinner();
 				window.showError(response.status, response.statusText); //method from common-scripts.js
@@ -114,7 +114,7 @@ export function addCampaign(campaign) {
 		})
 		.catch((response) => {
 			try {
-				window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+				window.showError(response.status + " " +response.data.error.code, response.data.error.title); //method from common-scripts.js
 			} catch (e) {
 				window.hideLoadingSpinner();
 				window.showError(response.status, response.statusText); //method from common-scripts.js

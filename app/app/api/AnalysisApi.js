@@ -31,7 +31,7 @@ export function getCsvFile(startDate, endDate, product, entity, campaign) {
 		})
 		.catch((response) => {
 			try {
-				window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+				window.showError(response.status + " " +response.data.error.code, response.data.error.title); //method from common-scripts.js
 			} catch (e) {
 				window.hideLoadingSpinner();
 				window.showError(response.status, response.statusText); //method from common-scripts.js
@@ -68,7 +68,7 @@ export function getLeadsStatistics(startDate, endDate, product, entity, campaign
 		})
 		.catch((response) => {
 			try {
-				window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+				window.showError(response.status + " " +response.data.error.code, response.data.error.title); //method from common-scripts.js
 			} catch (e) {
 				window.hideLoadingSpinner();
 				window.showError(response.status, response.statusText); //method from common-scripts.js
@@ -105,7 +105,7 @@ export function getRegistrationsStatistics(startDate, endDate, product, entity, 
 		})
 		.catch((response) => {
 			try {
-				window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+				window.showError(response.status + " " +response.data.error.code, response.data.error.title); //method from common-scripts.js
 			} catch (e) {
 				window.hideLoadingSpinner();
 				window.showError(response.status, response.statusText); //method from common-scripts.js
@@ -142,7 +142,7 @@ export function getLeadsCount(startDate, endDate, product, entity, campaign) {
 		})
 		.catch((response) => {
 			try {
-				window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+				window.showError(response.status + " " +response.data.error.code, response.data.error.title); //method from common-scripts.js
 			} catch (e) {
 				window.hideLoadingSpinner();
 				window.showError(response.status, response.statusText); //method from common-scripts.js
@@ -179,7 +179,7 @@ export function getRegistrationsCount(startDate, endDate, product, entity, campa
 		})
 		.catch((response) => {
 			try {
-				window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+				window.showError(response.status + " " +response.data.error.code, response.data.error.title); //method from common-scripts.js
 			} catch (e) {
 				window.hideLoadingSpinner();
 				window.showError(response.status, response.statusText); //method from common-scripts.js

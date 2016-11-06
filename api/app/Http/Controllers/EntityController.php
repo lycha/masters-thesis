@@ -38,6 +38,9 @@ class EntityController extends Controller
 
 	public function delete($id)
 	{
+		if ($id == 1) {
+			return ErrorManager::error400(ErrorManager::$INTERNAL_VIOLATION, 'Can not delete primary entity.');
+		}
 		$entity = Entity::find($id);
 		if ($entity == null) {
         	return ErrorManager::error400(ErrorManager::$OBJECT_DOES_NOT_EXIST, 'Entity does not exist.');

@@ -42,6 +42,9 @@ class CampaignController extends Controller
 
 	public function delete($id)
 	{
+		if ($id == 1) {
+			return ErrorManager::error400(ErrorManager::$INTERNAL_VIOLATION, 'Can not delete generic campaign.');
+		}
 		$campaign = Campaign::find($id);
 		if ($campaign == null) {
         	return ErrorManager::error400(ErrorManager::$OBJECT_DOES_NOT_EXIST, 'CAMPAIGN does not exist.');

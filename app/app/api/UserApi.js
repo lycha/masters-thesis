@@ -20,7 +20,7 @@ export function login(email, password) {
 		})
 		.catch((response) => {
 			try {
-				window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+				window.showError(response.status + " " +response.data.error.code, response.data.error.title); //method from common-scripts.js
 			} catch (e) {
 				window.hideLoadingSpinner();
 				window.showError(response.status, response.statusText); //method from common-scripts.js
@@ -47,7 +47,7 @@ export function getAuthenticatedUser() {
 		})
 		.catch((response) => {
 			try {
-				window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+				window.showError(response.status + " " +response.data.error.code, response.data.error.title); //method from common-scripts.js
 			} catch (e) {
 				window.hideLoadingSpinner();
 				window.showError(response.status, response.statusText); //method from common-scripts.js
@@ -74,7 +74,7 @@ export function getUsers(){
 		})
 		.catch((response) => {
 			try {
-				window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+				window.showError(response.status + " " +response.data.error.code, response.data.error.title); //method from common-scripts.js
 			} catch (e) {
 				window.hideLoadingSpinner();
 				window.showError(response.status, response.statusText); //method from common-scripts.js
@@ -101,7 +101,7 @@ export function deleteUser(userId){
 		})
 		.catch((response) => {
 			try {
-				window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+				window.showError(response.status + " " +response.data.error.code, response.data.error.title); //method from common-scripts.js
 			} catch (e) {
 				window.hideLoadingSpinner();
 				window.showError(response.status, response.statusText); //method from common-scripts.js
@@ -134,7 +134,7 @@ export function addUser(user){
 		})
 		.catch((response) => {
 			try {
-				window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+				window.showError(response.status + " " +response.data.error.code, response.data.error.title); //method from common-scripts.js
 			} catch (e) {
 				window.hideLoadingSpinner();
 				window.showError(response.status, response.statusText); //method from common-scripts.js

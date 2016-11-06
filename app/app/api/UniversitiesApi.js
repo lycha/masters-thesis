@@ -19,7 +19,7 @@ export function getUniversities() {
 		})
 		.catch((response) => {
 			try {
-				window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+				window.showError(response.status + " " +response.data.error.code, response.data.error.title); //method from common-scripts.js
 			} catch (e) {
 				window.hideLoadingSpinner();
 				window.showError(response.status, response.statusText); //method from common-scripts.js
@@ -46,7 +46,7 @@ export function deleteUniversity(universityId) {
 		})
 		.catch((response) => {
 			try {
-				window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+				window.showError(response.status + " " +response.data.error.code, response.data.error.title); //method from common-scripts.js
 			} catch (e) {
 				window.hideLoadingSpinner();
 				window.showError(response.status, response.statusText); //method from common-scripts.js
@@ -79,7 +79,7 @@ export function updateUniversity(university) {
 	})
 	.catch((response) => {
 		try {
-			window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+			window.showError(response.status + " " +response.data.error.code, response.data.error.title); //method from common-scripts.js
 		} catch (e) {
 			window.hideLoadingSpinner();
 			window.showError(response.status, response.statusText); //method from common-scripts.js
@@ -112,7 +112,7 @@ export function addUniversity(university) {
 		})
 		.catch((response) => {
 			try {
-				window.showError(response.status + " " +response.data.error.code, response.data.error); //method from common-scripts.js
+				window.showError(response.status + " " +response.data.error.code, response.data.error.title); //method from common-scripts.js
 			} catch (e) {
 				window.hideLoadingSpinner();
 				window.showError(response.status, response.statusText); //method from common-scripts.js

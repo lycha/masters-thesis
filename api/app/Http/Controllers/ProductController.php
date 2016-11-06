@@ -38,6 +38,9 @@ class ProductController extends Controller
 
 	public function delete($id)
 	{
+		if ($id == 1) {
+			return ErrorManager::error400(ErrorManager::$INTERNAL_VIOLATION, 'Can not delete generic product.');
+		}
 		$product = Product::find($id);
 		if ($product == null) {
         	return ErrorManager::error400(ErrorManager::$OBJECT_DOES_NOT_EXIST, 'Product does not exist.');
