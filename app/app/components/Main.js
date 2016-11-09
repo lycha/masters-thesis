@@ -9,6 +9,7 @@ import { getAuthenticatedUser } from '../api/UserApi'
 import {deleteSession} from '../utils/SessionManager';
 import {getEntities} from '../api/EntitiesApi';
 import {getProducts} from '../api/ProductsApi';
+import {getCampaigns} from '../api/CampaignsApi';
 import jwtDecode from 'jwt-decode';
 
 class Main extends React.Component {
@@ -23,6 +24,7 @@ class Main extends React.Component {
 		if (localStorage.getItem('trackingToolAuthToken') != null) { 
 			let decodedJwt = jwtDecode(localStorage.getItem('trackingToolAuthToken'));
 			if (decodedJwt.exp > currentEpoch) {
+				getCampaigns();
 				getAuthenticatedUser();
 				getProducts(); 
 		   	    getEntities()

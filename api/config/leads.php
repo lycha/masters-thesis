@@ -44,8 +44,8 @@ return  [
     |
     */
     'product_generic' => [
-    	'name' => 'n/a',
-        'slug' => 'na',
+    	'name' => 'generic',
+        'slug' => 'generic',
         'description' => 'generic'
     ]
 

@@ -17,7 +17,7 @@ import UniversitiesContainer from './components/AdminPanel/Universities/Universi
 import CampaignsContainer from './components/AdminPanel/Campaigns/CampaignsContainer';
 import ApiKeysContainer from './components/AdminPanel/ApiKeys/ApiKeysContainer';
 import Component404 from './components/Component404';
-import UrlGenerator from './components/UrlGenerator';
+import UrlGenerator from './components/UrlGenerator/UrlGenerator';
 
 ReactDOM.render (( 
 	<Provider store={store}>
