@@ -63342,7 +63342,7 @@
 /* 412 */
 /***/ function(module, exports) {
 
-	module.exports = {"serverUrl":"http://api.master-tool.dev/api/v1/"};
+	module.exports = {"serverUrl":"http://vps334372.ovh.net:8080/api/v1/"};
 
 /***/ },
 /* 413 */
