@@ -10,10 +10,10 @@ import {getCampaigns} from '../../api/CampaignsApi';
 import {getCsvFile, getLeadsCount, getRegistrationsCount} from '../../api/AnalysisApi';
 import { connect } from 'react-redux';import _ from 'lodash';
 
-class DashboardContainer extends React.Component {
+class HomeDashboard extends React.Component {
     constructor(props) {
         super(props);
-        this.displayName = 'DashboardContainer';
+        this.displayName = 'HomeDashboard';
         this.showAnalysis = this.showAnalysis.bind(this);
         getCampaigns();
         this.entity = "";
@@ -60,9 +60,9 @@ class DashboardContainer extends React.Component {
           </div>
           <div className="row mt">
             
-            <NumberStatistics type="Leads" entity="total" stats={this.props.leadsCount}/>
+            <NumberStatistics type="Leads" entityName="total" stats={this.props.leadsCount}/>
 
-            <NumberStatistics type="Registrations" entity="total" stats={this.props.registrationsCount}/>
+            <NumberStatistics type="Registrations" entityName="total" stats={this.props.registrationsCount}/>
               
             <Conversion leadsCount={this.props.leadsCount} registrationsCount={this.props.registrationsCount}/>
             
@@ -84,4 +84,4 @@ const mapStateToProps = function(store) {
   };
 };
 
-export default connect(mapStateToProps)(DashboardContainer);
+export default connect(mapStateToProps)(HomeDashboard);

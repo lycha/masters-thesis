@@ -31,10 +31,14 @@ class ApiKeyController extends Controller
         $expirationTime = strtotime($request->expiration_date);
         $ttl = round(abs($expirationTime - $currentTime) / 60,0);
         $customClaims = ['sub', uniqid()];
-		$user = User::where('name', 'api')->first();
+		$user = null;
+		if ($request->read_permissions) {
+			$user = User::where('name', 'apiread')->first();
+		} else {
+			$user = User::where('name', 'api')->first();
+		}
 		JWTFactory::setTTL($ttl);
 		$token = JWTAuth::fromUser($user, $customClaims);
-
 
 		$apiKey = new ApiKey;
         $apiKey->name = $request->name;	

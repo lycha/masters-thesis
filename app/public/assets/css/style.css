@@ -176,6 +176,8 @@ a, a:hover, a:focus {
   color: #fff;
   background-color: #68dff0;
   border-color: #48bcb4;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 .btn-theme:hover,
 .btn-theme:focus,
@@ -1836,6 +1838,8 @@ background: #fffbcc !important;
 
 label {
 	font-weight: 400;
+    margin-right: 5px;
+    margin-left: 5px;
 }
 
 .form-horizontal.style-form .form-group {

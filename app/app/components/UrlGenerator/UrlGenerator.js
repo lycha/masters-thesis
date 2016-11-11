@@ -19,9 +19,6 @@ class UrlGenerator extends React.Component {
     }
     getQuery(e){
       e.preventDefault();
-      console.log(this.state.productSlug);
-      console.log(this.state.campaignSlug);
-      console.log(this.state.entitySlug);
       let url = this.refs.url.value;
       if (url.indexOf("?") !== -1) {
         url = url + "&";
@@ -35,7 +32,6 @@ class UrlGenerator extends React.Component {
                 + "&utm_campaign=" + this.state.campaignSlug
                 + "&entity=" + this.state.entitySlug;
       this.setState({ url: url });
-      console.log(url);
     }
     setProduct(slug) {
       this.setState({ productSlug: slug });

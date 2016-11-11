@@ -6,18 +6,28 @@ import moment from 'moment';
 import { expirationDateSelected } from '../../../actions/ApiKeyActions';
 
 class AddApiKey extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {isChecked: false};
+  }
+
   
   getQuery(e) {
     e.preventDefault();
     let key = {
       name: this.refs.name.value,
       description: this.refs.description.value,
-      expiration_date: this.props.expirationDate.format('YYYY-MM-DD')
+      read_permissions: this.state.isChecked,
+      expiration_date: this.props.expirationDate.format('YYYY-MM-DD'),
     };
     this.refs.name.value = "";
     this.refs.description.value = "";
-
     this.props.addNew(key);
+  }
+
+  onChange(e) {
+    this.setState({isChecked: !this.state.isChecked});
   }
   
   handleChange(date) {  
@@ -40,6 +50,13 @@ class AddApiKey extends React.Component {
               dateFormat='YYYY-MM-DD'
               selected={this.props.expirationDate}
               onChange={this.handleChange} />
+            <label htmlFor="read_permissions"> Add read permissions? </label>
+            <input type="checkbox" 
+              name="read_permissions" 
+              ref="read_permissions" 
+              checked={this.state.isChecked}
+              onChange={(e) => this.onChange(e)}
+              value="read_permissions" />
             <button className="btn btn-theme" >Add</button>
 	    		</form>
       	</div>

@@ -37,6 +37,14 @@ class LeadController extends Controller
         $lead->entity_id = $this->getEntityId($request->entity);
         $lead->product_id = $this->getProductId($request->product);
         $lead->subproduct = preg_replace('/[^a-zA-Z0-9_.]/', '_', ($request->subproduct)); //this value can be null
+        //check if id is unique
+        $input['id'] = $lead->id;
+        $uniqueIdRule = array('id' => 'unique:leads,id');
+        $validator = Validator::make($input, $uniqueIdRule);
+
+        if ($validator->fails()) {
+            return ErrorManager::error400(ErrorManager::$ID_NOT_UNIQUE, 'Lead already exists in database.');
+        }
         try {
             $lead->save();
         } catch (\Illuminate\Database\QueryException $e) {

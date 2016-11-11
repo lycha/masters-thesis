@@ -70,7 +70,8 @@ export function addApiKey(apiKey) {
     return axios.post(Config.serverUrl+'api-keys', {
 		    name: apiKey.name,
 		    description: apiKey.description,
-		    expiration_date: apiKey.expiration_date
+		    expiration_date: apiKey.expiration_date,
+		    read_permissions: apiKey.read_permissions
 		}, config)
 		.then((response) => {
 			window.hideLoadingSpinner();

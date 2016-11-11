@@ -24,11 +24,13 @@ class RolesController extends Controller
 			$adminOutput = $this->createAdminRole();
 			$userOutput = $this->createUserRole();
 			$apiKeyOutput = $this->createApiKeyRole();
+			$apiKeyReadOutput = $this->createApiReadKeyRole();
 			$admin = new Admin();
 			$newAdmin  = $admin->create($name, $email, $password);
 
 			$apiKeyUser = new ApiUser();
 			$apiKeyUser->create();
+			$apiKeyUser->createRead();
 			if (!$newAdmin) {
 				return ErrorManager::error400(ErrorManager::$OBJECT_DUPLICATED, 'Admin is already created.');
 			}
@@ -76,6 +78,7 @@ class RolesController extends Controller
 			$roleUser->assignPermission('customer.user'); 
 			$roleUser->assignPermission('entity.user'); 
 			$roleUser->assignPermission('product.user'); 
+			$roleUser->assignPermission('university.user'); 
 
 			if ($roleUser->exists) {
 				return array('success_user_role' => 'Created User role.');
@@ -102,6 +105,29 @@ class RolesController extends Controller
 
 			if ($roleUser->exists) {
 				return array('success_api_role' => 'Created Api role.');
+			} else {
+				return ErrorManager::error400(ErrorManager::$OBJECT_CREATION_FAILED, 'Api role creation failed.');
+			}
+		} catch(\Illuminate\Database\QueryException $e) {
+				return ErrorManager::error400(ErrorManager::$OBJECT_CREATION_FAILED, 'Api role creation failed.');
+		}
+	}
+
+	private function createApiReadKeyRole()
+	{
+		try {
+			$roleUser = new Role();
+			$roleUser->name = 'ApiKeyReadUser';
+			$roleUser->slug = 'apiread';
+			$roleUser->description = 'priviliges for api calls with read permissions';
+			$roleUser->save();
+			$roleUser->assignPermission('lead.apiread');
+			$roleUser->assignPermission('customer.apiread'); 
+			$roleUser->assignPermission('entity.apiread'); 
+			$roleUser->assignPermission('university.apiread'); 
+
+			if ($roleUser->exists) {
+				return array('success_api_read_role' => 'Created Api Read role.');
 			} else {
 				return ErrorManager::error400(ErrorManager::$OBJECT_CREATION_FAILED, 'Api role creation failed.');
 			}

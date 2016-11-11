@@ -23,6 +23,7 @@ class ErrorManager
 	public static $OBJECT_CREATION_FAILED = "OBJECT_CREATION_FAILED";
 	public static $EMAIL_NOT_UNIQUE = 'EMAIL_NOT_UNIQUE';
 	public static $INTERNAL_VIOLATION = 'INTERNAL_VIOLATION';
+	public static $ID_NOT_UNIQUE = 'ID_NOT_UNIQUE';
 
 	/*
     |--------------------------------------------------------------------------

@@ -67738,7 +67738,7 @@
 
 	        _this.displayName = 'NumberStatistics';
 	        _this.statsCount = "";
-	        _this.entityName = "";
+	        _this.entityName = "total";
 	        return _this;
 	    }
 
@@ -67750,6 +67750,8 @@
 	            }
 	            if (typeof nextProps.entity != "undefined") {
 	                this.entityName = nextProps.entity.name;
+	            } else {
+	                this.entityName = nextProps.entityName;
 	            }
 	        }
 	    }, {
@@ -88098,15 +88100,15 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var DashboardContainer = function (_React$Component) {
-	  _inherits(DashboardContainer, _React$Component);
+	var HomeDashboard = function (_React$Component) {
+	  _inherits(HomeDashboard, _React$Component);
 
-	  function DashboardContainer(props) {
-	    _classCallCheck(this, DashboardContainer);
+	  function HomeDashboard(props) {
+	    _classCallCheck(this, HomeDashboard);
 
-	    var _this = _possibleConstructorReturn(this, (DashboardContainer.__proto__ || Object.getPrototypeOf(DashboardContainer)).call(this, props));
+	    var _this = _possibleConstructorReturn(this, (HomeDashboard.__proto__ || Object.getPrototypeOf(HomeDashboard)).call(this, props));
 
-	    _this.displayName = 'DashboardContainer';
+	    _this.displayName = 'HomeDashboard';
 	    _this.showAnalysis = _this.showAnalysis.bind(_this);
 	    (0, _CampaignsApi.getCampaigns)();
 	    _this.entity = "";
@@ -88114,7 +88116,7 @@
 	    return _this;
 	  }
 
-	  _createClass(DashboardContainer, [{
+	  _createClass(HomeDashboard, [{
 	    key: 'componentWillMount',
 	    value: function componentWillMount() {
 	      (0, _AnalysisApi.getLeadsCount)(this.props.startDate, this.props.endDate);
@@ -88179,8 +88181,8 @@
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'row mt' },
-	            _react2.default.createElement(_NumberStatistics2.default, { type: 'Leads', entity: 'total', stats: this.props.leadsCount }),
-	            _react2.default.createElement(_NumberStatistics2.default, { type: 'Registrations', entity: 'total', stats: this.props.registrationsCount }),
+	            _react2.default.createElement(_NumberStatistics2.default, { type: 'Leads', entityName: 'total', stats: this.props.leadsCount }),
+	            _react2.default.createElement(_NumberStatistics2.default, { type: 'Registrations', entityName: 'total', stats: this.props.registrationsCount }),
 	            _react2.default.createElement(_Conversion2.default, { leadsCount: this.props.leadsCount, registrationsCount: this.props.registrationsCount })
 	          )
 	        )
@@ -88188,7 +88190,7 @@
 	    }
 	  }]);
 
-	  return DashboardContainer;
+	  return HomeDashboard;
 	}(_react2.default.Component);
 
 	var mapStateToProps = function mapStateToProps(store) {
@@ -88202,7 +88204,7 @@
 	  };
 	};
 
-	exports.default = (0, _reactRedux.connect)(mapStateToProps)(DashboardContainer);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps)(HomeDashboard);
 
 /***/ },
 /* 596 */
@@ -93664,7 +93666,7 @@
 										'h4',
 										null,
 										_react2.default.createElement('i', { className: 'fa fa-angle-right' }),
-										' Products'
+										' API Keys'
 									),
 									_react2.default.createElement('hr', null),
 									_react2.default.createElement(
@@ -93828,7 +93830,8 @@
 		return _axios2.default.post(_Config2.default.serverUrl + 'api-keys', {
 			name: apiKey.name,
 			description: apiKey.description,
-			expiration_date: apiKey.expiration_date
+			expiration_date: apiKey.expiration_date,
+			read_permissions: apiKey.read_permissions
 		}, config).then(function (response) {
 			window.hideLoadingSpinner();
 			_store2.default.dispatch((0, _ApiKeyActions.addApiKeySuccess)(response.data));
@@ -94041,10 +94044,13 @@
 	var AddApiKey = function (_React$Component) {
 	  _inherits(AddApiKey, _React$Component);
 
-	  function AddApiKey() {
+	  function AddApiKey(props) {
 	    _classCallCheck(this, AddApiKey);
 
-	    return _possibleConstructorReturn(this, (AddApiKey.__proto__ || Object.getPrototypeOf(AddApiKey)).apply(this, arguments));
+	    var _this = _possibleConstructorReturn(this, (AddApiKey.__proto__ || Object.getPrototypeOf(AddApiKey)).call(this, props));
+
+	    _this.state = { isChecked: false };
+	    return _this;
 	  }
 
 	  _createClass(AddApiKey, [{
@@ -94054,12 +94060,17 @@
 	      var key = {
 	        name: this.refs.name.value,
 	        description: this.refs.description.value,
+	        read_permissions: this.state.isChecked,
 	        expiration_date: this.props.expirationDate.format('YYYY-MM-DD')
 	      };
 	      this.refs.name.value = "";
 	      this.refs.description.value = "";
-
 	      this.props.addNew(key);
+	    }
+	  }, {
+	    key: 'onChange',
+	    value: function onChange(e) {
+	      this.setState({ isChecked: !this.state.isChecked });
 	    }
 	  }, {
 	    key: 'handleChange',
@@ -94108,6 +94119,19 @@
 	            dateFormat: 'YYYY-MM-DD',
 	            selected: this.props.expirationDate,
 	            onChange: this.handleChange }),
+	          _react2.default.createElement(
+	            'label',
+	            { htmlFor: 'read_permissions' },
+	            ' Add read permissions? '
+	          ),
+	          _react2.default.createElement('input', { type: 'checkbox',
+	            name: 'read_permissions',
+	            ref: 'read_permissions',
+	            checked: this.state.isChecked,
+	            onChange: function onChange(e) {
+	              return _this2.onChange(e);
+	            },
+	            value: 'read_permissions' }),
 	          _react2.default.createElement(
 	            'button',
 	            { className: 'btn btn-theme' },
@@ -94269,9 +94293,6 @@
 	    key: 'getQuery',
 	    value: function getQuery(e) {
 	      e.preventDefault();
-	      console.log(this.state.productSlug);
-	      console.log(this.state.campaignSlug);
-	      console.log(this.state.entitySlug);
 	      var url = this.refs.url.value;
 	      if (url.indexOf("?") !== -1) {
 	        url = url + "&";
@@ -94280,7 +94301,6 @@
 	      }
 	      url = url + "product=" + this.state.productSlug + "&subproduct=" + this.refs.subproduct.value + "&utm_source=" + this.refs.utm_source.value + "&utm_medium=" + this.refs.utm_medium.value + "&utm_campaign=" + this.state.campaignSlug + "&entity=" + this.state.entitySlug;
 	      this.setState({ url: url });
-	      console.log(url);
 	    }
 	  }, {
 	    key: 'setProduct',

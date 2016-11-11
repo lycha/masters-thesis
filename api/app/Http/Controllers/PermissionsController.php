@@ -28,11 +28,17 @@ class PermissionsController extends Controller
 		$customerForUserPerm = $this->createCustomerForUserPermissions();
 		$entityForUserPerm = $this->createEntityForUserPermissions();
 		$productForUserPerm = $this->createProductForUserPermissions();
+		$universityForUserPerm = $this->createUniversitiesForUserPermissions();
 
 		$leadForFormsPerm = $this->createLeadForFormsPermissions();
 		$customerForFormsPerm = $this->createCustomerForFormsPermissions();
 		$entityForFormsPerm = $this->createEntityForFormsPermissions();
 		$universitiesForFormsPerm = $this->createUniversitiesForFormsPermissions();
+
+		$leadForApiReadPerm = $this->createLeadForApiReadPermissions();
+		$customerForApiReadPerm = $this->createCustomerForApiReadPermissions();
+		$entityForApiReadPerm = $this->createEntityForApiReadPermissions();
+		$universitiesForApiReadPerm = $this->createUniversitiesForApiReadPermissions();
 
 		if ($userForAdminPerm && 
 			$leadForAdminPerm &&
@@ -47,11 +53,16 @@ class PermissionsController extends Controller
 			$customerForUserPerm &&
 			$entityForUserPerm &&
 			$productForUserPerm &&
+			$universityForUserPerm &&
 			$leadForFormsPerm &&
 			$customerForFormsPerm &&
 			$universitiesForAdminPerm &&
 			$entityForFormsPerm &&
-			$universitiesForFormsPerm) {
+			$universitiesForFormsPerm &&
+			$leadForApiReadPerm &&
+			$customerForApiReadPerm &&
+			$entityForApiReadPerm &&
+			$universitiesForApiReadPerm) {
 			return response()->json([], 201);
 		} else {
             return ErrorManager::error400(ErrorManager::$CREATE_PERMISSIONS_FAILED, 'Failed to create permissions.');
@@ -272,7 +283,22 @@ class PermissionsController extends Controller
             'inherit_id' => Permission::where('name', 'product')->first()->getKey(),
 		    'description' => 'Manage product permissions for user role'
 		]);
-		var_dump($permission);
+	}
+
+	public function createUniversitiesForUserPermissions() 
+	{
+		$permission = new Permission();
+		return $perm = $permission->create([ 
+		    'name'        => 'university.user',
+		    'slug'        => [          // pass an array of permissions.
+		        'create'     => false,
+		        'view'       => true,
+		        'update'     => false,
+		        'delete'     => false
+		    ],
+            'inherit_id' => Permission::where('name', 'university')->first()->getKey(),
+		    'description' => 'Manage Universities permissions for user'
+		]);
 	}
 
 	/*----------------Forms API --------------*/
@@ -283,7 +309,7 @@ class PermissionsController extends Controller
 		    'name'        => 'lead.forms',
 		    'slug'        => [          // pass an array of permissions.
 		        'create'     => true,
-		        'view'       => true,
+		        'view'       => false,
 		        'update'     => false,
 		        'delete'     => false
 		    ],
@@ -299,7 +325,7 @@ class PermissionsController extends Controller
 		    'name'        => 'customer.forms',
 		    'slug'        => [          // pass an array of permissions.
 		        'create'     => true,
-		        'view'       => true,
+		        'view'       => false,
 		        'update'     => false,
 		        'delete'     => false
 		    ],
@@ -337,6 +363,71 @@ class PermissionsController extends Controller
 		    ],
             'inherit_id' => Permission::where('name', 'entity')->first()->getKey(),
 		    'description' => 'Manage entity permissions for user role'
+		]);
+	}
+
+	/*----------------API With Read--------------*/
+	public function createLeadForApiReadPermissions()
+	{
+		$permission = new Permission();
+		return $perm = $permission->create([ 
+		    'name'        => 'lead.apiread',
+		    'slug'        => [          // pass an array of permissions.
+		        'create'     => true,
+		        'view'       => true,
+		        'update'     => false,
+		        'delete'     => false
+		    ],
+            'inherit_id' => Permission::where('name', 'lead')->first()->getKey(),
+		    'description' => 'Manage lead permissions for api with read permissions'
+		]);
+	}
+
+	public function createCustomerForApiReadPermissions()
+	{
+		$permission = new Permission();
+		return $perm = $permission->create([ 
+		    'name'        => 'customer.apiread',
+		    'slug'        => [          // pass an array of permissions.
+		        'create'     => true,
+		        'view'       => true,
+		        'update'     => false,
+		        'delete'     => false
+		    ],
+            'inherit_id' => Permission::where('name', 'customer')->first()->getKey(),
+		    'description' => 'Manage customer permissions for api with read permissions'
+		]);
+	}
+
+	public function createUniversitiesForApiReadPermissions() 
+	{
+		$permission = new Permission();
+		return $perm = $permission->create([ 
+		    'name'        => 'university.apiread',
+		    'slug'        => [          // pass an array of permissions.
+		        'create'     => false,
+		        'view'       => true,
+		        'update'     => false,
+		        'delete'     => false
+		    ],
+            'inherit_id' => Permission::where('name', 'university')->first()->getKey(),
+		    'description' => 'Manage Universities permissions for api with read permissions'
+		]);
+	}
+
+	public function createEntityForApiReadPermissions()
+	{
+		$permission = new Permission();
+		return $perm = $permission->create([ 
+		    'name'        => 'entity.apiread',
+		    'slug'        => [          // pass an array of permissions.
+		        'create'     => false,
+		        'view'       => true,
+		        'update'     => false,
+		        'delete'     => false
+		    ],
+            'inherit_id' => Permission::where('name', 'entity')->first()->getKey(),
+		    'description' => 'Manage entity permissions for api with read permissions'
 		]);
 	}
 }

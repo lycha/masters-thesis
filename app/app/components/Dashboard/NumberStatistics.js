@@ -5,7 +5,7 @@ class NumberStatistics extends React.Component {
         super(props);
         this.displayName = 'NumberStatistics';
         this.statsCount = "";
-        this.entityName = "";
+        this.entityName = "total";
     }
 
     componentWillUpdate(nextProps, nextState) {
@@ -14,6 +14,8 @@ class NumberStatistics extends React.Component {
         }
         if (typeof nextProps.entity != "undefined") {
             this.entityName = nextProps.entity.name;
+        } else {
+            this.entityName = nextProps.entityName;
         }
     }
 
