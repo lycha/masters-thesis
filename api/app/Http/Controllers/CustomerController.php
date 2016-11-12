@@ -63,10 +63,11 @@ class CustomerController extends Controller
 
     public function download(Request $request)
     {
+        $filename = "customers-".date("m-d-y:H:i:s")."csv";
         $headers = [
                 'Cache-Control'       => 'must-revalidate, post-check=0, pre-check=0'
             ,   'Content-type'        => 'text/csv'
-            ,   'Content-Disposition' => 'attachment; filename=customers.csv'
+            ,   'Content-Disposition' => 'attachment; filename='.$filename
             ,   'Expires'             => '0'
             ,   'Pragma'              => 'public'
         ];
@@ -88,17 +89,21 @@ class CustomerController extends Controller
         }
 
         $dump = DB::select("select * from \"lead_customer\" ".$where);
-        $list = json_decode(json_encode($dump), true);
-        //$customers = json_encode(Customer::all());
-        //$array = json_decode($customers, true);
-        
-        //$this->flatten($array);
-        
+
+        $listHstore = json_decode(json_encode($dump), true);
+        $list;
+        foreach ($listHstore as $row) { 
+            $newRow = $row;
+            $newRow = array_merge(json_decode($this->hstore2json($row['fields']), true), $newRow);
+            unset($newRow['fields']);
+            $list[] = $newRow;
+        }
+
         # add headers for each column in the CSV download
         array_unshift($list, array_keys($list[0]));
 
         $callback = function() use ($list) 
-        {
+        { 
             $FH = fopen('php://output', 'w');
             foreach ($list as $row) { 
                 fputcsv($FH, $row);
@@ -108,6 +113,13 @@ class CustomerController extends Controller
 
         return \Response::stream($callback, 200, $headers);
 
+    }
+
+    private function hstore2json($hstore)
+    {
+        $json = str_replace("=>", ":", "{".$hstore."}");
+        $json = stripslashes($json);
+        return $json;
     }
 
 	public function update(Request $request)
