@@ -88,6 +88,10 @@ class CreateLeadsTable extends Migration
                   ->references('id')->on('leads')
                   ->onDelete('cascade');
             $table->string('email')->unique();
+            $table->integer('entity_id');
+            $table->foreign('entity_id')
+                  ->references('id')->on('entities')
+                  ->onDelete('cascade');
             $table->passthru('hstore', 'fields');
             $table->timestamps();
         });
@@ -97,6 +101,7 @@ class CreateLeadsTable extends Migration
                 customers.email, 
                 customers.fields, 
                 customers.created_at AS customer_created_at, 
+                customers.entity_id AS customer_entity_id, 
                 customers.lead_id, 
                 leads.utm_source,
                 leads.utm_campaign_id,

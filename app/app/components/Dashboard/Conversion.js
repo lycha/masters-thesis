@@ -24,7 +24,7 @@ class Conversion extends React.Component {
                 </div>
                 <div id="conversionLeadToOpen"></div>
                   <div className="centered">
-                    <h1>#<val id="conversionNumber">{ this.conversionLeadToOpen }</val>%</h1>
+                    <h1><val id="conversionNumber">{ this.conversionLeadToOpen }</val>%</h1>
                     <h4>That is a kickass conversion!</h4>
                     <h1><i className="fa fa-thumbs-o-up"></i></h1> 
                   </div>

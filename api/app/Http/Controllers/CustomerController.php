@@ -21,6 +21,7 @@ class CustomerController extends Controller
 		$customer = new Customer;
         $customer->lead_id = $request->lead_id;
         $customer->email = $request->email;
+        $customer->entity_id = $request->entity_id;
         $customer->setFields($request->fields);
 
         if (!$this->validateCustomerInput($customer)) {
@@ -80,7 +81,7 @@ class CustomerController extends Controller
             $where = $where." AND \"product_id\" = (SELECT id FROM products WHERE slug = '".$request->product."')"; 
         }
         if (!empty($request->entity)) {
-            $where = $where." AND \"entity_id\" = (SELECT id FROM entities WHERE slug = '".$request->entity."')"; 
+            $where = $where." AND \"customer_entity_id\" = (SELECT id FROM entities WHERE slug = '".$request->entity."')"; 
         }
         if (!empty($request->utm_campaign)) {
             $where = $where." AND \"utm_campaign_id\" = (SELECT id FROM campaigns WHERE slug = '".$request->utm_campaign."')";
@@ -126,7 +127,7 @@ class CustomerController extends Controller
             $where = $where." AND \"product_id\" = (SELECT id FROM products WHERE slug = '".$request->product."')"; 
         }
         if (!empty($request->entity)) {
-            $where = $where." AND \"entity_id\" = (SELECT id FROM entities WHERE slug = '".$request->entity."')"; 
+            $where = $where." AND \"customer_entity_id\" = (SELECT id FROM entities WHERE slug = '".$request->entity."')"; 
         }
         if (!empty($request->utm_campaign)) {
             $where = $where." AND \"utm_campaign_id\" = (SELECT id FROM campaigns WHERE slug = '".$request->utm_campaign."')";
@@ -156,7 +157,7 @@ class CustomerController extends Controller
 
         $where = "WHERE product_id = (SELECT id FROM products WHERE slug = '".$request->product."')";
         if (!empty($request->entity)) {
-            $where = $where." AND entity_id = (SELECT id FROM entities WHERE slug = '".$request->entity."')"; 
+            $where = $where." AND customer_entity_id = (SELECT id FROM entities WHERE slug = '".$request->entity."')"; 
         }
         if (!empty($request->utm_campaign)) {
             $where = $where." AND utm_campaign_id = (SELECT id FROM campaigns WHERE slug = '".$request->utm_campaign."')";
