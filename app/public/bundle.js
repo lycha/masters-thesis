@@ -88967,6 +88967,8 @@
 											' URL Name '
 										),
 										_react2.default.createElement('input', { className: 'form-inline', name: 'slug', type: 'text', id: 'slug',
+											pattern: '[a-z0-9\\\\-]+',
+											title: 'Accepted only small letters, numbers and -',
 											ref: 'slug', defaultValue: this.props.product.slug })
 									),
 									_react2.default.createElement(
@@ -91525,6 +91527,8 @@
 	            ' URL Name '
 	          ),
 	          _react2.default.createElement('input', { className: 'form-inline', name: 'slug', type: 'text', id: 'slug',
+	            pattern: '[a-z0-9\\\\-]+',
+	            title: 'Accepted only small letters, numbers and -',
 	            ref: 'slug' }),
 	          _react2.default.createElement(
 	            'button',
@@ -91958,6 +91962,8 @@
 											' URL Name '
 										),
 										_react2.default.createElement('input', { className: 'form-inline', name: 'slug', type: 'text', id: 'slug',
+											pattern: '[a-z0-9\\\\-]+',
+											title: 'Accepted only small letters, numbers and -',
 											ref: 'slug', defaultValue: this.props.entity.slug })
 									),
 									_react2.default.createElement(
@@ -92005,7 +92011,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	         value: true
+	  value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -92027,89 +92033,91 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var AddEntity = function (_React$Component) {
-	         _inherits(AddEntity, _React$Component);
+	  _inherits(AddEntity, _React$Component);
 
-	         function AddEntity() {
-	                  _classCallCheck(this, AddEntity);
+	  function AddEntity() {
+	    _classCallCheck(this, AddEntity);
 
-	                  return _possibleConstructorReturn(this, (AddEntity.__proto__ || Object.getPrototypeOf(AddEntity)).apply(this, arguments));
-	         }
+	    return _possibleConstructorReturn(this, (AddEntity.__proto__ || Object.getPrototypeOf(AddEntity)).apply(this, arguments));
+	  }
 
-	         _createClass(AddEntity, [{
-	                  key: 'getQuery',
-	                  value: function getQuery(e) {
-	                           e.preventDefault();
-	                           var entity = {
-	                                    expa_id: this.refs.expa_id.value,
-	                                    expa_name: this.refs.expa_name.value,
-	                                    name: this.refs.name.value,
-	                                    slug: this.refs.slug.value
-	                           };
-	                           this.refs.expa_id.value = "";
-	                           this.refs.expa_name.value = "";
-	                           this.refs.name.value = "";
-	                           this.refs.slug.value = "";
+	  _createClass(AddEntity, [{
+	    key: 'getQuery',
+	    value: function getQuery(e) {
+	      e.preventDefault();
+	      var entity = {
+	        expa_id: this.refs.expa_id.value,
+	        expa_name: this.refs.expa_name.value,
+	        name: this.refs.name.value,
+	        slug: this.refs.slug.value
+	      };
+	      this.refs.expa_id.value = "";
+	      this.refs.expa_name.value = "";
+	      this.refs.name.value = "";
+	      this.refs.slug.value = "";
 
-	                           this.props.addNew(entity);
-	                  }
-	         }, {
-	                  key: 'render',
-	                  value: function render() {
-	                           var _this2 = this;
+	      this.props.addNew(entity);
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
 
-	                           return _react2.default.createElement(
-	                                    'div',
-	                                    null,
-	                                    _react2.default.createElement(
-	                                             'h4',
-	                                             { className: 'mb' },
-	                                             _react2.default.createElement('i', { className: 'fa fa-angle-right' }),
-	                                             ' Add Entity'
-	                                    ),
-	                                    _react2.default.createElement(
-	                                             'form',
-	                                             { onSubmit: function onSubmit(e) {
-	                                                               return _this2.getQuery(e);
-	                                                      }, acceptCharset: 'UTF-8', className: 'form-inline', id: 'add-lc' },
-	                                             _react2.default.createElement(
-	                                                      'label',
-	                                                      { htmlFor: 'expa_id' },
-	                                                      ' EXPA ID '
-	                                             ),
-	                                             _react2.default.createElement('input', { className: 'form-inline', name: 'expa_id', type: 'number', id: 'expa_id',
-	                                                      ref: 'expa_id' }),
-	                                             _react2.default.createElement(
-	                                                      'label',
-	                                                      { htmlFor: 'expa_name' },
-	                                                      ' EXPA Name '
-	                                             ),
-	                                             _react2.default.createElement('input', { className: 'form-inline', name: 'expa_name', type: 'text', id: 'expa_name',
-	                                                      ref: 'expa_name' }),
-	                                             _react2.default.createElement(
-	                                                      'label',
-	                                                      { htmlFor: 'slug' },
-	                                                      ' URL Name '
-	                                             ),
-	                                             _react2.default.createElement('input', { className: 'form-inline', name: 'slug', type: 'text', id: 'slug',
-	                                                      ref: 'slug' }),
-	                                             _react2.default.createElement(
-	                                                      'label',
-	                                                      { htmlFor: 'name' },
-	                                                      ' Full Name '
-	                                             ),
-	                                             _react2.default.createElement('input', { className: 'form-inline', name: 'name', type: 'text', id: 'name',
-	                                                      ref: 'name' }),
-	                                             _react2.default.createElement(
-	                                                      'button',
-	                                                      { className: 'btn btn-theme' },
-	                                                      'Add'
-	                                             )
-	                                    )
-	                           );
-	                  }
-	         }]);
+	      return _react2.default.createElement(
+	        'div',
+	        null,
+	        _react2.default.createElement(
+	          'h4',
+	          { className: 'mb' },
+	          _react2.default.createElement('i', { className: 'fa fa-angle-right' }),
+	          ' Add Entity'
+	        ),
+	        _react2.default.createElement(
+	          'form',
+	          { onSubmit: function onSubmit(e) {
+	              return _this2.getQuery(e);
+	            }, acceptCharset: 'UTF-8', className: 'form-inline', id: 'add-lc' },
+	          _react2.default.createElement(
+	            'label',
+	            { htmlFor: 'expa_id' },
+	            ' EXPA ID '
+	          ),
+	          _react2.default.createElement('input', { className: 'form-inline', name: 'expa_id', type: 'number', id: 'expa_id',
+	            ref: 'expa_id' }),
+	          _react2.default.createElement(
+	            'label',
+	            { htmlFor: 'expa_name' },
+	            ' EXPA Name '
+	          ),
+	          _react2.default.createElement('input', { className: 'form-inline', name: 'expa_name', type: 'text', id: 'expa_name',
+	            ref: 'expa_name' }),
+	          _react2.default.createElement(
+	            'label',
+	            { htmlFor: 'slug' },
+	            ' URL Name '
+	          ),
+	          _react2.default.createElement('input', { className: 'form-inline', name: 'slug', type: 'text', id: 'slug',
+	            pattern: '[a-z0-9\\\\-]+',
+	            title: 'Accepted only small letters, numbers and -',
+	            ref: 'slug' }),
+	          _react2.default.createElement(
+	            'label',
+	            { htmlFor: 'name' },
+	            ' Full Name '
+	          ),
+	          _react2.default.createElement('input', { className: 'form-inline', name: 'name', type: 'text', id: 'name',
+	            ref: 'name' }),
+	          _react2.default.createElement(
+	            'button',
+	            { className: 'btn btn-theme' },
+	            'Add'
+	          )
+	        )
+	      );
+	    }
+	  }]);
 
-	         return AddEntity;
+	  return AddEntity;
 	}(_react2.default.Component);
 
 	exports.default = AddEntity;
@@ -92704,6 +92712,8 @@
 											' URL Name '
 										),
 										_react2.default.createElement('input', { className: 'form-inline', name: 'slug', type: 'text', id: 'slug',
+											pattern: '[a-z0-9\\\\-]+',
+											title: 'Accepted only small letters, numbers and -',
 											ref: 'slug', defaultValue: this.props.university.slug })
 									),
 									_react2.default.createElement(
@@ -92917,6 +92927,8 @@
 	            ' URL Name '
 	          ),
 	          _react2.default.createElement('input', { className: 'form-inline', name: 'slug', type: 'text', id: 'slug',
+	            pattern: '[a-z0-9\\\\-]+',
+	            title: 'Accepted only small letters, numbers and -',
 	            ref: 'slug' }),
 	          _react2.default.createElement(
 	            'label',
@@ -93180,14 +93192,14 @@
 																									),
 																									_react2.default.createElement(
 																													'td',
-																													{ id: 'slug' },
-																													campaign.slug,
+																													{ id: 'description' },
+																													campaign.description,
 																													' '
 																									),
 																									_react2.default.createElement(
 																													'td',
-																													{ id: 'description' },
-																													campaign.description,
+																													{ id: 'slug' },
+																													campaign.slug,
 																													' '
 																									),
 																									_react2.default.createElement(
@@ -93544,6 +93556,8 @@
 	            ' URL Name '
 	          ),
 	          _react2.default.createElement('input', { className: 'form-inline', name: 'slug', type: 'text', id: 'slug',
+	            pattern: '[a-z0-9\\\\-]+',
+	            title: 'Accepted only small letters, numbers and -',
 	            ref: 'slug' }),
 	          _react2.default.createElement(
 	            'label',

@@ -31,6 +31,8 @@ class AddEntity extends React.Component {
 			            		ref="expa_name"/>
             <label htmlFor="slug"> URL Name </label>
             <input className="form-inline" name="slug" type="text" id="slug"
+                      pattern="[a-z0-9\\-]+"
+                      title="Accepted only small letters, numbers and -"
 			            		ref="slug"/>
             <label htmlFor="name"> Full Name </label>
             <input className="form-inline" name="name" type="text" id="name"

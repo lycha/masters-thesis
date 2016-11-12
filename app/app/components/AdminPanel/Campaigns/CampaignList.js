@@ -20,8 +20,8 @@ class CampaignList extends React.Component {
 		          <tr key={campaign.id} className={trClass}>
 			          <td id="id">{campaign.id}</td>
 			          <td id="name">{campaign.name} </td>
-			          <td id="slug">{campaign.slug} </td>
 			          <td id="description">{campaign.description} </td>
+			          <td id="slug">{campaign.slug} </td>
 			          <td id="expirationDate">{campaign.expires_on} </td>
 			          <td>
 			          	<button 

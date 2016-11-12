@@ -32,6 +32,8 @@ class AddUniversity extends React.Component {
 			            		ref="name"/>
             <label htmlFor="slug"> URL Name </label>
             <input className="form-inline" name="slug" type="text" id="slug"
+                      pattern="[a-z0-9\\-]+"
+                      title="Accepted only small letters, numbers and -"
 			            		ref="slug"/>
             <label htmlFor="entity"> Entity </label>
             <EntitySelector entities={this.props.entities} setEntity={(entity) => this.setEntity(entity)} />

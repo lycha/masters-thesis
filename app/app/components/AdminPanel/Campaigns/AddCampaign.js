@@ -39,6 +39,8 @@ class AddCampaign extends React.Component {
 			            		ref="description"/>
             <label htmlFor="slug"> URL Name </label>
             <input className="form-inline" name="slug" type="text" id="slug"
+                      pattern="[a-z0-9\\-]+"
+                      title="Accepted only small letters, numbers and -"
                       ref="slug"/>
             <label htmlFor="expiration_date"> Expiration Date  </label>
             <DatePicker
