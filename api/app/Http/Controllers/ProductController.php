@@ -55,9 +55,8 @@ class ProductController extends Controller
 
 	public function viewById($id)
 	{
+		var_dump($id);
 		$product = Product::find($id);
-		$subproducts = Subproduct::where('product_id', $id)->get();
-		$product->subproducts = $subproducts;
 
 		return $product;
 	}
