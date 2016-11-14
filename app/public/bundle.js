@@ -88622,6 +88622,11 @@
 				(0, _ProductsApi.addProduct)(product);
 			}
 		}, {
+			key: 'updateProduct',
+			value: function updateProduct(product) {
+				(0, _ProductsApi.updateProduct)(product);
+			}
+		}, {
 			key: 'render',
 			value: function render() {
 				return _react2.default.createElement(

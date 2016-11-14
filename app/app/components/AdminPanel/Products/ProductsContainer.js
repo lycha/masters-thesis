@@ -13,6 +13,10 @@ class ProductsContainer extends React.Component {
     addNew(product) {
     	addProduct(product);
     }
+    
+    updateProduct(product) {
+    	updateProduct(product);
+    }
 
     render() {
         return (
