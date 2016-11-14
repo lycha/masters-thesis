@@ -55,7 +55,6 @@ class ProductController extends Controller
 
 	public function viewById($id)
 	{
-		var_dump($id);
 		$product = Product::find($id);
 
 		return $product;
