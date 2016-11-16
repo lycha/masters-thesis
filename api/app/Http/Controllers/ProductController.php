@@ -66,20 +66,20 @@ class ProductController extends Controller
 		$product->name = $request->name;	
         $product->description = $request->description;	
         $product->slug = $request->slug;	
-        $product->expires_on = $request->expires_on;	
 
 		if (!$this->validateProductInput($product) && empty($request->id)) {
         	return ErrorManager::error400(ErrorManager::$INVALID_PAYLOAD, 'Some elements are not provided.');
 		} 
 
-        if (Product::whereSlug($request->slug)->first()->id != $request->id) {
+        if (Product::whereSlug($request->slug)->first() != null &&
+        	Product::whereSlug($request->slug)->first()->id != $request->id) {
         	return ErrorManager::error400(ErrorManager::$SLUG_NOT_UNIQUE, 'Provided product slug is not unique.');
         }
 
         try {
         	$product->save();
         } catch (\Illuminate\Database\QueryException $e) {
-        	return ErrorManager::error400(ErrorManager::$INVALID_PAYLOAD, 'Invalid payload. Please check date format and unique fields.');
+        	return ErrorManager::error400(ErrorManager::$DATABASE_ERROR, 'There was an error while saving.'.$e);
         }
 
         return response($product);

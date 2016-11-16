@@ -13,11 +13,8 @@ class ProductsContainer extends React.Component {
     addNew(product) {
     	addProduct(product);
     }
-    
-    updateProduct(product) {
-    	updateProduct(product);
-    }
 
+   
     render() {
         return (
         	<section id="main-content">

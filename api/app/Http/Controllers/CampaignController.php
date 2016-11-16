@@ -78,7 +78,8 @@ class CampaignController extends Controller
         	return ErrorManager::error400(ErrorManager::$DATE_NOT_VALID, 'Date format is not valid.');
         }
 
-        if (Campaign::whereSlug($request->slug)->first()->id != $request->id) {
+        if (Campaign::whereSlug($request->slug)->first() != null &&
+        	Campaign::whereSlug($request->slug)->first()->id != $request->id) {
         	return ErrorManager::error400(ErrorManager::$SLUG_NOT_UNIQUE, 'Provided campaign slug is not unique.');
         }
 

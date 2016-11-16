@@ -15,7 +15,7 @@ class EditProduct extends React.Component {
 	      slug: this.refs.slug.value
 	    };
 	    $("#editProductModal-"+product.id).modal('toggle');
-	    this.props.updateproduct(product);
+	    this.props.updateProduct(product);
 	  }
     render() {
         return (

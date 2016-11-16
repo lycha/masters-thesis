@@ -65263,6 +65263,7 @@
 	}
 
 	function updateProduct(product) {
+		console.log("aaaaa") + product;
 		window.showLoadingSpinner();
 		var config = {
 			headers: {
@@ -88622,11 +88623,6 @@
 				(0, _ProductsApi.addProduct)(product);
 			}
 		}, {
-			key: 'updateProduct',
-			value: function updateProduct(product) {
-				(0, _ProductsApi.updateProduct)(product);
-			}
-		}, {
 			key: 'render',
 			value: function render() {
 				return _react2.default.createElement(
@@ -88882,7 +88878,7 @@
 					slug: this.refs.slug.value
 				};
 				$("#editProductModal-" + product.id).modal('toggle');
-				this.props.updateproduct(product);
+				this.props.updateProduct(product);
 			}
 		}, {
 			key: 'render',

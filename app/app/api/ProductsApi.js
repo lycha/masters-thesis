@@ -60,6 +60,7 @@ export function deleteProduct(productId) {
 }
 
 export function updateProduct(product) {
+	console.log("aaaaa")+product;
 	window.showLoadingSpinner();
 	var config = {
 	  headers: {
