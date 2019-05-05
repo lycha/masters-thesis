@@ -12,8 +12,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     { 
-    	//Model::unguard();
+    	Model::unguard();
 
-		//$this->call('GenericModelsSeeder');
+        $user = User::create([
+           'name' => $name,
+           'email' => $email,
+           'password' => bcrypt($password),
+        ]);
+        $user->assignRole('admin');
+        return $user->toArray();
     }
 }

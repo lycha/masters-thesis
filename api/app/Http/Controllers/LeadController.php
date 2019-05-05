@@ -63,9 +63,16 @@ class LeadController extends Controller
 		$user->delete();
 	}
 
-	public function view()
+	public function view(Request $request)
 	{
-		return response(Lead::all());
+		//return response(Lead::all());
+        $date_from = $request->date_from;
+        $date_to = $request->date_to;
+
+        $leads = Lead::where('created_at', '<=', $date_to)
+            ->where('created_at', '>=', $date_from)
+            ->get();
+        return response($leads);
 	}
 
     public function count(Request $request)
