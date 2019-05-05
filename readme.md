@@ -1,21 +1,31 @@
 ## Marketing Tracking Tool
 
 ## INSTALATION
-- run POST http://master-tool.dev/install with json body to generate .env variable and check database connection:
-```{
+
+1) 
+`git clone git:// https://github.com/lycha/masters-thesis.git`
+
+2) 
+`curl -X POST -H "Content-Type: application/json" -H "Cache-Control: no-cache" '{
     "db-host": "localhost",
     "db-database":"homestead",
     "db-username":"homestead",
     "db-password":"secret"
-}```
-- run GET http://master-tool.dev/run-migrations to create all necessary tables in database
-- run POST http://master-tool.dev/init-roles to create Admin and User role and create administrator account
-```{
-    "name": "admin_name",
-    "email": "name@domain.com",
-    "password": "secretPass"
-}```
+}' "http://api.domain-name.dev/install"`
+
+3) 
+`curl -X GET -H "Cache-Control:no-cache" "http://api.domain-name.dev/run-migrations"`
+
+4)
+`curl -X POST -H "Cache-Control: no-cache" "http://api.domain-name.dev/init-permissions"`
+
+5)
+`curl -X POST -H "Content-Type: application/json" -H "Cache-Control: no-cache" '{
+    "name": "username",
+    "email": "user@example.com ",
+    "password": "secret"
+}' "http://api.domain-name.dev.dev/init-roles"`
+
 
 ## Dependencies
 - https://github.com/kodeine/laravel-acl/ for user management
-- 
