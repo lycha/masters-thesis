@@ -1,0 +1,4 @@
+{    
+	"api_host" : "http://localhost/api”, 
+	"api_auth_token" : “my_super_secret_api_auth_token”,
+}
